@@ -134,7 +134,7 @@ export default function Hero() {
               variant="big"
               className="text-foreground mb-2 font-sans leading-[0.95]"
             >
-              Get customers
+              Your next customers
             </Heading>
           </motion.div>
 
@@ -144,7 +144,7 @@ export default function Hero() {
               variant="big"
               className="mb-8 font-sans leading-[0.95]"
             >
-              <span className="text-foreground">from </span>
+              <span className="text-foreground">are asking on </span>
               <span className="relative inline-block align-baseline">
                 <AnimatePresence mode="wait">
                   <motion.span
