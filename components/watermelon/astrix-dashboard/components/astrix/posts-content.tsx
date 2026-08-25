@@ -193,6 +193,13 @@ const INTENT_STYLES: Record<Post["intent"], string> = {
   Low: "bg-foreground/5 text-muted-foreground",
 };
 
+
+function postUrl(platform: string, community: string) {
+  if (platform === "reddit") return `https://www.reddit.com/${community}/`;
+  if (platform === "x") return `https://x.com/${community.slice(1)}`;
+  return `https://bsky.app/profile/${community.slice(1)}`;
+}
+
 export function PostsContent() {
   const [activeKey, setActiveKey] = useState<(typeof PLATFORMS)[number]["key"]>(
     PLATFORMS[0].key,
@@ -263,37 +270,33 @@ export function PostsContent() {
 
           <ul>
             {active.posts.map((post) => (
-              <li
-                key={post.id}
-                className="group border-b border-border px-4 py-4 transition-colors last:border-b-0 hover:bg-sidebar-accent/40"
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <div className="min-w-0">
-                    <p className="truncate text-sm font-medium">{post.title}</p>
-                    <p className="mt-0.5 text-xs text-muted-foreground">
-                      {post.community} · {post.author} · {post.time}
-                    </p>
-                    <p className="mt-2 line-clamp-2 text-sm text-foreground/70">
-                      {post.snippet}
-                    </p>
-                  </div>
-                  <div className="flex shrink-0 flex-col items-end gap-2">
+              <li key={post.id} className="border-b border-border last:border-b-0">
+                <a
+                  href={postUrl(active.key, post.community)}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="block cursor-pointer px-4 py-4 transition-colors hover:bg-sidebar-accent/40"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-medium">{post.title}</p>
+                      <p className="mt-0.5 text-xs text-muted-foreground">
+                        {post.community} · {post.author} · {post.time}
+                      </p>
+                      <p className="mt-2 line-clamp-2 text-sm text-foreground/70">
+                        {post.snippet}
+                      </p>
+                    </div>
                     <span
                       className={cn(
-                        "px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase",
+                        "shrink-0 px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase",
                         INTENT_STYLES[post.intent],
                       )}
                     >
                       {post.intent} intent
                     </span>
-                    <button
-                      type="button"
-                      className="bg-primary px-3 py-1.5 text-xs font-bold tracking-wider text-primary-foreground uppercase opacity-0 transition-opacity group-hover:opacity-100 hover:bg-primary/90"
-                    >
-                      Reply
-                    </button>
                   </div>
-                </div>
+                </a>
               </li>
             ))}
           </ul>
