@@ -1,5 +1,9 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
+import { useProject } from "./project-context";
+
 const LAUNCH_SITES: Array<{ name: string; domain: string; url?: string }> = [
   { name: "Product Hunt", domain: "producthunt.com" },
   { name: "Hacker News (Show HN)", domain: "news.ycombinator.com" },
@@ -33,7 +37,35 @@ const LAUNCH_SITES: Array<{ name: string; domain: string; url?: string }> = [
   { name: "Crunchbase", domain: "crunchbase.com" },
 ];
 
+const LAUNCHED_STORAGE_KEY = "launched-sites";
+
 export function LaunchpadContent() {
+  const { project } = useProject();
+
+  // Map of projectId -> launched site names, loaded after mount to match SSR.
+  const [launched, setLaunched] = useState<Record<string, string[]>>({});
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(LAUNCHED_STORAGE_KEY);
+      if (stored) setLaunched(JSON.parse(stored));
+    } catch {
+      // ignore corrupt storage
+    }
+  }, []);
+
+  const projectLaunched = new Set(launched[project.id] ?? []);
+
+  const toggleLaunched = (siteName: string) => {
+    setLaunched((prev) => {
+      const current = new Set(prev[project.id] ?? []);
+      if (current.has(siteName)) current.delete(siteName);
+      else current.add(siteName);
+      const next = { ...prev, [project.id]: [...current] };
+      localStorage.setItem(LAUNCHED_STORAGE_KEY, JSON.stringify(next));
+      return next;
+    });
+  };
+
   return (
     <div className="flex flex-col gap-4 p-6">
       <div>
@@ -42,41 +74,72 @@ export function LaunchpadContent() {
           30 places to launch your product for free and get your first users.
           Ranked from most popular to least, so start at the top.
         </p>
+        <p className="mt-2 text-sm">
+          <span className="text-primary font-semibold">
+            {projectLaunched.size}
+          </span>{" "}
+          <span className="text-muted-foreground">
+            of {LAUNCH_SITES.length} launched for
+          </span>{" "}
+          <span className="text-primary">{project.name}</span>
+        </p>
       </div>
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        {LAUNCH_SITES.map((site, index) => (
-          <a
-            key={`${site.domain}-${site.name}`}
-            href={site.url ?? `https://${site.domain}`}
-            target="_blank"
-            rel="noreferrer"
-            className="group flex cursor-pointer flex-col gap-3 border border-border p-4 transition-colors hover:bg-sidebar-accent/60"
-          >
-            <div className="flex items-center gap-3">
-              <span className="text-xs font-bold text-muted-foreground">
-                #{index + 1}
-              </span>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={`https://www.google.com/s2/favicons?domain=${site.domain}&sz=64`}
-                alt=""
-                className="h-6 w-6 shrink-0"
-              />
-              <span className="min-w-0">
-                <span className="block truncate text-sm font-medium">
-                  {site.name}
+        {LAUNCH_SITES.map((site) => {
+          const isLaunched = projectLaunched.has(site.name);
+          return (
+            <div
+              key={`${site.domain}-${site.name}`}
+              className={cn(
+                "flex flex-col border transition-colors",
+                isLaunched ? "border-primary/40" : "border-border",
+              )}
+            >
+              <a
+                href={site.url ?? `https://${site.domain}`}
+                target="_blank"
+                rel="noreferrer"
+                className="flex flex-1 cursor-pointer items-center gap-3 p-4 transition-colors hover:bg-sidebar-accent/60"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={`https://www.google.com/s2/favicons?domain=${site.domain}&sz=64`}
+                  alt=""
+                  className={cn("h-6 w-6 shrink-0", isLaunched && "opacity-60")}
+                />
+                <span className="min-w-0">
+                  <span
+                    className={cn(
+                      "block truncate text-sm font-medium",
+                      isLaunched && "text-muted-foreground",
+                    )}
+                  >
+                    {site.name}
+                  </span>
+                  <span className="block truncate text-xs text-muted-foreground">
+                    {site.domain}
+                  </span>
                 </span>
-                <span className="block truncate text-xs text-muted-foreground">
-                  {site.domain}
-                </span>
-              </span>
+              </a>
+              <button
+                type="button"
+                onClick={() => toggleLaunched(site.name)}
+                aria-pressed={isLaunched}
+                className={cn(
+                  "border-t px-4 py-2 text-left text-[10px] font-bold tracking-wider uppercase transition-colors",
+                  isLaunched
+                    ? "border-primary/40 text-primary hover:text-primary/70"
+                    : "border-border text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
+                )}
+              >
+                {isLaunched
+                  ? `\u2713 ${project.name} launched here`
+                  : "Mark as launched"}
+              </button>
             </div>
-            <span className="text-primary text-[10px] font-bold tracking-wider uppercase opacity-70 transition-opacity group-hover:opacity-100">
-              Submit your product
-            </span>
-          </a>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
