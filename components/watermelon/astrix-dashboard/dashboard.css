@@ -288,3 +288,25 @@ body:has(.astrix-dashboard) [data-slot="tooltip-content"] > svg {
   padding-left: 0.625rem;
   padding-right: 2rem;
 }
+
+/* Slim vertical scrollbar for in-panel lists (feed, history sheet) */
+.astrix-dashboard .slim-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.astrix-dashboard .slim-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.astrix-dashboard .slim-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.astrix-dashboard .slim-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--border);
+}
+
+.astrix-dashboard .slim-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}

@@ -22,7 +22,7 @@ export function HistoryPanel({
       <p className="border-b border-border px-4 py-3 text-xs font-bold tracking-wider text-muted-foreground uppercase">
         {rows.length} replied {rows.length === 1 ? "post" : "posts"}
       </p>
-      <ul className="min-h-0 flex-1 overflow-y-auto">
+      <ul className="slim-scrollbar min-h-0 flex-1 overflow-y-auto">
         {rows.map(({ platform, post }) => (
           <li
             key={post.id}
