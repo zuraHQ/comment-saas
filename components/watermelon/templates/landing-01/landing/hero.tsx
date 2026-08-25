@@ -14,6 +14,7 @@ import {
   FaRedditAlien,
   FaThreads,
   FaXTwitter,
+  FaYoutube,
 } from 'react-icons/fa6';
 
 const PLATFORMS = [
@@ -27,7 +28,39 @@ const PLATFORMS = [
   { name: 'Quora', Icon: FaQuora, bg: '#B92B27', color: '#B92B27', iconColor: '#ffffff' },
 ] as const;
 
-export default function Hero() {
+const TRACK_PLATFORMS = [
+  { name: 'X', Icon: FaXTwitter, bg: '#ffffff', iconColor: '#000000' },
+  { name: 'Reddit', Icon: FaRedditAlien, bg: '#FF4500', iconColor: '#ffffff' },
+  { name: 'YouTube', Icon: FaYoutube, bg: '#FF0000', iconColor: '#ffffff' },
+  { name: 'LinkedIn', Icon: FaLinkedinIn, bg: '#0A66C2', iconColor: '#ffffff' },
+] as const;
+
+function TrackLine({ className = '' }: { className?: string }) {
+  return (
+    <span className={className}>
+      Track your brand, product, competitors, and keywords across{' '}
+      {TRACK_PLATFORMS.map((p, i) => (
+        <span key={p.name} className="whitespace-nowrap">
+          <span className="text-foreground inline-flex items-center gap-[0.3em] align-baseline">
+            <span
+              className="inline-flex h-[1.1em] w-[1.1em] shrink-0 items-center justify-center"
+              style={{ backgroundColor: p.bg }}
+            >
+              <p.Icon className="h-[0.75em] w-[0.75em]" style={{ color: p.iconColor }} />
+            </span>
+            {p.name}
+          </span>
+          {i < TRACK_PLATFORMS.length - 2 ? ', ' : i === TRACK_PLATFORMS.length - 2 ? ', and ' : ''}
+        </span>
+      ))}
+      .
+    </span>
+  );
+}
+
+export type HeroVariant = 'default' | 'track-sub' | 'track-below';
+
+export default function Hero({ variant = 'default' }: { variant?: HeroVariant }) {
   const router = useRouter();
   const [wordIndex, setWordIndex] = useState(0);
 
@@ -180,9 +213,15 @@ export default function Hero() {
           {/* Subheading */}
           <motion.div variants={itemVariants}>
             <SubHeading variant="big" className="mb-12 max-w-2xl text-pretty">
-              From direct asks to loosely related threads, we surface the
-              posts where your product fits, so you can reply first and turn
-              them into customers.
+              {variant === 'track-sub' ? (
+                <TrackLine />
+              ) : (
+                <>
+                  From direct asks to loosely related threads, we surface the
+                  posts where your product fits, so you can reply first and
+                  turn them into customers.
+                </>
+              )}
             </SubHeading>
           </motion.div>
 
@@ -211,6 +250,11 @@ export default function Hero() {
             <p className="mt-3 text-center text-[10px] tracking-widest text-white/40 uppercase">
               Free while in beta. No credit card required
             </p>
+            {variant === 'track-below' ? (
+              <p className="mt-6 text-center text-sm text-white/60">
+                <TrackLine />
+              </p>
+            ) : null}
           </motion.div>
 
           {/* Social proof strip */}

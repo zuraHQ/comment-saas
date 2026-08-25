@@ -1,7 +1,7 @@
 "use client";
 
 import Navbar from './landing/navbar';
-import Hero from './landing/hero';
+import Hero, { type HeroVariant } from './landing/hero';
 import Stats from './landing/stats';
 import Features from './landing/features';
 import AnimatedBento from './landing/animated-bento';
@@ -9,7 +9,7 @@ import ComponentsBento from './landing/component-bento';
 import Testimonial from './landing/testimonial';
 import Footer from './landing/footer';
 
-export default function Landing01Demo() {
+export default function Landing01Demo({ heroVariant = 'default' }: { heroVariant?: HeroVariant } = {}) {
   return (
     // Landing renders entirely in Inter: the template's hardcoded font-mono
     // classes resolve to Inter via this scoped variable remap.
@@ -18,7 +18,7 @@ export default function Landing01Demo() {
       style={{ "--font-geist-mono": "var(--font-inter)" } as React.CSSProperties}
     >
       <Navbar />
-      <Hero />
+      <Hero variant={heroVariant} />
       <Stats />
       <Features />
       <AnimatedBento />
