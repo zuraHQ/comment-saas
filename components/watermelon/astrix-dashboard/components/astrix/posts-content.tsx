@@ -469,6 +469,9 @@ const INTENT_STYLES: Record<Post["intent"], string> = {
 };
 
 
+
+
+
 function postUrl(platform: string, community: string) {
   if (platform === "reddit") return `https://www.reddit.com/${community}/`;
   if (platform === "x") return `https://x.com/${community.slice(1)}`;
@@ -659,6 +662,7 @@ export function PostsContent() {
           </ul>
         </section>
       </div>
+
     </div>
   );
 }

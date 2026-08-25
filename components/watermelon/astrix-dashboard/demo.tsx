@@ -1,18 +1,26 @@
 "use client";
 
+import type { ReactNode } from "react";
 import DashboardLayout from "./dashboard-layout";
-import { DashboardNavigationProvider } from "./components/astrix/navigation";
+import { AnalyticsContent } from "./components/astrix/analytics-content";
+import { LaunchpadContent } from "./components/astrix/launchpad-content";
+import {
+  DashboardNavigationProvider,
+  useDashboardNavigation,
+} from "./components/astrix/navigation";
 import { PostsContent } from "./components/astrix/posts-content";
 import { ProjectProvider } from "./components/astrix/project-context";
 import { ThemeProvider } from "./components/astrix/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
 function DashboardRoute() {
-  return (
-    <DashboardLayout>
-      <PostsContent />
-    </DashboardLayout>
-  );
+  const { pathname } = useDashboardNavigation();
+
+  let content: ReactNode = <PostsContent />;
+  if (pathname === "/analytics") content = <AnalyticsContent />;
+  else if (pathname === "/launchpad") content = <LaunchpadContent />;
+
+  return <DashboardLayout>{content}</DashboardLayout>;
 }
 
 export default function AstrixDashboardDemo() {
