@@ -151,7 +151,7 @@ export function AnalyticsContent() {
                 </p>
               </div>
               <div className="shrink-0 text-right text-sm tabular-nums">
-                <span className="text-primary">{comment.clicks}</span>
+                <span className="font-medium">{comment.clicks}</span>
                 <span className="ml-1 text-xs text-muted-foreground">
                   clicks
                 </span>
