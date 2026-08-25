@@ -12,7 +12,11 @@ import Footer from './landing/footer';
 
 export default function Landing01Demo() {
   return (
-    <main className="dark min-h-screen overflow-x-hidden bg-[#101010]">
+    // Landing keeps its original all-mono look: remap the sans font to mono within this tree only.
+    <main
+      className="dark min-h-screen overflow-x-hidden bg-[#101010]"
+      style={{ "--font-geist-sans": "var(--font-geist-mono)" } as React.CSSProperties}
+    >
       <Navbar />
       <Hero />
       <Stats />
