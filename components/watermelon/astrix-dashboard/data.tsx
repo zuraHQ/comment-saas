@@ -398,8 +398,4 @@ export const workspaceNavigation: NavigationItem[] = [
     icon: ClassificationIcon,
     badge: String(classificationQueue.length),
   },
-  { name: "Reports", href: "/reports", icon: ReportsIcon },
-  { name: "Integration", href: "/integration", icon: IntegrationIcon },
-  { name: "Compliance", href: "/compliance", icon: ComplianceIcon },
-  { name: "Settings", href: "/settings", icon: SettingsIcon },
 ];
