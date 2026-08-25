@@ -136,7 +136,7 @@ export default function Hero() {
               variant="big"
               className="text-foreground mb-2 font-sans font-semibold leading-[0.95]"
             >
-              Get your product in front
+              Find people already
             </Heading>
           </motion.div>
 
@@ -146,8 +146,8 @@ export default function Hero() {
               variant="big"
               className="mb-8 font-sans font-semibold leading-[0.95]"
             >
-              <span className="text-foreground">of </span>
-              <span className="text-primary">people who need it</span>
+              <span className="text-foreground">looking for </span>
+              <span className="text-primary">your product</span>
             </Heading>
           </motion.div>
 
@@ -211,6 +211,84 @@ export default function Hero() {
                 Get Started
               </button>
             </form>
+          </motion.div>
+
+          {/* Demo container */}
+          <motion.div
+            variants={itemVariants}
+            className="relative mt-16 w-full max-w-4xl border border-white/10 bg-black/40 text-left backdrop-blur-md"
+          >
+            {/* Corner accents */}
+            <div className="absolute top-0 left-0 h-2 w-2 border-t border-l border-white/40" />
+            <div className="absolute top-0 right-0 h-2 w-2 border-t border-r border-white/40" />
+            <div className="absolute bottom-0 left-0 h-2 w-2 border-b border-l border-white/40" />
+            <div className="absolute bottom-0 right-0 h-2 w-2 border-b border-r border-white/40" />
+
+            {/* Window bar */}
+            <div className="flex items-center gap-2 border-b border-white/10 bg-white/5 px-4 py-2.5">
+              <span className="h-2 w-2 bg-white/20" />
+              <span className="h-2 w-2 bg-white/20" />
+              <span className="h-2 w-2 bg-white/20" />
+              <span className="ml-3 border border-white/10 px-3 py-0.5 font-mono text-[10px] tracking-widest text-white/40 uppercase">
+                Dashboard / Posts
+              </span>
+            </div>
+
+            {/* Mini feed mock */}
+            <div className="divide-y divide-white/5">
+              {[
+                {
+                  Icon: FaRedditAlien,
+                  bg: '#FF4500',
+                  iconColor: '#ffffff',
+                  title: 'What tools do you use to find customers for a new SaaS?',
+                  meta: 'r/SaaS · 12m ago',
+                  intent: 'High',
+                },
+                {
+                  Icon: FaXTwitter,
+                  bg: '#ffffff',
+                  iconColor: '#000000',
+                  title: 'Is there a tool that finds tweets asking for product recs?',
+                  meta: '@shipfast_sam · 44m ago',
+                  intent: 'High',
+                },
+                {
+                  Icon: FaLinkedinIn,
+                  bg: '#0A66C2',
+                  iconColor: '#ffffff',
+                  title: 'Can anyone recommend a tool for social listening on a budget?',
+                  meta: 'Maya Chen · 1h ago',
+                  intent: 'Medium',
+                },
+              ].map((row) => (
+                <div key={row.title} className="flex items-center gap-3 px-4 py-3">
+                  <span
+                    className="flex h-6 w-6 shrink-0 items-center justify-center"
+                    style={{ backgroundColor: row.bg }}
+                  >
+                    <row.Icon className="h-3.5 w-3.5" style={{ color: row.iconColor }} />
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-sm text-white/90">
+                      {row.title}
+                    </span>
+                    <span className="block truncate text-xs text-white/40">
+                      {row.meta}
+                    </span>
+                  </span>
+                  <span
+                    className={
+                      row.intent === 'High'
+                        ? 'shrink-0 bg-primary px-2 py-0.5 text-[10px] font-bold tracking-wider text-background uppercase'
+                        : 'shrink-0 bg-white/10 px-2 py-0.5 text-[10px] font-bold tracking-wider text-white/70 uppercase'
+                    }
+                  >
+                    {row.intent} intent
+                  </span>
+                </div>
+              ))}
+            </div>
           </motion.div>
 
 
