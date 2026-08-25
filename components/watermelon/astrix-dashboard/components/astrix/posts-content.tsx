@@ -188,7 +188,7 @@ const PLATFORMS = [
 ] as const;
 
 const INTENT_STYLES: Record<Post["intent"], string> = {
-  High: "bg-primary/10 text-primary",
+  High: "bg-primary text-primary-foreground",
   Medium: "bg-foreground/10 text-foreground/80",
   Low: "bg-foreground/5 text-muted-foreground",
 };
