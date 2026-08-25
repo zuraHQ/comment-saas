@@ -3,9 +3,7 @@
 import { useEffect, useState } from "react";
 import { FaBluesky, FaRedditAlien, FaXTwitter } from "react-icons/fa6";
 import { cn } from "@/lib/utils";
-
-// Placeholder until onboarding stores the user's product.
-const SAAS_NAME = "Acme";
+import { useProject } from "./project-context";
 
 type Post = {
   id: string;
@@ -203,6 +201,7 @@ function postUrl(platform: string, community: string) {
 const SEEN_STORAGE_KEY = "seen-posts";
 
 export function PostsContent() {
+  const { project } = useProject();
   const [activeKey, setActiveKey] = useState<(typeof PLATFORMS)[number]["key"]>(
     PLATFORMS[0].key,
   );
@@ -232,7 +231,7 @@ export function PostsContent() {
     <div className="flex flex-col gap-6 p-6">
       <h1 className="text-xl font-semibold">
         Looking posts for:{" "}
-        <span className="text-primary">{`{ ${SAAS_NAME} }`}</span>
+        <span className="text-primary">{`{ ${project.name} }`}</span>
       </h1>
 
       <div className="flex flex-col gap-4 lg:flex-row">
