@@ -3,47 +3,48 @@ body:has(.astrix-dashboard) [data-slot="sidebar"][data-mobile="true"],
 body:has(.astrix-dashboard) [data-slot="dropdown-menu-content"],
 body:has(.astrix-dashboard) [data-slot="sheet-content"],
 body:has(.astrix-dashboard) [data-slot="tooltip-content"] {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.6959 0.204 43.335);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.9761 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
+  --radius: 0rem;
+  --background: #101010;
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.13 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.17 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: #101010;
+  --secondary: oklch(1 0 0 / 8%);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(1 0 0 / 8%);
+  --muted-foreground: oklch(1 0 0 / 50%);
+  --accent: oklch(1 0 0 / 8%);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
   --success: oklch(0.627 0.194 149.214);
-  --info: oklch(0.623 0.214 259.815);
-  --border: oklch(0.9189 0 0 / 80%);
-  --input: oklch(0.922 0 0);
+  --info: oklch(0.707 0.165 254.624);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 10%);
   --input-addon-foreground: oklch(0.777 0 0);
-  --ring: oklch(0.708 0 0);
+  --ring: oklch(0.556 0 0);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.9819 0.0029 264.542);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.6959 0.204 43.335);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(1 0 0);
-  --sidebar-accent-foreground: oklch(0.145 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-  --shadow-sidebar-item: drop-shadow(1px 2px 12px rgb(158 158 158 / 8%));
+  --sidebar: #101010;
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.922 0 0);
+  --sidebar-primary-foreground: #101010;
+  --sidebar-accent: oklch(1 0 0 / 6%);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+  --shadow-sidebar-item: drop-shadow(1px 2px 12px rgb(0 0 0 / 25%));
 }
 
 .astrix-dashboard {
   background-color: var(--background);
   color: var(--foreground);
+  font-family: var(--font-geist-mono), monospace;
 }
 
 .astrix-dashboard.dark,
@@ -52,25 +53,26 @@ body:has(.astrix-dashboard) [data-slot="tooltip-content"] {
 .dark body:has(.astrix-dashboard) [data-slot="dropdown-menu-content"],
 .dark body:has(.astrix-dashboard) [data-slot="sheet-content"],
 .dark body:has(.astrix-dashboard) [data-slot="tooltip-content"] {
-  --background: oklch(0.145 0 0);
+  --radius: 0rem;
+  --background: #101010;
   --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
+  --card: oklch(0.13 0 0);
   --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
+  --popover: oklch(0.17 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.6959 0.204 43.335);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.269 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: #101010;
+  --secondary: oklch(1 0 0 / 8%);
   --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
+  --muted: oklch(1 0 0 / 8%);
+  --muted-foreground: oklch(1 0 0 / 50%);
+  --accent: oklch(1 0 0 / 8%);
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.704 0.191 22.216);
   --success: oklch(0.627 0.194 149.214);
   --info: oklch(0.707 0.165 254.624);
-  --border: oklch(1 0 0 / 15%);
-  --input: oklch(1 0 0 / 15%);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 10%);
   --input-addon-foreground: oklch(0.777 0 0);
   --ring: oklch(0.556 0 0);
   --chart-1: oklch(0.87 0 0);
@@ -78,11 +80,11 @@ body:has(.astrix-dashboard) [data-slot="tooltip-content"] {
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
+  --sidebar: #101010;
   --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.6959 0.204 43.335);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-primary: oklch(0.922 0 0);
+  --sidebar-primary-foreground: #101010;
+  --sidebar-accent: oklch(1 0 0 / 6%);
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
