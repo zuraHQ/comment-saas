@@ -86,7 +86,7 @@ export function DashboardSidebar() {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <Sidebar collapsible="icon" className="border-none">
+    <Sidebar collapsible="icon" className="border-r border-sidebar-border">
       <SidebarHeader className="h-16 flex-row items-center justify-between px-3 transition-[padding] ease-linear group-data-[collapsible=icon]:px-4.25">
         <div className="flex min-w-0 items-center gap-2 overflow-hidden group-data-[collapsible=icon]:hidden">
           <AstrixLogo />
