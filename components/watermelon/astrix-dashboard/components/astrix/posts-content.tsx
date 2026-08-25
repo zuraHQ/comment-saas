@@ -526,9 +526,9 @@ export function PostsContent() {
         <span className="text-primary">{`{ ${project.name} }`}</span>
       </h1>
 
-      <div className="flex min-h-0 flex-1 flex-col gap-4 lg:flex-row">
+      <div className="flex min-h-0 flex-1 flex-col border border-border lg:flex-row">
         {/* Platform rail */}
-        <nav className="flex shrink-0 overflow-x-auto border border-border lg:w-56 lg:flex-col lg:overflow-visible">
+        <nav className="flex shrink-0 overflow-x-auto border-b border-border lg:w-56 lg:flex-col lg:overflow-visible lg:border-r lg:border-b-0">
           {ALL_PLATFORMS.map((platform) => {
             const isActive = platform.key === activeKey;
             return (
@@ -565,7 +565,7 @@ export function PostsContent() {
         </nav>
 
         {/* Post feed */}
-        <section className="flex min-w-0 flex-1 flex-col border border-border">
+        <section className="flex min-w-0 flex-1 flex-col">
           <header className="flex flex-wrap items-center gap-3 border-b border-border px-4 py-3">
             <span
               className="flex h-6 w-6 shrink-0 items-center justify-center"
