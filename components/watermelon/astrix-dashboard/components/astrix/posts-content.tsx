@@ -13,7 +13,15 @@ import {
   FaRedditAlien,
   FaXTwitter,
 } from "react-icons/fa6";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
+import { HistoryPanel } from "./history-content";
 import { useProject } from "./project-context";
 
 type Post = {
@@ -663,6 +671,23 @@ export function PostsContent() {
                   className={cn("h-3.5 w-3.5", refreshing && "animate-spin")}
                 />
               </button>
+              <Sheet>
+                <SheetTrigger
+                  type="button"
+                  className="border border-border px-2.5 py-1 text-[10px] font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
+                >
+                  History
+                </SheetTrigger>
+                <SheetContent
+                  side="right"
+                  className="astrix-dashboard flex w-full flex-col gap-0 p-0 sm:max-w-md"
+                >
+                  <SheetHeader className="border-b border-border px-4 py-4">
+                    <SheetTitle className="text-base">History</SheetTitle>
+                  </SheetHeader>
+                  <HistoryPanel replied={replied} onUnmark={toggleReplied} />
+                </SheetContent>
+              </Sheet>
               <button
                 type="button"
                 onClick={() => setHideReplied((v) => !v)}

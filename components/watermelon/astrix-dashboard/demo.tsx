@@ -3,7 +3,6 @@
 import type { ReactNode } from "react";
 import DashboardLayout from "./dashboard-layout";
 import { AnalyticsContent } from "./components/astrix/analytics-content";
-import { HistoryContent } from "./components/astrix/history-content";
 import { LaunchpadContent } from "./components/astrix/launchpad-content";
 import {
   DashboardNavigationProvider,
@@ -20,7 +19,6 @@ function DashboardRoute() {
   let content: ReactNode = <PostsContent />;
   if (pathname === "/analytics") content = <AnalyticsContent />;
   else if (pathname === "/launchpad") content = <LaunchpadContent />;
-  else if (pathname === "/history") content = <HistoryContent />;
 
   return <DashboardLayout>{content}</DashboardLayout>;
 }
