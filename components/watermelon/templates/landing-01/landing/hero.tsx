@@ -134,9 +134,9 @@ export default function Hero() {
             <Heading
               as="h1"
               variant="big"
-              className="text-foreground mb-2 font-sans leading-[0.95]"
+              className="text-foreground mb-2 font-sans font-semibold leading-[0.95]"
             >
-              From 0 to your first
+              Get your product in front
             </Heading>
           </motion.div>
 
@@ -144,10 +144,10 @@ export default function Hero() {
             <Heading
               as="h1"
               variant="big"
-              className="mb-8 font-sans leading-[0.95]"
+              className="mb-8 font-sans font-semibold leading-[0.95]"
             >
-              <span className="text-primary">1,000 customers</span>
-              <span className="text-foreground">, organically</span>
+              <span className="text-foreground">of </span>
+              <span className="text-primary">people who need it</span>
             </Heading>
           </motion.div>
 
