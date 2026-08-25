@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  type ReactNode,
-} from "react";
+import { createContext, useContext, useState, type ReactNode } from "react";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import type { Doc, Id } from "@/convex/_generated/dataModel";
@@ -32,8 +26,6 @@ export const PROJECT_COLORS = [
   "#00C48C",
 ];
 
-const SELECTED_PROJECT_KEY = "selected-project";
-
 type ProjectContextValue = {
   projects: Project[];
   project: Project | null;
@@ -58,32 +50,22 @@ const ProjectContext = createContext<ProjectContextValue | null>(null);
 
 export function ProjectProvider({ children }: { children: ReactNode }) {
   const projects = useQuery(api.projects.list);
+  const me = useQuery(api.users.me);
   const create = useMutation(api.projects.create);
   const update = useMutation(api.projects.update);
   const remove = useMutation(api.projects.remove);
+  const setLastProject = useMutation(api.users.setLastProject);
 
-  const [selectedId, setSelectedId] = useState<Id<"projects"> | null>(null);
-
-  // Restore the last selection after mount so SSR and first render agree.
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem(SELECTED_PROJECT_KEY);
-      if (stored) setSelectedId(stored as Id<"projects">);
-    } catch {
-      // ignore corrupt storage
-    }
-  }, []);
+  // Selection this session; falls back to the one Convex remembered for us.
+  const [pickedId, setPickedId] = useState<Id<"projects"> | null>(null);
 
   const list = projects ?? [];
+  const selectedId = pickedId ?? me?.lastProjectId ?? null;
   const project = list.find((p) => p._id === selectedId) ?? list[0] ?? null;
 
   const setProjectId = (id: Id<"projects">) => {
-    setSelectedId(id);
-    try {
-      localStorage.setItem(SELECTED_PROJECT_KEY, id);
-    } catch {
-      // ignore quota errors
-    }
+    setPickedId(id);
+    void setLastProject({ projectId: id });
   };
 
   const addProject = async (name: string) => {
@@ -97,6 +79,7 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
     await remove({ projectId: id });
     const next = list.find((p) => p._id !== id);
     if (next) setProjectId(next._id);
+    else setPickedId(null);
   };
 
   return (

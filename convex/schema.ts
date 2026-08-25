@@ -7,6 +7,7 @@ export default defineSchema({
     name: v.string(),
     email: v.optional(v.string()),
     imageUrl: v.optional(v.string()),
+    lastProjectId: v.optional(v.id("projects")),
   }).index("by_clerk_id", ["clerkId"]),
 
   // A user's product. Everything user-specific hangs off a project, and every

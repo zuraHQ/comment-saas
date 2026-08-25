@@ -1,31 +1,19 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { Check, Trash2, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { useDashboardNavigation } from "./navigation";
-import { POST_TYPES, PROJECT_COLORS, useProject } from "./project-context";
+import {
+  POST_TYPES,
+  PROJECT_COLORS,
+  useProject,
+  type Project,
+} from "./project-context";
 
 export function ProjectSettingsContent() {
-  const { project, projects, updateProject, removeProject } = useProject();
-  const { navigate } = useDashboardNavigation();
-
-  const [name, setName] = useState(project?.name ?? "");
-  const [url, setUrl] = useState(project?.url ?? "");
-  const [description, setDescription] = useState(project?.description ?? "");
-  const [keyword, setKeyword] = useState("");
-  const [confirmDelete, setConfirmDelete] = useState(false);
-
-  // Re-sync the form when the topbar switches project underneath us.
-  useEffect(() => {
-    if (!project) return;
-    setName(project.name);
-    setUrl(project.url ?? "");
-    setDescription(project.description ?? "");
-    setKeyword("");
-    setConfirmDelete(false);
-  }, [project?._id, project?.name, project?.url, project?.description]);
+  const { project } = useProject();
 
   if (!project) {
     return (
@@ -34,6 +22,21 @@ export function ProjectSettingsContent() {
       </div>
     );
   }
+
+  // Keyed on the project id so switching projects remounts with fresh fields
+  // instead of syncing state in an effect.
+  return <ProjectSettingsForm key={project._id} project={project} />;
+}
+
+function ProjectSettingsForm({ project }: { project: Project }) {
+  const { projects, updateProject, removeProject } = useProject();
+  const { navigate } = useDashboardNavigation();
+
+  const [name, setName] = useState(project.name);
+  const [url, setUrl] = useState(project.url ?? "");
+  const [description, setDescription] = useState(project.description ?? "");
+  const [keyword, setKeyword] = useState("");
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   const addKeyword = (e: FormEvent) => {
     e.preventDefault();
