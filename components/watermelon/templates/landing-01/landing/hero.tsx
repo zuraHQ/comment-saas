@@ -62,31 +62,11 @@ export default function Hero() {
     },
   };
 
-  const glowVariants: Variants = {
-    hidden: { opacity: 0, scale: 0.8 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: { duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: 0.3 },
-    },
-  };
 
   return (
-    <section className="relative flex min-h-screen w-full flex-col justify-center overflow-x-hidden pt-16 pb-32 font-mono">
+    <section className="relative flex min-h-screen w-full flex-col justify-center overflow-x-hidden pt-36 pb-24 font-mono">
       {/* Background Dot Grid */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-size-[24px_24px]" />
-
-      {/* Ambient Glow behind heading */}
-      <motion.div
-        className="pointer-events-none absolute top-1/2 left-1/2 h-[400px] w-[600px] -translate-x-1/2 translate-y-[-60%] rounded-full"
-        style={{
-          background:
-            'radial-gradient(ellipse at center, rgba(163,255,18,0.06) 0%, rgba(163,255,18,0.02) 40%, transparent 70%)',
-        }}
-        variants={glowVariants}
-        initial={false}
-        animate="visible"
-      />
 
       {/* Decorative Technical Borders */}
       <div className="absolute top-24 right-0 left-0 hidden h-px bg-white/5 lg:block" />
@@ -234,60 +214,11 @@ export default function Hero() {
               </span>
             </div>
 
-            {/* Mini feed mock */}
-            <div className="divide-y divide-white/5">
-              {[
-                {
-                  Icon: FaRedditAlien,
-                  bg: '#FF4500',
-                  iconColor: '#ffffff',
-                  title: 'What tools do you use to find customers for a new SaaS?',
-                  meta: 'r/SaaS · 12m ago',
-                  intent: 'High',
-                },
-                {
-                  Icon: FaXTwitter,
-                  bg: '#ffffff',
-                  iconColor: '#000000',
-                  title: 'Is there a tool that finds tweets asking for product recs?',
-                  meta: '@shipfast_sam · 44m ago',
-                  intent: 'High',
-                },
-                {
-                  Icon: FaLinkedinIn,
-                  bg: '#0A66C2',
-                  iconColor: '#ffffff',
-                  title: 'Can anyone recommend a tool for social listening on a budget?',
-                  meta: 'Maya Chen · 1h ago',
-                  intent: 'Medium',
-                },
-              ].map((row) => (
-                <div key={row.title} className="flex items-center gap-3 px-4 py-3">
-                  <span
-                    className="flex h-6 w-6 shrink-0 items-center justify-center"
-                    style={{ backgroundColor: row.bg }}
-                  >
-                    <row.Icon className="h-3.5 w-3.5" style={{ color: row.iconColor }} />
-                  </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate text-sm text-white/90">
-                      {row.title}
-                    </span>
-                    <span className="block truncate text-xs text-white/40">
-                      {row.meta}
-                    </span>
-                  </span>
-                  <span
-                    className={
-                      row.intent === 'High'
-                        ? 'shrink-0 bg-primary px-2 py-0.5 text-[10px] font-bold tracking-wider text-background uppercase'
-                        : 'shrink-0 bg-white/10 px-2 py-0.5 text-[10px] font-bold tracking-wider text-white/70 uppercase'
-                    }
-                  >
-                    {row.intent} intent
-                  </span>
-                </div>
-              ))}
+            {/* Video demo drops in here */}
+            <div className="flex aspect-video w-full items-center justify-center">
+              <span className="font-mono text-xs tracking-widest text-white/30 uppercase">
+                [ Demo ]
+              </span>
             </div>
           </motion.div>
 
