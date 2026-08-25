@@ -1,44 +1,27 @@
-import { mutation, query } from "./_generated/server";
+import { mutation } from "./_generated/server";
 
-// Upsert the signed-in Clerk user into the users table.
-// Call from the client once after sign-in.
-export const store = mutation({
+// Called from the client on first authenticated load — no Clerk webhook
+// needed for basic user sync.
+export const ensure = mutation({
   args: {},
   handler: async (ctx) => {
     const identity = await ctx.auth.getUserIdentity();
-    if (!identity) {
-      throw new Error("Called users.store without authentication");
-    }
+    if (!identity) return null;
+
+    const fields = {
+      name: identity.name ?? identity.email ?? "User",
+      email: identity.email,
+      imageUrl: identity.pictureUrl,
+    };
 
     const existing = await ctx.db
       .query("users")
       .withIndex("by_clerk_id", (q) => q.eq("clerkId", identity.subject))
       .unique();
-
     if (existing) {
-      if (existing.name !== identity.name) {
-        await ctx.db.patch(existing._id, { name: identity.name ?? "" });
-      }
+      await ctx.db.patch(existing._id, fields);
       return existing._id;
     }
-
-    return await ctx.db.insert("users", {
-      clerkId: identity.subject,
-      name: identity.name ?? "",
-      email: identity.email,
-      imageUrl: identity.pictureUrl,
-    });
-  },
-});
-
-export const current = query({
-  args: {},
-  handler: async (ctx) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) return null;
-    return await ctx.db
-      .query("users")
-      .withIndex("by_clerk_id", (q) => q.eq("clerkId", identity.subject))
-      .unique();
+    return ctx.db.insert("users", { clerkId: identity.subject, ...fields });
   },
 });

@@ -1,5 +1,6 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import { requireOwnedProject } from "./auth";
 
 const CODE_ALPHABET = "abcdefghjkmnpqrstuvwxyz23456789"; // no 0/O/1/l/i
 
@@ -14,12 +15,13 @@ function randomCode() {
 // Create a tracked link for a reply. Returns the short code for /r/[code].
 export const createLink = mutation({
   args: {
-    projectId: v.string(),
+    projectId: v.id("projects"),
     targetUrl: v.string(),
     platform: v.string(),
     label: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
+    const project = await requireOwnedProject(ctx, args.projectId);
     let code = randomCode();
     while (
       await ctx.db
@@ -29,12 +31,17 @@ export const createLink = mutation({
     ) {
       code = randomCode();
     }
-    await ctx.db.insert("trackedLinks", { code, ...args });
+    await ctx.db.insert("trackedLinks", {
+      code,
+      ownerClerkId: project.ownerClerkId,
+      ...args,
+    });
     return { code, path: `/r/${code}` };
   },
 });
 
-// Log a click and return the destination. Called by the /r/[code] route.
+// Log a click and return the destination. Called by the public /r/[code]
+// route, so this one is intentionally unauthenticated.
 export const logClickAndGetTarget = mutation({
   args: {
     code: v.string(),
@@ -53,10 +60,11 @@ export const logClickAndGetTarget = mutation({
   },
 });
 
-// Per-link click totals for a project, for the analytics page.
+// Per-link click totals for one of the caller's projects.
 export const statsForProject = query({
-  args: { projectId: v.string() },
+  args: { projectId: v.id("projects") },
   handler: async (ctx, { projectId }) => {
+    await requireOwnedProject(ctx, projectId);
     const links = await ctx.db
       .query("trackedLinks")
       .withIndex("by_project", (q) => q.eq("projectId", projectId))

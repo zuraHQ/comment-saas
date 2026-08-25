@@ -8,7 +8,12 @@
  * @module
  */
 
+import type * as auth from "../auth.js";
+import type * as crons from "../crons.js";
+import type * as fetchers from "../fetchers.js";
 import type * as links from "../links.js";
+import type * as pipeline from "../pipeline.js";
+import type * as projects from "../projects.js";
 import type * as users from "../users.js";
 
 import type {
@@ -18,7 +23,12 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  auth: typeof auth;
+  crons: typeof crons;
+  fetchers: typeof fetchers;
   links: typeof links;
+  pipeline: typeof pipeline;
+  projects: typeof projects;
   users: typeof users;
 }>;
 
