@@ -12,10 +12,11 @@ import Footer from './landing/footer';
 
 export default function Landing01Demo() {
   return (
-    // Landing keeps its original all-mono look: remap the sans font to mono within this tree only.
+    // Landing renders entirely in Inter: the template's hardcoded font-mono
+    // classes resolve to Inter via this scoped variable remap.
     <main
-      className="dark min-h-screen overflow-x-hidden bg-[#101010] font-mono"
-      style={{ "--font-inter": "var(--font-geist-mono)" } as React.CSSProperties}
+      className="dark min-h-screen overflow-x-hidden bg-[#101010] font-sans"
+      style={{ "--font-geist-mono": "var(--font-inter)" } as React.CSSProperties}
     >
       <Navbar />
       <Hero />
