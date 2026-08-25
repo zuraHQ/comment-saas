@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaBluesky, FaRedditAlien, FaXTwitter } from "react-icons/fa6";
 import { cn } from "@/lib/utils";
 
@@ -200,11 +200,33 @@ function postUrl(platform: string, community: string) {
   return `https://bsky.app/profile/${community.slice(1)}`;
 }
 
+const SEEN_STORAGE_KEY = "seen-posts";
+
 export function PostsContent() {
   const [activeKey, setActiveKey] = useState<(typeof PLATFORMS)[number]["key"]>(
     PLATFORMS[0].key,
   );
   const active = PLATFORMS.find((p) => p.key === activeKey)!;
+
+  // Loaded after mount so the server-rendered HTML matches the first client render.
+  const [seen, setSeen] = useState<Set<string>>(new Set());
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(SEEN_STORAGE_KEY);
+      if (stored) setSeen(new Set(JSON.parse(stored)));
+    } catch {
+      // ignore corrupt storage
+    }
+  }, []);
+
+  const markSeen = (id: string) => {
+    setSeen((prev) => {
+      if (prev.has(id)) return prev;
+      const next = new Set(prev).add(id);
+      localStorage.setItem(SEEN_STORAGE_KEY, JSON.stringify([...next]));
+      return next;
+    });
+  };
 
   return (
     <div className="flex flex-col gap-6 p-6">
@@ -275,7 +297,11 @@ export function PostsContent() {
                   href={postUrl(active.key, post.community)}
                   target="_blank"
                   rel="noreferrer"
-                  className="block cursor-pointer px-4 py-4 transition-colors hover:bg-sidebar-accent/40"
+                  onClick={() => markSeen(post.id)}
+                  className={cn(
+                    "block cursor-pointer px-4 py-4 transition-colors hover:bg-sidebar-accent/40",
+                    seen.has(post.id) && "opacity-50",
+                  )}
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="min-w-0">
@@ -287,14 +313,21 @@ export function PostsContent() {
                         {post.snippet}
                       </p>
                     </div>
-                    <span
-                      className={cn(
-                        "shrink-0 px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase",
-                        INTENT_STYLES[post.intent],
-                      )}
-                    >
-                      {post.intent} intent
-                    </span>
+                    <div className="flex shrink-0 flex-col items-end gap-1.5">
+                      <span
+                        className={cn(
+                          "px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase",
+                          INTENT_STYLES[post.intent],
+                        )}
+                      >
+                        {post.intent} intent
+                      </span>
+                      {seen.has(post.id) ? (
+                        <span className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
+                          Seen
+                        </span>
+                      ) : null}
+                    </div>
                   </div>
                 </a>
               </li>
