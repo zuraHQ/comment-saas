@@ -65,9 +65,6 @@ export default function Hero() {
 
   return (
     <section className="relative flex min-h-screen w-full flex-col justify-center overflow-x-hidden pt-48 pb-48 font-mono">
-      {/* Background Dot Grid */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-size-[24px_24px]" />
-
       {/* Decorative Technical Borders */}
       <div className="absolute top-24 right-0 left-0 hidden h-px bg-white/5 lg:block" />
       <div className="absolute right-0 bottom-24 left-0 hidden h-px bg-white/5 lg:block" />
