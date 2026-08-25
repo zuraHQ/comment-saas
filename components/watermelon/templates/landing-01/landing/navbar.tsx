@@ -1,8 +1,15 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { GithubIcon, NewTwitterIcon, Menu01Icon, Cancel01Icon } from "hugeicons-react";
+import { Menu01Icon, Cancel01Icon } from "hugeicons-react";
 import { cn } from "@/lib/utils";
 import LogoIcon from "@/assets/logo-icon";
+
+const NAV_LINKS = [
+  { label: "How it works", href: "#how-it-works" },
+  { label: "Use cases", href: "#use-cases" },
+  { label: "Pricing", href: "#pricing" },
+  { label: "FAQ", href: "#faq" },
+];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -25,7 +32,7 @@ export default function Navbar() {
           : "bg-transparent border-transparent py-5"
       )}
     >
-      <div className="container mx-auto px-4 md:px-8 lg:px-12 xl:px-16 flex items-center justify-between">
+      <div className="container relative mx-auto px-4 md:px-8 lg:px-12 xl:px-16 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 group">
           <div className="w-8 h-8 flex items-center justify-center relative transition-transform duration-300 group-hover:scale-105">
@@ -34,18 +41,21 @@ export default function Navbar() {
           <span className="font-mono font-bold text-sm tracking-widest uppercase">Watermelon UI</span>
         </Link>
 
-
+        {/* Center nav */}
+        <nav className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-8">
+          {NAV_LINKS.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              className="text-sm text-white/60 hover:text-white transition-colors"
+            >
+              {link.label}
+            </a>
+          ))}
+        </nav>
 
         {/* Right side */}
         <div className="hidden md:flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <a href="https://github.com/WatermelonCorp/watermelon-platform" target="_blank" rel="noreferrer" className="flex items-center justify-center h-10 w-10 border border-white/10 bg-transparent text-white/50 hover:text-white hover:bg-white/5 transition-colors">
-              <GithubIcon className="w-4 h-4" />
-            </a>
-            <a href="https://x.com/watermelonui" target="_blank" rel="noreferrer" className="flex items-center justify-center h-10 w-10 border border-white/10 bg-transparent text-white/50 hover:text-white hover:bg-white/5 transition-colors">
-              <NewTwitterIcon className="w-4 h-4" />
-            </a>
-          </div>
           <Link href="/login" className="flex items-center h-10 bg-primary text-background font-mono font-bold tracking-widest uppercase px-6 text-xs hover:bg-primary/90 transition-colors active:scale-[0.96]">
             Get Started
           </Link>
@@ -65,11 +75,19 @@ export default function Navbar() {
       {/* Mobile Menu */}
       {mobileMenuOpen && (
         <div className="md:hidden absolute top-full left-0 right-0 bg-background border-b border-border/50 shadow-lg p-4 flex flex-col gap-4 animate-fade-in-up">
+          <nav className="flex flex-col gap-1">
+            {NAV_LINKS.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-2 py-3 text-sm text-white/70 hover:text-white transition-colors"
+              >
+                {link.label}
+              </a>
+            ))}
+          </nav>
 
-          <div className="flex items-center justify-center gap-8 p-4 border-t border-border/50 mt-2">
-            <a href="https://github.com/WatermelonCorp/watermelon-platform" className="text-muted-foreground hover:text-foreground"><GithubIcon className="w-6 h-6" /></a>
-            <a href="https://x.com/watermelonui" className="text-muted-foreground hover:text-foreground"><NewTwitterIcon className="w-6 h-6" /></a>
-          </div>
           <Link href="/login" className="w-full text-center bg-primary text-background font-mono font-bold tracking-widest uppercase px-4 py-4 text-xs hover:bg-primary/90 transition-colors active:scale-[0.96] mt-2">
             Get Started
           </Link>
