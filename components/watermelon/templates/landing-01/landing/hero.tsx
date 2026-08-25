@@ -5,12 +5,26 @@ import { motion, type Variants, AnimatePresence } from 'motion/react';
 import Link from "next/link";
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { FaRedditAlien, FaXTwitter, FaBluesky } from 'react-icons/fa6';
+import {
+  FaBluesky,
+  FaGithub,
+  FaHackerNews,
+  FaLinkedinIn,
+  FaQuora,
+  FaRedditAlien,
+  FaThreads,
+  FaXTwitter,
+} from 'react-icons/fa6';
 
 const PLATFORMS = [
   { name: 'Reddit', Icon: FaRedditAlien, bg: '#FF4500', color: '#FF4500', iconColor: '#ffffff' },
   { name: 'X/Twitter', Icon: FaXTwitter, bg: '#ffffff', color: '#ffffff', iconColor: '#000000' },
   { name: 'Bluesky', Icon: FaBluesky, bg: '#0085FF', color: '#0085FF', iconColor: '#ffffff' },
+  { name: 'Hacker News', Icon: FaHackerNews, bg: '#FF6600', color: '#FF6600', iconColor: '#ffffff' },
+  { name: 'GitHub', Icon: FaGithub, bg: '#ffffff', color: '#ffffff', iconColor: '#000000' },
+  { name: 'LinkedIn', Icon: FaLinkedinIn, bg: '#0A66C2', color: '#0A66C2', iconColor: '#ffffff' },
+  { name: 'Quora', Icon: FaQuora, bg: '#B92B27', color: '#B92B27', iconColor: '#ffffff' },
+  { name: 'Threads', Icon: FaThreads, bg: '#ffffff', color: '#ffffff', iconColor: '#000000' },
 ] as const;
 
 export default function Hero() {
