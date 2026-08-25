@@ -19,12 +19,12 @@ import {
 const PLATFORMS = [
   { name: 'Reddit', Icon: FaRedditAlien, bg: '#FF4500', color: '#FF4500', iconColor: '#ffffff' },
   { name: 'X/Twitter', Icon: FaXTwitter, bg: '#ffffff', color: '#ffffff', iconColor: '#000000' },
-  { name: 'Bluesky', Icon: FaBluesky, bg: '#0085FF', color: '#0085FF', iconColor: '#ffffff' },
-  { name: 'Hacker News', Icon: FaHackerNews, bg: '#FF6600', color: '#FF6600', iconColor: '#ffffff' },
-  { name: 'GitHub', Icon: FaGithub, bg: '#ffffff', color: '#ffffff', iconColor: '#000000' },
   { name: 'LinkedIn', Icon: FaLinkedinIn, bg: '#0A66C2', color: '#0A66C2', iconColor: '#ffffff' },
-  { name: 'Quora', Icon: FaQuora, bg: '#B92B27', color: '#B92B27', iconColor: '#ffffff' },
+  { name: 'HN', Icon: FaHackerNews, bg: '#FF6600', color: '#FF6600', iconColor: '#ffffff' },
   { name: 'Threads', Icon: FaThreads, bg: '#ffffff', color: '#ffffff', iconColor: '#000000' },
+  { name: 'Bluesky', Icon: FaBluesky, bg: '#0085FF', color: '#0085FF', iconColor: '#ffffff' },
+  { name: 'GitHub', Icon: FaGithub, bg: '#ffffff', color: '#ffffff', iconColor: '#000000' },
+  { name: 'Quora', Icon: FaQuora, bg: '#B92B27', color: '#B92B27', iconColor: '#ffffff' },
 ] as const;
 
 export default function Hero() {
@@ -149,7 +149,7 @@ export default function Hero() {
                 <AnimatePresence mode="wait">
                   <motion.span
                     key={platform.name}
-                    className="inline-flex items-center gap-[0.25em] whitespace-nowrap align-baseline"
+                    className="inline-flex max-w-full items-center gap-[0.25em] whitespace-nowrap align-baseline"
                     style={{ color: platform.color }}
                     initial={{ y: 12, opacity: 0, filter: 'blur(4px)' }}
                     animate={{ y: 0, opacity: 1, filter: 'blur(0px)' }}

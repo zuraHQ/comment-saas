@@ -144,6 +144,123 @@ const PLATFORMS = [
     ] satisfies Post[],
   },
   {
+    key: "linkedin",
+    name: "LinkedIn",
+    Icon: FaLinkedinIn,
+    bg: "#0A66C2",
+    iconColor: "#ffffff",
+    posts: [
+      {
+        id: "l1",
+        title: "Can anyone recommend a tool for social listening on a budget?",
+        snippet:
+          "Head of Growth at a 10-person SaaS. We need to know when prospects ask for products like ours. Agency quotes are wild.",
+        community: "Maya Chen",
+        author: "Head of Growth",
+        time: "1h ago",
+        intent: "High",
+      },
+      {
+        id: "l2",
+        title: "We got 14 demos last quarter just from answering questions online",
+        snippet:
+          "No ads. Just being genuinely helpful in threads where people asked for solutions. Founders sleep on this channel.",
+        community: "Tom Okafor",
+        author: "Founder, PipelineIQ",
+        time: "4h ago",
+        intent: "Medium",
+      },
+      {
+        id: "l3",
+        title: "Hiring a community manager to monitor Reddit and LinkedIn",
+        snippet:
+          "Half the job description is 'find conversations where we should show up.' Feels like software should do this part.",
+        community: "Priya Nair",
+        author: "VP Marketing",
+        time: "9h ago",
+        intent: "Medium",
+      },
+    ] satisfies Post[],
+  },
+  {
+    key: "hn",
+    name: "Hacker News",
+    Icon: FaHackerNews,
+    bg: "#FF6600",
+    iconColor: "#ffffff",
+    posts: [
+      {
+        id: "h1",
+        title: "Ask HN: How do you find your first paying customers?",
+        snippet:
+          "Bootstrapped a monitoring tool over 6 months. Launch post got 12 upvotes. Cold outreach feels spammy. What actually worked for you?",
+        community: "Ask HN",
+        author: "184 points",
+        time: "35m ago",
+        intent: "High",
+      },
+      {
+        id: "h2",
+        title: "Ask HN: Best tool for tracking brand mentions across communities?",
+        snippet:
+          "Google Alerts misses almost everything on Reddit and HN. Is there something purpose-built that isn't enterprise-priced?",
+        community: "Ask HN",
+        author: "97 points",
+        time: "2h ago",
+        intent: "High",
+      },
+      {
+        id: "h3",
+        title: "Show HN: I built a CLI to search HN comments semantically",
+        snippet:
+          "Side project using the Algolia dump plus embeddings. Curious if anyone would pay for alerts on top of this.",
+        community: "Show HN",
+        author: "61 points",
+        time: "5h ago",
+        intent: "Medium",
+      },
+    ] satisfies Post[],
+  },
+  {
+    key: "threads",
+    name: "Threads",
+    Icon: FaThreads,
+    bg: "#ffffff",
+    iconColor: "#000000",
+    posts: [
+      {
+        id: "t1",
+        title: "Does anyone know an app that tracks keyword mentions here?",
+        snippet:
+          "The API finally exists but I haven't seen a good alerts tool built on it yet. Want pings when people ask for recs in my niche.",
+        community: "@growthgabi",
+        author: "9.4k followers",
+        time: "26m ago",
+        intent: "High",
+      },
+      {
+        id: "t2",
+        title: "Asked for a CRM rec this morning, got 60 replies by lunch",
+        snippet:
+          "Threads engagement for question posts is unreal right now. Brands that answer fast are winning customers here.",
+        community: "@saasscout",
+        author: "15k followers",
+        time: "3h ago",
+        intent: "Medium",
+      },
+      {
+        id: "t3",
+        title: "Moving our community content strategy to Threads",
+        snippet:
+          "Early-platform reach is too good to ignore. Documenting what works for B2B as we go.",
+        community: "@b2bplaybook",
+        author: "4.2k followers",
+        time: "8h ago",
+        intent: "Low",
+      },
+    ] satisfies Post[],
+  },
+  {
     key: "bluesky",
     name: "Bluesky",
     Icon: FaBluesky,
@@ -193,45 +310,6 @@ const PLATFORMS = [
     ] satisfies Post[],
   },
   {
-    key: "hn",
-    name: "Hacker News",
-    Icon: FaHackerNews,
-    bg: "#FF6600",
-    iconColor: "#ffffff",
-    posts: [
-      {
-        id: "h1",
-        title: "Ask HN: How do you find your first paying customers?",
-        snippet:
-          "Bootstrapped a monitoring tool over 6 months. Launch post got 12 upvotes. Cold outreach feels spammy. What actually worked for you?",
-        community: "Ask HN",
-        author: "184 points",
-        time: "35m ago",
-        intent: "High",
-      },
-      {
-        id: "h2",
-        title: "Ask HN: Best tool for tracking brand mentions across communities?",
-        snippet:
-          "Google Alerts misses almost everything on Reddit and HN. Is there something purpose-built that isn't enterprise-priced?",
-        community: "Ask HN",
-        author: "97 points",
-        time: "2h ago",
-        intent: "High",
-      },
-      {
-        id: "h3",
-        title: "Show HN: I built a CLI to search HN comments semantically",
-        snippet:
-          "Side project using the Algolia dump plus embeddings. Curious if anyone would pay for alerts on top of this.",
-        community: "Show HN",
-        author: "61 points",
-        time: "5h ago",
-        intent: "Medium",
-      },
-    ] satisfies Post[],
-  },
-  {
     key: "github",
     name: "GitHub",
     Icon: FaGithub,
@@ -271,45 +349,6 @@ const PLATFORMS = [
     ] satisfies Post[],
   },
   {
-    key: "linkedin",
-    name: "LinkedIn",
-    Icon: FaLinkedinIn,
-    bg: "#0A66C2",
-    iconColor: "#ffffff",
-    posts: [
-      {
-        id: "l1",
-        title: "Can anyone recommend a tool for social listening on a budget?",
-        snippet:
-          "Head of Growth at a 10-person SaaS. We need to know when prospects ask for products like ours. Agency quotes are wild.",
-        community: "Maya Chen",
-        author: "Head of Growth",
-        time: "1h ago",
-        intent: "High",
-      },
-      {
-        id: "l2",
-        title: "We got 14 demos last quarter just from answering questions online",
-        snippet:
-          "No ads. Just being genuinely helpful in threads where people asked for solutions. Founders sleep on this channel.",
-        community: "Tom Okafor",
-        author: "Founder, PipelineIQ",
-        time: "4h ago",
-        intent: "Medium",
-      },
-      {
-        id: "l3",
-        title: "Hiring a community manager to monitor Reddit and LinkedIn",
-        snippet:
-          "Half the job description is 'find conversations where we should show up.' Feels like software should do this part.",
-        community: "Priya Nair",
-        author: "VP Marketing",
-        time: "9h ago",
-        intent: "Medium",
-      },
-    ] satisfies Post[],
-  },
-  {
     key: "quora",
     name: "Quora",
     Icon: FaQuora,
@@ -344,45 +383,6 @@ const PLATFORMS = [
         community: "Digital Marketing",
         author: "41 followers",
         time: "1d ago",
-        intent: "Low",
-      },
-    ] satisfies Post[],
-  },
-  {
-    key: "threads",
-    name: "Threads",
-    Icon: FaThreads,
-    bg: "#ffffff",
-    iconColor: "#000000",
-    posts: [
-      {
-        id: "t1",
-        title: "Does anyone know an app that tracks keyword mentions here?",
-        snippet:
-          "The API finally exists but I haven't seen a good alerts tool built on it yet. Want pings when people ask for recs in my niche.",
-        community: "@growthgabi",
-        author: "9.4k followers",
-        time: "26m ago",
-        intent: "High",
-      },
-      {
-        id: "t2",
-        title: "Asked for a CRM rec this morning, got 60 replies by lunch",
-        snippet:
-          "Threads engagement for question posts is unreal right now. Brands that answer fast are winning customers here.",
-        community: "@saasscout",
-        author: "15k followers",
-        time: "3h ago",
-        intent: "Medium",
-      },
-      {
-        id: "t3",
-        title: "Moving our community content strategy to Threads",
-        snippet:
-          "Early-platform reach is too good to ignore. Documenting what works for B2B as we go.",
-        community: "@b2bplaybook",
-        author: "4.2k followers",
-        time: "8h ago",
         intent: "Low",
       },
     ] satisfies Post[],
