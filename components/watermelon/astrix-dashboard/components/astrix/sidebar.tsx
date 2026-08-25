@@ -1,4 +1,5 @@
-import { LogOut, MessageCircle, Moon, Settings, Sun, User } from "lucide-react";
+import { LogOut, Moon, Settings, Sun, User } from "lucide-react";
+import { FaDiscord } from "react-icons/fa";
 import { AstrixLogo } from "./logo";
 import { SidebarToggleIcon } from "./icons";
 import { DashboardLink, useDashboardNavigation } from "./navigation";
@@ -132,7 +133,7 @@ export function DashboardSidebar() {
                   "transition-[width,padding] ease-linear",
                 )}
               >
-                <MessageCircle className="size-5" />
+                <FaDiscord className="size-5" />
                 <span className="truncate text-base group-data-[collapsible=icon]:hidden">
                   Discord
                 </span>
