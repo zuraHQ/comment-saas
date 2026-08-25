@@ -14,6 +14,7 @@ import {
   FaRedditAlien,
   FaThreads,
   FaXTwitter,
+  FaYoutube,
 } from 'react-icons/fa6';
 
 const PLATFORMS = [
@@ -21,6 +22,7 @@ const PLATFORMS = [
   { name: 'X/Twitter', Icon: FaXTwitter, bg: '#ffffff', color: '#ffffff', iconColor: '#000000' },
   { name: 'LinkedIn', Icon: FaLinkedinIn, bg: '#0A66C2', color: '#0A66C2', iconColor: '#ffffff' },
   { name: 'HN', Icon: FaHackerNews, bg: '#FF6600', color: '#FF6600', iconColor: '#ffffff' },
+  { name: 'YouTube', Icon: FaYoutube, bg: '#FF0000', color: '#FF0000', iconColor: '#ffffff' },
   { name: 'Threads', Icon: FaThreads, bg: '#ffffff', color: '#ffffff', iconColor: '#000000' },
   { name: 'Bluesky', Icon: FaBluesky, bg: '#0085FF', color: '#0085FF', iconColor: '#ffffff' },
   { name: 'GitHub', Icon: FaGithub, bg: '#ffffff', color: '#ffffff', iconColor: '#000000' },
@@ -134,7 +136,7 @@ export default function Hero() {
               variant="big"
               className="text-foreground mb-2 font-sans leading-[0.95]"
             >
-              Your next customers
+              From 0 to your first
             </Heading>
           </motion.div>
 
@@ -144,44 +146,46 @@ export default function Hero() {
               variant="big"
               className="mb-8 font-sans leading-[0.95]"
             >
-              <span className="text-foreground">are asking on </span>
-              <span className="relative inline-block align-baseline">
-                <AnimatePresence mode="wait">
-                  <motion.span
-                    key={platform.name}
-                    className="inline-flex max-w-full items-center gap-[0.25em] whitespace-nowrap align-baseline"
-                    style={{ color: platform.color }}
-                    initial={{ y: 12, opacity: 0, filter: 'blur(4px)' }}
-                    animate={{ y: 0, opacity: 1, filter: 'blur(0px)' }}
-                    exit={{
-                      y: -12,
-                      opacity: 0,
-                      filter: 'blur(4px)',
-                      transition: { duration: 0.15, ease: 'easeIn' },
-                    }}
-                    transition={{ duration: 0.3, ease: 'easeOut' }}
-                  >
-                    <span
-                      className="inline-flex h-[0.85em] w-[0.85em] shrink-0 items-center justify-center"
-                      style={{ backgroundColor: platform.bg }}
-                    >
-                      <platform.Icon
-                        className="h-[0.6em] w-[0.6em]"
-                        style={{ color: platform.iconColor }}
-                      />
-                    </span>
-                    {platform.name}
-                  </motion.span>
-                </AnimatePresence>
-              </span>
+              <span className="text-primary">1,000 customers</span>
+              <span className="text-foreground">, organically</span>
             </Heading>
           </motion.div>
 
           {/* Subheading */}
           <motion.div variants={itemVariants}>
             <SubHeading variant="big" className="mb-12 max-w-2xl text-pretty">
-              We find posts from people who need a product like yours.
-              Reply first, and turn them into customers.
+              We find the posts on{' '}
+              <span className="relative inline-block align-baseline">
+                  <AnimatePresence mode="wait">
+                    <motion.span
+                      key={platform.name}
+                      className="inline-flex max-w-full items-center gap-[0.25em] whitespace-nowrap align-baseline"
+                      style={{ color: platform.color }}
+                      initial={{ y: 12, opacity: 0, filter: 'blur(4px)' }}
+                      animate={{ y: 0, opacity: 1, filter: 'blur(0px)' }}
+                      exit={{
+                        y: -12,
+                        opacity: 0,
+                        filter: 'blur(4px)',
+                        transition: { duration: 0.15, ease: 'easeIn' },
+                      }}
+                      transition={{ duration: 0.3, ease: 'easeOut' }}
+                    >
+                      <span
+                        className="inline-flex h-[0.85em] w-[0.85em] shrink-0 items-center justify-center"
+                        style={{ backgroundColor: platform.bg }}
+                      >
+                        <platform.Icon
+                          className="h-[0.6em] w-[0.6em]"
+                          style={{ color: platform.iconColor }}
+                        />
+                      </span>
+                      {platform.name}
+                    </motion.span>
+                  </AnimatePresence>
+              </span>{' '}
+              where people ask for a product like yours. Reply first, and win
+              the customer.
             </SubHeading>
           </motion.div>
 
