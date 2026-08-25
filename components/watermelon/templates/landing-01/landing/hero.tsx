@@ -140,7 +140,7 @@ export default function Hero() {
           <motion.div variants={itemVariants}>
             <SubHeading variant="big" className="mb-12 max-w-2xl text-pretty">
               We find the posts where people are asking for a product like
-              yours — so you can reply first and turn threads into customers.
+              yours, so you can reply first and turn threads into customers.
             </SubHeading>
           </motion.div>
 
@@ -167,7 +167,7 @@ export default function Hero() {
               </button>
             </form>
             <p className="mt-3 text-center text-[10px] tracking-widest text-white/40 uppercase">
-              Free while in beta — no credit card required
+              Free while in beta. No credit card required
             </p>
           </motion.div>
 

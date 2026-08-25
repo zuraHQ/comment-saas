@@ -68,7 +68,7 @@ function FakeLoginForm() {
         Sign in
       </h1>
       <p className="mb-8 text-xs uppercase tracking-widest text-white/50">
-        Demo mode — add Clerk keys to enable real auth.
+        Demo mode. Add Clerk keys to enable real auth.
       </p>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
