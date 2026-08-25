@@ -180,9 +180,8 @@ export default function Hero() {
           {/* Subheading */}
           <motion.div variants={itemVariants}>
             <SubHeading variant="big" className="mb-12 max-w-2xl text-pretty">
-              From direct asks to loosely related threads, we surface the
-              posts where your product fits, so you can reply first and turn
-              them into customers.
+              We find posts from people who need a product like yours.
+              Reply first, and turn them into customers.
             </SubHeading>
           </motion.div>
 
