@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/sidebar";
 import {
   currentUser,
+  launchNavigation,
   workspaceNavigation,
   type NavigationItem,
 } from "../../data";
@@ -106,6 +107,15 @@ export function DashboardSidebar() {
       <SidebarContent className="overflow-x-hidden px-3 py-4 transition-[padding] ease-linear group-data-[collapsible=icon]:px-4.25">
         <SidebarMenu className="gap-3">
           {workspaceNavigation.map((item) => (
+            <NavItem key={item.href} item={item} />
+          ))}
+        </SidebarMenu>
+
+        <SidebarGroupLabel className="mt-4 px-3 text-xs font-medium tracking-wide text-muted-foreground uppercase group-data-[collapsible=icon]:hidden">
+          Launch
+        </SidebarGroupLabel>
+        <SidebarMenu className="gap-3">
+          {launchNavigation.map((item) => (
             <NavItem key={item.href} item={item} />
           ))}
         </SidebarMenu>

@@ -394,5 +394,8 @@ export const workspaceNavigation: NavigationItem[] = [
   { name: "Dashboard", href: "/", icon: HomeIcon },
   { name: "Classification", href: "/classification", icon: ClassificationIcon },
   { name: "Analytics", href: "/analytics", icon: ReportsIcon },
+];
+
+export const launchNavigation: NavigationItem[] = [
   { name: "Launchpad", href: "/launchpad", icon: IntegrationIcon },
 ];
