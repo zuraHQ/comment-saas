@@ -6,7 +6,6 @@ import Stats from './landing/stats';
 import Features from './landing/features';
 import AnimatedBento from './landing/animated-bento';
 import ComponentsBento from './landing/component-bento';
-import TemplateBento from './landing/template-bento';
 import Testimonial from './landing/testimonial';
 import Footer from './landing/footer';
 
@@ -24,7 +23,6 @@ export default function Landing01Demo() {
       <Features />
       <AnimatedBento />
       <ComponentsBento />
-      <TemplateBento />
       <Testimonial />
       <Footer />
     </main>

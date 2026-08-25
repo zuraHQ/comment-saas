@@ -1,11 +1,10 @@
-import { ArrowUpRight01Icon } from 'hugeicons-react';
 import Container from './container';
 import Heading from './heading';
 import SubHeading from './subheading';
 import { motion, type Variants, AnimatePresence } from 'motion/react';
 import Link from "next/link";
 import { useState } from 'react';
-import BgFrame from './bg-frame';
+import { useRouter } from 'next/navigation';
 
 const ROTATING_WORDS = [
   'designers',
@@ -14,40 +13,8 @@ const ROTATING_WORDS = [
   'creators',
 ] as const;
 
-const HERO_IMAGES = Array.from({ length: 10 }).map(
-  (_, i) =>
-    `https://assets.watermelon.sh/lp-hero-${(i + 1).toString().padStart(2, '0')}.avif`,
-);
-
-const IMAGE_POSITIONS = [
-  // L4 (Highest, furthest left)
-  { top: '-30%', left: '-15%', width: '24%', rotate: '-15deg', zIndex: 1 },
-  // R4 (Highest, furthest right)
-  { top: '-30%', right: '-15%', width: '24%', rotate: '15deg', zIndex: 1 },
-
-  // L3
-  { top: '-10%', left: '-5%', width: '28%', rotate: '-10deg', zIndex: 2 },
-  // R3
-  { top: '-10%', right: '-5%', width: '28%', rotate: '10deg', zIndex: 2 },
-
-  // L2
-  { top: '10%', left: '5%', width: '34%', rotate: '-5deg', zIndex: 3 },
-  // R2
-  { top: '10%', right: '5%', width: '34%', rotate: '5deg', zIndex: 3 },
-
-  // L1
-  { top: '25%', left: '15%', width: '42%', rotate: '-2deg', zIndex: 4 },
-  // R1
-  { top: '25%', right: '15%', width: '42%', rotate: '2deg', zIndex: 4 },
-
-  // Center (Front, lowest)
-  { top: '40%', left: '24%', width: '52%', rotate: '0deg', zIndex: 10 },
-
-  // Top Center (Background Floater)
-  { top: '15%', left: '38%', width: '24%', rotate: '0deg', zIndex: 0 },
-];
-
 export default function Hero() {
+  const router = useRouter();
   const [wordIndex] = useState(0);
 
   const containerVariants: Variants = {
@@ -137,14 +104,6 @@ export default function Hero() {
           initial={false}
           animate="visible"
         >
-          {/* Badge */}
-          <motion.div
-            variants={itemVariants}
-            className="text-primary mb-10 inline-flex items-center gap-2 border border-white/10 bg-white/3 px-4 py-1.5 text-xs font-bold tracking-widest uppercase backdrop-blur-sm"
-          >
-            Open Source &mdash; Free Forever
-          </motion.div>
-
           {/* Main Heading — 2 lines */}
           <motion.div variants={itemVariants}>
             <Heading
@@ -185,26 +144,31 @@ export default function Hero() {
             </SubHeading>
           </motion.div>
 
-          {/* CTAs */}
-          <motion.div
-            variants={itemVariants}
-            className="flex flex-col gap-4 sm:flex-row"
-          >
-            <Link
-              href="/login"
-              className="group text-background bg-primary hover:bg-primary/90 inline-flex items-center justify-center gap-2 px-8 py-3 text-sm font-bold transition-all active:scale-[0.97]"
+          {/* Email capture CTA */}
+          <motion.div variants={itemVariants} className="w-full max-w-xl">
+            <form
+              className="flex flex-col gap-3 sm:flex-row"
+              onSubmit={(e) => {
+                e.preventDefault();
+                router.push('/login');
+              }}
             >
-              Browse Components
-              <ArrowUpRight01Icon className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </Link>
-            <a
-              href="https://github.com/WatermelonCorp/watermelon-platform"
-              target="_blank"
-              rel="noreferrer"
-              className="text-foreground inline-flex items-center justify-center border border-white/10 px-8 py-3 text-sm font-bold transition-all hover:bg-white/5 active:scale-[0.97]"
-            >
-              Star on GitHub
-            </a>
+              <input
+                type="email"
+                required
+                placeholder="you@company.com"
+                className="h-12 flex-1 border border-white/10 bg-white/5 px-5 text-sm text-white placeholder:text-white/30 outline-none transition-colors focus:border-primary/60"
+              />
+              <button
+                type="submit"
+                className="h-12 shrink-0 bg-primary px-8 text-xs font-bold tracking-widest text-background uppercase transition-all hover:bg-primary/90 active:scale-[0.97]"
+              >
+                Get Started
+              </button>
+            </form>
+            <p className="mt-3 text-center text-[10px] tracking-widest text-white/40 uppercase">
+              Free while in beta — no credit card required
+            </p>
           </motion.div>
 
           {/* Social proof strip */}
@@ -252,51 +216,6 @@ export default function Hero() {
           </motion.div>
         </motion.div>
 
-        {/* Images Collage */}
-        <motion.div
-          className="pointer-events-none relative mx-auto mt-32 flex h-[400px] w-full max-w-6xl items-center justify-center sm:h-[600px] md:h-[800px]"
-          initial={false}
-          animate="visible"
-          variants={{
-            hidden: {},
-            visible: {
-              transition: {
-                staggerChildren: 0.1,
-                delayChildren: 0.8,
-              },
-            },
-          }}
-        >
-          {HERO_IMAGES.map((url, i) => (
-            <motion.div
-              key={url}
-              className="pointer-events-auto absolute shadow-2xl"
-              style={{
-                ...IMAGE_POSITIONS[i],
-                transformOrigin: 'center center',
-              }}
-              variants={{
-                hidden: { opacity: 0, y: 12, filter: 'blur(4px)' },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                  filter: 'blur(0px)',
-                  transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
-                },
-              }}
-              whileHover={{
-                scale: 1.05,
-                zIndex: 50,
-                transition: { duration: 0.4 },
-              }}
-            >
-              <BgFrame
-                imageUrl={url}
-                className="bg-background w-full border-white/10 shadow-2xl"
-              />
-            </motion.div>
-          ))}
-        </motion.div>
       </Container>
     </section>
   );
