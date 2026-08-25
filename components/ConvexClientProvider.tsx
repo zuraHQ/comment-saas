@@ -1,9 +1,10 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { ClerkProvider, useAuth } from "@clerk/nextjs";
-import { ConvexReactClient } from "convex/react";
+import { ConvexReactClient, useConvexAuth, useMutation } from "convex/react";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
+import { api } from "@/convex/_generated/api";
 
 const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
@@ -18,8 +19,19 @@ export function ConvexClientProvider({ children }: { children: ReactNode }) {
   return (
     <ClerkProvider>
       <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
+        <UserSync />
         {children}
       </ConvexProviderWithClerk>
     </ClerkProvider>
   );
+}
+
+// Upsert the Clerk user into Convex once the session is authenticated.
+function UserSync() {
+  const { isAuthenticated } = useConvexAuth();
+  const ensure = useMutation(api.users.ensure);
+  useEffect(() => {
+    if (isAuthenticated) void ensure({});
+  }, [isAuthenticated, ensure]);
+  return null;
 }

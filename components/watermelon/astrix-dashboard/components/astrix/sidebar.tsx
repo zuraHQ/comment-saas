@@ -1,20 +1,9 @@
-import { LogOut, Moon, Settings, Sun, User } from "lucide-react";
 import { FaDiscord } from "react-icons/fa";
+import { AccountMenu } from "./account-menu";
 import { AstrixLogo } from "./logo";
 import { SidebarToggleIcon } from "./icons";
 import { DashboardLink, useDashboardNavigation } from "./navigation";
-import { useTheme } from "./theme-provider";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import {
   Sidebar,
   SidebarContent,
@@ -27,15 +16,11 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import {
-  currentUser,
   launchNavigation,
   workspaceNavigation,
   type NavigationItem,
 } from "../../data";
 import { cn } from "@/lib/utils";
-
-const dropdownTriggerClassName =
-  "peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm ring-sidebar-ring outline-hidden transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0";
 
 function NavItem({ item }: { item: NavigationItem }) {
   const { pathname } = useDashboardNavigation();
@@ -84,7 +69,6 @@ function NavItem({ item }: { item: NavigationItem }) {
 
 export function DashboardSidebar() {
   const { toggleSidebar } = useSidebar();
-  const { theme, toggleTheme } = useTheme();
 
   return (
     <Sidebar collapsible="icon" className="border-r border-sidebar-border">
@@ -156,67 +140,7 @@ export function DashboardSidebar() {
       <SidebarFooter className="px-3 py-2 transition-[padding] ease-linear group-data-[collapsible=icon]:px-5.25">
         <SidebarMenu>
           <SidebarMenuItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger
-                type="button"
-                className={cn(
-                  dropdownTriggerClassName,
-                  "h-auto gap-2.5 overflow-hidden rounded-xl px-1.5 py-1.5 group-data-[collapsible=icon]:size-10! group-data-[collapsible=icon]:rounded-full! group-data-[collapsible=icon]:p-0!",
-                )}
-                aria-label="Account menu"
-              >
-                <Avatar className="size-10 after:border-[0.15625rem]">
-                  <AvatarImage
-                    src={currentUser.avatar}
-                    alt={currentUser.name}
-                  />
-                  <AvatarFallback>{currentUser.initials}</AvatarFallback>
-                </Avatar>
-                <div className="min-w-0 flex-1 text-left group-data-[collapsible=icon]:hidden">
-                  <p className="truncate text-base font-semibold">
-                    {currentUser.name}
-                  </p>
-                  <p className="truncate text-sm text-muted-foreground">
-                    {currentUser.email}
-                  </p>
-                </div>
-              </DropdownMenuTrigger>
-
-              <DropdownMenuContent
-                align="start"
-                side="top"
-                className="astrix-dashboard w-56"
-              >
-                <DropdownMenuGroup>
-                  <DropdownMenuLabel className="font-normal">
-                    <p className="font-medium text-foreground">
-                      {currentUser.name}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {currentUser.email}
-                    </p>
-                  </DropdownMenuLabel>
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <User />
-                  Profile Settings
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Settings />
-                  Account Settings
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={toggleTheme}>
-                  {theme === "dark" ? <Sun /> : <Moon />}
-                  {theme === "dark" ? "Light mode" : "Dark mode"}
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem variant="destructive">
-                  <LogOut />
-                  Log out
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <AccountMenu />
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
