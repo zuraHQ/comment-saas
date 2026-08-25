@@ -7,10 +7,10 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 const ROTATING_WORDS = [
-  'designers',
-  'developers',
-  'builders',
-  'creators',
+  'Reddit',
+  'X',
+  'LinkedIn',
+  'Hacker News',
 ] as const;
 
 export default function Hero() {
@@ -111,7 +111,7 @@ export default function Hero() {
               variant="big"
               className="text-foreground mb-2 font-sans leading-[0.95]"
             >
-              Beautiful Components
+              Your next customers
             </Heading>
           </motion.div>
 
@@ -121,7 +121,7 @@ export default function Hero() {
               variant="big"
               className="mb-8 font-sans leading-[0.95]"
             >
-              <span className="text-foreground">Built for </span>
+              <span className="text-foreground">are asking on </span>
               <span className="relative inline-block min-w-[3ch]">
                 <AnimatePresence mode="wait">
                   <motion.span
@@ -139,8 +139,8 @@ export default function Hero() {
           {/* Subheading */}
           <motion.div variants={itemVariants}>
             <SubHeading variant="big" className="mb-12 max-w-2xl text-pretty">
-              600+ free, open-source UI components crafted for the design
-              community. Copy, paste, and ship — no strings attached.
+              We find the posts where people are asking for a product like
+              yours — so you can reply first and turn threads into customers.
             </SubHeading>
           </motion.div>
 
@@ -178,7 +178,7 @@ export default function Hero() {
           >
             <div className="flex items-center gap-3 font-mono text-xs tracking-widest text-white/40 uppercase">
               <span className="h-px w-8 bg-white/10" />
-              Trusted by developers worldwide
+              Built for founders and indie hackers
               <span className="h-px w-8 bg-white/10" />
             </div>
             <motion.div
@@ -193,7 +193,7 @@ export default function Hero() {
                 },
               }}
             >
-              {['600+ Components', '100+ Animations', '100% Free'].map(
+              {['Monitors communities 24/7', 'Ranks posts by intent', 'Reply-ready in one click'].map(
                 (stat) => (
                   <motion.div
                     key={stat}
