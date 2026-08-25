@@ -1,0 +1,285 @@
+"use client";
+
+import { useEffect, useState, type FormEvent } from "react";
+import { Check, Trash2, X } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
+import { useDashboardNavigation } from "./navigation";
+import { POST_TYPES, PROJECT_COLORS, useProject } from "./project-context";
+
+export function ProjectSettingsContent() {
+  const { project, projects, updateProject, removeProject } = useProject();
+  const { navigate } = useDashboardNavigation();
+
+  const [name, setName] = useState(project.name);
+  const [url, setUrl] = useState(project.url);
+  const [description, setDescription] = useState(project.description);
+  const [keyword, setKeyword] = useState("");
+  const [confirmDelete, setConfirmDelete] = useState(false);
+
+  // Re-sync the form when the topbar switches project underneath us.
+  useEffect(() => {
+    setName(project.name);
+    setUrl(project.url);
+    setDescription(project.description);
+    setKeyword("");
+    setConfirmDelete(false);
+  }, [project.id, project.name, project.url, project.description]);
+
+  const addKeyword = (e: FormEvent) => {
+    e.preventDefault();
+    const value = keyword.trim().toLowerCase();
+    if (!value || project.keywords.includes(value)) {
+      setKeyword("");
+      return;
+    }
+    updateProject(project.id, { keywords: [...project.keywords, value] });
+    setKeyword("");
+  };
+
+  const removeKeyword = (value: string) => {
+    updateProject(project.id, {
+      keywords: project.keywords.filter((k) => k !== value),
+    });
+  };
+
+  const togglePostType = (id: string) => {
+    const next = project.postTypes.includes(id)
+      ? project.postTypes.filter((t) => t !== id)
+      : [...project.postTypes, id];
+    updateProject(project.id, { postTypes: next });
+  };
+
+  return (
+    <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 p-6">
+      <div>
+        <h1 className="text-xl font-semibold">
+          Settings for: <span className="text-primary">{`{ ${project.name} }`}</span>
+        </h1>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Each project is one product. Its keywords and post types decide which
+          posts land in your feed.
+        </p>
+      </div>
+
+      <Section title="Project">
+        <Field label="Name">
+          <Input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            onBlur={() =>
+              updateProject(project.id, { name: name.trim() || project.name })
+            }
+            className="rounded-none"
+          />
+        </Field>
+        <Field label="Product URL">
+          <Input
+            value={url}
+            placeholder="https://yourproduct.com"
+            onChange={(e) => setUrl(e.target.value)}
+            onBlur={() => updateProject(project.id, { url: url.trim() })}
+            className="rounded-none"
+          />
+        </Field>
+        <Field
+          label="What it does"
+          hint="One or two lines. Used to judge how relevant a post is."
+        >
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            onBlur={() => updateProject(project.id, { description })}
+            rows={3}
+            placeholder="Lightweight CRM for small sales teams."
+            className="w-full resize-none border border-input bg-transparent px-3 py-2 text-sm outline-none placeholder:text-muted-foreground focus-visible:border-ring"
+          />
+        </Field>
+        <Field label="Color">
+          <div className="flex flex-wrap gap-2">
+            {PROJECT_COLORS.map((color) => (
+              <button
+                key={color}
+                type="button"
+                onClick={() => updateProject(project.id, { color })}
+                aria-label={`Use ${color}`}
+                className={cn(
+                  "flex h-7 w-7 cursor-pointer items-center justify-center border transition-colors",
+                  project.color === color
+                    ? "border-foreground"
+                    : "border-transparent hover:border-border",
+                )}
+              >
+                <span className="h-5 w-5" style={{ backgroundColor: color }} />
+              </button>
+            ))}
+          </div>
+        </Field>
+      </Section>
+
+      <Section
+        title="Keywords"
+        subtitle={`${project.keywords.length} tracked. We search every platform for these.`}
+      >
+        <form onSubmit={addKeyword} className="flex gap-2">
+          <Input
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+            placeholder="e.g. hubspot alternative"
+            className="rounded-none"
+          />
+          <button
+            type="submit"
+            className="h-9 shrink-0 cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
+          >
+            Add
+          </button>
+        </form>
+
+        {project.keywords.length ? (
+          <div className="flex flex-wrap gap-2">
+            {project.keywords.map((k) => (
+              <span
+                key={k}
+                className="flex items-center gap-2 border border-border px-3 py-1.5 text-sm"
+              >
+                {k}
+                <button
+                  type="button"
+                  onClick={() => removeKeyword(k)}
+                  aria-label={`Remove ${k}`}
+                  className="cursor-pointer text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  <X className="size-3.5" />
+                </button>
+              </span>
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm text-muted-foreground">
+            No keywords yet. Add the phrases people use when they need your product.
+          </p>
+        )}
+      </Section>
+
+      <Section
+        title="Post types"
+        subtitle="What kind of posts count as a lead for this project."
+      >
+        <div className="grid gap-2 sm:grid-cols-2">
+          {POST_TYPES.map((type) => {
+            const on = project.postTypes.includes(type.id);
+            return (
+              <button
+                key={type.id}
+                type="button"
+                onClick={() => togglePostType(type.id)}
+                className={cn(
+                  "flex cursor-pointer items-center gap-3 border p-3 text-left text-sm transition-colors",
+                  on
+                    ? "border-primary/40 bg-sidebar-accent/40"
+                    : "border-border hover:bg-sidebar-accent/60",
+                )}
+              >
+                <span
+                  className={cn(
+                    "flex size-6 shrink-0 items-center justify-center border transition-colors",
+                    on ? "border-primary bg-primary" : "border-border",
+                  )}
+                >
+                  {on ? <Check className="size-4 text-[#101010]" /> : null}
+                </span>
+                {type.label}
+              </button>
+            );
+          })}
+        </div>
+      </Section>
+
+      <Section title="Danger zone">
+        {projects.length > 1 ? (
+          confirmDelete ? (
+            <div className="flex flex-wrap items-center gap-3">
+              <p className="text-sm">
+                Delete <span className="text-primary">{project.name}</span> and its
+                settings?
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  removeProject(project.id);
+                  navigate("/");
+                }}
+                className="h-9 cursor-pointer border border-red-500/40 px-4 text-xs font-bold tracking-wider text-red-400 uppercase transition-colors hover:bg-red-500/10"
+              >
+                Delete
+              </button>
+              <button
+                type="button"
+                onClick={() => setConfirmDelete(false)}
+                className="h-9 cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
+              >
+                Cancel
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setConfirmDelete(true)}
+              className="flex h-9 w-fit cursor-pointer items-center gap-2 border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:border-red-500/40 hover:text-red-400"
+            >
+              <Trash2 className="size-3.5" />
+              Delete project
+            </button>
+          )
+        ) : (
+          <p className="text-sm text-muted-foreground">
+            This is your only project. Create another one before deleting it.
+          </p>
+        )}
+      </Section>
+    </div>
+  );
+}
+
+function Section({
+  title,
+  subtitle,
+  children,
+}: {
+  title: string;
+  subtitle?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section className="flex flex-col gap-4 border border-border p-5">
+      <div>
+        <h2 className="text-xs font-bold tracking-wider text-muted-foreground uppercase">
+          {title}
+        </h2>
+        {subtitle ? (
+          <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>
+        ) : null}
+      </div>
+      {children}
+    </section>
+  );
+}
+
+function Field({
+  label,
+  hint,
+  children,
+}: {
+  label: string;
+  hint?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex flex-col gap-2">
+      <label className="text-sm font-medium">{label}</label>
+      {children}
+      {hint ? <p className="text-xs text-muted-foreground">{hint}</p> : null}
+    </div>
+  );
+}

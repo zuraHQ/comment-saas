@@ -1,4 +1,5 @@
-import { Check, ChevronsUpDown, Plus } from "lucide-react";
+import { useState } from "react";
+import { Check, ChevronsUpDown, Plus, Settings } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,17 +11,20 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { DashboardLink, useDashboardNavigation } from "./navigation";
-import { PROJECTS, useProject } from "./project-context";
+import { useProject } from "./project-context";
 
 const PAGE_LABELS: Record<string, string> = {
   "/analytics": "Analytics",
   "/launchpad": "Launchpad",
+  "/settings": "Settings",
 };
 
 export function DashboardTopbar() {
-  const { project, setProjectId } = useProject();
-  const { pathname } = useDashboardNavigation();
+  const { project, projects, setProjectId, addProject } = useProject();
+  const { pathname, navigate } = useDashboardNavigation();
   const pageLabel = PAGE_LABELS[pathname];
+  const [creating, setCreating] = useState(false);
+  const [newName, setNewName] = useState("");
 
   return (
     <header className="flex h-16 items-center justify-between gap-4 border-b px-4 md:px-6 md:pr-8">
@@ -69,7 +73,7 @@ export function DashboardTopbar() {
             <DropdownMenuGroup>
               <DropdownMenuLabel>Projects</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              {PROJECTS.map((p) => (
+              {projects.map((p) => (
                 <DropdownMenuItem key={p.id} onSelect={() => setProjectId(p.id)}>
                   <span
                     className="flex h-5 w-5 shrink-0 items-center justify-center text-[10px] font-bold text-[#101010]"
@@ -83,9 +87,46 @@ export function DashboardTopbar() {
               ))}
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem disabled>
-              <Plus className="size-4" />
-              New project
+            {creating ? (
+              <form
+                className="p-1"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (!newName.trim()) return;
+                  addProject(newName);
+                  setNewName("");
+                  setCreating(false);
+                  navigate("/settings");
+                }}
+              >
+                <input
+                  autoFocus
+                  value={newName}
+                  onChange={(e) => setNewName(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Escape") {
+                      setCreating(false);
+                      setNewName("");
+                    }
+                  }}
+                  placeholder="Project name"
+                  className="h-8 w-full border border-border bg-transparent px-2 text-sm outline-none placeholder:text-muted-foreground focus-visible:border-ring"
+                />
+              </form>
+            ) : (
+              <DropdownMenuItem
+                onSelect={(e) => {
+                  e.preventDefault();
+                  setCreating(true);
+                }}
+              >
+                <Plus className="size-4" />
+                New project
+              </DropdownMenuItem>
+            )}
+            <DropdownMenuItem onSelect={() => navigate("/settings")}>
+              <Settings className="size-4" />
+              {project.name} settings
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
