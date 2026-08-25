@@ -209,29 +209,6 @@ export default function Hero() {
             </form>
           </motion.div>
 
-          {/* Platform logos */}
-          <motion.div
-            variants={itemVariants}
-            className="mt-14 flex flex-col items-center gap-4"
-          >
-            <div className="flex items-center gap-3 font-mono text-xs tracking-widest text-white/40 uppercase">
-              <span className="h-px w-8 bg-white/10" />
-              Finding posts across
-              <span className="h-px w-8 bg-white/10" />
-            </div>
-            <div className="flex flex-wrap items-center justify-center gap-3">
-            {PLATFORMS.map((p) => (
-              <span
-                key={p.name}
-                title={p.name}
-                className="flex h-9 w-9 items-center justify-center"
-                style={{ backgroundColor: p.bg }}
-              >
-                <p.Icon className="h-5 w-5" style={{ color: p.iconColor }} />
-              </span>
-            ))}
-            </div>
-          </motion.div>
 
         </motion.div>
 
