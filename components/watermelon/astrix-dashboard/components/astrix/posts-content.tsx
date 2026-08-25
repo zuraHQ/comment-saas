@@ -592,10 +592,29 @@ export function PostsContent() {
 
   return (
     <div className="flex h-full flex-col gap-6 p-6">
-      <h1 className="text-xl font-semibold">
-        Looking posts for:{" "}
-        <span className="text-primary">{`{ ${project.name} }`}</span>
-      </h1>
+      <div className="flex items-center justify-between gap-4">
+        <h1 className="text-xl font-semibold">
+          Looking posts for:{" "}
+          <span className="text-primary">{`{ ${project.name} }`}</span>
+        </h1>
+        <Sheet>
+          <SheetTrigger
+            type="button"
+            className="h-9 cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
+          >
+            History
+          </SheetTrigger>
+          <SheetContent
+            side="right"
+            className="astrix-dashboard flex w-full flex-col gap-0 p-0 sm:max-w-md"
+          >
+            <SheetHeader className="border-b border-border px-4 py-4">
+              <SheetTitle className="text-base">History</SheetTitle>
+            </SheetHeader>
+            <HistoryPanel replied={replied} onUnmark={toggleReplied} />
+          </SheetContent>
+        </Sheet>
+      </div>
 
       <div className="flex min-h-0 flex-1 flex-col border border-border lg:flex-row">
         {/* Platform rail */}
@@ -671,23 +690,6 @@ export function PostsContent() {
                   className={cn("h-3.5 w-3.5", refreshing && "animate-spin")}
                 />
               </button>
-              <Sheet>
-                <SheetTrigger
-                  type="button"
-                  className="border border-border px-2.5 py-1 text-[10px] font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
-                >
-                  History
-                </SheetTrigger>
-                <SheetContent
-                  side="right"
-                  className="astrix-dashboard flex w-full flex-col gap-0 p-0 sm:max-w-md"
-                >
-                  <SheetHeader className="border-b border-border px-4 py-4">
-                    <SheetTitle className="text-base">History</SheetTitle>
-                  </SheetHeader>
-                  <HistoryPanel replied={replied} onUnmark={toggleReplied} />
-                </SheetContent>
-              </Sheet>
               <button
                 type="button"
                 onClick={() => setHideReplied((v) => !v)}
