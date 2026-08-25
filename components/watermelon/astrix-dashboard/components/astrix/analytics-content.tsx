@@ -6,6 +6,7 @@ import {
   FaLinkedinIn,
   FaRedditAlien,
   FaXTwitter,
+  FaYoutube,
 } from "react-icons/fa6";
 import { useProject } from "./project-context";
 
@@ -16,6 +17,7 @@ const PLATFORM_CLICKS = [
   { name: "X/Twitter", Icon: FaXTwitter, chip: "#ffffff", iconColor: "#000000", clicks: 507 },
   { name: "LinkedIn", Icon: FaLinkedinIn, chip: "#0A66C2", iconColor: "#ffffff", clicks: 342 },
   { name: "HN", Icon: FaHackerNews, chip: "#FF6600", iconColor: "#ffffff", clicks: 296 },
+  { name: "YouTube", Icon: FaYoutube, chip: "#FF0000", iconColor: "#ffffff", clicks: 189 },
   { name: "Bluesky", Icon: FaBluesky, chip: "#0085FF", iconColor: "#ffffff", clicks: 118 },
 ];
 

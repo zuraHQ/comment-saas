@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { RefreshCw } from "lucide-react";
+import { Check, RefreshCw } from "lucide-react";
 import {
   FaBluesky,
   FaGithub,
@@ -9,6 +9,7 @@ import {
   FaLinkedinIn,
   FaQuora,
   FaThreads,
+  FaYoutube,
   FaRedditAlien,
   FaXTwitter,
 } from "react-icons/fa6";
@@ -223,6 +224,45 @@ const PLATFORMS = [
     ] satisfies Post[],
   },
   {
+    key: "youtube",
+    name: "YouTube",
+    Icon: FaYoutube,
+    bg: "#FF0000",
+    iconColor: "#ffffff",
+    posts: [
+      {
+        id: "y1",
+        title: "I tried 7 tools to find customers on Reddit, here's what worked",
+        snippet:
+          "Comment section is full of founders asking for recommendations. Great thread to be helpful in.",
+        community: "@growthjourney",
+        author: "48k views",
+        time: "1h ago",
+        intent: "High",
+      },
+      {
+        id: "y2",
+        title: "How I got my first 100 SaaS customers without ads",
+        snippet:
+          "Comments asking 'what tool did you use to monitor mentions?' keep piling up under this one.",
+        community: "@bootstrapdiaries",
+        author: "112k views",
+        time: "6h ago",
+        intent: "High",
+      },
+      {
+        id: "y3",
+        title: "Reply marketing tutorial for indie hackers",
+        snippet:
+          "Viewers in the comments trading subreddit lists and asking for automation tools.",
+        community: "@microsaaslab",
+        author: "23k views",
+        time: "1d ago",
+        intent: "Medium",
+      },
+    ] satisfies Post[],
+  },
+  {
     key: "threads",
     name: "Threads",
     Icon: FaThreads,
@@ -427,6 +467,10 @@ const FILLER_SOURCES: Record<string, Array<{ community: string; author: string }
     { community: "Ask HN", author: "38 points" },
     { community: "Show HN", author: "121 points" },
   ],
+  youtube: [
+    { community: "@founderclips", author: "31k views" },
+    { community: "@saasbuilders", author: "9.4k views" },
+  ],
   github: [
     { community: "supabase/supabase", author: "Discussion" },
     { community: "calcom/cal.com", author: "Discussion" },
@@ -450,7 +494,7 @@ const FILLER_SOURCES: Record<string, Array<{ community: string; author: string }
 
 const FILLER_TIMES = ["4h ago", "6h ago", "9h ago", "12h ago", "16h ago", "20h ago", "1d ago", "1d ago", "2d ago", "2d ago", "3d ago", "3d ago"];
 
-const ALL_PLATFORMS = PLATFORMS.map((platform) => {
+export const ALL_PLATFORMS = PLATFORMS.map((platform) => {
   const sources = FILLER_SOURCES[platform.key] ?? [];
   const fillers: Post[] = FILLER.slice(0, Math.max(0, 15 - platform.posts.length)).map(
     (f, i) => ({
@@ -481,10 +525,11 @@ function postUrl(platform: string, community: string) {
   if (platform === "linkedin") return "https://www.linkedin.com/feed/";
   if (platform === "quora") return "https://www.quora.com/";
   if (platform === "threads") return `https://www.threads.net/${community}`;
+  if (platform === "youtube") return `https://www.youtube.com/${community}`;
   return `https://bsky.app/profile/${community.slice(1)}`;
 }
 
-const REPLIED_STORAGE_KEY = "replied-posts";
+export const REPLIED_STORAGE_KEY = "replied-posts";
 
 export function PostsContent() {
   const { project } = useProject();
@@ -672,14 +717,18 @@ export function PostsContent() {
                           e.stopPropagation();
                           toggleReplied(post.id);
                         }}
+                        aria-pressed={replied.has(post.id)}
+                        title={
+                          replied.has(post.id) ? "Replied" : "Mark as replied"
+                        }
                         className={cn(
-                          "px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase transition-colors",
+                          "flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center border transition-colors",
                           replied.has(post.id)
-                            ? "text-primary hover:text-primary/70"
-                            : "border border-border text-muted-foreground opacity-0 group-hover:opacity-100 hover:bg-sidebar-accent hover:text-foreground",
+                            ? "border-primary bg-primary text-primary-foreground"
+                            : "border-border text-muted-foreground/40 hover:border-foreground/40 hover:text-foreground",
                         )}
                       >
-                        {replied.has(post.id) ? "✓ Replied" : "Mark replied"}
+                        <Check className="h-3.5 w-3.5" />
                       </button>
                     </div>
                   </div>

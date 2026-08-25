@@ -15,6 +15,7 @@ import { PROJECTS, useProject } from "./project-context";
 const PAGE_LABELS: Record<string, string> = {
   "/analytics": "Analytics",
   "/launchpad": "Launchpad",
+  "/history": "History",
 };
 
 export function DashboardTopbar() {
