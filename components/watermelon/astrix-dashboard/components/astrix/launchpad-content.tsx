@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useProject } from "./project-context";
 
@@ -92,7 +93,7 @@ export function LaunchpadContent() {
             <div
               key={`${site.domain}-${site.name}`}
               className={cn(
-                "flex flex-col border transition-colors",
+                "flex items-center border pr-3 transition-colors",
                 isLaunched ? "border-primary/40" : "border-border",
               )}
             >
@@ -100,7 +101,7 @@ export function LaunchpadContent() {
                 href={site.url ?? `https://${site.domain}`}
                 target="_blank"
                 rel="noreferrer"
-                className="flex flex-1 cursor-pointer items-center gap-3 p-4 transition-colors hover:bg-sidebar-accent/60"
+                className="flex min-w-0 flex-1 cursor-pointer items-center gap-3 p-4 transition-colors hover:bg-sidebar-accent/60"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
@@ -126,16 +127,19 @@ export function LaunchpadContent() {
                 type="button"
                 onClick={() => toggleLaunched(site.name)}
                 aria-pressed={isLaunched}
-                className={cn(
-                  "border-t px-4 py-2 text-left text-[10px] font-bold tracking-wider uppercase transition-colors",
+                title={
                   isLaunched
-                    ? "border-primary/40 text-primary hover:text-primary/70"
-                    : "border-border text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
+                    ? `${project.name} launched here`
+                    : "Mark as launched"
+                }
+                className={cn(
+                  "flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center border transition-colors",
+                  isLaunched
+                    ? "border-primary bg-primary text-primary-foreground"
+                    : "border-border text-muted-foreground/40 hover:border-foreground/40 hover:text-foreground",
                 )}
               >
-                {isLaunched
-                  ? `\u2713 ${project.name} launched here`
-                  : "Mark as launched"}
+                <Check className="h-3.5 w-3.5" />
               </button>
             </div>
           );
