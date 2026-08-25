@@ -1,4 +1,4 @@
-import { LogOut, Moon, Settings, Sun, User } from "lucide-react";
+import { LogOut, MessageCircle, Moon, Settings, Sun, User } from "lucide-react";
 import { AstrixLogo } from "./logo";
 import { SidebarToggleIcon } from "./icons";
 import { DashboardLink, useDashboardNavigation } from "./navigation";
@@ -18,6 +18,7 @@ import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -106,6 +107,38 @@ export function DashboardSidebar() {
           {workspaceNavigation.map((item) => (
             <NavItem key={item.href} item={item} />
           ))}
+        </SidebarMenu>
+
+        <SidebarGroupLabel className="mt-4 px-3 text-xs font-medium tracking-wide text-muted-foreground uppercase group-data-[collapsible=icon]:hidden">
+          Community
+        </SidebarGroupLabel>
+        <SidebarMenu className="gap-3">
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              asChild
+              tooltip="Discord"
+              className={cn(
+                "h-auto [&_svg]:size-5",
+                "group-data-[collapsible=icon]:size-12!",
+                "group-data-[collapsible=icon]:px-3.5!",
+              )}
+            >
+              <a
+                href="https://discord.com"
+                target="_blank"
+                rel="noreferrer"
+                className={cn(
+                  "flex h-12 w-full items-center gap-2.5 overflow-hidden rounded-xl px-3 py-2.5 text-muted-foreground hover:text-foreground",
+                  "transition-[width,padding] ease-linear",
+                )}
+              >
+                <MessageCircle className="size-5" />
+                <span className="truncate text-base group-data-[collapsible=icon]:hidden">
+                  Discord
+                </span>
+              </a>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
         </SidebarMenu>
       </SidebarContent>
 

@@ -392,10 +392,5 @@ export const generatedReports: GeneratedReport[] = [
 
 export const workspaceNavigation: NavigationItem[] = [
   { name: "Dashboard", href: "/", icon: HomeIcon },
-  {
-    name: "Classification",
-    href: "/classification",
-    icon: ClassificationIcon,
-    badge: String(classificationQueue.length),
-  },
+  { name: "Classification", href: "/classification", icon: ClassificationIcon },
 ];
