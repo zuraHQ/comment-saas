@@ -134,7 +134,7 @@ export default function Hero() {
               variant="big"
               className="text-foreground mb-2 font-sans leading-[0.95]"
             >
-              Your next customers
+              Get customers
             </Heading>
           </motion.div>
 
@@ -144,7 +144,7 @@ export default function Hero() {
               variant="big"
               className="mb-8 font-sans leading-[0.95]"
             >
-              <span className="text-foreground">are asking on </span>
+              <span className="text-foreground">from </span>
               <span className="relative inline-block align-baseline">
                 <AnimatePresence mode="wait">
                   <motion.span
@@ -180,8 +180,9 @@ export default function Hero() {
           {/* Subheading */}
           <motion.div variants={itemVariants}>
             <SubHeading variant="big" className="mb-12 max-w-2xl text-pretty">
-              We find the posts where people are asking for a product like
-              yours, so you can reply first and turn threads into customers.
+              From direct asks to loosely related threads, we surface the
+              posts where your product fits, so you can reply first and turn
+              them into customers.
             </SubHeading>
           </motion.div>
 
