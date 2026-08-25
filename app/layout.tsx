@@ -23,7 +23,17 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       className={`${inter.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
+      <head>
+        {/* Apply the stored dashboard theme before first paint to avoid a light flash */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "(function(){try{if(localStorage.getItem('astrix-theme')!=='light'){document.documentElement.classList.add('dark')}}catch(e){}})()",
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
         <ConvexClientProvider>{children}</ConvexClientProvider>
       </body>

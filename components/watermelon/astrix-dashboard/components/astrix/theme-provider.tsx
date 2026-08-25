@@ -26,7 +26,7 @@ const ThemeProviderContext = createContext<ThemeProviderState | null>(null);
 
 export function ThemeProvider({
   children,
-  defaultTheme = "light",
+  defaultTheme = "dark",
   storageKey = "astrix-theme",
 }: ThemeProviderProps) {
   const [theme, setThemeState] = useState<Theme>(() => {
