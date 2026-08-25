@@ -13,7 +13,6 @@ import { DashboardLink, useDashboardNavigation } from "./navigation";
 import { PROJECTS, useProject } from "./project-context";
 
 const PAGE_LABELS: Record<string, string> = {
-  "/classification": "Classification",
   "/analytics": "Analytics",
   "/launchpad": "Launchpad",
 };
