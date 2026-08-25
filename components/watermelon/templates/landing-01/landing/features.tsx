@@ -83,7 +83,7 @@ export default function Features() {
         <motion.div
           className="mb-16 flex flex-col items-start text-left md:items-center md:text-center"
           variants={containerVariants}
-          initial="hidden"
+          initial={false}
           whileInView="visible"
           viewport={{ once: true, margin: '-100px' }}
         >
@@ -108,7 +108,7 @@ export default function Features() {
         <motion.div
           className="grid auto-rows-[320px] grid-cols-1 gap-6 lg:grid-cols-5"
           variants={containerVariants}
-          initial="hidden"
+          initial={false}
           whileInView="visible"
           viewport={{ once: true, margin: '-50px' }}
         >

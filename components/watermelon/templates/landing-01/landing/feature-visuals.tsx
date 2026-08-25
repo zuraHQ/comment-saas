@@ -286,11 +286,7 @@ export function ProductionReadyComponent() {
         <div className="flex flex-col gap-3">
           {/* Status Header */}
           <div className="mb-2 flex items-center gap-2">
-            <motion.div
-              className="bg-primary text-primary h-1.5 w-1.5 rounded-full drop-shadow-[0_0_6px_currentColor]"
-              animate={{ opacity: [1, 0.3, 1] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            />
+            <div className="bg-primary text-primary h-1.5 w-1.5 rounded-full drop-shadow-[0_0_6px_currentColor]" />
             <span className="font-mono text-[9px] tracking-widest text-white/40 uppercase">
               Sys.Ready
             </span>

@@ -152,7 +152,7 @@ export default function Stats() {
         <motion.div
           className="mb-16 flex flex-col items-start text-left md:items-center md:text-center"
           variants={containerVariants}
-          initial="hidden"
+          initial={false}
           whileInView="visible"
           viewport={{ once: true, margin: '-100px' }}
         >
@@ -186,7 +186,7 @@ export default function Stats() {
         <motion.div
           className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
           variants={containerVariants}
-          initial="hidden"
+          initial={false}
           whileInView="visible"
           viewport={{ once: true, margin: '-50px' }}
         >

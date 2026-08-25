@@ -277,7 +277,7 @@ export default function Testimonial() {
         <motion.div
           className="mb-16 flex flex-col items-start text-left md:items-center md:text-center"
           variants={containerVariants}
-          initial="hidden"
+          initial={false}
           whileInView="visible"
           viewport={{ once: true, margin: '-100px' }}
         >
@@ -314,15 +314,7 @@ export default function Testimonial() {
         <div className="from-background pointer-events-none absolute top-0 left-0 z-20 h-full w-32 bg-linear-to-r to-transparent" />
         <div className="from-background pointer-events-none absolute top-0 right-0 z-20 h-full w-32 bg-linear-to-l to-transparent" />
 
-        <motion.div
-          className="flex gap-6 px-3 whitespace-nowrap"
-          animate={{ x: ['0%', '-50%'] }}
-          transition={{
-            repeat: Infinity,
-            ease: 'linear',
-            duration: 40,
-          }}
-        >
+        <motion.div className="flex gap-6 px-3 whitespace-nowrap">
           {marqueeItems.map((t, index) => (
             <TestimonialCard key={`${t.id}-${index}`} testimonial={t} />
           ))}

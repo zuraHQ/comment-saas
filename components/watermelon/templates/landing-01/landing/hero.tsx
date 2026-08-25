@@ -4,7 +4,7 @@ import Heading from './heading';
 import SubHeading from './subheading';
 import { motion, type Variants, AnimatePresence } from 'motion/react';
 import Link from "next/link";
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import BgFrame from './bg-frame';
 
 const ROTATING_WORDS = [
@@ -48,14 +48,7 @@ const IMAGE_POSITIONS = [
 ];
 
 export default function Hero() {
-  const [wordIndex, setWordIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setWordIndex((prev) => (prev + 1) % ROTATING_WORDS.length);
-    }, 2800);
-    return () => clearInterval(interval);
-  }, []);
+  const [wordIndex] = useState(0);
 
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -99,7 +92,7 @@ export default function Hero() {
             'radial-gradient(ellipse at center, rgba(163,255,18,0.06) 0%, rgba(163,255,18,0.02) 40%, transparent 70%)',
         }}
         variants={glowVariants}
-        initial="hidden"
+        initial={false}
         animate="visible"
       />
 
@@ -141,7 +134,7 @@ export default function Hero() {
         <motion.div
           className="mx-auto flex max-w-4xl flex-col items-center text-center"
           variants={containerVariants}
-          initial="hidden"
+          initial={false}
           animate="visible"
         >
           {/* Badge */}
@@ -175,15 +168,7 @@ export default function Hero() {
                   <motion.span
                     key={ROTATING_WORDS[wordIndex]}
                     className="text-primary inline-block"
-                    initial={{ y: 12, opacity: 0, filter: 'blur(4px)' }}
-                    animate={{ y: 0, opacity: 1, filter: 'blur(0px)' }}
-                    exit={{
-                      y: -12,
-                      opacity: 0,
-                      filter: 'blur(4px)',
-                      transition: { duration: 0.15, ease: 'easeIn' },
-                    }}
-                    transition={{ duration: 0.3, ease: 'easeOut' }}
+                    initial={false}
                   >
                     {ROTATING_WORDS[wordIndex]}
                   </motion.span>
@@ -270,7 +255,7 @@ export default function Hero() {
         {/* Images Collage */}
         <motion.div
           className="pointer-events-none relative mx-auto mt-32 flex h-[400px] w-full max-w-6xl items-center justify-center sm:h-[600px] md:h-[800px]"
-          initial="hidden"
+          initial={false}
           animate="visible"
           variants={{
             hidden: {},

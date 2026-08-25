@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, type Variants, AnimatePresence } from "motion/react";
 import Heading from "./heading";
 import Container from "./container";
@@ -58,14 +58,7 @@ const IMAGES = [
 ];
 
 export default function TemplateBento() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % IMAGES.length);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
+  const [currentIndex] = useState(0);
 
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -96,7 +89,7 @@ export default function TemplateBento() {
         <motion.div
           className="mb-16 flex flex-col items-start md:items-center text-left md:text-center"
           variants={containerVariants}
-          initial="hidden"
+          initial={false}
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
         >
@@ -116,7 +109,7 @@ export default function TemplateBento() {
         
         <motion.div
           variants={containerVariants}
-          initial="hidden"
+          initial={false}
           whileInView="visible"
           viewport={{ once: true, margin: "-50px" }}
         >
@@ -127,10 +120,7 @@ export default function TemplateBento() {
                   <motion.img
                     key={currentIndex}
                     src={IMAGES[currentIndex]}
-                    initial={{ opacity: 0, scale: 0.98, filter: "blur(4px)" }}
-                    animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-                    exit={{ opacity: 0, scale: 1.02, filter: "blur(4px)" }}
-                    transition={{ duration: 0.5, ease: "easeInOut" }}
+                    initial={false}
                     className="w-full h-full object-cover object-top"
                     alt={`Template preview ${currentIndex + 1}`}
                   />

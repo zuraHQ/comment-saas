@@ -79,7 +79,7 @@ export default function ComponentsBento() {
         <motion.div
           className="mb-12 flex flex-col items-start md:items-end text-left md:text-right"
           variants={containerVariants}
-          initial="hidden"
+          initial={false}
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
         >
@@ -101,7 +101,7 @@ export default function ComponentsBento() {
         <motion.div 
           className="grid grid-cols-1 md:grid-cols-2 gap-6 auto-rows-[240px]"
           variants={containerVariants}
-          initial="hidden"
+          initial={false}
           whileInView="visible"
           viewport={{ once: true, margin: "-50px" }}
         >

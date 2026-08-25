@@ -136,7 +136,7 @@ export default function AnimatedBento() {
         <motion.div
           className="mb-12 flex flex-col items-start md:items-center text-left md:text-center"
           variants={containerVariants}
-          initial="hidden"
+          initial={false}
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
         >
@@ -157,7 +157,7 @@ export default function AnimatedBento() {
         <motion.div 
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[420px]"
           variants={containerVariants}
-          initial="hidden"
+          initial={false}
           whileInView="visible"
         >
           {/* Top Left */}
