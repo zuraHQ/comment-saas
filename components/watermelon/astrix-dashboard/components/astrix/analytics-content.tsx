@@ -77,7 +77,7 @@ export function AnalyticsContent() {
       <div>
         <h1 className="text-xl font-semibold">Analytics</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Where {project.name}&apos;s visitors come from. Every reply gets a
+          Where {project?.name ?? "no project"}&apos;s visitors come from. Every reply gets a
           tracked link, so each click attributes back to the exact comment.
           Sample data until tracked links are live.
         </p>

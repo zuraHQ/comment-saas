@@ -58,11 +58,11 @@ export function DashboardTopbar() {
           >
             <span
               className="flex h-5 w-5 shrink-0 items-center justify-center text-[10px] font-bold text-[#101010]"
-              style={{ backgroundColor: project.color }}
+              style={{ backgroundColor: project?.color ?? "#3f3f46" }}
             >
-              {project.name[0]}
+              {project?.name[0] ?? "+"}
             </span>
-            {project.name}
+            {project?.name ?? "No project"}
             <ChevronsUpDown className="size-3.5 text-muted-foreground" />
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -74,7 +74,7 @@ export function DashboardTopbar() {
               <DropdownMenuLabel>Projects</DropdownMenuLabel>
               <DropdownMenuSeparator />
               {projects.map((p) => (
-                <DropdownMenuItem key={p.id} onSelect={() => setProjectId(p.id)}>
+                <DropdownMenuItem key={p._id} onSelect={() => setProjectId(p._id)}>
                   <span
                     className="flex h-5 w-5 shrink-0 items-center justify-center text-[10px] font-bold text-[#101010]"
                     style={{ backgroundColor: p.color }}
@@ -82,7 +82,7 @@ export function DashboardTopbar() {
                     {p.name[0]}
                   </span>
                   <span className="flex-1">{p.name}</span>
-                  {p.id === project.id ? <Check className="size-4" /> : null}
+                  {p._id === project?._id ? <Check className="size-4" /> : null}
                 </DropdownMenuItem>
               ))}
             </DropdownMenuGroup>
@@ -90,10 +90,10 @@ export function DashboardTopbar() {
             {creating ? (
               <form
                 className="p-1"
-                onSubmit={(e) => {
+                onSubmit={async (e) => {
                   e.preventDefault();
                   if (!newName.trim()) return;
-                  addProject(newName);
+                  await addProject(newName);
                   setNewName("");
                   setCreating(false);
                   navigate("/settings");
@@ -124,10 +124,12 @@ export function DashboardTopbar() {
                 New project
               </DropdownMenuItem>
             )}
-            <DropdownMenuItem onSelect={() => navigate("/settings")}>
-              <Settings className="size-4" />
-              {project.name} settings
-            </DropdownMenuItem>
+            {project ? (
+              <DropdownMenuItem onSelect={() => navigate("/settings")}>
+                <Settings className="size-4" />
+                {project.name} settings
+              </DropdownMenuItem>
+            ) : null}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

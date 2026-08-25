@@ -7,16 +7,11 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { useMutation, useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import type { Doc, Id } from "@/convex/_generated/dataModel";
 
-export type Project = {
-  id: string;
-  name: string;
-  color: string;
-  url: string;
-  description: string;
-  keywords: string[];
-  postTypes: string[];
-};
+export type Project = Doc<"projects">;
 
 // What kind of posts a project wants surfaced. Feeds the intent scorer.
 export const POST_TYPES = [
@@ -37,129 +32,84 @@ export const PROJECT_COLORS = [
   "#00C48C",
 ];
 
-const PROJECTS_STORAGE_KEY = "projects";
-
-// Seed projects until onboarding writes real ones to Convex.
-export const PROJECTS: Project[] = [
-  {
-    id: "acme",
-    name: "Acme",
-    color: "#A3FF12",
-    url: "https://acme.dev",
-    description: "Reply marketing tool for founders.",
-    keywords: ["reply marketing", "find customers", "reddit marketing"],
-    postTypes: ["asking-recommendation", "looking-alternative"],
-  },
-  {
-    id: "nimbus",
-    name: "Nimbus CRM",
-    color: "#0085FF",
-    url: "https://nimbus.crm",
-    description: "Lightweight CRM for small sales teams.",
-    keywords: ["crm recommendation", "hubspot alternative"],
-    postTypes: ["asking-recommendation", "complaining-competitor"],
-  },
-  {
-    id: "pixelkit",
-    name: "PixelKit",
-    color: "#FF4500",
-    url: "https://pixelkit.design",
-    description: "UI kit for design engineers.",
-    keywords: ["ui kit", "design system template"],
-    postTypes: ["asking-recommendation", "how-do-i"],
-  },
-];
+const SELECTED_PROJECT_KEY = "selected-project";
 
 type ProjectContextValue = {
   projects: Project[];
-  project: Project;
-  setProjectId: (id: string) => void;
-  addProject: (name: string) => Project;
-  updateProject: (id: string, patch: Partial<Omit<Project, "id">>) => void;
-  removeProject: (id: string) => void;
+  project: Project | null;
+  loading: boolean;
+  setProjectId: (id: Id<"projects">) => void;
+  addProject: (name: string) => Promise<Id<"projects">>;
+  updateProject: (
+    id: Id<"projects">,
+    patch: {
+      name?: string;
+      color?: string;
+      url?: string;
+      description?: string;
+      keywords?: string[];
+      postTypes?: string[];
+    },
+  ) => Promise<void>;
+  removeProject: (id: Id<"projects">) => Promise<void>;
 };
 
 const ProjectContext = createContext<ProjectContextValue | null>(null);
 
-function slugify(name: string) {
-  return (
-    name
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-|-$/g, "") || "project"
-  );
-}
-
 export function ProjectProvider({ children }: { children: ReactNode }) {
-  const [projects, setProjects] = useState<Project[]>(PROJECTS);
-  const [projectId, setProjectId] = useState(PROJECTS[0].id);
+  const projects = useQuery(api.projects.list);
+  const create = useMutation(api.projects.create);
+  const update = useMutation(api.projects.update);
+  const remove = useMutation(api.projects.remove);
 
-  // Loaded after mount so the server-rendered HTML matches the first client render.
+  const [selectedId, setSelectedId] = useState<Id<"projects"> | null>(null);
+
+  // Restore the last selection after mount so SSR and first render agree.
   useEffect(() => {
     try {
-      const stored = localStorage.getItem(PROJECTS_STORAGE_KEY);
-      if (stored) {
-        const parsed = JSON.parse(stored) as Project[];
-        if (Array.isArray(parsed) && parsed.length) {
-          setProjects(parsed);
-          setProjectId(parsed[0].id);
-        }
-      }
+      const stored = localStorage.getItem(SELECTED_PROJECT_KEY);
+      if (stored) setSelectedId(stored as Id<"projects">);
     } catch {
       // ignore corrupt storage
     }
   }, []);
 
-  const persist = (next: Project[]) => {
-    setProjects(next);
+  const list = projects ?? [];
+  const project = list.find((p) => p._id === selectedId) ?? list[0] ?? null;
+
+  const setProjectId = (id: Id<"projects">) => {
+    setSelectedId(id);
     try {
-      localStorage.setItem(PROJECTS_STORAGE_KEY, JSON.stringify(next));
+      localStorage.setItem(SELECTED_PROJECT_KEY, id);
     } catch {
       // ignore quota errors
     }
   };
 
-  const project = projects.find((p) => p.id === projectId) ?? projects[0];
-
-  const addProject = (name: string) => {
-    const base = slugify(name);
-    let id = base;
-    let n = 2;
-    while (projects.some((p) => p.id === id)) id = `${base}-${n++}`;
-
-    const created: Project = {
-      id,
-      name: name.trim() || "New project",
-      color: PROJECT_COLORS[projects.length % PROJECT_COLORS.length],
-      url: "",
-      description: "",
-      keywords: [],
-      postTypes: [],
-    };
-    persist([...projects, created]);
-    setProjectId(created.id);
-    return created;
+  const addProject = async (name: string) => {
+    const color = PROJECT_COLORS[list.length % PROJECT_COLORS.length];
+    const id = await create({ name, color });
+    setProjectId(id);
+    return id;
   };
 
-  const updateProject = (id: string, patch: Partial<Omit<Project, "id">>) => {
-    persist(projects.map((p) => (p.id === id ? { ...p, ...patch } : p)));
-  };
-
-  const removeProject = (id: string) => {
-    const next = projects.filter((p) => p.id !== id);
-    if (!next.length) return; // always keep at least one project
-    persist(next);
-    if (id === projectId) setProjectId(next[0].id);
+  const removeProject = async (id: Id<"projects">) => {
+    await remove({ projectId: id });
+    const next = list.find((p) => p._id !== id);
+    if (next) setProjectId(next._id);
   };
 
   return (
     <ProjectContext.Provider
       value={{
-        projects,
+        projects: list,
         project,
+        loading: projects === undefined,
         setProjectId,
         addProject,
-        updateProject,
+        updateProject: async (id, patch) => {
+          await update({ projectId: id, ...patch });
+        },
         removeProject,
       }}
     >

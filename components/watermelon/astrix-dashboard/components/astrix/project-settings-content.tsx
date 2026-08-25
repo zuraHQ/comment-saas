@@ -11,20 +11,29 @@ export function ProjectSettingsContent() {
   const { project, projects, updateProject, removeProject } = useProject();
   const { navigate } = useDashboardNavigation();
 
-  const [name, setName] = useState(project.name);
-  const [url, setUrl] = useState(project.url);
-  const [description, setDescription] = useState(project.description);
+  const [name, setName] = useState(project?.name ?? "");
+  const [url, setUrl] = useState(project?.url ?? "");
+  const [description, setDescription] = useState(project?.description ?? "");
   const [keyword, setKeyword] = useState("");
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   // Re-sync the form when the topbar switches project underneath us.
   useEffect(() => {
+    if (!project) return;
     setName(project.name);
-    setUrl(project.url);
-    setDescription(project.description);
+    setUrl(project.url ?? "");
+    setDescription(project.description ?? "");
     setKeyword("");
     setConfirmDelete(false);
-  }, [project.id, project.name, project.url, project.description]);
+  }, [project?._id, project?.name, project?.url, project?.description]);
+
+  if (!project) {
+    return (
+      <div className="p-6 text-sm text-muted-foreground">
+        Create a project first, from the project switcher above.
+      </div>
+    );
+  }
 
   const addKeyword = (e: FormEvent) => {
     e.preventDefault();
@@ -33,12 +42,12 @@ export function ProjectSettingsContent() {
       setKeyword("");
       return;
     }
-    updateProject(project.id, { keywords: [...project.keywords, value] });
+    void updateProject(project._id, { keywords: [...project.keywords, value] });
     setKeyword("");
   };
 
   const removeKeyword = (value: string) => {
-    updateProject(project.id, {
+    void updateProject(project._id, {
       keywords: project.keywords.filter((k) => k !== value),
     });
   };
@@ -47,7 +56,7 @@ export function ProjectSettingsContent() {
     const next = project.postTypes.includes(id)
       ? project.postTypes.filter((t) => t !== id)
       : [...project.postTypes, id];
-    updateProject(project.id, { postTypes: next });
+    void updateProject(project._id, { postTypes: next });
   };
 
   return (
@@ -68,7 +77,7 @@ export function ProjectSettingsContent() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             onBlur={() =>
-              updateProject(project.id, { name: name.trim() || project.name })
+              void updateProject(project._id, { name: name.trim() || project.name })
             }
             className="rounded-none"
           />
@@ -78,7 +87,7 @@ export function ProjectSettingsContent() {
             value={url}
             placeholder="https://yourproduct.com"
             onChange={(e) => setUrl(e.target.value)}
-            onBlur={() => updateProject(project.id, { url: url.trim() })}
+            onBlur={() => void updateProject(project._id, { url: url.trim() })}
             className="rounded-none"
           />
         </Field>
@@ -89,7 +98,7 @@ export function ProjectSettingsContent() {
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            onBlur={() => updateProject(project.id, { description })}
+            onBlur={() => void updateProject(project._id, { description })}
             rows={3}
             placeholder="Lightweight CRM for small sales teams."
             className="w-full resize-none border border-input bg-transparent px-3 py-2 text-sm outline-none placeholder:text-muted-foreground focus-visible:border-ring"
@@ -101,7 +110,7 @@ export function ProjectSettingsContent() {
               <button
                 key={color}
                 type="button"
-                onClick={() => updateProject(project.id, { color })}
+                onClick={() => void updateProject(project._id, { color })}
                 aria-label={`Use ${color}`}
                 className={cn(
                   "flex h-7 w-7 cursor-pointer items-center justify-center border transition-colors",
@@ -206,8 +215,8 @@ export function ProjectSettingsContent() {
               </p>
               <button
                 type="button"
-                onClick={() => {
-                  removeProject(project.id);
+                onClick={async () => {
+                  await removeProject(project._id);
                   navigate("/");
                 }}
                 className="h-9 cursor-pointer border border-red-500/40 px-4 text-xs font-bold tracking-wider text-red-400 uppercase transition-colors hover:bg-red-500/10"

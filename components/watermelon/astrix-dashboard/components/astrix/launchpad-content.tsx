@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useMutation, useQuery } from "convex/react";
 import { useProject } from "./project-context";
+import { api } from "@/convex/_generated/api";
 
 const LAUNCH_SITES: Array<{ name: string; domain: string; url?: string }> = [
   { name: "Product Hunt", domain: "producthunt.com" },
@@ -39,33 +40,21 @@ const LAUNCH_SITES: Array<{ name: string; domain: string; url?: string }> = [
   { name: "ScrollLaunch", domain: "scrolllaunch.com", url: "https://www.scrolllaunch.com/" },
 ];
 
-const LAUNCHED_STORAGE_KEY = "launched-sites";
-
 export function LaunchpadContent() {
   const { project } = useProject();
 
-  // Map of projectId -> launched site names, loaded after mount to match SSR.
-  const [launched, setLaunched] = useState<Record<string, string[]>>({});
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem(LAUNCHED_STORAGE_KEY);
-      if (stored) setLaunched(JSON.parse(stored));
-    } catch {
-      // ignore corrupt storage
-    }
-  }, []);
+  // Launch markers live in Convex, per project.
+  const launchedList = useQuery(
+    api.launches.listForProject,
+    project ? { projectId: project._id } : "skip",
+  );
+  const toggle = useMutation(api.launches.toggle);
 
-  const projectLaunched = new Set(launched[project.id] ?? []);
+  const projectLaunched = new Set(launchedList ?? []);
 
   const toggleLaunched = (siteName: string) => {
-    setLaunched((prev) => {
-      const current = new Set(prev[project.id] ?? []);
-      if (current.has(siteName)) current.delete(siteName);
-      else current.add(siteName);
-      const next = { ...prev, [project.id]: [...current] };
-      localStorage.setItem(LAUNCHED_STORAGE_KEY, JSON.stringify(next));
-      return next;
-    });
+    if (!project) return;
+    void toggle({ projectId: project._id, site: siteName });
   };
 
   return (
@@ -83,7 +72,7 @@ export function LaunchpadContent() {
           <span className="text-muted-foreground">
             of {LAUNCH_SITES.length} launched for
           </span>{" "}
-          <span className="text-primary">{project.name}</span>
+          <span className="text-primary">{project?.name ?? "no project"}</span>
         </p>
       </div>
 
@@ -130,7 +119,7 @@ export function LaunchpadContent() {
                 aria-pressed={isLaunched}
                 title={
                   isLaunched
-                    ? `${project.name} launched here`
+                    ? `${project?.name ?? "Project"} launched here`
                     : "Mark as launched"
                 }
                 className={cn(

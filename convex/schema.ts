@@ -20,6 +20,7 @@ export default defineSchema({
     description: v.optional(v.string()),
     keywords: v.array(v.string()),
     postTypes: v.array(v.string()),
+    hideReplied: v.optional(v.boolean()),
   })
     .index("by_owner", ["ownerClerkId"])
     .index("by_owner_slug", ["ownerClerkId", "slug"]),
@@ -65,6 +66,25 @@ export default defineSchema({
   })
     .index("by_platform_keyword", ["platform", "keyword"])
     .index("by_platform", ["platform"]),
+
+  // Posts the user has replied to. Keyed by post key (mock feed ids today,
+  // match ids once the feed is live).
+  repliedPosts: defineTable({
+    projectId: v.id("projects"),
+    ownerClerkId: v.string(),
+    postKey: v.string(),
+  })
+    .index("by_project", ["projectId"])
+    .index("by_project_post", ["projectId", "postKey"]),
+
+  // Which launch sites a project has been posted to. Per project, per user.
+  launches: defineTable({
+    projectId: v.id("projects"),
+    ownerClerkId: v.string(),
+    site: v.string(),
+  })
+    .index("by_project", ["projectId"])
+    .index("by_project_site", ["projectId", "site"]),
 
   // One tracked short link per reply; /r/[code] redirects to targetUrl.
   trackedLinks: defineTable({

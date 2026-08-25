@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useMutation, useQuery } from "convex/react";
 import { Check, RefreshCw } from "lucide-react";
 import {
   FaBluesky,
@@ -23,6 +24,7 @@ import {
 import { cn } from "@/lib/utils";
 import { HistoryPanel } from "./history-content";
 import { useProject } from "./project-context";
+import { api } from "@/convex/_generated/api";
 
 type Post = {
   id: string;
@@ -537,8 +539,6 @@ function postUrl(platform: string, community: string) {
   return `https://bsky.app/profile/${community.slice(1)}`;
 }
 
-export const REPLIED_STORAGE_KEY = "replied-posts";
-
 export function PostsContent() {
   const { project } = useProject();
   const [activeKey, setActiveKey] = useState<(typeof PLATFORMS)[number]["key"]>(
@@ -546,18 +546,16 @@ export function PostsContent() {
   );
   const active = ALL_PLATFORMS.find((p) => p.key === activeKey)!;
 
-  // Loaded after mount so the server-rendered HTML matches the first client render.
-  const [replied, setReplied] = useState<Set<string>>(new Set());
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem(REPLIED_STORAGE_KEY);
-      if (stored) setReplied(new Set(JSON.parse(stored)));
-    } catch {
-      // ignore corrupt storage
-    }
-  }, []);
+  // Replied markers and the hide-replied preference live in Convex, per project.
+  const repliedList = useQuery(
+    api.replies.listForProject,
+    project ? { projectId: project._id } : "skip",
+  );
+  const toggleReplied_ = useMutation(api.replies.toggle);
+  const setHideRepliedPref = useMutation(api.replies.setHideReplied);
 
-  const [hideReplied, setHideReplied] = useState(false);
+  const replied = new Set(repliedList ?? []);
+  const hideReplied = project?.hideReplied ?? false;
 
   const [refreshing, setRefreshing] = useState(false);
   const [updatedLabel, setUpdatedLabel] = useState("2m ago");
@@ -577,13 +575,8 @@ export function PostsContent() {
   };
 
   const toggleReplied = (id: string) => {
-    setReplied((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      localStorage.setItem(REPLIED_STORAGE_KEY, JSON.stringify([...next]));
-      return next;
-    });
+    if (!project) return;
+    void toggleReplied_({ projectId: project._id, postKey: id });
   };
 
   const visiblePosts = active.posts.filter(
@@ -595,7 +588,7 @@ export function PostsContent() {
       <div className="flex items-center justify-between gap-4">
         <h1 className="text-xl font-semibold">
           Looking posts for:{" "}
-          <span className="text-primary">{`{ ${project.name} }`}</span>
+          <span className="text-primary">{`{ ${project?.name ?? "no project"} }`}</span>
         </h1>
         <Sheet>
           <SheetTrigger
@@ -692,7 +685,13 @@ export function PostsContent() {
               </button>
               <button
                 type="button"
-                onClick={() => setHideReplied((v) => !v)}
+                onClick={() => {
+                  if (!project) return;
+                  void setHideRepliedPref({
+                    projectId: project._id,
+                    hideReplied: !hideReplied,
+                  });
+                }}
                 aria-pressed={hideReplied}
                 className={cn(
                   "px-2.5 py-1 text-[10px] font-bold tracking-wider uppercase transition-colors",
