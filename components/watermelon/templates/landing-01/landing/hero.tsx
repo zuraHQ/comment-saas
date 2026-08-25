@@ -205,7 +205,8 @@ export default function Hero() {
           >
             <div className="flex items-center gap-3 font-mono text-xs tracking-widest text-white/40 uppercase">
               <span className="h-px w-8 bg-white/10" />
-              Built for founders and indie hackers
+              <span className="bg-primary inline-block h-1.5 w-1.5 rounded-full" />
+              Live data
               <span className="h-px w-8 bg-white/10" />
             </div>
             <motion.div
@@ -220,10 +221,14 @@ export default function Hero() {
                 },
               }}
             >
-              {['Monitors communities 24/7', 'Ranks posts by intent', 'Reply-ready in one click'].map(
+              {[
+                { value: '128,402', label: 'posts found' },
+                { value: '12,847', label: 'leads found' },
+                { value: '3,215', label: 'replies posted' },
+              ].map(
                 (stat) => (
                   <motion.div
-                    key={stat}
+                    key={stat.label}
                     variants={{
                       hidden: { opacity: 0, y: 12, filter: 'blur(4px)' },
                       visible: {
@@ -235,7 +240,8 @@ export default function Hero() {
                     }}
                     className="border border-white/5 bg-white/2 px-4 py-2 text-xs font-bold tracking-wider text-white/60 uppercase"
                   >
-                    {stat}
+                    <span className="text-primary mr-1.5">{stat.value}</span>
+                    {stat.label}
                   </motion.div>
                 ),
               )}
