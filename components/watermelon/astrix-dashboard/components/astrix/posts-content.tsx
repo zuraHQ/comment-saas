@@ -389,6 +389,79 @@ const PLATFORMS = [
   },
 ] as const;
 
+// Deterministic filler so every platform has ~15 posts while we tune the UX.
+const FILLER: Array<Pick<Post, "title" | "snippet" | "intent">> = [
+  { title: "What's your stack for finding early users?", snippet: "Curious what tools people actually keep paying for after month one.", intent: "High" },
+  { title: "Tools to monitor competitor mentions across communities?", snippet: "We keep hearing about lost deals a week too late. Want same-day visibility.", intent: "High" },
+  { title: "Best alternative to expensive social listening suites?", snippet: "Enterprise pricing for what feels like a saved search. There must be something leaner.", intent: "High" },
+  { title: "Keyword alerts that actually filter noise, do they exist?", snippet: "Every tool I try floods me with irrelevant matches. I want intent, not volume.", intent: "High" },
+  { title: "Anyone using AI to draft community replies?", snippet: "Half tempted, half worried it will read as spam. Experiences welcome.", intent: "Medium" },
+  { title: "Is engaging in niche communities worth it for B2B?", snippet: "Our ICP hangs out in maybe five places online. Trying to justify the time spend.", intent: "Medium" },
+  { title: "Where do you find beta testers these days?", snippet: "Launch platforms feel tapped out. Looking for fresher watering holes.", intent: "Medium" },
+  { title: "Sharing my playbook for turning threads into signups", snippet: "Reply fast, be useful first, mention the product last. Numbers inside.", intent: "Medium" },
+  { title: "Underrated growth channels in 2026?", snippet: "Paid is brutal, SEO is AI-flooded. What is quietly working for you?", intent: "Medium" },
+  { title: "How do you reply to prospects without sounding like an ad?", snippet: "The line between helpful and salesy is thin. Curious how others walk it.", intent: "Medium" },
+  { title: "How much time do you spend on community marketing weekly?", snippet: "Trying to benchmark before I commit a full day per week to it.", intent: "Low" },
+  { title: "Do founders still do things that don't scale?", snippet: "Feels like everyone automates everything now. Is manual outreach dead?", intent: "Low" },
+];
+
+const FILLER_SOURCES: Record<string, Array<{ community: string; author: string }>> = {
+  reddit: [
+    { community: "r/SaaS", author: "u/foundermode" },
+    { community: "r/startups", author: "u/zerotoone_dev" },
+    { community: "r/Entrepreneur", author: "u/sidehustlesam" },
+    { community: "r/marketing", author: "u/funnelfixer" },
+  ],
+  x: [
+    { community: "@launchweekly", author: "6.2k followers" },
+    { community: "@microsaasguy", author: "18k followers" },
+    { community: "@gtm_notes", author: "3.4k followers" },
+  ],
+  bluesky: [
+    { community: "@founderlog.bsky.social", author: "1.8k followers" },
+    { community: "@growthlab.bsky.social", author: "4.5k followers" },
+  ],
+  hn: [
+    { community: "Ask HN", author: "72 points" },
+    { community: "Ask HN", author: "38 points" },
+    { community: "Show HN", author: "121 points" },
+  ],
+  github: [
+    { community: "supabase/supabase", author: "Discussion" },
+    { community: "calcom/cal.com", author: "Discussion" },
+    { community: "plausible/analytics", author: "Discussion" },
+  ],
+  linkedin: [
+    { community: "Diego Ramos", author: "Growth Lead" },
+    { community: "Sofia Lindqvist", author: "Founder, MetricsHQ" },
+    { community: "James Wu", author: "Demand Gen Manager" },
+  ],
+  quora: [
+    { community: "SaaS Marketing", author: "64 followers" },
+    { community: "Growth Hacking", author: "112 followers" },
+    { community: "Lead Generation", author: "37 followers" },
+  ],
+  threads: [
+    { community: "@buildinpublicdaily", author: "11k followers" },
+    { community: "@thegtmgirl", author: "7.7k followers" },
+  ],
+};
+
+const FILLER_TIMES = ["4h ago", "6h ago", "9h ago", "12h ago", "16h ago", "20h ago", "1d ago", "1d ago", "2d ago", "2d ago", "3d ago", "3d ago"];
+
+const ALL_PLATFORMS = PLATFORMS.map((platform) => {
+  const sources = FILLER_SOURCES[platform.key] ?? [];
+  const fillers: Post[] = FILLER.slice(0, Math.max(0, 15 - platform.posts.length)).map(
+    (f, i) => ({
+      id: `${platform.key}-f${i}`,
+      ...f,
+      ...sources[i % sources.length],
+      time: FILLER_TIMES[i % FILLER_TIMES.length],
+    }),
+  );
+  return { ...platform, posts: [...platform.posts, ...fillers] };
+});
+
 const INTENT_STYLES: Record<Post["intent"], string> = {
   High: "bg-primary text-primary-foreground",
   Medium: "bg-foreground/10 text-foreground/80",
@@ -414,7 +487,7 @@ export function PostsContent() {
   const [activeKey, setActiveKey] = useState<(typeof PLATFORMS)[number]["key"]>(
     PLATFORMS[0].key,
   );
-  const active = PLATFORMS.find((p) => p.key === activeKey)!;
+  const active = ALL_PLATFORMS.find((p) => p.key === activeKey)!;
 
   // Loaded after mount so the server-rendered HTML matches the first client render.
   const [seen, setSeen] = useState<Set<string>>(new Set());
@@ -446,7 +519,7 @@ export function PostsContent() {
       <div className="flex min-h-0 flex-1 flex-col gap-4 lg:flex-row">
         {/* Platform rail */}
         <nav className="flex shrink-0 overflow-x-auto border border-border lg:w-56 lg:flex-col lg:overflow-visible">
-          {PLATFORMS.map((platform) => {
+          {ALL_PLATFORMS.map((platform) => {
             const isActive = platform.key === activeKey;
             return (
               <button
