@@ -203,12 +203,9 @@ export default function Hero() {
 
             {/* Window bar */}
             <div className="flex items-center gap-2 border-b border-white/10 bg-white/5 px-4 py-2.5">
-              <span className="h-2 w-2 bg-white/20" />
-              <span className="h-2 w-2 bg-white/20" />
-              <span className="h-2 w-2 bg-white/20" />
-              <span className="ml-3 border border-white/10 px-3 py-0.5 font-mono text-[10px] tracking-widest text-white/40 uppercase">
-                Dashboard / Posts
-              </span>
+              <span className="h-2 w-2 bg-[#FF5F57]" />
+              <span className="h-2 w-2 bg-[#FEBC2E]" />
+              <span className="h-2 w-2 bg-[#28C840]" />
             </div>
 
             {/* Video demo drops in here */}
