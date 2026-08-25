@@ -210,55 +210,6 @@ export default function Hero() {
 
           </motion.div>
 
-          {/* Social proof strip */}
-          <motion.div
-            variants={itemVariants}
-            className="mt-16 flex flex-col items-center gap-4"
-          >
-            <div className="flex items-center gap-3 font-mono text-xs tracking-widest text-white/40 uppercase">
-              <span className="h-px w-8 bg-white/10" />
-              <span className="bg-primary inline-block h-1.5 w-1.5 rounded-full" />
-              Live data
-              <span className="h-px w-8 bg-white/10" />
-            </div>
-            <motion.div
-              className="flex flex-wrap justify-center items-center gap-4 sm:gap-6"
-              variants={{
-                hidden: {},
-                visible: {
-                  transition: {
-                    staggerChildren: 0.1,
-                    delayChildren: 0.3,
-                  },
-                },
-              }}
-            >
-              {[
-                { value: '128,402', label: 'posts found' },
-                { value: '12,847', label: 'leads found' },
-                { value: '3,215', label: 'replies posted' },
-              ].map(
-                (stat) => (
-                  <motion.div
-                    key={stat.label}
-                    variants={{
-                      hidden: { opacity: 0, y: 12, filter: 'blur(4px)' },
-                      visible: {
-                        opacity: 1,
-                        y: 0,
-                        filter: 'blur(0px)',
-                        transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
-                      },
-                    }}
-                    className="border border-white/5 bg-white/2 px-4 py-2 text-xs font-bold tracking-wider text-white/60 uppercase"
-                  >
-                    <span className="text-primary mr-1.5">{stat.value}</span>
-                    {stat.label}
-                  </motion.div>
-                ),
-              )}
-            </motion.div>
-          </motion.div>
         </motion.div>
 
       </Container>
