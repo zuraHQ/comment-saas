@@ -3,19 +3,28 @@ import Heading from './heading';
 import SubHeading from './subheading';
 import { motion, type Variants, AnimatePresence } from 'motion/react';
 import Link from "next/link";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { FaRedditAlien, FaXTwitter, FaBluesky } from 'react-icons/fa6';
 
-const ROTATING_WORDS = [
-  'Reddit',
-  'X',
-  'LinkedIn',
-  'Hacker News',
+const PLATFORMS = [
+  { name: 'Reddit', Icon: FaRedditAlien, bg: '#FF4500', color: '#FF4500', iconColor: '#ffffff' },
+  { name: 'X/Twitter', Icon: FaXTwitter, bg: '#ffffff', color: '#ffffff', iconColor: '#000000' },
+  { name: 'Bluesky', Icon: FaBluesky, bg: '#0085FF', color: '#0085FF', iconColor: '#ffffff' },
 ] as const;
 
 export default function Hero() {
   const router = useRouter();
-  const [wordIndex] = useState(0);
+  const [wordIndex, setWordIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setWordIndex((prev) => (prev + 1) % PLATFORMS.length);
+    }, 2800);
+    return () => clearInterval(interval);
+  }, []);
+
+  const platform = PLATFORMS[wordIndex];
 
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -122,14 +131,32 @@ export default function Hero() {
               className="mb-8 font-sans leading-[0.95]"
             >
               <span className="text-foreground">are asking on </span>
-              <span className="relative inline-block min-w-[3ch]">
+              <span className="relative inline-block align-baseline">
                 <AnimatePresence mode="wait">
                   <motion.span
-                    key={ROTATING_WORDS[wordIndex]}
-                    className="text-primary inline-block"
-                    initial={false}
+                    key={platform.name}
+                    className="inline-flex items-center gap-[0.25em] whitespace-nowrap align-baseline"
+                    style={{ color: platform.color }}
+                    initial={{ y: 12, opacity: 0, filter: 'blur(4px)' }}
+                    animate={{ y: 0, opacity: 1, filter: 'blur(0px)' }}
+                    exit={{
+                      y: -12,
+                      opacity: 0,
+                      filter: 'blur(4px)',
+                      transition: { duration: 0.15, ease: 'easeIn' },
+                    }}
+                    transition={{ duration: 0.3, ease: 'easeOut' }}
                   >
-                    {ROTATING_WORDS[wordIndex]}
+                    <span
+                      className="inline-flex h-[0.85em] w-[0.85em] shrink-0 items-center justify-center"
+                      style={{ backgroundColor: platform.bg }}
+                    >
+                      <platform.Icon
+                        className="h-[0.6em] w-[0.6em]"
+                        style={{ color: platform.iconColor }}
+                      />
+                    </span>
+                    {platform.name}
                   </motion.span>
                 </AnimatePresence>
               </span>
