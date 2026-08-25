@@ -26,7 +26,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           <DashboardTopbar />
         </div>
 
-        <div className="flex-1 overflow-y-auto">{children}</div>
+        <div className="min-h-0 flex-1 overflow-hidden">{children}</div>
       </main>
     </SidebarProvider>
   );

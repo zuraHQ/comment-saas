@@ -1,7 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { FaBluesky, FaRedditAlien, FaXTwitter } from "react-icons/fa6";
+import {
+  FaBluesky,
+  FaGithub,
+  FaHackerNews,
+  FaLinkedinIn,
+  FaQuora,
+  FaThreads,
+  FaRedditAlien,
+  FaXTwitter,
+} from "react-icons/fa6";
 import { cn } from "@/lib/utils";
 import { useProject } from "./project-context";
 
@@ -183,6 +192,201 @@ const PLATFORMS = [
       },
     ] satisfies Post[],
   },
+  {
+    key: "hn",
+    name: "Hacker News",
+    Icon: FaHackerNews,
+    bg: "#FF6600",
+    iconColor: "#ffffff",
+    posts: [
+      {
+        id: "h1",
+        title: "Ask HN: How do you find your first paying customers?",
+        snippet:
+          "Bootstrapped a monitoring tool over 6 months. Launch post got 12 upvotes. Cold outreach feels spammy. What actually worked for you?",
+        community: "Ask HN",
+        author: "184 points",
+        time: "35m ago",
+        intent: "High",
+      },
+      {
+        id: "h2",
+        title: "Ask HN: Best tool for tracking brand mentions across communities?",
+        snippet:
+          "Google Alerts misses almost everything on Reddit and HN. Is there something purpose-built that isn't enterprise-priced?",
+        community: "Ask HN",
+        author: "97 points",
+        time: "2h ago",
+        intent: "High",
+      },
+      {
+        id: "h3",
+        title: "Show HN: I built a CLI to search HN comments semantically",
+        snippet:
+          "Side project using the Algolia dump plus embeddings. Curious if anyone would pay for alerts on top of this.",
+        community: "Show HN",
+        author: "61 points",
+        time: "5h ago",
+        intent: "Medium",
+      },
+    ] satisfies Post[],
+  },
+  {
+    key: "github",
+    name: "GitHub",
+    Icon: FaGithub,
+    bg: "#ffffff",
+    iconColor: "#000000",
+    posts: [
+      {
+        id: "g1",
+        title: "Is there a hosted alternative to running this ourselves?",
+        snippet:
+          "We love the project but our team doesn't want to maintain the infra. Would happily pay for a managed version with SSO.",
+        community: "vercel/next.js",
+        author: "Discussion",
+        time: "48m ago",
+        intent: "High",
+      },
+      {
+        id: "g2",
+        title: "Recommendations for a lightweight feature-flag service?",
+        snippet:
+          "LaunchDarkly is overkill for our 4-person team. Looking for something simple that plays nice with Next.js middleware.",
+        community: "community/community",
+        author: "Discussion",
+        time: "3h ago",
+        intent: "High",
+      },
+      {
+        id: "g3",
+        title: "How are you all handling webhook retries in production?",
+        snippet:
+          "Rolling our own queue feels wrong. Curious what services people plug in before we build it ourselves.",
+        community: "trigger/trigger.dev",
+        author: "Discussion",
+        time: "7h ago",
+        intent: "Medium",
+      },
+    ] satisfies Post[],
+  },
+  {
+    key: "linkedin",
+    name: "LinkedIn",
+    Icon: FaLinkedinIn,
+    bg: "#0A66C2",
+    iconColor: "#ffffff",
+    posts: [
+      {
+        id: "l1",
+        title: "Can anyone recommend a tool for social listening on a budget?",
+        snippet:
+          "Head of Growth at a 10-person SaaS. We need to know when prospects ask for products like ours. Agency quotes are wild.",
+        community: "Maya Chen",
+        author: "Head of Growth",
+        time: "1h ago",
+        intent: "High",
+      },
+      {
+        id: "l2",
+        title: "We got 14 demos last quarter just from answering questions online",
+        snippet:
+          "No ads. Just being genuinely helpful in threads where people asked for solutions. Founders sleep on this channel.",
+        community: "Tom Okafor",
+        author: "Founder, PipelineIQ",
+        time: "4h ago",
+        intent: "Medium",
+      },
+      {
+        id: "l3",
+        title: "Hiring a community manager to monitor Reddit and LinkedIn",
+        snippet:
+          "Half the job description is 'find conversations where we should show up.' Feels like software should do this part.",
+        community: "Priya Nair",
+        author: "VP Marketing",
+        time: "9h ago",
+        intent: "Medium",
+      },
+    ] satisfies Post[],
+  },
+  {
+    key: "quora",
+    name: "Quora",
+    Icon: FaQuora,
+    bg: "#B92B27",
+    iconColor: "#ffffff",
+    posts: [
+      {
+        id: "q1",
+        title: "What is the best tool to monitor Reddit for keywords in 2026?",
+        snippet:
+          "I run a small SaaS and want alerts when people ask for a product like mine. Free or cheap options preferred.",
+        community: "Social Media Marketing",
+        author: "23 followers",
+        time: "2h ago",
+        intent: "High",
+      },
+      {
+        id: "q2",
+        title: "How do startups get their first 100 customers without ads?",
+        snippet:
+          "Every answer says 'communities' but nobody explains how to actually find the right threads at the right time.",
+        community: "Startup Growth",
+        author: "156 followers",
+        time: "6h ago",
+        intent: "Medium",
+      },
+      {
+        id: "q3",
+        title: "Is comment marketing on Quora still effective?",
+        snippet:
+          "Seeing mixed opinions. Some say answers rank on Google for years, others say the traffic is gone.",
+        community: "Digital Marketing",
+        author: "41 followers",
+        time: "1d ago",
+        intent: "Low",
+      },
+    ] satisfies Post[],
+  },
+  {
+    key: "threads",
+    name: "Threads",
+    Icon: FaThreads,
+    bg: "#ffffff",
+    iconColor: "#000000",
+    posts: [
+      {
+        id: "t1",
+        title: "Does anyone know an app that tracks keyword mentions here?",
+        snippet:
+          "The API finally exists but I haven't seen a good alerts tool built on it yet. Want pings when people ask for recs in my niche.",
+        community: "@growthgabi",
+        author: "9.4k followers",
+        time: "26m ago",
+        intent: "High",
+      },
+      {
+        id: "t2",
+        title: "Asked for a CRM rec this morning, got 60 replies by lunch",
+        snippet:
+          "Threads engagement for question posts is unreal right now. Brands that answer fast are winning customers here.",
+        community: "@saasscout",
+        author: "15k followers",
+        time: "3h ago",
+        intent: "Medium",
+      },
+      {
+        id: "t3",
+        title: "Moving our community content strategy to Threads",
+        snippet:
+          "Early-platform reach is too good to ignore. Documenting what works for B2B as we go.",
+        community: "@b2bplaybook",
+        author: "4.2k followers",
+        time: "8h ago",
+        intent: "Low",
+      },
+    ] satisfies Post[],
+  },
 ] as const;
 
 const INTENT_STYLES: Record<Post["intent"], string> = {
@@ -195,6 +399,11 @@ const INTENT_STYLES: Record<Post["intent"], string> = {
 function postUrl(platform: string, community: string) {
   if (platform === "reddit") return `https://www.reddit.com/${community}/`;
   if (platform === "x") return `https://x.com/${community.slice(1)}`;
+  if (platform === "hn") return "https://news.ycombinator.com/ask";
+  if (platform === "github") return `https://github.com/${community}/discussions`;
+  if (platform === "linkedin") return "https://www.linkedin.com/feed/";
+  if (platform === "quora") return "https://www.quora.com/";
+  if (platform === "threads") return `https://www.threads.net/${community}`;
   return `https://bsky.app/profile/${community.slice(1)}`;
 }
 
@@ -228,13 +437,13 @@ export function PostsContent() {
   };
 
   return (
-    <div className="flex flex-col gap-6 p-6">
+    <div className="flex h-full flex-col gap-6 p-6">
       <h1 className="text-xl font-semibold">
         Looking posts for:{" "}
         <span className="text-primary">{`{ ${project.name} }`}</span>
       </h1>
 
-      <div className="flex flex-col gap-4 lg:flex-row">
+      <div className="flex min-h-0 flex-1 flex-col gap-4 lg:flex-row">
         {/* Platform rail */}
         <nav className="flex shrink-0 overflow-x-auto border border-border lg:w-56 lg:flex-col lg:overflow-visible">
           {PLATFORMS.map((platform) => {
@@ -273,7 +482,7 @@ export function PostsContent() {
         </nav>
 
         {/* Post feed */}
-        <section className="min-w-0 flex-1 border border-border">
+        <section className="flex min-w-0 flex-1 flex-col border border-border">
           <header className="flex items-center gap-3 border-b border-border px-4 py-3">
             <span
               className="flex h-6 w-6 shrink-0 items-center justify-center"
@@ -289,7 +498,7 @@ export function PostsContent() {
             </span>
           </header>
 
-          <ul>
+          <ul className="min-h-0 flex-1 overflow-y-auto">
             {active.posts.map((post) => (
               <li key={post.id} className="border-b border-border last:border-b-0">
                 <a
