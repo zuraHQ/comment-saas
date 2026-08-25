@@ -480,7 +480,7 @@ function postUrl(platform: string, community: string) {
   return `https://bsky.app/profile/${community.slice(1)}`;
 }
 
-const SEEN_STORAGE_KEY = "seen-posts";
+const REPLIED_STORAGE_KEY = "replied-posts";
 
 export function PostsContent() {
   const { project } = useProject();
@@ -490,24 +490,31 @@ export function PostsContent() {
   const active = ALL_PLATFORMS.find((p) => p.key === activeKey)!;
 
   // Loaded after mount so the server-rendered HTML matches the first client render.
-  const [seen, setSeen] = useState<Set<string>>(new Set());
+  const [replied, setReplied] = useState<Set<string>>(new Set());
   useEffect(() => {
     try {
-      const stored = localStorage.getItem(SEEN_STORAGE_KEY);
-      if (stored) setSeen(new Set(JSON.parse(stored)));
+      const stored = localStorage.getItem(REPLIED_STORAGE_KEY);
+      if (stored) setReplied(new Set(JSON.parse(stored)));
     } catch {
       // ignore corrupt storage
     }
   }, []);
 
-  const markSeen = (id: string) => {
-    setSeen((prev) => {
-      if (prev.has(id)) return prev;
-      const next = new Set(prev).add(id);
-      localStorage.setItem(SEEN_STORAGE_KEY, JSON.stringify([...next]));
+  const [hideReplied, setHideReplied] = useState(false);
+
+  const toggleReplied = (id: string) => {
+    setReplied((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      localStorage.setItem(REPLIED_STORAGE_KEY, JSON.stringify([...next]));
       return next;
     });
   };
+
+  const visiblePosts = active.posts.filter(
+    (post) => !hideReplied || !replied.has(post.id),
+  );
 
   return (
     <div className="flex h-full flex-col gap-6 p-6">
@@ -556,7 +563,7 @@ export function PostsContent() {
 
         {/* Post feed */}
         <section className="flex min-w-0 flex-1 flex-col border border-border">
-          <header className="flex items-center gap-3 border-b border-border px-4 py-3">
+          <header className="flex flex-wrap items-center gap-3 border-b border-border px-4 py-3">
             <span
               className="flex h-6 w-6 shrink-0 items-center justify-center"
               style={{ backgroundColor: active.bg }}
@@ -568,20 +575,40 @@ export function PostsContent() {
             </span>
             <span className="text-sm font-medium">
               Found {active.posts.length} posts
+              {visiblePosts.length !== active.posts.length ? (
+                <span className="text-muted-foreground">
+                  {" "}· showing {visiblePosts.length}
+                </span>
+              ) : null}
             </span>
+
+            <div className="ml-auto flex items-center">
+              <button
+                type="button"
+                onClick={() => setHideReplied((v) => !v)}
+                aria-pressed={hideReplied}
+                className={cn(
+                  "px-2.5 py-1 text-[10px] font-bold tracking-wider uppercase transition-colors",
+                  hideReplied
+                    ? "bg-primary text-primary-foreground"
+                    : "border border-border text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
+                )}
+              >
+                Hide replied
+              </button>
+            </div>
           </header>
 
           <ul className="min-h-0 flex-1 overflow-y-auto">
-            {active.posts.map((post) => (
+            {visiblePosts.map((post) => (
               <li key={post.id} className="border-b border-border last:border-b-0">
                 <a
                   href={postUrl(active.key, post.community)}
                   target="_blank"
                   rel="noreferrer"
-                  onClick={() => markSeen(post.id)}
                   className={cn(
-                    "block cursor-pointer px-4 py-4 transition-colors hover:bg-sidebar-accent/40",
-                    seen.has(post.id) && "opacity-50",
+                    "group block cursor-pointer px-4 py-4 transition-colors hover:bg-sidebar-accent/40",
+                    replied.has(post.id) && "opacity-50",
                   )}
                 >
                   <div className="flex items-start justify-between gap-4">
@@ -603,16 +630,32 @@ export function PostsContent() {
                       >
                         {post.intent} intent
                       </span>
-                      {seen.has(post.id) ? (
-                        <span className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
-                          Seen
-                        </span>
-                      ) : null}
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          toggleReplied(post.id);
+                        }}
+                        className={cn(
+                          "px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase transition-colors",
+                          replied.has(post.id)
+                            ? "text-primary hover:text-primary/70"
+                            : "border border-border text-muted-foreground opacity-0 group-hover:opacity-100 hover:bg-sidebar-accent hover:text-foreground",
+                        )}
+                      >
+                        {replied.has(post.id) ? "✓ Replied" : "Mark replied"}
+                      </button>
                     </div>
                   </div>
                 </a>
               </li>
             ))}
+            {visiblePosts.length === 0 ? (
+              <li className="px-4 py-12 text-center text-sm text-muted-foreground">
+                Nothing matches the current filters.
+              </li>
+            ) : null}
           </ul>
         </section>
       </div>
