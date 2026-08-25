@@ -66,17 +66,17 @@ export default function Hero() {
   return (
     <section className="relative flex min-h-screen w-full flex-col justify-center overflow-x-hidden pt-48 pb-48 font-mono">
       {/* Decorative Technical Borders */}
-      <div className="absolute top-24 right-0 left-0 hidden h-px bg-white/5 lg:block" />
+      <div className="absolute top-[80px] right-0 left-0 hidden h-px bg-white/5 lg:block" />
       <div className="absolute right-0 bottom-24 left-0 hidden h-px bg-white/5 lg:block" />
       <div className="absolute top-0 bottom-0 left-8 hidden w-px bg-white/5 md:left-16 lg:block" />
       <div className="absolute top-0 right-8 bottom-0 hidden w-px bg-white/5 md:right-16 lg:block" />
 
       {/* Crosshairs at intersections */}
-      <div className="absolute top-24 left-8 hidden h-4 w-4 -translate-x-1/2 -translate-y-1/2 md:left-16 lg:block">
+      <div className="absolute top-[80px] left-8 hidden h-4 w-4 -translate-x-1/2 -translate-y-1/2 md:left-16 lg:block">
         <div className="bg-primary/50 absolute top-1/2 right-0 left-0 h-px" />
         <div className="bg-primary/50 absolute top-0 bottom-0 left-1/2 w-px" />
       </div>
-      <div className="absolute top-24 right-8 hidden h-4 w-4 translate-x-1/2 -translate-y-1/2 md:right-16 lg:block">
+      <div className="absolute top-[80px] right-8 hidden h-4 w-4 translate-x-1/2 -translate-y-1/2 md:right-16 lg:block">
         <div className="absolute top-1/2 right-0 left-0 h-px bg-white/20" />
         <div className="absolute top-0 bottom-0 left-1/2 w-px bg-white/20" />
       </div>
