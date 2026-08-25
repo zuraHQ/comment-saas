@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { RefreshCw } from "lucide-react";
 import {
   FaBluesky,
   FaGithub,
@@ -505,6 +506,23 @@ export function PostsContent() {
 
   const [hideReplied, setHideReplied] = useState(false);
 
+  const [refreshing, setRefreshing] = useState(false);
+  const [updatedLabel, setUpdatedLabel] = useState("2m ago");
+  const refreshTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => {
+    if (refreshTimer.current) clearTimeout(refreshTimer.current);
+  }, []);
+
+  // Simulated refetch until the real fetchers exist.
+  const refresh = () => {
+    if (refreshing) return;
+    setRefreshing(true);
+    refreshTimer.current = setTimeout(() => {
+      setRefreshing(false);
+      setUpdatedLabel("just now");
+    }, 800);
+  };
+
   const toggleReplied = (id: string) => {
     setReplied((prev) => {
       const next = new Set(prev);
@@ -585,7 +603,21 @@ export function PostsContent() {
               ) : null}
             </span>
 
-            <div className="ml-auto flex items-center">
+            <div className="ml-auto flex items-center gap-3">
+              <span className="hidden text-xs text-muted-foreground sm:inline">
+                Updated {updatedLabel}
+              </span>
+              <button
+                type="button"
+                onClick={refresh}
+                aria-label="Refresh posts"
+                disabled={refreshing}
+                className="flex h-6 w-6 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground disabled:cursor-default"
+              >
+                <RefreshCw
+                  className={cn("h-3.5 w-3.5", refreshing && "animate-spin")}
+                />
+              </button>
               <button
                 type="button"
                 onClick={() => setHideReplied((v) => !v)}

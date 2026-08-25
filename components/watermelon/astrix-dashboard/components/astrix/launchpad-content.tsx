@@ -36,6 +36,7 @@ const LAUNCH_SITES: Array<{ name: string; domain: string; url?: string }> = [
   { name: "BetaPage", domain: "betapage.co" },
   { name: "voting.dev", domain: "voting.dev" },
   { name: "Crunchbase", domain: "crunchbase.com" },
+  { name: "ScrollLaunch", domain: "scrolllaunch.com", url: "https://www.scrolllaunch.com/" },
 ];
 
 const LAUNCHED_STORAGE_KEY = "launched-sites";
@@ -72,7 +73,7 @@ export function LaunchpadContent() {
       <div>
         <h1 className="text-xl font-semibold">Launchpad</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          30 places to launch your product for free and get your first users.
+          {LAUNCH_SITES.length} places to launch your product for free and get your first users.
           Ranked from most popular to least, so start at the top.
         </p>
         <p className="mt-2 text-sm">
