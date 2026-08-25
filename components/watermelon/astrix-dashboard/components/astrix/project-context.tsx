@@ -65,7 +65,7 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
 
   const setProjectId = (id: Id<"projects">) => {
     setPickedId(id);
-    void setLastProject({ projectId: id });
+    setLastProject({ projectId: id }).catch(console.error);
   };
 
   const addProject = async (name: string) => {

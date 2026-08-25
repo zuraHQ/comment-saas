@@ -54,7 +54,7 @@ export function LaunchpadContent() {
 
   const toggleLaunched = (siteName: string) => {
     if (!project) return;
-    void toggle({ projectId: project._id, site: siteName });
+    toggle({ projectId: project._id, site: siteName }).catch(console.error);
   };
 
   return (

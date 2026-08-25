@@ -576,7 +576,7 @@ export function PostsContent() {
 
   const toggleReplied = (id: string) => {
     if (!project) return;
-    void toggleReplied_({ projectId: project._id, postKey: id });
+    toggleReplied_({ projectId: project._id, postKey: id }).catch(console.error);
   };
 
   const visiblePosts = active.posts.filter(
@@ -687,10 +687,10 @@ export function PostsContent() {
                 type="button"
                 onClick={() => {
                   if (!project) return;
-                  void setHideRepliedPref({
+                  setHideRepliedPref({
                     projectId: project._id,
                     hideReplied: !hideReplied,
-                  });
+                  }).catch(console.error);
                 }}
                 aria-pressed={hideReplied}
                 className={cn(
