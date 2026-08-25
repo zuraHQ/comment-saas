@@ -10,7 +10,7 @@ body:has(.astrix-dashboard) [data-slot="tooltip-content"] {
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.17 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
+  --primary: #A3FF12;
   --primary-foreground: #101010;
   --secondary: oklch(1 0 0 / 8%);
   --secondary-foreground: oklch(0.985 0 0);
@@ -32,7 +32,7 @@ body:has(.astrix-dashboard) [data-slot="tooltip-content"] {
   --chart-5: oklch(0.269 0 0);
   --sidebar: #101010;
   --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.922 0 0);
+  --sidebar-primary: #A3FF12;
   --sidebar-primary-foreground: #101010;
   --sidebar-accent: oklch(1 0 0 / 6%);
   --sidebar-accent-foreground: oklch(0.985 0 0);
@@ -60,7 +60,7 @@ body:has(.astrix-dashboard) [data-slot="tooltip-content"] {
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.17 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
+  --primary: #A3FF12;
   --primary-foreground: #101010;
   --secondary: oklch(1 0 0 / 8%);
   --secondary-foreground: oklch(0.985 0 0);
@@ -82,7 +82,7 @@ body:has(.astrix-dashboard) [data-slot="tooltip-content"] {
   --chart-5: oklch(0.269 0 0);
   --sidebar: #101010;
   --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.922 0 0);
+  --sidebar-primary: #A3FF12;
   --sidebar-primary-foreground: #101010;
   --sidebar-accent: oklch(1 0 0 / 6%);
   --sidebar-accent-foreground: oklch(0.985 0 0);
