@@ -112,7 +112,7 @@ export default function Hero() {
             <Heading
               as="h1"
               variant="big"
-              className="text-foreground mb-2 font-sans font-semibold leading-[0.95]"
+              className="text-foreground mb-2 font-sans font-semibold leading-[0.95] lg:text-[64px]"
             >
               The internet is asking
             </Heading>
@@ -122,7 +122,7 @@ export default function Hero() {
             <Heading
               as="h1"
               variant="big"
-              className="mb-8 font-sans font-semibold leading-[0.95]"
+              className="mb-8 font-sans font-semibold leading-[0.95] lg:text-[64px]"
             >
               <span className="text-foreground">for your product. We find where.</span>
             </Heading>
