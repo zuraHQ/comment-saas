@@ -710,7 +710,7 @@ export function PostsContent() {
             </div>
           </header>
 
-          <ul className="slim-scrollbar min-h-0 flex-1 overflow-y-auto">
+          <ul className="no-scrollbar min-h-0 flex-1 overflow-y-auto">
             {visiblePosts.map((post) => (
               <li key={post.id} className="border-b border-border last:border-b-0">
                 <a

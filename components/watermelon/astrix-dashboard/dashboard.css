@@ -310,3 +310,13 @@ body:has(.astrix-dashboard) [data-slot="tooltip-content"] > svg {
 .astrix-dashboard .slim-scrollbar::-webkit-scrollbar-thumb:hover {
   background: var(--muted-foreground);
 }
+
+/* Scrolls normally, just no visible scrollbar. */
+.astrix-dashboard .no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.astrix-dashboard .no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
