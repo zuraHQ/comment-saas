@@ -108,7 +108,7 @@ export function PostsContent() {
       console.error(err);
     }
   };
-  const setHideRepliedPref = useMutation(api.replies.setHideReplied);
+
 
   // Rail: every live platform, always. What shows in the rail is navigation,
   // not a reflection of project config or fetched data.
@@ -134,7 +134,6 @@ export function PostsContent() {
   );
   const rows = feed ?? [];
 
-  const hideReplied = project?.hideReplied ?? false;
   const [intentFilter, setIntentFilter] =
     useState<(typeof INTENT_FILTERS)[number]>("All");
   const [refreshing, setRefreshing] = useState(false);
@@ -158,9 +157,10 @@ export function PostsContent() {
   };
 
   const platformRows = rows;
+  // Replied posts leave the feed automatically; History holds them.
   const visibleRows = platformRows.filter(
     (row) =>
-      (!hideReplied || !row.match.replied) &&
+      !row.match.replied &&
       (intentFilter === "All" ||
         row.match.intentScore === intentFilter.toLowerCase()),
   );
@@ -220,25 +220,6 @@ export function PostsContent() {
                 </button>
               ))}
             </div>
-            <button
-              type="button"
-              onClick={() => {
-                if (!project) return;
-                setHideRepliedPref({
-                  projectId: project._id,
-                  hideReplied: !hideReplied,
-                }).catch(console.error);
-              }}
-              aria-pressed={hideReplied}
-              className={cn(
-                "h-9 px-3 text-[10px] font-bold tracking-wider uppercase transition-colors",
-                hideReplied
-                  ? "bg-primary text-primary-foreground"
-                  : "border border-border text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
-              )}
-            >
-              Hide replied
-            </button>
             <Sheet>
               <SheetTrigger
                 type="button"
