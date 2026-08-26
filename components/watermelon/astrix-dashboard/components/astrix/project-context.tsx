@@ -1,6 +1,17 @@
 "use client";
 
 import { createContext, useContext, useState, type ReactNode } from "react";
+import {
+  FaBluesky,
+  FaGithub,
+  FaHackerNews,
+  FaLinkedinIn,
+  FaQuora,
+  FaRedditAlien,
+  FaThreads,
+  FaXTwitter,
+  FaYoutube,
+} from "react-icons/fa6";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import type { Doc, Id } from "@/convex/_generated/dataModel";
@@ -11,15 +22,15 @@ export type Project = Doc<"projects"> & { iconUrl: string | null };
 // Where we look for posts. Only reddit + hn have live fetchers today; the
 // rest are wired as the pipeline grows.
 export const PLATFORM_OPTIONS = [
-  { id: "reddit", label: "Reddit", live: true },
-  { id: "hn", label: "Hacker News", live: true },
-  { id: "x", label: "X / Twitter", live: false },
-  { id: "linkedin", label: "LinkedIn", live: false },
-  { id: "youtube", label: "YouTube", live: false },
-  { id: "bluesky", label: "Bluesky", live: false },
-  { id: "threads", label: "Threads", live: false },
-  { id: "github", label: "GitHub", live: false },
-  { id: "quora", label: "Quora", live: false },
+  { id: "reddit", label: "Reddit", Icon: FaRedditAlien, bg: "#FF4500", fg: "#ffffff", live: true },
+  { id: "hn", label: "Hacker News", Icon: FaHackerNews, bg: "#FF6600", fg: "#ffffff", live: true },
+  { id: "x", label: "X / Twitter", Icon: FaXTwitter, bg: "#ffffff", fg: "#000000", live: false },
+  { id: "linkedin", label: "LinkedIn", Icon: FaLinkedinIn, bg: "#0A66C2", fg: "#ffffff", live: false },
+  { id: "youtube", label: "YouTube", Icon: FaYoutube, bg: "#FF0000", fg: "#ffffff", live: false },
+  { id: "bluesky", label: "Bluesky", Icon: FaBluesky, bg: "#0085FF", fg: "#ffffff", live: false },
+  { id: "threads", label: "Threads", Icon: FaThreads, bg: "#ffffff", fg: "#000000", live: false },
+  { id: "github", label: "GitHub", Icon: FaGithub, bg: "#ffffff", fg: "#000000", live: false },
+  { id: "quora", label: "Quora", Icon: FaQuora, bg: "#B92B27", fg: "#ffffff", live: false },
 ] as const;
 
 type ProjectContextValue = {

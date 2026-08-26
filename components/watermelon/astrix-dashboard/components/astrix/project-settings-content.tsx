@@ -230,6 +230,15 @@ function ProjectSettingsForm({ project }: { project: Project }) {
                 >
                   {on ? <Check className="size-4 text-[#101010]" /> : null}
                 </span>
+                <span
+                  className="flex h-6 w-6 shrink-0 items-center justify-center"
+                  style={{ backgroundColor: platform.bg }}
+                >
+                  <platform.Icon
+                    className="h-3.5 w-3.5"
+                    style={{ color: platform.fg }}
+                  />
+                </span>
                 <span className="flex-1">{platform.label}</span>
                 {!platform.live ? (
                   <span className="text-[10px] tracking-wider text-muted-foreground uppercase">
