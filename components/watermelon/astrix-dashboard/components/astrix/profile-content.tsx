@@ -60,6 +60,35 @@ export function ProfileContent() {
       <section className="flex flex-col gap-4 border border-border p-5">
         <div>
           <h2 className="text-xs font-bold tracking-wider text-muted-foreground uppercase">
+            Billing
+          </h2>
+        </div>
+        <div className="flex flex-wrap items-center gap-4 border border-border p-4">
+          <div className="min-w-0 flex-1">
+            <p className="flex items-center gap-2 text-sm font-medium">
+              Free plan
+              <span className="border border-primary/40 px-2 py-0.5 text-[10px] font-bold tracking-wider text-primary uppercase">
+                Beta
+              </span>
+            </p>
+            <p className="mt-0.5 text-xs text-muted-foreground">
+              Everything is free while we are in beta. Paid plans arrive at
+              launch.
+            </p>
+          </div>
+          <button
+            type="button"
+            disabled
+            className="h-9 shrink-0 border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase opacity-50"
+          >
+            Manage billing
+          </button>
+        </div>
+      </section>
+
+      <section className="flex flex-col gap-4 border border-border p-5">
+        <div>
+          <h2 className="text-xs font-bold tracking-wider text-muted-foreground uppercase">
             Integrations
           </h2>
         </div>
