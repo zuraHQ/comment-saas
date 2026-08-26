@@ -13,7 +13,7 @@ const clerkConfigured = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
 
 export default function LoginPage() {
   return (
-    <main className="dark flex min-h-screen items-center justify-center bg-[#101010] px-4 py-12 font-mono">
+    <main className="dark flex min-h-screen items-center justify-center bg-[#101010] px-4 py-12 font-sans">
       <div className="w-full max-w-sm">
         <Link href="/" className="mb-10 flex items-center justify-center gap-3">
           <LogoIcon className="h-8 w-8 text-primary" />

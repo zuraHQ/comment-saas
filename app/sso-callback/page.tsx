@@ -6,7 +6,7 @@ import { AuthenticateWithRedirectCallback } from "@clerk/nextjs";
 // transfers unknown accounts into sign-up automatically.
 export default function SsoCallbackPage() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#101010] font-mono">
+    <main className="flex min-h-screen items-center justify-center bg-[#101010] font-sans">
       <span className="text-xs uppercase tracking-widest text-white/40">
         Signing you in...
       </span>
