@@ -16,11 +16,11 @@ export default defineSchema({
     ownerClerkId: v.string(),
     slug: v.string(),
     name: v.string(),
-    color: v.string(),
+    iconId: v.optional(v.id("_storage")),
     url: v.optional(v.string()),
     description: v.optional(v.string()),
     keywords: v.array(v.string()),
-    postTypes: v.array(v.string()),
+    platforms: v.array(v.string()),
     hideReplied: v.optional(v.boolean()),
   })
     .index("by_owner", ["ownerClerkId"])

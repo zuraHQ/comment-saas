@@ -33,10 +33,17 @@ export const list = query({
   handler: async (ctx) => {
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) return [];
-    return ctx.db
+    const projects = await ctx.db
       .query("projects")
       .withIndex("by_owner", (q) => q.eq("ownerClerkId", identity.subject))
       .collect();
+    // Icons live in Convex file storage; hand the UI a ready-to-render URL.
+    return Promise.all(
+      projects.map(async (project) => ({
+        ...project,
+        iconUrl: project.iconId ? await ctx.storage.getUrl(project.iconId) : null,
+      })),
+    );
   },
 });
 
@@ -48,11 +55,10 @@ export const get = query({
 export const create = mutation({
   args: {
     name: v.string(),
-    color: v.string(),
     url: v.optional(v.string()),
     description: v.optional(v.string()),
     keywords: v.optional(v.array(v.string())),
-    postTypes: v.optional(v.array(v.string())),
+    platforms: v.optional(v.array(v.string())),
   },
   handler: async (ctx, args) => {
     const ownerClerkId = await requireClerkId(ctx);
@@ -77,11 +83,11 @@ export const create = mutation({
       ownerClerkId,
       slug,
       name: args.name.trim() || "New project",
-      color: args.color,
       url: args.url,
       description: args.description,
       keywords,
-      postTypes: args.postTypes ?? [],
+      // Default to the platforms we can actually fetch today.
+      platforms: args.platforms ?? ["reddit", "hn"],
     });
     await ensureSearchJobs(ctx, keywords);
     return projectId;
@@ -92,11 +98,11 @@ export const update = mutation({
   args: {
     projectId: v.id("projects"),
     name: v.optional(v.string()),
-    color: v.optional(v.string()),
+    iconId: v.optional(v.id("_storage")),
     url: v.optional(v.string()),
     description: v.optional(v.string()),
     keywords: v.optional(v.array(v.string())),
-    postTypes: v.optional(v.array(v.string())),
+    platforms: v.optional(v.array(v.string())),
   },
   handler: async (ctx, args) => {
     await requireOwnedProject(ctx, args.projectId);
@@ -137,5 +143,24 @@ export const remove = mutation({
     }
 
     await ctx.db.delete(args.projectId);
+  },
+});
+
+// Icon upload: the client POSTs the file straight to this URL, then hands the
+// returned storage id back through `update`.
+export const generateIconUploadUrl = mutation({
+  args: {},
+  handler: async (ctx) => {
+    await requireClerkId(ctx);
+    return ctx.storage.generateUploadUrl();
+  },
+});
+
+export const clearIcon = mutation({
+  args: { projectId: v.id("projects") },
+  handler: async (ctx, args) => {
+    const project = await requireOwnedProject(ctx, args.projectId);
+    if (project.iconId) await ctx.storage.delete(project.iconId);
+    await ctx.db.patch(args.projectId, { iconId: undefined });
   },
 });

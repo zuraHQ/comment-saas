@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { DashboardLink, useDashboardNavigation } from "./navigation";
+import { ProjectIcon } from "./project-icon";
 import { useProject } from "./project-context";
 
 const PAGE_LABELS: Record<string, string> = {
@@ -56,12 +57,7 @@ export function DashboardTopbar() {
             className="flex h-10 items-center gap-2.5 border border-border px-3 text-sm font-medium text-foreground transition-colors hover:bg-sidebar-accent"
             aria-label="Switch project"
           >
-            <span
-              className="flex h-5 w-5 shrink-0 items-center justify-center text-[10px] font-bold text-[#101010]"
-              style={{ backgroundColor: project?.color ?? "#3f3f46" }}
-            >
-              {project?.name[0] ?? "+"}
-            </span>
+            <ProjectIcon project={project} />
             {project?.name ?? "No project"}
             <ChevronsUpDown className="size-3.5 text-muted-foreground" />
           </DropdownMenuTrigger>
@@ -75,12 +71,7 @@ export function DashboardTopbar() {
               <DropdownMenuSeparator />
               {projects.map((p) => (
                 <DropdownMenuItem key={p._id} onSelect={() => setProjectId(p._id)}>
-                  <span
-                    className="flex h-5 w-5 shrink-0 items-center justify-center text-[10px] font-bold text-[#101010]"
-                    style={{ backgroundColor: p.color }}
-                  >
-                    {p.name[0]}
-                  </span>
+                  <ProjectIcon project={p} />
                   <span className="flex-1">{p.name}</span>
                   {p._id === project?._id ? <Check className="size-4" /> : null}
                 </DropdownMenuItem>

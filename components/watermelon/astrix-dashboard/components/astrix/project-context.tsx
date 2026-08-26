@@ -5,26 +5,22 @@ import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import type { Doc, Id } from "@/convex/_generated/dataModel";
 
-export type Project = Doc<"projects">;
+// projects.list resolves the stored icon into a URL for rendering.
+export type Project = Doc<"projects"> & { iconUrl: string | null };
 
-// What kind of posts a project wants surfaced. Feeds the intent scorer.
-export const POST_TYPES = [
-  { id: "asking-recommendation", label: "Asking for a recommendation" },
-  { id: "looking-alternative", label: "Looking for an alternative" },
-  { id: "complaining-competitor", label: "Complaining about a competitor" },
-  { id: "how-do-i", label: "Asking how to do something" },
-  { id: "sharing-problem", label: "Sharing a problem we solve" },
-  { id: "hiring-outsourcing", label: "Hiring or outsourcing the job" },
+// Where we look for posts. Only reddit + hn have live fetchers today; the
+// rest are wired as the pipeline grows.
+export const PLATFORM_OPTIONS = [
+  { id: "reddit", label: "Reddit", live: true },
+  { id: "hn", label: "Hacker News", live: true },
+  { id: "x", label: "X / Twitter", live: false },
+  { id: "linkedin", label: "LinkedIn", live: false },
+  { id: "youtube", label: "YouTube", live: false },
+  { id: "bluesky", label: "Bluesky", live: false },
+  { id: "threads", label: "Threads", live: false },
+  { id: "github", label: "GitHub", live: false },
+  { id: "quora", label: "Quora", live: false },
 ] as const;
-
-export const PROJECT_COLORS = [
-  "#A3FF12",
-  "#0085FF",
-  "#FF4500",
-  "#FF6600",
-  "#B92B27",
-  "#00C48C",
-];
 
 type ProjectContextValue = {
   projects: Project[];
@@ -36,11 +32,11 @@ type ProjectContextValue = {
     id: Id<"projects">,
     patch: {
       name?: string;
-      color?: string;
       url?: string;
       description?: string;
       keywords?: string[];
-      postTypes?: string[];
+      platforms?: string[];
+      iconId?: Id<"_storage">;
     },
   ) => Promise<void>;
   removeProject: (id: Id<"projects">) => Promise<void>;
@@ -69,8 +65,7 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
   };
 
   const addProject = async (name: string) => {
-    const color = PROJECT_COLORS[list.length % PROJECT_COLORS.length];
-    const id = await create({ name, color });
+    const id = await create({ name });
     setProjectId(id);
     return id;
   };

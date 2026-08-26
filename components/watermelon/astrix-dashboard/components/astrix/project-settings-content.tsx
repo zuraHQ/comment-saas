@@ -5,12 +5,10 @@ import { Check, Trash2, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { useDashboardNavigation } from "./navigation";
-import {
-  POST_TYPES,
-  PROJECT_COLORS,
-  useProject,
-  type Project,
-} from "./project-context";
+import { useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { ProjectIcon } from "./project-icon";
+import { PLATFORM_OPTIONS, useProject, type Project } from "./project-context";
 
 export function ProjectSettingsContent() {
   const { project } = useProject();
@@ -37,6 +35,30 @@ function ProjectSettingsForm({ project }: { project: Project }) {
   const [description, setDescription] = useState(project.description ?? "");
   const [keyword, setKeyword] = useState("");
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [uploading, setUploading] = useState(false);
+
+  const generateUploadUrl = useMutation(api.projects.generateIconUploadUrl);
+  const clearIcon = useMutation(api.projects.clearIcon);
+
+  // Upload straight to Convex storage, then save the returned id on the project.
+  const uploadIcon = async (file: File) => {
+    setUploading(true);
+    try {
+      const uploadUrl = await generateUploadUrl({});
+      const res = await fetch(uploadUrl, {
+        method: "POST",
+        headers: { "Content-Type": file.type },
+        body: file,
+      });
+      if (!res.ok) throw new Error(`Upload failed: ${res.status}`);
+      const { storageId } = await res.json();
+      await updateProject(project._id, { iconId: storageId });
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const addKeyword = (e: FormEvent) => {
     e.preventDefault();
@@ -55,11 +77,11 @@ function ProjectSettingsForm({ project }: { project: Project }) {
     });
   };
 
-  const togglePostType = (id: string) => {
-    const next = project.postTypes.includes(id)
-      ? project.postTypes.filter((t) => t !== id)
-      : [...project.postTypes, id];
-    void updateProject(project._id, { postTypes: next });
+  const togglePlatform = (id: string) => {
+    const next = project.platforms.includes(id)
+      ? project.platforms.filter((t) => t !== id)
+      : [...project.platforms, id];
+    void updateProject(project._id, { platforms: next });
   };
 
   return (
@@ -107,24 +129,31 @@ function ProjectSettingsForm({ project }: { project: Project }) {
             className="w-full resize-none border border-input bg-transparent px-3 py-2 text-sm outline-none placeholder:text-muted-foreground focus-visible:border-ring"
           />
         </Field>
-        <Field label="Color">
-          <div className="flex flex-wrap gap-2">
-            {PROJECT_COLORS.map((color) => (
+        <Field label="Icon" hint="Square image, shown in the project switcher.">
+          <div className="flex items-center gap-3">
+            <ProjectIcon project={project} className="h-10 w-10 text-sm" />
+            <label className="h-9 cursor-pointer border border-border px-4 text-xs font-bold leading-9 tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground">
+              {uploading ? "Uploading..." : project.iconUrl ? "Replace" : "Upload"}
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  e.target.value = "";
+                  if (file) void uploadIcon(file);
+                }}
+              />
+            </label>
+            {project.iconUrl ? (
               <button
-                key={color}
                 type="button"
-                onClick={() => void updateProject(project._id, { color })}
-                aria-label={`Use ${color}`}
-                className={cn(
-                  "flex h-7 w-7 cursor-pointer items-center justify-center border transition-colors",
-                  project.color === color
-                    ? "border-foreground"
-                    : "border-transparent hover:border-border",
-                )}
+                onClick={() => void clearIcon({ projectId: project._id })}
+                className="h-9 cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:border-red-500/40 hover:text-red-400"
               >
-                <span className="h-5 w-5" style={{ backgroundColor: color }} />
+                Remove
               </button>
-            ))}
+            ) : null}
           </div>
         </Field>
       </Section>
@@ -175,17 +204,17 @@ function ProjectSettingsForm({ project }: { project: Project }) {
       </Section>
 
       <Section
-        title="Post types"
-        subtitle="What kind of posts count as a lead for this project."
+        title="Platforms"
+        subtitle="Where we look for posts. We surface any post type that fits your keywords."
       >
         <div className="grid gap-2 sm:grid-cols-2">
-          {POST_TYPES.map((type) => {
-            const on = project.postTypes.includes(type.id);
+          {PLATFORM_OPTIONS.map((platform) => {
+            const on = project.platforms.includes(platform.id);
             return (
               <button
-                key={type.id}
+                key={platform.id}
                 type="button"
-                onClick={() => togglePostType(type.id)}
+                onClick={() => togglePlatform(platform.id)}
                 className={cn(
                   "flex cursor-pointer items-center gap-3 border p-3 text-left text-sm transition-colors",
                   on
@@ -201,7 +230,12 @@ function ProjectSettingsForm({ project }: { project: Project }) {
                 >
                   {on ? <Check className="size-4 text-[#101010]" /> : null}
                 </span>
-                {type.label}
+                <span className="flex-1">{platform.label}</span>
+                {!platform.live ? (
+                  <span className="text-[10px] tracking-wider text-muted-foreground uppercase">
+                    soon
+                  </span>
+                ) : null}
               </button>
             );
           })}
