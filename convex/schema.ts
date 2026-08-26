@@ -64,6 +64,8 @@ export default defineSchema({
     projectId: v.id("projects"),
     ownerClerkId: v.string(),
     postId: v.id("posts"),
+    // Denormalized from the post so the feed can page per platform.
+    platform: v.optional(v.string()),
     // How this post reached the project: reading a community, or a keyword
     // sweep of the whole platform. Lets us measure which path pays off.
     source: v.string(),
@@ -76,6 +78,7 @@ export default defineSchema({
     .index("by_project", ["projectId"])
     .index("by_project_post", ["projectId", "postId"])
     .index("by_project_posted", ["projectId", "postedAt"])
+    .index("by_project_platform", ["projectId", "platform", "postedAt"])
     .index("by_owner", ["ownerClerkId"]),
 
   // Globally deduped fetch jobs, shared across projects: one job per

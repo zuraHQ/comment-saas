@@ -79,6 +79,7 @@ export const ingest = internalMutation({
             projectId: project._id,
             ownerClerkId: project.ownerClerkId,
             postId,
+            platform: args.platform,
             source: args.kind,
             query: args.query,
             replied: false,
@@ -180,16 +181,28 @@ export const markJobRan = internalMutation({
   },
 });
 
-// The dashboard feed for one of the caller's projects.
+// The dashboard feed for one of the caller's projects, one platform at a time.
 export const feed = query({
-  args: { projectId: v.id("projects"), limit: v.optional(v.number()) },
+  args: {
+    projectId: v.id("projects"),
+    platform: v.optional(v.string()),
+    limit: v.optional(v.number()),
+  },
   handler: async (ctx, args) => {
     await requireOwnedProject(ctx, args.projectId);
-    const matches = await ctx.db
-      .query("matches")
-      .withIndex("by_project_posted", (q) => q.eq("projectId", args.projectId))
-      .order("desc")
-      .take(args.limit ?? 100);
+    const matches = args.platform
+      ? await ctx.db
+          .query("matches")
+          .withIndex("by_project_platform", (q) =>
+            q.eq("projectId", args.projectId).eq("platform", args.platform),
+          )
+          .order("desc")
+          .take(args.limit ?? 100)
+      : await ctx.db
+          .query("matches")
+          .withIndex("by_project_posted", (q) => q.eq("projectId", args.projectId))
+          .order("desc")
+          .take(args.limit ?? 100);
 
     const rows = [];
     for (const match of matches) {
@@ -367,6 +380,7 @@ export const backfillProject = internalMutation({
         projectId: project._id,
         ownerClerkId: project.ownerClerkId,
         postId: post._id,
+        platform: post.platform,
         source: kind,
         query,
         replied: false,
@@ -486,5 +500,42 @@ export const makeJobsDue = internalMutation({
       n++;
     }
     return n;
+  },
+});
+
+// Per-platform totals for the rail and the header count.
+export const feedCounts = query({
+  args: { projectId: v.id("projects") },
+  handler: async (ctx, args) => {
+    await requireOwnedProject(ctx, args.projectId);
+    const matches = await ctx.db
+      .query("matches")
+      .withIndex("by_project", (q) => q.eq("projectId", args.projectId))
+      .collect();
+    const byPlatform: Record<string, number> = {};
+    let replied = 0;
+    for (const match of matches) {
+      const key = match.platform ?? "unknown";
+      byPlatform[key] = (byPlatform[key] ?? 0) + 1;
+      if (match.replied) replied++;
+    }
+    return { total: matches.length, replied, byPlatform };
+  },
+});
+
+// One-shot: fill matches.platform from their posts.
+export const backfillMatchPlatform = internalMutation({
+  args: {},
+  handler: async (ctx) => {
+    let updated = 0;
+    for (const match of await ctx.db.query("matches").collect()) {
+      if (match.platform) continue;
+      const post = await ctx.db.get(match.postId);
+      if (post) {
+        await ctx.db.patch(match._id, { platform: post.platform });
+        updated++;
+      }
+    }
+    return updated;
   },
 });

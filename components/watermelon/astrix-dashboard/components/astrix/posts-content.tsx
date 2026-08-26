@@ -62,21 +62,18 @@ export function IntentBadge({ match }: { match: Doc<"matches"> }) {
 export function PostsContent() {
   const { project } = useProject();
 
-  const feed = useQuery(
-    api.pipeline.feed,
-    project ? { projectId: project._id, limit: 300 } : "skip",
+  const counts = useQuery(
+    api.pipeline.feedCounts,
+    project ? { projectId: project._id } : "skip",
   );
   const setReplied = useMutation(api.pipeline.setReplied);
   const refreshProject = useAction(api.fetchers.refreshProject);
   const setHideRepliedPref = useMutation(api.replies.setHideReplied);
 
-  const rows = feed ?? [];
-
   // Rail: every live platform, always. What shows in the rail is navigation,
   // not a reflection of project config or fetched data.
   const platforms = PLATFORM_OPTIONS.filter((option) => option.live);
-  const countFor = (id: string) =>
-    rows.filter((row) => row.post.platform === id).length;
+  const countFor = (id: string) => counts?.byPlatform?.[id] ?? 0;
 
   const [pickedKey, setPickedKey] = useState<string | null>(null);
   const activeKey =
@@ -87,6 +84,15 @@ export function PostsContent() {
       platforms[0]?.id ?? "reddit",
     );
   const active = platforms.find((option) => option.id === activeKey);
+
+  // Only the active platform's rows are loaded; switching tabs re-queries.
+  const feed = useQuery(
+    api.pipeline.feed,
+    project
+      ? { projectId: project._id, platform: activeKey, limit: 200 }
+      : "skip",
+  );
+  const rows = feed ?? [];
 
   const hideReplied = project?.hideReplied ?? false;
   const [intentFilter, setIntentFilter] =
@@ -111,7 +117,7 @@ export function PostsContent() {
     );
   };
 
-  const platformRows = rows.filter((row) => row.post.platform === activeKey);
+  const platformRows = rows;
   const visibleRows = platformRows.filter(
     (row) =>
       (!hideReplied || !row.match.replied) &&
@@ -131,7 +137,7 @@ export function PostsContent() {
           </h1>
           <div className="ml-auto flex items-center gap-3">
             <span className="hidden text-xs text-muted-foreground sm:inline">
-              {rows.length} found
+              {counts?.total ?? 0} found
             </span>
             <button
               type="button"
