@@ -2,7 +2,9 @@
 // builders in projects.ts and pipeline.ts cannot drift apart.
 
 // Platforms where we cannot read every post, so keywords are the way in.
-export const KEYWORD_PLATFORMS = ["reddit", "bluesky", "github", "youtube", "threads"];
+// Threads is off: its Apify actor bills ~$0.48 per RUN regardless of
+// result count, which the cron would turn into dollars a day.
+export const KEYWORD_PLATFORMS = ["reddit", "bluesky", "github", "youtube"];
 
 // Minimum time between runs of one job, per platform. YouTube searches cost
 // 100 of a 10k/day quota, so they run a few times a day, not every 15 min.

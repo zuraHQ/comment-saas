@@ -19,7 +19,7 @@ const DESCRIPTIONS: Record<string, string> = {
   tiktok: "Comments under the TikTok accounts you watch.",
   x: "Keyword search on X.",
   linkedin: "Coming later.",
-  threads: "Keyword search across Threads.",
+  threads: "Coming later.",
 };
 
 const INTEGRATIONS = PLATFORM_OPTIONS.map((platform) => ({
