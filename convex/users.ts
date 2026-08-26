@@ -119,6 +119,21 @@ export const setIntegration = mutation({
     if (args.enabled) current.add(args.integration);
     else current.delete(args.integration);
     await ctx.db.patch(user._id, { integrations: [...current] });
+
+    // The toggle means "fetch this platform": keep every project in sync so
+    // flipping it here is enough to start (or stop) the jobs.
+    const projects = await ctx.db
+      .query("projects")
+      .withIndex("by_owner", (q) => q.eq("ownerClerkId", identity.subject))
+      .collect();
+    for (const project of projects) {
+      const platforms = new Set(project.platforms);
+      if (args.enabled) platforms.add(args.integration);
+      else platforms.delete(args.integration);
+      if (platforms.size !== project.platforms.length) {
+        await ctx.db.patch(project._id, { platforms: [...platforms] });
+      }
+    }
   },
 });
 
