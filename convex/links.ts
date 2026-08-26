@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import { mutation, query } from "./_generated/server";
+import { internalMutation, mutation, query } from "./_generated/server";
 import { requireOwnedProject } from "./auth";
 
 const CODE_ALPHABET = "abcdefghjkmnpqrstuvwxyz23456789"; // no 0/O/1/l/i
@@ -177,5 +177,24 @@ export const clickBreakdown = query({
       }
     }
     return { total, byPlatform };
+  },
+});
+
+// CLI helper: wipe all tracked links and clicks for a fresh start.
+//   npx convex run links:resetAnalytics '{}' --prod
+export const resetAnalytics = internalMutation({
+  args: {},
+  handler: async (ctx) => {
+    let clicks = 0;
+    let links = 0;
+    for (const click of await ctx.db.query("linkClicks").collect()) {
+      await ctx.db.delete(click._id);
+      clicks++;
+    }
+    for (const link of await ctx.db.query("trackedLinks").collect()) {
+      await ctx.db.delete(link._id);
+      links++;
+    }
+    return { links, clicks };
   },
 });
