@@ -22,10 +22,9 @@ function clip(text: string | null | undefined, max = 500): string | undefined {
 }
 
 // HN via Algolia: free, no auth. https://hn.algolia.com/api
-async function searchHn(keyword: string): Promise<Normalized[]> {
-  const url = `https://hn.algolia.com/api/v1/search_by_date?query=${encodeURIComponent(keyword)}&tags=story&hitsPerPage=30`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`HN search failed: ${res.status}`);
+async function hnGet(params: string): Promise<Normalized[]> {
+  const res = await fetch(`https://hn.algolia.com/api/v1/search_by_date?${params}`);
+  if (!res.ok) throw new Error(`HN request failed: ${res.status}`);
   const data = await res.json();
   return (data.hits ?? [])
     .filter((h: any) => h.title)
@@ -39,6 +38,24 @@ async function searchHn(keyword: string): Promise<Normalized[]> {
       score: h.points ?? undefined,
       commentCount: h.num_comments ?? undefined,
     }));
+}
+
+function searchHn(keyword: string) {
+  return hnGet(`query=${encodeURIComponent(keyword)}&tags=story&hitsPerPage=50`);
+}
+
+// HN only produces a few hundred stories a day, so we read the whole thing
+// rather than guessing keywords. "ask" and "show" are the high-signal slices.
+const HN_FEEDS: Record<string, string> = {
+  all: "tags=story&hitsPerPage=100",
+  ask: "tags=ask_hn&hitsPerPage=50",
+  show: "tags=show_hn&hitsPerPage=50",
+};
+
+function fetchHnFeed(feed: string) {
+  const params = HN_FEEDS[feed];
+  if (!params) throw new Error(`Unknown HN feed: ${feed}`);
+  return hnGet(params);
 }
 
 const REDDIT_UA = "web:comment-saas:0.1 (reply-marketing research)";
@@ -111,6 +128,7 @@ const FETCHERS: Record<string, Fetcher | undefined> = {
   "reddit:community": fetchSubreddit,
   "reddit:keyword": searchReddit,
   "hn:keyword": searchHn,
+  "hn:community": fetchHnFeed,
 };
 
 type JobResult = {

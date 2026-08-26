@@ -4,6 +4,9 @@ import { requireClerkId, requireOwnedProject } from "./auth";
 
 const KEYWORD_PLATFORMS = ["hn", "reddit"] as const;
 
+// HN publishes only a few hundred stories a day, so we pull all of it.
+const HN_FEEDS = ["all", "ask", "show"];
+
 // Communities where founders and small-business buyers actually talk. Seeded
 // on every new project; the user edits the list in settings.
 export const DEFAULT_COMMUNITIES = [
@@ -63,6 +66,10 @@ async function ensureJobs(
   // Communities are a Reddit concept for now.
   for (const community of communities ?? []) {
     await ensureJob(ctx, "reddit", "community", community);
+  }
+  // HN is small enough to read end to end, so every project gets the feeds.
+  for (const feed of HN_FEEDS) {
+    await ensureJob(ctx, "hn", "community", feed);
   }
 }
 

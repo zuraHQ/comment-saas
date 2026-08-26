@@ -28,11 +28,12 @@ export const ingest = internalMutation({
     const projects = await ctx.db.query("projects").collect();
     // A community job feeds every project watching that community; a keyword
     // job feeds every project tracking that phrase.
-    const interested = projects.filter((p) =>
-      args.kind === "community"
-        ? p.communities.includes(args.query)
-        : p.keywords.includes(args.query),
-    );
+    const interested = projects.filter((p) => {
+      if (args.kind === "keyword") return p.keywords.includes(args.query);
+      // HN feeds are not user-picked: everyone watching HN gets them.
+      if (args.platform === "hn") return p.platforms.includes("hn");
+      return p.communities.includes(args.query);
+    });
     let inserted = 0;
     let matched = 0;
 
@@ -113,6 +114,11 @@ export const jobsForProject = internalQuery({
     if (args.platforms.includes("reddit")) {
       for (const community of args.communities) {
         wanted.push({ platform: "reddit", kind: "community", query: community });
+      }
+    }
+    if (args.platforms.includes("hn")) {
+      for (const feed of ["all", "ask", "show"]) {
+        wanted.push({ platform: "hn", kind: "community", query: feed });
       }
     }
 
@@ -213,6 +219,11 @@ export const rebuildJobs = internalMutation({
       if (project.platforms.includes("reddit")) {
         for (const community of project.communities) {
           await ensure("reddit", "community", community);
+        }
+      }
+      if (project.platforms.includes("hn")) {
+        for (const feed of ["all", "ask", "show"]) {
+          await ensure("hn", "community", feed);
         }
       }
     }
