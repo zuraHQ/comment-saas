@@ -54,7 +54,6 @@ export function OnboardingContent() {
   const [communities, setCommunities] = useState<string[]>(
     suggestCommunities([]),
   );
-  const [community, setCommunity] = useState("");
 
   const toggleCategory = (id: string) => {
     const next = categories.includes(id)
@@ -84,19 +83,6 @@ export function OnboardingContent() {
       if (timer.current) clearTimeout(timer.current);
     };
   }, [site]);
-
-  const addCommunity = (e: FormEvent) => {
-    e.preventDefault();
-    const value = community
-      .trim()
-      .toLowerCase()
-      .replace(/^\/?r\//, "")
-      .replace(/\/$/, "");
-    if (value && !communities.includes(value)) {
-      setCommunities([...communities, value]);
-    }
-    setCommunity("");
-  };
 
   const togglePlatform = (id: string) =>
     setPlatforms((prev) =>
