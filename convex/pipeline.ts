@@ -330,3 +330,54 @@ export const backfillProject = internalMutation({
     return { scanned: scanned - 1, matched };
   },
 });
+
+// Per-source performance: how many posts each keyword / community produced,
+// and how good they were. Powers the sources table on Analytics.
+export const sourceStats = query({
+  args: { projectId: v.id("projects") },
+  handler: async (ctx, args) => {
+    await requireOwnedProject(ctx, args.projectId);
+    const matches = await ctx.db
+      .query("matches")
+      .withIndex("by_project", (q) => q.eq("projectId", args.projectId))
+      .collect();
+
+    const bySource = new Map<
+      string,
+      {
+        source: string;
+        query: string;
+        total: number;
+        high: number;
+        medium: number;
+        low: number;
+        replied: number;
+      }
+    >();
+    for (const match of matches) {
+      const key = `${match.source}:${match.query}`;
+      let row = bySource.get(key);
+      if (!row) {
+        row = {
+          source: match.source,
+          query: match.query,
+          total: 0,
+          high: 0,
+          medium: 0,
+          low: 0,
+          replied: 0,
+        };
+        bySource.set(key, row);
+      }
+      row.total++;
+      if (match.intentScore === "high") row.high++;
+      else if (match.intentScore === "medium") row.medium++;
+      else if (match.intentScore === "low") row.low++;
+      if (match.replied) row.replied++;
+    }
+
+    return [...bySource.values()].sort(
+      (a, b) => b.high - a.high || b.total - a.total,
+    );
+  },
+});
