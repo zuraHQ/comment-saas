@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useAuth, useSignIn, useSignUp } from "@clerk/nextjs";
 import { FcGoogle } from "react-icons/fc";
@@ -53,10 +53,16 @@ function ClerkLoginForm() {
   const { signUp } = useSignUp();
   const { isLoaded: authLoaded, isSignedIn } = useAuth();
 
+  // The site link from the landing hero rides through sign-in into onboarding.
+  const site = useSearchParams().get("site");
+  const dashboardUrl = site
+    ? `/dashboard?site=${encodeURIComponent(site)}`
+    : "/dashboard";
+
   // Already signed in? Never show the sign-in screen.
   useEffect(() => {
-    if (authLoaded && isSignedIn) router.replace("/dashboard");
-  }, [authLoaded, isSignedIn, router]);
+    if (authLoaded && isSignedIn) router.replace(dashboardUrl);
+  }, [authLoaded, isSignedIn, router, dashboardUrl]);
 
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
@@ -73,7 +79,7 @@ function ClerkLoginForm() {
     const { error } = await signIn.sso({
       strategy: "oauth_google",
       redirectCallbackUrl: "/sso-callback",
-      redirectUrl: "/dashboard",
+      redirectUrl: dashboardUrl,
     });
     if (error) setError("Google sign-in failed. Try again.");
   }
@@ -139,7 +145,7 @@ function ClerkLoginForm() {
     }
 
     // Full navigation so the proxy middleware sees the new session cookie.
-    window.location.assign("/dashboard");
+    window.location.assign(dashboardUrl);
   }
 
   if (!authLoaded || isSignedIn) {

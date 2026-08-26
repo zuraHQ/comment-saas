@@ -53,3 +53,16 @@ export const setLastProject = mutation({
     if (user) await ctx.db.patch(user._id, { lastProjectId: args.projectId });
   },
 });
+
+export const completeOnboarding = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) return;
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_clerk_id", (q) => q.eq("clerkId", identity.subject))
+      .unique();
+    if (user) await ctx.db.patch(user._id, { onboardedAt: Date.now() });
+  },
+});

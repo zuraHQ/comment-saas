@@ -8,6 +8,8 @@ export default defineSchema({
     email: v.optional(v.string()),
     imageUrl: v.optional(v.string()),
     lastProjectId: v.optional(v.id("projects")),
+    // Set when onboarding finishes; absent means the user has never been through it.
+    onboardedAt: v.optional(v.number()),
   }).index("by_clerk_id", ["clerkId"]),
 
   // A user's product. Everything user-specific hangs off a project, and every
