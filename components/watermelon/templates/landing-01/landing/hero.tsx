@@ -32,6 +32,7 @@ const PLATFORMS = [
 export default function Hero() {
   const router = useRouter();
   const [wordIndex, setWordIndex] = useState(0);
+  const [site, setSite] = useState('');
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -166,28 +167,39 @@ export default function Hero() {
             </SubHeading>
           </motion.div>
 
-          {/* Email capture CTA */}
+          {/* Site capture CTA: we read the site to learn what the product does */}
           <motion.div variants={itemVariants} className="w-full max-w-xl">
             <form
               className="flex flex-col gap-3 sm:flex-row"
               onSubmit={(e) => {
                 e.preventDefault();
-                router.push('/login');
+                const value = site.trim();
+                if (!value) return;
+                const url = /^https?:\/\//i.test(value) ? value : `https://${value}`;
+                router.push(`/login?site=${encodeURIComponent(url)}`);
               }}
             >
               <input
-                type="email"
+                type="text"
                 required
-                placeholder="you@company.com"
+                value={site}
+                onChange={(e) => setSite(e.target.value)}
+                inputMode="url"
+                autoComplete="url"
+                placeholder="yoursaas.com"
                 className="h-12 flex-1 border border-white/10 bg-white/5 px-5 text-sm text-white placeholder:text-white/30 outline-none transition-colors focus:border-primary/60"
               />
               <button
                 type="submit"
                 className="h-12 shrink-0 bg-primary px-8 text-xs font-bold tracking-widest text-background uppercase transition-all hover:bg-primary/90 active:scale-[0.97]"
               >
-                Get Started
+                Find posts
               </button>
             </form>
+            <p className="mt-3 text-xs text-white/40">
+              Drop your link. We read your site to learn what you build, then go
+              find the posts worth replying to.
+            </p>
           </motion.div>
 
           {/* Demo container */}
