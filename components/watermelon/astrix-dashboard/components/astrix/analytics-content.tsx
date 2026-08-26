@@ -1,5 +1,6 @@
 "use client";
 
+import { Globe, Link2 } from "lucide-react";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { PLATFORM_OPTIONS, useProject } from "./project-context";
@@ -78,7 +79,15 @@ export function AnalyticsContent() {
                   >
                     <meta.Icon className="h-3.5 w-3.5" style={{ color: meta.fg }} />
                   </span>
-                ) : null}
+                ) : (
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center bg-sidebar-accent">
+                    {platformId === "direct" ? (
+                      <Link2 className="h-3.5 w-3.5 text-foreground" />
+                    ) : (
+                      <Globe className="h-3.5 w-3.5 text-foreground" />
+                    )}
+                  </span>
+                )}
                 <span className="w-24 shrink-0 truncate text-sm capitalize">
                   {meta?.label ?? platformId}
                 </span>
