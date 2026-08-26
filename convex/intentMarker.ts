@@ -118,7 +118,7 @@ For each post, relative to the product described, return:
 
 reason: one short sentence, for the founder, on why this post is or is not worth replying to.
 
-Return one entry per post, with the exact id you were given.`;
+Return one entry per post, echoing the exact id you were given for it.`;
 
 export const scoreDue = internalAction({
   args: {},
@@ -130,10 +130,11 @@ export const scoreDue = internalAction({
     if (!batch || !batch.items.length) return { scored: 0, more: false };
 
     const model = process.env.OPENAI_MODEL ?? "gpt-5-mini";
+    // The model echoes short indexes, not raw ids: nothing for it to mangle.
     const user = JSON.stringify({
       product: batch.product,
-      posts: batch.items.map((item) => ({
-        id: item.matchId,
+      posts: batch.items.map((item, index) => ({
+        id: String(index),
         platform: item.platform,
         community: item.community,
         title: item.title,
@@ -165,12 +166,19 @@ export const scoreDue = internalAction({
       scores: Array<{ id: string; intent: string; reason: string }>;
     };
 
+    const scores = [];
+    for (const score of parsed.scores) {
+      const index = Number(score.id);
+      const item = Number.isInteger(index) ? batch.items[index] : undefined;
+      if (!item) continue; // index the model invented
+      scores.push({
+        matchId: item.matchId,
+        intent: score.intent,
+        reason: score.reason,
+      });
+    }
     const applied: number = await ctx.runMutation(internal.intentMarker.applyScores, {
-      scores: parsed.scores.map((s) => ({
-        matchId: s.id as never,
-        intent: s.intent,
-        reason: s.reason,
-      })),
+      scores,
       allowedIds: batch.items.map((item) => item.matchId),
     });
 
