@@ -358,12 +358,15 @@ function ProjectSettingsForm({ project }: { project: Project }) {
           }}
           className="flex gap-2"
         >
-          <Input
-            value={igAccount}
-            onChange={(e) => setIgAccount(e.target.value)}
-            placeholder="@shopify"
-            className="h-9 rounded-none"
-          />
+          <div className="flex h-9 flex-1 items-center border border-input transition-colors focus-within:border-ring dark:bg-input/30">
+            <span className="pl-3 text-sm text-muted-foreground">@</span>
+            <input
+              value={igAccount}
+              onChange={(e) => setIgAccount(e.target.value)}
+              placeholder="shopify"
+              className="h-full w-full min-w-0 bg-transparent px-1.5 text-sm outline-none placeholder:text-muted-foreground"
+            />
+          </div>
           <button
             type="submit"
             className="h-9 shrink-0 cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
@@ -402,12 +405,15 @@ function ProjectSettingsForm({ project }: { project: Project }) {
           }}
           className="flex gap-2"
         >
-          <Input
-            value={ttAccount}
-            onChange={(e) => setTtAccount(e.target.value)}
-            placeholder="@shopify"
-            className="h-9 rounded-none"
-          />
+          <div className="flex h-9 flex-1 items-center border border-input transition-colors focus-within:border-ring dark:bg-input/30">
+            <span className="pl-3 text-sm text-muted-foreground">@</span>
+            <input
+              value={ttAccount}
+              onChange={(e) => setTtAccount(e.target.value)}
+              placeholder="shopify"
+              className="h-full w-full min-w-0 bg-transparent px-1.5 text-sm outline-none placeholder:text-muted-foreground"
+            />
+          </div>
           <button
             type="submit"
             className="h-9 shrink-0 cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
@@ -447,12 +453,15 @@ function ProjectSettingsForm({ project }: { project: Project }) {
           }}
           className="flex gap-2"
         >
-          <Input
-            value={xAccount}
-            onChange={(e) => setXAccount(e.target.value)}
-            placeholder="@marc_louvion"
-            className="h-9 rounded-none"
-          />
+          <div className="flex h-9 flex-1 items-center border border-input transition-colors focus-within:border-ring dark:bg-input/30">
+            <span className="pl-3 text-sm text-muted-foreground">@</span>
+            <input
+              value={xAccount}
+              onChange={(e) => setXAccount(e.target.value)}
+              placeholder="marc_louvion"
+              className="h-full w-full min-w-0 bg-transparent px-1.5 text-sm outline-none placeholder:text-muted-foreground"
+            />
+          </div>
           <button
             type="submit"
             className="h-9 shrink-0 cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
