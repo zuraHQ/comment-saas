@@ -398,7 +398,7 @@ async function searchThreads(keyword: string): Promise<Normalized[]> {
   const items = await apifyRun("igview-owner~threads-search-scraper", {
     search: keyword,
     // Testing spend guard; raise for launch.
-    maxItems: 5,
+    maxItems: 1,
   });
   return items
     .filter((t: any) => t?.postId && t?.captionText)
