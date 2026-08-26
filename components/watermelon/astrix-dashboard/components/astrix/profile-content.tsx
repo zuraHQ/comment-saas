@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQuery } from "convex/react";
-import { FaGithub } from "react-icons/fa6";
+import { FaFacebook, FaGithub, FaInstagram } from "react-icons/fa6";
 import { Check } from "lucide-react";
 import { api } from "@/convex/_generated/api";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -12,8 +12,30 @@ const INTEGRATIONS = [
     id: "github",
     label: "GitHub Discussions",
     Icon: FaGithub,
+    iconBg: "#ffffff",
+    iconFg: "#000000",
     description:
       "Watch repo discussions like communities. Best for dev-tool products.",
+    ready: true,
+  },
+  {
+    id: "facebook",
+    label: "Facebook comments",
+    Icon: FaFacebook,
+    iconBg: "#1877F2",
+    iconFg: "#ffffff",
+    description:
+      "We read the comment sections of pages you pick in project settings.",
+    ready: true,
+  },
+  {
+    id: "instagram",
+    label: "Instagram comments",
+    Icon: FaInstagram,
+    iconBg: "#E4405F",
+    iconFg: "#ffffff",
+    description:
+      "Same for Instagram: comments under the accounts you watch.",
     ready: true,
   },
 ];
@@ -57,8 +79,14 @@ export function ProfileContent() {
               key={integration.id}
               className="flex items-center gap-4 border border-border p-4"
             >
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center bg-white">
-                <integration.Icon className="h-5 w-5 text-black" />
+              <span
+                className="flex h-9 w-9 shrink-0 items-center justify-center"
+                style={{ backgroundColor: integration.iconBg }}
+              >
+                <integration.Icon
+                  className="h-5 w-5"
+                  style={{ color: integration.iconFg }}
+                />
               </span>
               <div className="min-w-0 flex-1">
                 <p className="flex items-center gap-2 text-sm font-medium">
