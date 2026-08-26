@@ -196,10 +196,6 @@ export default function Hero() {
                 Find customers
               </button>
             </form>
-            <p className="mt-3 text-xs text-white/40">
-              Drop your link. We read your site to learn what you build, then go
-              find the posts worth replying to.
-            </p>
           </motion.div>
 
           {/* Demo container */}
