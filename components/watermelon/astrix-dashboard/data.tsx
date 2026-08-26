@@ -393,6 +393,7 @@ export const generatedReports: GeneratedReport[] = [
 export const workspaceNavigation: NavigationItem[] = [
   { name: "Dashboard", href: "/", icon: HomeIcon },
   { name: "Analytics", href: "/analytics", icon: ReportsIcon },
+  { name: "Ideas", href: "/ideas", icon: ClassificationIcon },
 ];
 
 export const launchNavigation: NavigationItem[] = [
