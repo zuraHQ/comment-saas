@@ -114,7 +114,7 @@ export default function Hero() {
               variant="big"
               className="text-foreground mb-2 font-sans font-semibold leading-[0.95]"
             >
-              Find people already
+              The internet is asking
             </Heading>
           </motion.div>
 
@@ -124,7 +124,7 @@ export default function Hero() {
               variant="big"
               className="mb-8 font-sans font-semibold leading-[0.95]"
             >
-              <span className="text-foreground">looking for your product</span>
+              <span className="text-foreground">for your product. We find where.</span>
             </Heading>
           </motion.div>
 
