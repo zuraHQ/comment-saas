@@ -4,7 +4,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth, useSignIn, useSignUp } from "@clerk/nextjs";
-import { FaGoogle } from "react-icons/fa6";
+import { FcGoogle } from "react-icons/fc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import LogoIcon from "@/assets/logo-icon";
@@ -168,7 +168,7 @@ function ClerkLoginForm() {
             variant="outline"
             className="h-10 rounded-none border-white/10 bg-white/5 text-xs font-bold uppercase tracking-widest text-white hover:bg-white/10 hover:text-white"
           >
-            <FaGoogle className="mr-2 h-3.5 w-3.5" />
+            <FcGoogle className="mr-2 h-4 w-4" />
             Continue with Google
           </Button>
 
