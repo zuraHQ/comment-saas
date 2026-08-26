@@ -258,10 +258,6 @@ export function OnboardingContent() {
                     );
                   })}
                 </div>
-                <p className="text-xs text-muted-foreground">
-                  Picked from your site, fix it if we are wrong. This decides
-                  which communities we watch for you.
-                </p>
               </div>
 
               <div className="flex flex-col gap-2">
@@ -270,9 +266,6 @@ export function OnboardingContent() {
                 </label>
                 <p className="text-sm text-muted-foreground">
                   {keywords.join(", ")}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  Picked from your site. You can add your own in settings later.
                 </p>
               </div>
             </Step>
