@@ -319,53 +319,6 @@ export function OnboardingContent() {
                 })}
               </div>
 
-              {platforms.includes("reddit") ? (
-                <div className="flex flex-col gap-3 border border-border p-4">
-                  <div>
-                    <p className="text-sm font-medium">Reddit communities</p>
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      We read these end to end, so we catch posts that never
-                      mention your product by name.
-                    </p>
-                  </div>
-
-                  <form onSubmit={addCommunity} className="flex gap-2">
-                    <Input
-                      value={community}
-                      onChange={(e) => setCommunity(e.target.value)}
-                      placeholder="r/smallbusiness"
-                      className="rounded-none"
-                    />
-                    <button
-                      type="submit"
-                      className="h-9 shrink-0 cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase hover:bg-sidebar-accent hover:text-foreground"
-                    >
-                      Add
-                    </button>
-                  </form>
-
-                  <div className="flex flex-wrap gap-2">
-                    {communities.map((c) => (
-                      <span
-                        key={c}
-                        className="flex items-center gap-2 border border-border px-3 py-1.5 text-sm"
-                      >
-                        r/{c}
-                        <button
-                          type="button"
-                          aria-label={`Remove r/${c}`}
-                          onClick={() =>
-                            setCommunities(communities.filter((x) => x !== c))
-                          }
-                          className="cursor-pointer text-muted-foreground hover:text-foreground"
-                        >
-                          <X className="size-3.5" />
-                        </button>
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ) : null}
             </Step>
           ) : null}
 
