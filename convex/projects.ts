@@ -4,23 +4,13 @@ import { requireClerkId, requireOwnedProject } from "./auth";
 
 import { COMMUNITY_PLATFORMS, HN_FEEDS, KEYWORD_PLATFORMS } from "./platforms";
 
-// The universal starter set from lib/subreddit-catalog.ts (kept in sync by
-// hand — convex/ cannot import from lib/). Used when a project is created
-// without an explicit community list.
-export const DEFAULT_COMMUNITIES = [
-  "saas",
-  "entrepreneur",
-  "smallbusiness",
-  "startups",
-  "indiehackers",
-  "sideproject",
-  "microsaas",
-  "entrepreneurridealong",
-  "buildinpublic",
-  "alphaandbetausers",
-  "roastmystartup",
-  "growmybusiness",
-];
+import { SUBREDDIT_CATALOG } from "../lib/subreddit-catalog";
+
+// The universal starter set, used when a project is created without an
+// explicit community list.
+export const DEFAULT_COMMUNITIES = SUBREDDIT_CATALOG.filter(
+  (entry) => entry.default,
+).map((entry) => entry.name);
 
 function normalizeKeywords(keywords: string[]) {
   return [...new Set(keywords.map((k) => k.trim().toLowerCase()).filter(Boolean))];
