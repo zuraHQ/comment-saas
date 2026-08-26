@@ -169,45 +169,78 @@ export function AnalyticsContent() {
         </ul>
       </section>
 
-      {/* Live data: which keywords and communities actually produce leads */}
-      <section className="border border-border">
-        <div className="border-b border-border px-4 py-3">
-          <h2 className="text-sm font-semibold">Sources</h2>
-          <p className="mt-0.5 text-xs text-muted-foreground">
-            What each keyword and community has found for this project.
-          </p>
-        </div>
-        {sourceStats === undefined ? (
-          <p className="px-4 py-6 text-sm text-muted-foreground">Loading...</p>
-        ) : sourceStats.length === 0 ? (
-          <p className="px-4 py-6 text-sm text-muted-foreground">
-            Nothing fetched yet. Data appears as posts come in.
-          </p>
-        ) : (
-          <ul className="divide-y divide-border">
-            {sourceStats.map((row) => (
-              <li
-                key={`${row.source}:${row.query}`}
-                className="flex items-center gap-3 px-4 py-3"
-              >
-                <span className="w-24 shrink-0 text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
-                  {row.source}
-                </span>
-                <span className="min-w-0 flex-1 truncate text-sm">
-                  {row.source === "community" ? `r/${row.query}` : row.query}
-                </span>
-                <span className="shrink-0 text-right text-sm tabular-nums">
-                  <span className="text-[#FF6600]">{row.high} high</span>
-                  <span className="text-muted-foreground">
-                    {" "}· {row.medium} med · {row.total} found
-                    {row.replied ? ` · ${row.replied} replied` : ""}
-                  </span>
-                </span>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
+      {/* Live data: which communities and keywords actually produce leads */}
+      <div className="grid gap-6 lg:grid-cols-2">
+        <SourceCard
+          title="Communities"
+          rows={sourceStats?.filter((row) => row.source === "community")}
+          label={(row) =>
+            row.query === "all" || row.query === "ask" || row.query === "show"
+              ? `HN ${row.query}`
+              : `r/${row.query}`
+          }
+        />
+        <SourceCard
+          title="Keywords"
+          rows={sourceStats?.filter((row) => row.source === "keyword")}
+          label={(row) => row.query}
+        />
+      </div>
     </div>
+  );
+}
+
+type SourceRow = {
+  source: string;
+  query: string;
+  total: number;
+  high: number;
+  medium: number;
+  low: number;
+  replied: number;
+};
+
+function SourceCard({
+  title,
+  rows,
+  label,
+}: {
+  title: string;
+  rows: SourceRow[] | undefined;
+  label: (row: SourceRow) => string;
+}) {
+  return (
+    <section className="border border-border">
+      <div className="border-b border-border px-4 py-3">
+        <h2 className="text-sm font-semibold">{title}</h2>
+      </div>
+      {rows === undefined ? (
+        <p className="px-4 py-6 text-sm text-muted-foreground">Loading...</p>
+      ) : rows.length === 0 ? (
+        <p className="px-4 py-6 text-sm text-muted-foreground">
+          Nothing fetched yet.
+        </p>
+      ) : (
+        <ul className="divide-y divide-border">
+          {rows.map((row) => (
+            <li
+              key={row.query}
+              className="flex items-center gap-3 px-4 py-3"
+            >
+              <span className="min-w-0 flex-1 truncate text-sm">
+                {label(row)}
+              </span>
+              <span className="shrink-0 text-right text-sm tabular-nums">
+                <span className="text-[#FF6600]">{row.high} high</span>
+                <span className="text-muted-foreground">
+                  {" "}· {row.medium} med · {row.total} found
+                  {row.replied ? ` · ${row.replied} replied` : ""}
+                </span>
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
   );
 }
