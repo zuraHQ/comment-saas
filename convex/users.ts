@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import { mutation, query } from "./_generated/server";
+import { internalMutation, mutation, query } from "./_generated/server";
 
 // Called from the client on first authenticated load — no Clerk webhook
 // needed for basic user sync.
@@ -64,5 +64,42 @@ export const completeOnboarding = mutation({
       .withIndex("by_clerk_id", (q) => q.eq("clerkId", identity.subject))
       .unique();
     if (user) await ctx.db.patch(user._id, { onboardedAt: Date.now() });
+  },
+});
+
+// Testing helper, CLI only:
+//   npx convex run users:resetOnboarding '{}' --prod
+//   npx convex run users:resetOnboarding '{"wipeProjects":true}' --prod
+export const resetOnboarding = internalMutation({
+  args: { email: v.optional(v.string()), wipeProjects: v.optional(v.boolean()) },
+  handler: async (ctx, args) => {
+    const users = await ctx.db.query("users").collect();
+    const targets = args.email
+      ? users.filter((u) => u.email === args.email)
+      : users;
+
+    for (const user of targets) {
+      await ctx.db.patch(user._id, {
+        onboardedAt: undefined,
+        lastProjectId: undefined,
+      });
+
+      if (!args.wipeProjects) continue;
+      const projects = await ctx.db
+        .query("projects")
+        .withIndex("by_owner", (q) => q.eq("ownerClerkId", user.clerkId))
+        .collect();
+      for (const project of projects) {
+        for (const table of ["matches", "launches", "repliedPosts"] as const) {
+          const rows = await ctx.db
+            .query(table)
+            .withIndex("by_project", (q) => q.eq("projectId", project._id))
+            .collect();
+          for (const row of rows) await ctx.db.delete(row._id);
+        }
+        await ctx.db.delete(project._id);
+      }
+    }
+    return { reset: targets.length, wipedProjects: args.wipeProjects ?? false };
   },
 });
