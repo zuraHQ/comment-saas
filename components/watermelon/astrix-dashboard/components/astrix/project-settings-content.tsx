@@ -187,10 +187,7 @@ function ProjectSettingsForm({ project }: { project: Project }) {
         </Field>
       </Section>
 
-      <Section
-        title="Communities"
-        subtitle={`${project.communities.length} subreddits read end to end. This is where most leads come from.`}
-      >
+      <Section title="Communities">
         <form onSubmit={addCommunity} className="flex gap-2">
           <Input
             value={community}
