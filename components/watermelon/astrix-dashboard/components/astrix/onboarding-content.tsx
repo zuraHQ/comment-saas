@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { PLATFORM_OPTIONS, useProject } from "./project-context";
 import { CATEGORIES, suggestCommunities } from "@/lib/subreddit-catalog";
 
-const STEPS = ["Your site", "What we found", "Platforms", "Done"] as const;
+const STEPS = ["Your site", "What we found", "Platforms"] as const;
 
 // Stand-in for the real scraper: derives a plausible product from the domain.
 function fakeScrape(url: string) {
@@ -308,35 +308,6 @@ export function OnboardingContent() {
             </Step>
           ) : null}
 
-          {step === 3 ? (
-            <Step
-              title="You're set"
-              subtitle="We start watching now. New posts land in your feed as they appear."
-            >
-              <dl className="flex flex-col gap-3 border border-border p-4 text-sm">
-                <Row label="Product" value={name} />
-                <Row label="Site" value={url || "not set"} />
-                <Row
-                  label="Communities"
-                  value={
-                    communities.length
-                      ? communities.map((c) => `r/${c}`).join(", ")
-                      : "none"
-                  }
-                />
-                <Row
-                  label="Platforms"
-                  value={platforms
-                    .map(
-                      (id) =>
-                        PLATFORM_OPTIONS.find((p) => p.id === id)?.label ?? id,
-                    )
-                    .join(", ")}
-                />
-              </dl>
-            </Step>
-          ) : null}
-
           <div className="mt-6 flex items-center justify-between gap-3 border-t border-border pt-6">
             <button
               type="button"
@@ -363,7 +334,7 @@ export function OnboardingContent() {
                 disabled={saving}
                 className="h-10 cursor-pointer bg-primary px-6 text-xs font-bold tracking-wider text-primary-foreground uppercase hover:bg-primary/90 disabled:cursor-default disabled:opacity-50"
               >
-                {saving ? "Setting up..." : "Go to dashboard"}
+                {saving ? "Setting up..." : "Done"}
               </button>
             )}
           </div>
@@ -393,11 +364,3 @@ function Step({
   );
 }
 
-function Row({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex gap-3">
-      <dt className="w-24 shrink-0 text-muted-foreground">{label}</dt>
-      <dd className="min-w-0 flex-1">{value}</dd>
-    </div>
-  );
-}
