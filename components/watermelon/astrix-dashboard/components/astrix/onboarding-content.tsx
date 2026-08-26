@@ -40,7 +40,8 @@ export function OnboardingContent() {
   const { addProject, updateProject } = useProject();
   const complete = useMutation(api.users.completeOnboarding);
 
-  const [step, setStep] = useState(0);
+  // The landing page already asked for the link, so skip straight to the result.
+  const [step, setStep] = useState(site ? 1 : 0);
   const [scanning, setScanning] = useState(true);
   const [url, setUrl] = useState(site);
   const [name, setName] = useState("");
@@ -180,6 +181,13 @@ export function OnboardingContent() {
               title="Did we get this right?"
               subtitle="Fix anything that is off. This is what we match posts against."
             >
+              {scanning ? (
+                <div className="flex items-center gap-3 border border-border p-4 text-sm text-muted-foreground">
+                  <Loader2 className="size-4 shrink-0 animate-spin" />
+                  Reading {url || "your site"}...
+                </div>
+              ) : null}
+
               <div className="flex flex-col gap-2">
                 <label className="text-sm font-medium">Product name</label>
                 <Input
@@ -325,10 +333,10 @@ export function OnboardingContent() {
               <button
                 type="button"
                 onClick={() => setStep((s) => s + 1)}
-                disabled={step === 0 && scanning}
+                disabled={scanning && step <= 1}
                 className="h-10 cursor-pointer bg-primary px-6 text-xs font-bold tracking-wider text-primary-foreground uppercase hover:bg-primary/90 disabled:cursor-default disabled:opacity-50"
               >
-                {step === 0 && scanning ? "Reading..." : "Next"}
+                {scanning && step <= 1 ? "Reading..." : "Next"}
               </button>
             ) : (
               <button
