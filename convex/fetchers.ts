@@ -458,9 +458,12 @@ async function fetchTiktokComments(account: string): Promise<Normalized[]> {
 
 // X via Apify (apidojo/tweet-scraper): verified per-result pricing at
 // ~$0.0004/tweet, no flat run fee. Official API swap-in point later.
+const X_MIN_FOLLOWERS = 25;
+
 async function searchX(keyword: string): Promise<Normalized[]> {
   const items = await apifyRun("apidojo~tweet-scraper", {
-    searchTerms: [keyword],
+    // -filter:replies keeps top-level asks; bare @-replies are mostly noise.
+    searchTerms: [`${keyword} -filter:replies`],
     // Testing spend guard; raise for launch.
     maxItems: 10,
     sort: "Latest",
@@ -468,6 +471,12 @@ async function searchX(keyword: string): Promise<Normalized[]> {
   });
   return items
     .filter((t: any) => t?.id && (t.fullText || t.text) && !t.isRetweet)
+    // Burner filter: fresh throwaway accounts have near-zero followers.
+    .filter((t: any) => {
+      const followers = t.author?.followers;
+      if (typeof followers !== "number") return true; // don't drop on missing data
+      return followers >= X_MIN_FOLLOWERS || t.author?.isBlueVerified === true;
+    })
     .map((t: any) => {
       const text = t.fullText ?? t.text;
       const handle = t.author?.userName;
