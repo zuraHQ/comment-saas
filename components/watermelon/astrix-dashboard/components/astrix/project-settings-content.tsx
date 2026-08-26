@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { Check, Lock, Trash2, X } from "lucide-react";
+import { Check, Globe, Lock, Trash2, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { useDashboardNavigation } from "./navigation";
@@ -435,6 +435,7 @@ function ProjectSettingsForm({ project }: { project: Project }) {
       </Section>
 
       <Section
+        platform="all"
         title="Keywords"
         subtitle={`${project.keywords.length} tracked. A wide net across each platform, outside your communities.`}
       >
@@ -550,6 +551,7 @@ function Section({
   const meta = platform
     ? PLATFORM_OPTIONS.find((option) => option.id === platform)
     : undefined;
+  const GlobeIcon = platform === "all" ? Globe : undefined;
   return (
     <section className="flex flex-col gap-4 border border-border p-5">
       <div>
@@ -560,6 +562,10 @@ function Section({
               style={{ backgroundColor: meta.bg }}
             >
               <meta.Icon className="h-3 w-3" style={{ color: meta.fg }} />
+            </span>
+          ) : GlobeIcon ? (
+            <span className="flex h-5 w-5 shrink-0 items-center justify-center bg-sidebar-accent">
+              <GlobeIcon className="h-3 w-3 text-foreground" />
             </span>
           ) : null}
           {title}
