@@ -124,7 +124,7 @@ export default function Hero() {
               variant="big"
               className="mb-8 font-sans font-semibold leading-[0.95]"
             >
-              <span className="text-foreground">looking for your product</span>
+              <span className="text-foreground">looking for you</span>
             </Heading>
           </motion.div>
 
