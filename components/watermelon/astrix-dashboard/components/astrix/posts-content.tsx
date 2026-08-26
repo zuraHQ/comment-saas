@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery } from "convex/react";
-import { Check, RefreshCw } from "lucide-react";
+import { Check, History as HistoryIcon, RefreshCw } from "lucide-react";
 import {
   FaBluesky,
   FaGithub,
@@ -680,12 +680,20 @@ export function PostsContent() {
             {project?.name ?? "no project"}
           </h1>
           <Sheet>
-            <SheetTrigger
-              type="button"
-              className="h-9 cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
-            >
-              History
-            </SheetTrigger>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <SheetTrigger
+                  type="button"
+                  aria-label="History"
+                  className="flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground"
+                >
+                  <HistoryIcon className="size-4" />
+                </SheetTrigger>
+              </TooltipTrigger>
+              <TooltipContent side="left" className="astrix-dashboard">
+                History
+              </TooltipContent>
+            </Tooltip>
             <SheetContent
               side="right"
               className="astrix-dashboard flex w-full flex-col gap-0 p-0 sm:max-w-md"
