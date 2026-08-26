@@ -66,7 +66,25 @@ export function PostsContent() {
     api.pipeline.feedCounts,
     project ? { projectId: project._id } : "skip",
   );
-  const setReplied = useMutation(api.pipeline.setReplied);
+  // Flip the cached feed instantly; Convex confirms (or rolls back) behind it.
+  const setReplied = useMutation(api.pipeline.setReplied).withOptimisticUpdate(
+    (localStore, args) => {
+      for (const { args: queryArgs, value } of localStore.getAllQueries(
+        api.pipeline.feed,
+      )) {
+        if (!value) continue;
+        localStore.setQuery(
+          api.pipeline.feed,
+          queryArgs,
+          value.map((row) =>
+            row.match._id === args.matchId
+              ? { ...row, match: { ...row.match, replied: args.replied } }
+              : row,
+          ),
+        );
+      }
+    },
+  );
   const refreshProject = useAction(api.fetchers.refreshProject);
   const setHideRepliedPref = useMutation(api.replies.setHideReplied);
 
