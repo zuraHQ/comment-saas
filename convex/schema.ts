@@ -59,7 +59,8 @@ export default defineSchema({
     // sweep of the whole platform. Lets us measure which path pays off.
     source: v.string(),
     query: v.string(),
-    intentScore: v.optional(v.string()),
+    intentScore: v.optional(v.string()), // "high" | "medium" | "low"
+    intentReason: v.optional(v.string()),
     replied: v.boolean(),
     postedAt: v.number(),
   })

@@ -11,6 +11,7 @@
 import type * as auth from "../auth.js";
 import type * as crons from "../crons.js";
 import type * as fetchers from "../fetchers.js";
+import type * as intentMarker from "../intentMarker.js";
 import type * as launches from "../launches.js";
 import type * as links from "../links.js";
 import type * as pipeline from "../pipeline.js";
@@ -29,6 +30,7 @@ declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   crons: typeof crons;
   fetchers: typeof fetchers;
+  intentMarker: typeof intentMarker;
   launches: typeof launches;
   links: typeof links;
   pipeline: typeof pipeline;

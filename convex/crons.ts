@@ -7,4 +7,8 @@ const crons = cronJobs();
 // product, so keep this tight; each run skips jobs fetched <10 min ago.
 crons.interval("fetch posts for due search jobs", { minutes: 15 }, internal.fetchers.runDueJobs, {});
 
+// Retry anything the immediate scoring pass missed (API errors, model
+// omissions). No-op when everything is scored.
+crons.interval("score unscored matches", { minutes: 5 }, internal.intentMarker.scoreDue, {});
+
 export default crons;

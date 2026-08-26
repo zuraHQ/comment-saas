@@ -1,5 +1,6 @@
 import { v } from "convex/values";
 import { internalMutation, internalQuery, mutation, query } from "./_generated/server";
+import { internal } from "./_generated/api";
 import { requireOwnedProject } from "./auth";
 import { COMMUNITY_PLATFORMS, HN_FEEDS, KEYWORD_PLATFORMS } from "./platforms";
 
@@ -76,6 +77,10 @@ export const ingest = internalMutation({
           matched++;
         }
       }
+    }
+    if (matched > 0) {
+      // Score new matches immediately; badges show "Scoring" until then.
+      await ctx.scheduler.runAfter(0, internal.intentMarker.scoreDue, {});
     }
     return { inserted, matched };
   },
