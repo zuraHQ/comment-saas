@@ -15,11 +15,6 @@ import {
   FaXTwitter,
 } from "react-icons/fa6";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import {
   Sheet,
   SheetContent,
   SheetHeader,
@@ -683,24 +678,17 @@ export function PostsContent() {
             <span className="hidden text-xs text-muted-foreground sm:inline">
               Updated {updatedLabel}
             </span>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  onClick={refresh}
-                  aria-label="Refresh posts"
-                  disabled={refreshing}
-                  className="flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground disabled:cursor-default"
-                >
-                  <RefreshCw
-                    className={cn("size-4", refreshing && "animate-spin")}
-                  />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="left" className="astrix-dashboard">
-                Refresh
-              </TooltipContent>
-            </Tooltip>
+            <button
+              type="button"
+              onClick={refresh}
+              aria-label="Refresh posts"
+              disabled={refreshing}
+              className="flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground disabled:cursor-default"
+            >
+              <RefreshCw
+                className={cn("size-4", refreshing && "animate-spin")}
+              />
+            </button>
             <button
               type="button"
               onClick={() => {
@@ -721,20 +709,13 @@ export function PostsContent() {
               Hide replied
             </button>
             <Sheet>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <SheetTrigger
-                    type="button"
-                    aria-label="History"
-                    className="flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground"
-                  >
-                    <HistoryIcon className="size-4" />
-                  </SheetTrigger>
-                </TooltipTrigger>
-                <TooltipContent side="left" className="astrix-dashboard">
-                  History
-                </TooltipContent>
-              </Tooltip>
+              <SheetTrigger
+                type="button"
+                aria-label="History"
+                className="flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground"
+              >
+                <HistoryIcon className="size-4" />
+              </SheetTrigger>
               <SheetContent
                 side="right"
                 className="astrix-dashboard flex w-full flex-col gap-0 p-0 sm:max-w-md"
@@ -825,40 +806,28 @@ export function PostsContent() {
                           {post.snippet}
                         </p>
                       </div>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              toggleReplied(post.id);
-                            }}
-                            aria-pressed={replied.has(post.id)}
-                            aria-label={
-                              replied.has(post.id)
-                                ? "Replied, click to undo"
-                                : "Mark as replied"
-                            }
-                            className={cn(
-                              "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border transition-colors",
-                              replied.has(post.id)
-                                ? "border-primary bg-primary text-primary-foreground"
-                                : "border-border text-muted-foreground/40 hover:border-foreground/40 hover:text-foreground",
-                            )}
-                          >
-                            <Check className="h-5 w-5" />
-                          </button>
-                        </TooltipTrigger>
-                        <TooltipContent
-                          side="left"
-                          className="astrix-dashboard"
-                        >
-                          {replied.has(post.id)
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          toggleReplied(post.id);
+                        }}
+                        aria-pressed={replied.has(post.id)}
+                        aria-label={
+                          replied.has(post.id)
                             ? "Replied, click to undo"
-                            : "Mark as replied"}
-                        </TooltipContent>
-                      </Tooltip>
+                            : "Mark as replied"
+                        }
+                        className={cn(
+                          "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border transition-colors",
+                          replied.has(post.id)
+                            ? "border-primary bg-primary text-primary-foreground"
+                            : "border-border text-muted-foreground/40 hover:border-foreground/40 hover:text-foreground",
+                        )}
+                      >
+                        <Check className="h-5 w-5" />
+                      </button>
                     </div>
                   </a>
                 </li>
