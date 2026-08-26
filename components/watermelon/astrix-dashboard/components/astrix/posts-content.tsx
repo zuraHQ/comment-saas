@@ -137,11 +137,7 @@ export function PostsContent() {
           </h1>
           <div className="ml-auto flex items-center gap-3">
             <span className="hidden text-xs text-muted-foreground sm:inline">
-              {counts?.total ?? 0} found ·{" "}
-              <span className="text-primary">{counts?.scored ?? 0} scored</span>
-              {counts && counts.total - counts.scored > 0 ? (
-                <> · {counts.total - counts.scored} scoring...</>
-              ) : null}
+              {counts?.total ?? 0} found
             </span>
             <button
               type="button"
@@ -246,6 +242,13 @@ export function PostsContent() {
                 </button>
               );
             })}
+            <div className="hidden border-t border-border px-4 py-3 text-xs text-muted-foreground lg:mt-auto lg:block">
+              <span className="text-primary">{counts?.scored ?? 0}</span> scored
+              by AI
+              {counts && counts.total - counts.scored > 0 ? (
+                <span> · {counts.total - counts.scored} scoring...</span>
+              ) : null}
+            </div>
           </nav>
 
           {/* Post feed */}
