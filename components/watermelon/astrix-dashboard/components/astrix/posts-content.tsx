@@ -673,37 +673,79 @@ export function PostsContent() {
   return (
     <div className="flex h-full flex-col p-6">
       <div className="flex min-h-0 flex-1 flex-col border border-border">
-        <div className="flex items-center justify-between gap-4 border-b border-border px-4 py-3">
+        <div className="flex flex-wrap items-center gap-3 border-b border-border px-4 py-3">
           <h1 className="flex items-center gap-2 text-xl font-semibold">
             Looking posts for:
             <ProjectIcon project={project} className="h-6 w-6 text-xs" />
             {project?.name ?? "no project"}
           </h1>
-          <Sheet>
+          <div className="ml-auto flex items-center gap-3">
+            <span className="hidden text-xs text-muted-foreground sm:inline">
+              Updated {updatedLabel}
+            </span>
             <Tooltip>
               <TooltipTrigger asChild>
-                <SheetTrigger
+                <button
                   type="button"
-                  aria-label="History"
-                  className="flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground"
+                  onClick={refresh}
+                  aria-label="Refresh posts"
+                  disabled={refreshing}
+                  className="flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground disabled:cursor-default"
                 >
-                  <HistoryIcon className="size-4" />
-                </SheetTrigger>
+                  <RefreshCw
+                    className={cn("size-4", refreshing && "animate-spin")}
+                  />
+                </button>
               </TooltipTrigger>
               <TooltipContent side="left" className="astrix-dashboard">
-                History
+                Refresh
               </TooltipContent>
             </Tooltip>
-            <SheetContent
-              side="right"
-              className="astrix-dashboard flex w-full flex-col gap-0 p-0 sm:max-w-md"
+            <button
+              type="button"
+              onClick={() => {
+                if (!project) return;
+                setHideRepliedPref({
+                  projectId: project._id,
+                  hideReplied: !hideReplied,
+                }).catch(console.error);
+              }}
+              aria-pressed={hideReplied}
+              className={cn(
+                "h-9 px-3 text-[10px] font-bold tracking-wider uppercase transition-colors",
+                hideReplied
+                  ? "bg-primary text-primary-foreground"
+                  : "border border-border text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
+              )}
             >
-              <SheetHeader className="border-b border-border px-4 py-4">
-                <SheetTitle className="text-base">History</SheetTitle>
-              </SheetHeader>
-              <HistoryPanel replied={replied} onUnmark={toggleReplied} />
-            </SheetContent>
-          </Sheet>
+              Hide replied
+            </button>
+            <Sheet>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <SheetTrigger
+                    type="button"
+                    aria-label="History"
+                    className="flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground"
+                  >
+                    <HistoryIcon className="size-4" />
+                  </SheetTrigger>
+                </TooltipTrigger>
+                <TooltipContent side="left" className="astrix-dashboard">
+                  History
+                </TooltipContent>
+              </Tooltip>
+              <SheetContent
+                side="right"
+                className="astrix-dashboard flex w-full flex-col gap-0 p-0 sm:max-w-md"
+              >
+                <SheetHeader className="border-b border-border px-4 py-4">
+                  <SheetTitle className="text-base">History</SheetTitle>
+                </SheetHeader>
+                <HistoryPanel replied={replied} onUnmark={toggleReplied} />
+              </SheetContent>
+            </Sheet>
+          </div>
         </div>
 
         <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
@@ -765,42 +807,6 @@ export function PostsContent() {
                   </span>
                 ) : null}
               </span>
-
-              <div className="ml-auto flex items-center gap-3">
-                <span className="hidden text-xs text-muted-foreground sm:inline">
-                  Updated {updatedLabel}
-                </span>
-                <button
-                  type="button"
-                  onClick={refresh}
-                  aria-label="Refresh posts"
-                  disabled={refreshing}
-                  className="flex h-6 w-6 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground disabled:cursor-default"
-                >
-                  <RefreshCw
-                    className={cn("h-3.5 w-3.5", refreshing && "animate-spin")}
-                  />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (!project) return;
-                    setHideRepliedPref({
-                      projectId: project._id,
-                      hideReplied: !hideReplied,
-                    }).catch(console.error);
-                  }}
-                  aria-pressed={hideReplied}
-                  className={cn(
-                    "px-2.5 py-1 text-[10px] font-bold tracking-wider uppercase transition-colors",
-                    hideReplied
-                      ? "bg-primary text-primary-foreground"
-                      : "border border-border text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
-                  )}
-                >
-                  Hide replied
-                </button>
-              </div>
             </header>
 
             <ul className="no-scrollbar min-h-0 flex-1 overflow-y-auto">
