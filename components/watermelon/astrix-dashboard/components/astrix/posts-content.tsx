@@ -8,7 +8,6 @@ import {
   FaGithub,
   FaHackerNews,
   FaLinkedinIn,
-  FaQuora,
   FaThreads,
   FaYoutube,
   FaRedditAlien,
@@ -403,45 +402,6 @@ const PLATFORMS = [
       },
     ] satisfies Post[],
   },
-  {
-    key: "quora",
-    name: "Quora",
-    Icon: FaQuora,
-    bg: "#B92B27",
-    iconColor: "#ffffff",
-    posts: [
-      {
-        id: "q1",
-        title: "What is the best tool to monitor Reddit for keywords in 2026?",
-        snippet:
-          "I run a small SaaS and want alerts when people ask for a product like mine. Free or cheap options preferred.",
-        community: "Social Media Marketing",
-        author: "23 followers",
-        time: "2h ago",
-        intent: "High",
-      },
-      {
-        id: "q2",
-        title: "How do startups get their first 100 customers without ads?",
-        snippet:
-          "Every answer says 'communities' but nobody explains how to actually find the right threads at the right time.",
-        community: "Startup Growth",
-        author: "156 followers",
-        time: "6h ago",
-        intent: "Medium",
-      },
-      {
-        id: "q3",
-        title: "Is comment marketing on Quora still effective?",
-        snippet:
-          "Seeing mixed opinions. Some say answers rank on Google for years, others say the traffic is gone.",
-        community: "Digital Marketing",
-        author: "41 followers",
-        time: "1d ago",
-        intent: "Low",
-      },
-    ] satisfies Post[],
-  },
 ] as const;
 
 // Deterministic filler so every platform has ~15 posts while we tune the UX.
@@ -557,11 +517,6 @@ const FILLER_SOURCES: Record<
     { community: "Sofia Lindqvist", author: "Founder, MetricsHQ" },
     { community: "James Wu", author: "Demand Gen Manager" },
   ],
-  quora: [
-    { community: "SaaS Marketing", author: "64 followers" },
-    { community: "Growth Hacking", author: "112 followers" },
-    { community: "Lead Generation", author: "37 followers" },
-  ],
   threads: [
     { community: "@buildinpublicdaily", author: "11k followers" },
     { community: "@thegtmgirl", author: "7.7k followers" },
@@ -612,7 +567,6 @@ function postUrl(platform: string, community: string) {
   if (platform === "github")
     return `https://github.com/${community}/discussions`;
   if (platform === "linkedin") return "https://www.linkedin.com/feed/";
-  if (platform === "quora") return "https://www.quora.com/";
   if (platform === "threads") return `https://www.threads.net/${community}`;
   if (platform === "youtube") return `https://www.youtube.com/${community}`;
   return `https://bsky.app/profile/${community.slice(1)}`;

@@ -6,7 +6,6 @@ import {
   FaGithub,
   FaHackerNews,
   FaLinkedinIn,
-  FaQuora,
   FaRedditAlien,
   FaThreads,
   FaXTwitter,
@@ -30,7 +29,6 @@ export const PLATFORM_OPTIONS = [
   { id: "bluesky", label: "Bluesky", Icon: FaBluesky, bg: "#0085FF", fg: "#ffffff", live: true },
   { id: "threads", label: "Threads", Icon: FaThreads, bg: "#ffffff", fg: "#000000", live: false },
   { id: "github", label: "GitHub", Icon: FaGithub, bg: "#ffffff", fg: "#000000", live: true },
-  { id: "quora", label: "Quora", Icon: FaQuora, bg: "#B92B27", fg: "#ffffff", live: false },
 ] as const;
 
 type ProjectContextValue = {
