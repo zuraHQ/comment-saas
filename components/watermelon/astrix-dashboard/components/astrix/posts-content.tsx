@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { HistoryPanel } from "./history-content";
-import { ProjectIcon } from "./project-icon";
+import { ProjectSwitcher } from "./project-switcher";
 import { useProject } from "./project-context";
 import { api } from "@/convex/_generated/api";
 
@@ -131,7 +131,7 @@ const PLATFORMS = [
       },
       {
         id: "x2",
-        title: "\"Anyone know a good CRM for freelancers?\" is free money",
+        title: '"Anyone know a good CRM for freelancers?" is free money',
         snippet:
           "I replied to 5 tweets like this last week and got 3 demos booked. Someone should productize finding these.",
         community: "@indiegrowth",
@@ -180,7 +180,8 @@ const PLATFORMS = [
       },
       {
         id: "l2",
-        title: "We got 14 demos last quarter just from answering questions online",
+        title:
+          "We got 14 demos last quarter just from answering questions online",
         snippet:
           "No ads. Just being genuinely helpful in threads where people asked for solutions. Founders sleep on this channel.",
         community: "Tom Okafor",
@@ -219,7 +220,8 @@ const PLATFORMS = [
       },
       {
         id: "h2",
-        title: "Ask HN: Best tool for tracking brand mentions across communities?",
+        title:
+          "Ask HN: Best tool for tracking brand mentions across communities?",
         snippet:
           "Google Alerts misses almost everything on Reddit and HN. Is there something purpose-built that isn't enterprise-priced?",
         community: "Ask HN",
@@ -248,7 +250,8 @@ const PLATFORMS = [
     posts: [
       {
         id: "y1",
-        title: "I tried 7 tools to find customers on Reddit, here's what worked",
+        title:
+          "I tried 7 tools to find customers on Reddit, here's what worked",
         snippet:
           "Comment section is full of founders asking for recommendations. Great thread to be helpful in.",
         community: "@growthjourney",
@@ -448,21 +451,83 @@ const PLATFORMS = [
 
 // Deterministic filler so every platform has ~15 posts while we tune the UX.
 const FILLER: Array<Pick<Post, "title" | "snippet" | "intent">> = [
-  { title: "What's your stack for finding early users?", snippet: "Curious what tools people actually keep paying for after month one.", intent: "High" },
-  { title: "Tools to monitor competitor mentions across communities?", snippet: "We keep hearing about lost deals a week too late. Want same-day visibility.", intent: "High" },
-  { title: "Best alternative to expensive social listening suites?", snippet: "Enterprise pricing for what feels like a saved search. There must be something leaner.", intent: "High" },
-  { title: "Keyword alerts that actually filter noise, do they exist?", snippet: "Every tool I try floods me with irrelevant matches. I want intent, not volume.", intent: "High" },
-  { title: "Anyone using AI to draft community replies?", snippet: "Half tempted, half worried it will read as spam. Experiences welcome.", intent: "Medium" },
-  { title: "Is engaging in niche communities worth it for B2B?", snippet: "Our ICP hangs out in maybe five places online. Trying to justify the time spend.", intent: "Medium" },
-  { title: "Where do you find beta testers these days?", snippet: "Launch platforms feel tapped out. Looking for fresher watering holes.", intent: "Medium" },
-  { title: "Sharing my playbook for turning threads into signups", snippet: "Reply fast, be useful first, mention the product last. Numbers inside.", intent: "Medium" },
-  { title: "Underrated growth channels in 2026?", snippet: "Paid is brutal, SEO is AI-flooded. What is quietly working for you?", intent: "Medium" },
-  { title: "How do you reply to prospects without sounding like an ad?", snippet: "The line between helpful and salesy is thin. Curious how others walk it.", intent: "Medium" },
-  { title: "How much time do you spend on community marketing weekly?", snippet: "Trying to benchmark before I commit a full day per week to it.", intent: "Low" },
-  { title: "Do founders still do things that don't scale?", snippet: "Feels like everyone automates everything now. Is manual outreach dead?", intent: "Low" },
+  {
+    title: "What's your stack for finding early users?",
+    snippet:
+      "Curious what tools people actually keep paying for after month one.",
+    intent: "High",
+  },
+  {
+    title: "Tools to monitor competitor mentions across communities?",
+    snippet:
+      "We keep hearing about lost deals a week too late. Want same-day visibility.",
+    intent: "High",
+  },
+  {
+    title: "Best alternative to expensive social listening suites?",
+    snippet:
+      "Enterprise pricing for what feels like a saved search. There must be something leaner.",
+    intent: "High",
+  },
+  {
+    title: "Keyword alerts that actually filter noise, do they exist?",
+    snippet:
+      "Every tool I try floods me with irrelevant matches. I want intent, not volume.",
+    intent: "High",
+  },
+  {
+    title: "Anyone using AI to draft community replies?",
+    snippet:
+      "Half tempted, half worried it will read as spam. Experiences welcome.",
+    intent: "Medium",
+  },
+  {
+    title: "Is engaging in niche communities worth it for B2B?",
+    snippet:
+      "Our ICP hangs out in maybe five places online. Trying to justify the time spend.",
+    intent: "Medium",
+  },
+  {
+    title: "Where do you find beta testers these days?",
+    snippet:
+      "Launch platforms feel tapped out. Looking for fresher watering holes.",
+    intent: "Medium",
+  },
+  {
+    title: "Sharing my playbook for turning threads into signups",
+    snippet:
+      "Reply fast, be useful first, mention the product last. Numbers inside.",
+    intent: "Medium",
+  },
+  {
+    title: "Underrated growth channels in 2026?",
+    snippet:
+      "Paid is brutal, SEO is AI-flooded. What is quietly working for you?",
+    intent: "Medium",
+  },
+  {
+    title: "How do you reply to prospects without sounding like an ad?",
+    snippet:
+      "The line between helpful and salesy is thin. Curious how others walk it.",
+    intent: "Medium",
+  },
+  {
+    title: "How much time do you spend on community marketing weekly?",
+    snippet: "Trying to benchmark before I commit a full day per week to it.",
+    intent: "Low",
+  },
+  {
+    title: "Do founders still do things that don't scale?",
+    snippet:
+      "Feels like everyone automates everything now. Is manual outreach dead?",
+    intent: "Low",
+  },
 ];
 
-const FILLER_SOURCES: Record<string, Array<{ community: string; author: string }>> = {
+const FILLER_SOURCES: Record<
+  string,
+  Array<{ community: string; author: string }>
+> = {
   reddit: [
     { community: "r/SaaS", author: "u/foundermode" },
     { community: "r/startups", author: "u/zerotoone_dev" },
@@ -508,18 +573,32 @@ const FILLER_SOURCES: Record<string, Array<{ community: string; author: string }
   ],
 };
 
-const FILLER_TIMES = ["4h ago", "6h ago", "9h ago", "12h ago", "16h ago", "20h ago", "1d ago", "1d ago", "2d ago", "2d ago", "3d ago", "3d ago"];
+const FILLER_TIMES = [
+  "4h ago",
+  "6h ago",
+  "9h ago",
+  "12h ago",
+  "16h ago",
+  "20h ago",
+  "1d ago",
+  "1d ago",
+  "2d ago",
+  "2d ago",
+  "3d ago",
+  "3d ago",
+];
 
 export const ALL_PLATFORMS = PLATFORMS.map((platform) => {
   const sources = FILLER_SOURCES[platform.key] ?? [];
-  const fillers: Post[] = FILLER.slice(0, Math.max(0, 15 - platform.posts.length)).map(
-    (f, i) => ({
-      id: `${platform.key}-f${i}`,
-      ...f,
-      ...sources[i % sources.length],
-      time: FILLER_TIMES[i % FILLER_TIMES.length],
-    }),
-  );
+  const fillers: Post[] = FILLER.slice(
+    0,
+    Math.max(0, 15 - platform.posts.length),
+  ).map((f, i) => ({
+    id: `${platform.key}-f${i}`,
+    ...f,
+    ...sources[i % sources.length],
+    time: FILLER_TIMES[i % FILLER_TIMES.length],
+  }));
   return { ...platform, posts: [...platform.posts, ...fillers] };
 });
 
@@ -529,15 +608,12 @@ const INTENT_STYLES: Record<Post["intent"], string> = {
   Low: "bg-foreground/5 text-muted-foreground",
 };
 
-
-
-
-
 function postUrl(platform: string, community: string) {
   if (platform === "reddit") return `https://www.reddit.com/${community}/`;
   if (platform === "x") return `https://x.com/${community.slice(1)}`;
   if (platform === "hn") return "https://news.ycombinator.com/ask";
-  if (platform === "github") return `https://github.com/${community}/discussions`;
+  if (platform === "github")
+    return `https://github.com/${community}/discussions`;
   if (platform === "linkedin") return "https://www.linkedin.com/feed/";
   if (platform === "quora") return "https://www.quora.com/";
   if (platform === "threads") return `https://www.threads.net/${community}`;
@@ -566,9 +642,12 @@ export function PostsContent() {
   const [refreshing, setRefreshing] = useState(false);
   const [updatedLabel, setUpdatedLabel] = useState("2m ago");
   const refreshTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  useEffect(() => () => {
-    if (refreshTimer.current) clearTimeout(refreshTimer.current);
-  }, []);
+  useEffect(
+    () => () => {
+      if (refreshTimer.current) clearTimeout(refreshTimer.current);
+    },
+    [],
+  );
 
   // Simulated refetch until the real fetchers exist.
   const refresh = () => {
@@ -582,7 +661,9 @@ export function PostsContent() {
 
   const toggleReplied = (id: string) => {
     if (!project) return;
-    toggleReplied_({ projectId: project._id, postKey: id }).catch(console.error);
+    toggleReplied_({ projectId: project._id, postKey: id }).catch(
+      console.error,
+    );
   };
 
   const visiblePosts = active.posts.filter(
@@ -590,204 +671,213 @@ export function PostsContent() {
   );
 
   return (
-    <div className="flex h-full flex-col gap-6 p-6">
-      <div className="flex items-center justify-between gap-4 border border-border px-4 py-3">
-        <h1 className="flex items-center gap-2 text-xl font-semibold">
-          Looking posts for:
-          <ProjectIcon project={project} className="h-6 w-6 text-xs" />
-          {project?.name ?? "no project"}
-        </h1>
-        <Sheet>
-          <SheetTrigger
-            type="button"
-            className="h-9 cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
-          >
-            History
-          </SheetTrigger>
-          <SheetContent
-            side="right"
-            className="astrix-dashboard flex w-full flex-col gap-0 p-0 sm:max-w-md"
-          >
-            <SheetHeader className="border-b border-border px-4 py-4">
-              <SheetTitle className="text-base">History</SheetTitle>
-            </SheetHeader>
-            <HistoryPanel replied={replied} onUnmark={toggleReplied} />
-          </SheetContent>
-        </Sheet>
-      </div>
-
-      <div className="flex min-h-0 flex-1 flex-col border border-border lg:flex-row">
-        {/* Platform rail */}
-        <nav className="flex shrink-0 overflow-x-auto border-b border-border lg:w-56 lg:flex-col lg:overflow-visible lg:border-r lg:border-b-0">
-          {ALL_PLATFORMS.map((platform) => {
-            const isActive = platform.key === activeKey;
-            return (
-              <button
-                key={platform.key}
-                type="button"
-                onClick={() => setActiveKey(platform.key)}
-                aria-current={isActive ? "true" : undefined}
-                className={cn(
-                  "flex min-w-fit items-center gap-3 px-4 py-3 text-left transition-colors",
-                  isActive
-                    ? "bg-sidebar-accent text-foreground"
-                    : "text-muted-foreground hover:bg-sidebar-accent/50 hover:text-foreground",
-                )}
-              >
-                <span
-                  className="flex h-8 w-8 shrink-0 items-center justify-center"
-                  style={{ backgroundColor: platform.bg }}
-                >
-                  <platform.Icon
-                    className="h-4 w-4"
-                    style={{ color: platform.iconColor }}
-                  />
-                </span>
-                <span className="flex flex-col">
-                  <span className="text-sm font-medium">{platform.name}</span>
-                  <span className="text-xs text-muted-foreground">
-                    Found {platform.posts.length} posts
-                  </span>
-                </span>
-              </button>
-            );
-          })}
-        </nav>
-
-        {/* Post feed */}
-        <section className="flex min-w-0 flex-1 flex-col">
-          <header className="flex flex-wrap items-center gap-3 border-b border-border px-4 py-3">
-            <span
-              className="flex h-6 w-6 shrink-0 items-center justify-center"
-              style={{ backgroundColor: active.bg }}
+    <div className="flex h-full flex-col p-6">
+      <div className="flex min-h-0 flex-1 flex-col border border-border">
+        <div className="flex items-center justify-between gap-4 border-b border-border px-4 py-3">
+          <div className="flex items-center gap-3">
+            <h1 className="text-xl font-semibold">Looking posts for:</h1>
+            <ProjectSwitcher align="start" />
+          </div>
+          <Sheet>
+            <SheetTrigger
+              type="button"
+              className="h-9 cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
             >
-              <active.Icon
-                className="h-3.5 w-3.5"
-                style={{ color: active.iconColor }}
-              />
-            </span>
-            <span className="text-sm font-medium">
-              Found {active.posts.length} posts
-              {visiblePosts.length !== active.posts.length ? (
-                <span className="text-muted-foreground">
-                  {" "}· showing {visiblePosts.length}
-                </span>
-              ) : null}
-            </span>
+              History
+            </SheetTrigger>
+            <SheetContent
+              side="right"
+              className="astrix-dashboard flex w-full flex-col gap-0 p-0 sm:max-w-md"
+            >
+              <SheetHeader className="border-b border-border px-4 py-4">
+                <SheetTitle className="text-base">History</SheetTitle>
+              </SheetHeader>
+              <HistoryPanel replied={replied} onUnmark={toggleReplied} />
+            </SheetContent>
+          </Sheet>
+        </div>
 
-            <div className="ml-auto flex items-center gap-3">
-              <span className="hidden text-xs text-muted-foreground sm:inline">
-                Updated {updatedLabel}
-              </span>
-              <button
-                type="button"
-                onClick={refresh}
-                aria-label="Refresh posts"
-                disabled={refreshing}
-                className="flex h-6 w-6 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground disabled:cursor-default"
-              >
-                <RefreshCw
-                  className={cn("h-3.5 w-3.5", refreshing && "animate-spin")}
-                />
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  if (!project) return;
-                  setHideRepliedPref({
-                    projectId: project._id,
-                    hideReplied: !hideReplied,
-                  }).catch(console.error);
-                }}
-                aria-pressed={hideReplied}
-                className={cn(
-                  "px-2.5 py-1 text-[10px] font-bold tracking-wider uppercase transition-colors",
-                  hideReplied
-                    ? "bg-primary text-primary-foreground"
-                    : "border border-border text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
-                )}
-              >
-                Hide replied
-              </button>
-            </div>
-          </header>
-
-          <ul className="no-scrollbar min-h-0 flex-1 overflow-y-auto">
-            {visiblePosts.map((post) => (
-              <li key={post.id} className="border-b border-border last:border-b-0">
-                <a
-                  href={postUrl(active.key, post.community)}
-                  target="_blank"
-                  rel="noreferrer"
+        <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
+          {/* Platform rail */}
+          <nav className="flex shrink-0 overflow-x-auto border-b border-border lg:w-56 lg:flex-col lg:overflow-visible lg:border-r lg:border-b-0">
+            {ALL_PLATFORMS.map((platform) => {
+              const isActive = platform.key === activeKey;
+              return (
+                <button
+                  key={platform.key}
+                  type="button"
+                  onClick={() => setActiveKey(platform.key)}
+                  aria-current={isActive ? "true" : undefined}
                   className={cn(
-                    "group block cursor-pointer px-4 py-4 transition-colors hover:bg-sidebar-accent/40",
-                    replied.has(post.id) && "opacity-50",
+                    "flex min-w-fit items-center gap-3 px-4 py-3 text-left transition-colors",
+                    isActive
+                      ? "bg-sidebar-accent text-foreground"
+                      : "text-muted-foreground hover:bg-sidebar-accent/50 hover:text-foreground",
                   )}
                 >
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="min-w-0">
-                      <div className="flex min-w-0 items-center gap-2">
-                        <p className="truncate text-sm font-medium">{post.title}</p>
-                        <span
-                          className={cn(
-                            "shrink-0 px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase",
-                            INTENT_STYLES[post.intent],
-                          )}
-                        >
-                          {post.intent} intent
-                        </span>
-                      </div>
-                      <p className="mt-1 text-xs text-muted-foreground">
-                        {post.community} · {post.author} · {post.time}
-                      </p>
-                      <p className="mt-2 line-clamp-2 text-sm text-foreground/70">
-                        {post.snippet}
-                      </p>
-                    </div>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            toggleReplied(post.id);
-                          }}
-                          aria-pressed={replied.has(post.id)}
-                          aria-label={
-                            replied.has(post.id)
-                              ? "Replied, click to undo"
-                              : "Mark as replied"
-                          }
-                          className={cn(
-                            "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border transition-colors",
-                            replied.has(post.id)
-                              ? "border-primary bg-primary text-primary-foreground"
-                              : "border-border text-muted-foreground/40 hover:border-foreground/40 hover:text-foreground",
-                          )}
-                        >
-                          <Check className="h-5 w-5" />
-                        </button>
-                      </TooltipTrigger>
-                      <TooltipContent side="left" className="astrix-dashboard">
-                        {replied.has(post.id)
-                          ? "Replied, click to undo"
-                          : "Mark as replied"}
-                      </TooltipContent>
-                    </Tooltip>
-                  </div>
-                </a>
-              </li>
-            ))}
-            {visiblePosts.length === 0 ? (
-              <li className="px-4 py-12 text-center text-sm text-muted-foreground">
-                Nothing matches the current filters.
-              </li>
-            ) : null}
-          </ul>
-        </section>
-      </div>
+                  <span
+                    className="flex h-8 w-8 shrink-0 items-center justify-center"
+                    style={{ backgroundColor: platform.bg }}
+                  >
+                    <platform.Icon
+                      className="h-4 w-4"
+                      style={{ color: platform.iconColor }}
+                    />
+                  </span>
+                  <span className="flex flex-col">
+                    <span className="text-sm font-medium">{platform.name}</span>
+                    <span className="text-xs text-muted-foreground">
+                      Found {platform.posts.length} posts
+                    </span>
+                  </span>
+                </button>
+              );
+            })}
+          </nav>
 
+          {/* Post feed */}
+          <section className="flex min-w-0 flex-1 flex-col">
+            <header className="flex flex-wrap items-center gap-3 border-b border-border px-4 py-3">
+              <span
+                className="flex h-6 w-6 shrink-0 items-center justify-center"
+                style={{ backgroundColor: active.bg }}
+              >
+                <active.Icon
+                  className="h-3.5 w-3.5"
+                  style={{ color: active.iconColor }}
+                />
+              </span>
+              <span className="text-sm font-medium">
+                Found {active.posts.length} posts
+                {visiblePosts.length !== active.posts.length ? (
+                  <span className="text-muted-foreground">
+                    {" "}
+                    · showing {visiblePosts.length}
+                  </span>
+                ) : null}
+              </span>
+
+              <div className="ml-auto flex items-center gap-3">
+                <span className="hidden text-xs text-muted-foreground sm:inline">
+                  Updated {updatedLabel}
+                </span>
+                <button
+                  type="button"
+                  onClick={refresh}
+                  aria-label="Refresh posts"
+                  disabled={refreshing}
+                  className="flex h-6 w-6 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground disabled:cursor-default"
+                >
+                  <RefreshCw
+                    className={cn("h-3.5 w-3.5", refreshing && "animate-spin")}
+                  />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (!project) return;
+                    setHideRepliedPref({
+                      projectId: project._id,
+                      hideReplied: !hideReplied,
+                    }).catch(console.error);
+                  }}
+                  aria-pressed={hideReplied}
+                  className={cn(
+                    "px-2.5 py-1 text-[10px] font-bold tracking-wider uppercase transition-colors",
+                    hideReplied
+                      ? "bg-primary text-primary-foreground"
+                      : "border border-border text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
+                  )}
+                >
+                  Hide replied
+                </button>
+              </div>
+            </header>
+
+            <ul className="no-scrollbar min-h-0 flex-1 overflow-y-auto">
+              {visiblePosts.map((post) => (
+                <li
+                  key={post.id}
+                  className="border-b border-border last:border-b-0"
+                >
+                  <a
+                    href={postUrl(active.key, post.community)}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={cn(
+                      "group block cursor-pointer px-4 py-4 transition-colors hover:bg-sidebar-accent/40",
+                      replied.has(post.id) && "opacity-50",
+                    )}
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="min-w-0">
+                        <div className="flex min-w-0 items-center gap-2">
+                          <p className="truncate text-sm font-medium">
+                            {post.title}
+                          </p>
+                          <span
+                            className={cn(
+                              "shrink-0 px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase",
+                              INTENT_STYLES[post.intent],
+                            )}
+                          >
+                            {post.intent} intent
+                          </span>
+                        </div>
+                        <p className="mt-1 text-xs text-muted-foreground">
+                          {post.community} · {post.author} · {post.time}
+                        </p>
+                        <p className="mt-2 line-clamp-2 text-sm text-foreground/70">
+                          {post.snippet}
+                        </p>
+                      </div>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              toggleReplied(post.id);
+                            }}
+                            aria-pressed={replied.has(post.id)}
+                            aria-label={
+                              replied.has(post.id)
+                                ? "Replied, click to undo"
+                                : "Mark as replied"
+                            }
+                            className={cn(
+                              "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border transition-colors",
+                              replied.has(post.id)
+                                ? "border-primary bg-primary text-primary-foreground"
+                                : "border-border text-muted-foreground/40 hover:border-foreground/40 hover:text-foreground",
+                            )}
+                          >
+                            <Check className="h-5 w-5" />
+                          </button>
+                        </TooltipTrigger>
+                        <TooltipContent
+                          side="left"
+                          className="astrix-dashboard"
+                        >
+                          {replied.has(post.id)
+                            ? "Replied, click to undo"
+                            : "Mark as replied"}
+                        </TooltipContent>
+                      </Tooltip>
+                    </div>
+                  </a>
+                </li>
+              ))}
+              {visiblePosts.length === 0 ? (
+                <li className="px-4 py-12 text-center text-sm text-muted-foreground">
+                  Nothing matches the current filters.
+                </li>
+              ) : null}
+            </ul>
+          </section>
+        </div>
+      </div>
     </div>
   );
 }
