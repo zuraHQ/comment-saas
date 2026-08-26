@@ -397,7 +397,8 @@ async function fetchInstagramComments(account: string): Promise<Normalized[]> {
 async function searchThreads(keyword: string): Promise<Normalized[]> {
   const items = await apifyRun("igview-owner~threads-search-scraper", {
     search: keyword,
-    maxItems: 20,
+    // Testing spend guard; raise for launch.
+    maxItems: 5,
   });
   return items
     .filter((t: any) => t?.postId && t?.captionText)
