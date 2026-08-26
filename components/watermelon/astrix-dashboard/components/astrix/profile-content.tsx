@@ -14,7 +14,7 @@ const INTEGRATIONS = [
     Icon: FaGithub,
     description:
       "Watch repo discussions like communities. Best for dev-tool products.",
-    ready: false, // fetcher not built yet; toggling records the preference
+    ready: true,
   },
 ];
 

@@ -2,7 +2,7 @@
 // builders in projects.ts and pipeline.ts cannot drift apart.
 
 // Platforms where we cannot read every post, so keywords are the way in.
-export const KEYWORD_PLATFORMS = ["reddit", "bluesky"];
+export const KEYWORD_PLATFORMS = ["reddit", "bluesky", "github"];
 
 // HN publishes only a few hundred stories a day, so we read all of it and
 // need no keywords there at all.

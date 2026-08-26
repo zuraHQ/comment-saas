@@ -186,6 +186,61 @@ async function searchBluesky(keyword: string): Promise<Normalized[]> {
     });
 }
 
+// GitHub Discussions via GraphQL search. Needs a free classic PAT with
+// public repo read; no app review.
+async function searchGithubDiscussions(keyword: string): Promise<Normalized[]> {
+  const token = process.env.GITHUB_TOKEN;
+  if (!token) throw new Error("GITHUB_TOKEN not set on this deployment");
+
+  const res = await fetch("https://api.github.com/graphql", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+      "User-Agent": "comment-saas/0.1",
+    },
+    body: JSON.stringify({
+      query: `query($q: String!) {
+        search(query: $q, type: DISCUSSION, first: 50) {
+          nodes {
+            ... on Discussion {
+              id
+              title
+              bodyText
+              url
+              createdAt
+              upvoteCount
+              author { login }
+              repository { nameWithOwner }
+              comments { totalCount }
+            }
+          }
+        }
+      }`,
+      variables: { q: `${keyword} sort:created-desc` },
+    }),
+  });
+  if (!res.ok) throw new Error(`GitHub search failed: ${res.status}`);
+  const data = await res.json();
+  if (data.errors?.length) {
+    throw new Error(`GitHub GraphQL: ${data.errors[0].message}`);
+  }
+
+  return (data.data?.search?.nodes ?? [])
+    .filter((n: any) => n?.id && n?.title)
+    .map((n: any) => ({
+      externalId: String(n.id),
+      url: n.url,
+      title: n.title,
+      snippet: clip(n.bodyText),
+      author: n.author?.login ?? undefined,
+      subsource: n.repository?.nameWithOwner ?? undefined,
+      postedAt: Date.parse(n.createdAt) || Date.now(),
+      score: n.upvoteCount ?? undefined,
+      commentCount: n.comments?.totalCount ?? undefined,
+    }));
+}
+
 type Fetcher = (query: string) => Promise<Normalized[]>;
 
 const FETCHERS: Record<string, Fetcher | undefined> = {
@@ -194,6 +249,7 @@ const FETCHERS: Record<string, Fetcher | undefined> = {
   "hn:keyword": searchHn,
   "hn:community": fetchHnFeed,
   "bluesky:keyword": searchBluesky,
+  "github:keyword": searchGithubDiscussions,
 };
 
 type JobResult = {
