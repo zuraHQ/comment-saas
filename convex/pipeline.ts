@@ -2,7 +2,7 @@ import { v } from "convex/values";
 import { internalMutation, internalQuery, mutation, query } from "./_generated/server";
 import { internal } from "./_generated/api";
 import { requireOwnedProject } from "./auth";
-import { COMMUNITY_PLATFORMS, HN_FEEDS, KEYWORD_PLATFORMS } from "./platforms";
+import { COMMUNITY_PLATFORMS, HN_FEEDS, KEYWORD_PLATFORMS, PLATFORM_MIN_INTERVAL_MS } from "./platforms";
 
 export const normalizedPost = v.object({
   externalId: v.string(),
@@ -89,10 +89,16 @@ export const ingest = internalMutation({
 export const dueJobs = internalQuery({
   args: { olderThanMs: v.number(), limit: v.number() },
   handler: async (ctx, args) => {
-    const cutoff = Date.now() - args.olderThanMs;
+    const now = Date.now();
     const jobs = await ctx.db.query("jobs").collect();
     return jobs
-      .filter((j) => (j.lastRunAt ?? 0) < cutoff)
+      .filter((j) => {
+        const interval = Math.max(
+          args.olderThanMs,
+          PLATFORM_MIN_INTERVAL_MS[j.platform] ?? 0,
+        );
+        return (j.lastRunAt ?? 0) < now - interval;
+      })
       .sort((a, b) => (a.lastRunAt ?? 0) - (b.lastRunAt ?? 0))
       .slice(0, args.limit);
   },

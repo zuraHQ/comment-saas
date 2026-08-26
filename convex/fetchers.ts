@@ -241,6 +241,40 @@ async function searchGithubDiscussions(keyword: string): Promise<Normalized[]> {
     }));
 }
 
+// YouTube Data API v3. Free key, but a search costs 100 of the 10k/day
+// quota, so these jobs run on a slow interval (see PLATFORM_MIN_INTERVAL_MS).
+async function searchYoutube(keyword: string): Promise<Normalized[]> {
+  const key = process.env.YOUTUBE_API_KEY;
+  if (!key) throw new Error("YOUTUBE_API_KEY not set on this deployment");
+
+  const params = new URLSearchParams({
+    part: "snippet",
+    q: keyword,
+    type: "video",
+    order: "date",
+    maxResults: "50",
+    relevanceLanguage: "en",
+    key,
+  });
+  const res = await fetch(
+    `https://www.googleapis.com/youtube/v3/search?${params}`,
+  );
+  if (!res.ok) throw new Error(`YouTube search failed: ${res.status}`);
+  const data = await res.json();
+
+  return (data.items ?? [])
+    .filter((item: any) => item?.id?.videoId && item?.snippet?.title)
+    .map((item: any) => ({
+      externalId: String(item.id.videoId),
+      url: `https://www.youtube.com/watch?v=${item.id.videoId}`,
+      title: item.snippet.title,
+      snippet: clip(item.snippet.description),
+      author: item.snippet.channelTitle ?? undefined,
+      subsource: item.snippet.channelTitle ?? undefined,
+      postedAt: Date.parse(item.snippet.publishedAt) || Date.now(),
+    }));
+}
+
 type Fetcher = (query: string) => Promise<Normalized[]>;
 
 const FETCHERS: Record<string, Fetcher | undefined> = {
@@ -250,6 +284,7 @@ const FETCHERS: Record<string, Fetcher | undefined> = {
   "hn:community": fetchHnFeed,
   "bluesky:keyword": searchBluesky,
   "github:keyword": searchGithubDiscussions,
+  "youtube:keyword": searchYoutube,
 };
 
 type JobResult = {

@@ -26,7 +26,7 @@ export const PLATFORM_OPTIONS = [
   { id: "hn", label: "Hacker News", Icon: FaHackerNews, bg: "#FF6600", fg: "#ffffff", live: true },
   { id: "x", label: "X / Twitter", Icon: FaXTwitter, bg: "#ffffff", fg: "#000000", live: false },
   { id: "linkedin", label: "LinkedIn", Icon: FaLinkedinIn, bg: "#0A66C2", fg: "#ffffff", live: false },
-  { id: "youtube", label: "YouTube", Icon: FaYoutube, bg: "#FF0000", fg: "#ffffff", live: false },
+  { id: "youtube", label: "YouTube", Icon: FaYoutube, bg: "#FF0000", fg: "#ffffff", live: true },
   { id: "bluesky", label: "Bluesky", Icon: FaBluesky, bg: "#0085FF", fg: "#ffffff", live: true },
   { id: "threads", label: "Threads", Icon: FaThreads, bg: "#ffffff", fg: "#000000", live: false },
   { id: "github", label: "GitHub", Icon: FaGithub, bg: "#ffffff", fg: "#000000", live: true },

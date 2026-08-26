@@ -2,7 +2,13 @@
 // builders in projects.ts and pipeline.ts cannot drift apart.
 
 // Platforms where we cannot read every post, so keywords are the way in.
-export const KEYWORD_PLATFORMS = ["reddit", "bluesky", "github"];
+export const KEYWORD_PLATFORMS = ["reddit", "bluesky", "github", "youtube"];
+
+// Minimum time between runs of one job, per platform. YouTube searches cost
+// 100 of a 10k/day quota, so they run a few times a day, not every 15 min.
+export const PLATFORM_MIN_INTERVAL_MS: Record<string, number> = {
+  youtube: 6 * 60 * 60 * 1000,
+};
 
 // HN publishes only a few hundred stories a day, so we read all of it and
 // need no keywords there at all.
