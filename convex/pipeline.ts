@@ -474,6 +474,7 @@ export const seedWatchTargets = internalMutation({
   args: {
     facebookPages: v.optional(v.array(v.string())),
     instagramAccounts: v.optional(v.array(v.string())),
+    tiktokAccounts: v.optional(v.array(v.string())),
   },
   handler: async (ctx, args) => {
     let updated = 0;
@@ -481,6 +482,7 @@ export const seedWatchTargets = internalMutation({
       const patch: Record<string, unknown> = {};
       if (args.facebookPages) patch.facebookPages = args.facebookPages;
       if (args.instagramAccounts) patch.instagramAccounts = args.instagramAccounts;
+      if (args.tiktokAccounts) patch.tiktokAccounts = args.tiktokAccounts;
       await ctx.db.patch(project._id, patch);
       updated++;
       for (const page of args.facebookPages ?? []) {
@@ -503,6 +505,17 @@ export const seedWatchTargets = internalMutation({
           .unique();
         if (!existing) {
           await ctx.db.insert("jobs", { platform: "instagram", kind: "community", query: account });
+        }
+      }
+      for (const account of args.tiktokAccounts ?? []) {
+        const existing = await ctx.db
+          .query("jobs")
+          .withIndex("by_platform_kind_query", (q) =>
+            q.eq("platform", "tiktok").eq("kind", "community").eq("query", account),
+          )
+          .unique();
+        if (!existing) {
+          await ctx.db.insert("jobs", { platform: "tiktok", kind: "community", query: account });
         }
       }
     }
