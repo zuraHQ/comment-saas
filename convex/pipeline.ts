@@ -514,12 +514,14 @@ export const feedCounts = query({
       .collect();
     const byPlatform: Record<string, number> = {};
     let replied = 0;
+    let scored = 0;
     for (const match of matches) {
       const key = match.platform ?? "unknown";
       byPlatform[key] = (byPlatform[key] ?? 0) + 1;
       if (match.replied) replied++;
+      if (match.intentScore !== undefined) scored++;
     }
-    return { total: matches.length, replied, byPlatform };
+    return { total: matches.length, replied, scored, byPlatform };
   },
 });
 

@@ -138,8 +138,10 @@ export function PostsContent() {
           <div className="ml-auto flex items-center gap-3">
             <span className="hidden text-xs text-muted-foreground sm:inline">
               {counts?.total ?? 0} found ·{" "}
-              <span className="text-primary">{counts?.replied ?? 0} replied</span>{" "}
-              · {(counts?.total ?? 0) - (counts?.replied ?? 0)} to go
+              <span className="text-primary">{counts?.scored ?? 0} scored</span>
+              {counts && counts.total - counts.scored > 0 ? (
+                <> · {counts.total - counts.scored} scoring...</>
+              ) : null}
             </span>
             <button
               type="button"
