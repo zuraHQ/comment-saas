@@ -104,11 +104,9 @@ export const jobsForProject = internalQuery({
     const cutoff = Date.now() - args.olderThanMs;
     const wanted: Array<{ platform: string; kind: string; query: string }> = [];
 
-    for (const keyword of args.keywords) {
-      for (const platform of ["hn", "reddit"]) {
-        if (args.platforms.includes(platform)) {
-          wanted.push({ platform, kind: "keyword", query: keyword });
-        }
+    if (args.platforms.includes("reddit")) {
+      for (const keyword of args.keywords) {
+        wanted.push({ platform: "reddit", kind: "keyword", query: keyword });
       }
     }
     if (args.platforms.includes("reddit")) {
@@ -209,11 +207,9 @@ export const rebuildJobs = internalMutation({
     };
 
     for (const project of projects) {
-      for (const keyword of project.keywords) {
-        for (const platform of ["hn", "reddit"]) {
-          if (project.platforms.includes(platform)) {
-            await ensure(platform, "keyword", keyword);
-          }
+      if (project.platforms.includes("reddit")) {
+        for (const keyword of project.keywords) {
+          await ensure("reddit", "keyword", keyword);
         }
       }
       if (project.platforms.includes("reddit")) {
@@ -228,5 +224,40 @@ export const rebuildJobs = internalMutation({
       }
     }
     return { projects: projects.length, created };
+  },
+});
+
+// Ops helper: drop jobs no project wants any more, so removing a keyword or a
+// community actually stops the fetching.
+//   npx convex run pipeline:pruneJobs '{}' --prod
+export const pruneJobs = internalMutation({
+  args: {},
+  handler: async (ctx) => {
+    const projects = await ctx.db.query("projects").collect();
+    const wanted = new Set<string>();
+
+    for (const project of projects) {
+      if (project.platforms.includes("reddit")) {
+        for (const keyword of project.keywords) {
+          wanted.add(`reddit:keyword:${keyword}`);
+        }
+        for (const community of project.communities) {
+          wanted.add(`reddit:community:${community}`);
+        }
+      }
+      if (project.platforms.includes("hn")) {
+        for (const feed of ["all", "ask", "show"]) {
+          wanted.add(`hn:community:${feed}`);
+        }
+      }
+    }
+
+    let deleted = 0;
+    for (const job of await ctx.db.query("jobs").collect()) {
+      if (wanted.has(`${job.platform}:${job.kind}:${job.query}`)) continue;
+      await ctx.db.delete(job._id);
+      deleted++;
+    }
+    return { kept: wanted.size, deleted };
   },
 });

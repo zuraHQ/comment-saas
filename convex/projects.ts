@@ -2,9 +2,9 @@ import { v } from "convex/values";
 import { mutation, query, type MutationCtx } from "./_generated/server";
 import { requireClerkId, requireOwnedProject } from "./auth";
 
-const KEYWORD_PLATFORMS = ["hn", "reddit"] as const;
-
-// HN publishes only a few hundred stories a day, so we pull all of it.
+// Keyword sweeps only make sense where we cannot read every post. HN is small
+// enough to pull in full, so it needs no keywords at all.
+const KEYWORD_PLATFORMS = ["reddit"] as const;
 const HN_FEEDS = ["all", "ask", "show"];
 
 // Communities where founders and small-business buyers actually talk. Seeded
