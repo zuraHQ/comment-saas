@@ -720,6 +720,7 @@ export function PostsContent() {
                   <div className="flex items-start justify-between gap-4">
                     <div className="min-w-0">
                       <div className="flex min-w-0 items-center gap-2">
+                        <p className="truncate text-sm font-medium">{post.title}</p>
                         <span
                           className={cn(
                             "shrink-0 px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase",
@@ -728,7 +729,6 @@ export function PostsContent() {
                         >
                           {post.intent} intent
                         </span>
-                        <p className="truncate text-sm font-medium">{post.title}</p>
                       </div>
                       <p className="mt-1 text-xs text-muted-foreground">
                         {post.community} · {post.author} · {post.time}
