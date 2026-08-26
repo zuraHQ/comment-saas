@@ -88,7 +88,7 @@ function ProjectSettingsForm({ project }: { project: Project }) {
     <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 p-6">
       <div>
         <h1 className="text-xl font-semibold">
-          Settings for: <span className="text-primary">{`{ ${project.name} }`}</span>
+          Settings for: <span className="text-primary">{project.name}</span>
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
           Each project is one product. Its keywords and post types decide which

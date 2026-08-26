@@ -588,7 +588,7 @@ export function PostsContent() {
       <div className="flex items-center justify-between gap-4">
         <h1 className="text-xl font-semibold">
           Looking posts for:{" "}
-          <span className="text-primary">{`{ ${project?.name ?? "no project"} }`}</span>
+          <span className="text-primary">{project?.name ?? "no project"}</span>
         </h1>
         <Sheet>
           <SheetTrigger
@@ -719,44 +719,42 @@ export function PostsContent() {
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="min-w-0">
-                      <p className="truncate text-sm font-medium">{post.title}</p>
-                      <p className="mt-0.5 text-xs text-muted-foreground">
+                      <div className="flex min-w-0 items-center gap-2">
+                        <span
+                          className={cn(
+                            "shrink-0 px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase",
+                            INTENT_STYLES[post.intent],
+                          )}
+                        >
+                          {post.intent} intent
+                        </span>
+                        <p className="truncate text-sm font-medium">{post.title}</p>
+                      </div>
+                      <p className="mt-1 text-xs text-muted-foreground">
                         {post.community} · {post.author} · {post.time}
                       </p>
                       <p className="mt-2 line-clamp-2 text-sm text-foreground/70">
                         {post.snippet}
                       </p>
                     </div>
-                    <div className="flex shrink-0 flex-col items-end gap-1.5">
-                      <span
-                        className={cn(
-                          "px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase",
-                          INTENT_STYLES[post.intent],
-                        )}
-                      >
-                        {post.intent} intent
-                      </span>
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          toggleReplied(post.id);
-                        }}
-                        aria-pressed={replied.has(post.id)}
-                        title={
-                          replied.has(post.id) ? "Replied" : "Mark as replied"
-                        }
-                        className={cn(
-                          "flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center border transition-colors",
-                          replied.has(post.id)
-                            ? "border-primary bg-primary text-primary-foreground"
-                            : "border-border text-muted-foreground/40 hover:border-foreground/40 hover:text-foreground",
-                        )}
-                      >
-                        <Check className="h-3.5 w-3.5" />
-                      </button>
-                    </div>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        toggleReplied(post.id);
+                      }}
+                      aria-pressed={replied.has(post.id)}
+                      title={replied.has(post.id) ? "Replied" : "Mark as replied"}
+                      className={cn(
+                        "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border transition-colors",
+                        replied.has(post.id)
+                          ? "border-primary bg-primary text-primary-foreground"
+                          : "border-border text-muted-foreground/40 hover:border-foreground/40 hover:text-foreground",
+                      )}
+                    >
+                      <Check className="h-5 w-5" />
+                    </button>
                   </div>
                 </a>
               </li>

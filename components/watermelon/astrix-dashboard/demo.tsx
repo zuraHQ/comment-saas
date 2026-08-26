@@ -4,7 +4,6 @@ import type { ReactNode } from "react";
 import DashboardLayout from "./dashboard-layout";
 import { AnalyticsContent } from "./components/astrix/analytics-content";
 import { AuthGate } from "./components/astrix/auth-gate";
-import { IdeasContent } from "./components/astrix/ideas-content";
 import { LaunchpadContent } from "./components/astrix/launchpad-content";
 import {
   DashboardNavigationProvider,
@@ -23,7 +22,6 @@ function DashboardRoute() {
   if (pathname === "/analytics") content = <AnalyticsContent />;
   else if (pathname === "/launchpad") content = <LaunchpadContent />;
   else if (pathname === "/settings") content = <ProjectSettingsContent />;
-  else if (pathname === "/ideas") content = <IdeasContent />;
 
   return <DashboardLayout>{content}</DashboardLayout>;
 }
