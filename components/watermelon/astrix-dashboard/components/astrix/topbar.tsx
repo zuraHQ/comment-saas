@@ -35,12 +35,9 @@ export function DashboardTopbar() {
         ) : null}
       </nav>
 
-      {/* The dashboard has its own switcher in the feed header. */}
-      {pageLabel ? (
-        <div className="ml-auto flex shrink-0 items-center">
-          <ProjectSwitcher />
-        </div>
-      ) : null}
+      <div className="ml-auto flex shrink-0 items-center">
+        <ProjectSwitcher />
+      </div>
     </header>
   );
 }

@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { HistoryPanel } from "./history-content";
-import { ProjectSwitcher } from "./project-switcher";
+import { ProjectIcon } from "./project-icon";
 import { useProject } from "./project-context";
 import { api } from "@/convex/_generated/api";
 
@@ -674,10 +674,11 @@ export function PostsContent() {
     <div className="flex h-full flex-col p-6">
       <div className="flex min-h-0 flex-1 flex-col border border-border">
         <div className="flex items-center justify-between gap-4 border-b border-border px-4 py-3">
-          <div className="flex items-center gap-3">
-            <h1 className="text-xl font-semibold">Looking posts for:</h1>
-            <ProjectSwitcher align="start" />
-          </div>
+          <h1 className="flex items-center gap-2 text-xl font-semibold">
+            Looking posts for:
+            <ProjectIcon project={project} className="h-6 w-6 text-xs" />
+            {project?.name ?? "no project"}
+          </h1>
           <Sheet>
             <SheetTrigger
               type="button"
