@@ -10,24 +10,20 @@ export function AnalyticsContent() {
     api.pipeline.sourceStats,
     project ? { projectId: project._id } : "skip",
   );
-  const linkStats = useQuery(
-    api.links.statsForProject,
+  const breakdown = useQuery(
+    api.links.clickBreakdown,
+    project ? { projectId: project._id } : "skip",
+  );
+  const counts = useQuery(
+    api.pipeline.feedCounts,
     project ? { projectId: project._id } : "skip",
   );
 
-  const links = linkStats ?? [];
-  const realClicks = links.reduce((sum, link) => sum + link.clicks, 0);
-  const clicksByPlatform = new Map<string, number>();
-  for (const link of links) {
-    clicksByPlatform.set(
-      link.platform,
-      (clicksByPlatform.get(link.platform) ?? 0) + link.clicks,
-    );
-  }
+  const realClicks = breakdown?.total ?? 0;
+  const clicksByPlatform = new Map(Object.entries(breakdown?.byPlatform ?? {}));
   const bestChannel =
     [...clicksByPlatform.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ?? "—";
   const maxPlatformClicks = Math.max(1, ...clicksByPlatform.values());
-  const topLinks = [...links].sort((a, b) => b.clicks - a.clicks).slice(0, 8);
 
 
   return (
@@ -46,14 +42,15 @@ export function AnalyticsContent() {
       <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
         {[
           { label: "Link clicks", value: realClicks.toLocaleString() },
-          { label: "Tracked replies", value: links.length.toLocaleString() },
-          {
-            label: "Avg clicks per reply",
-            value: links.length
-              ? (realClicks / links.length).toFixed(1)
-              : "0",
-          },
           { label: "Best channel", value: bestChannel },
+          {
+            label: "Posts found",
+            value: (counts?.total ?? 0).toLocaleString(),
+          },
+          {
+            label: "Replied",
+            value: (counts?.replied ?? 0).toLocaleString(),
+          },
         ].map((tile) => (
           <div key={tile.label} className="border border-border p-4">
             <p className="text-xs font-bold tracking-wider text-muted-foreground uppercase">
@@ -67,7 +64,7 @@ export function AnalyticsContent() {
       {/* Clicks by platform */}
       <section className="border border-border">
         <header className="border-b border-border px-4 py-3 text-sm font-medium">
-          Clicks by platform
+          Where your clicks came from
         </header>
         <ul className="flex flex-col gap-4 p-4">
           {[...clicksByPlatform.entries()].map(([platformId, clicks]) => {
@@ -82,7 +79,7 @@ export function AnalyticsContent() {
                     <meta.Icon className="h-3.5 w-3.5" style={{ color: meta.fg }} />
                   </span>
                 ) : null}
-                <span className="w-24 shrink-0 truncate text-sm">
+                <span className="w-24 shrink-0 truncate text-sm capitalize">
                   {meta?.label ?? platformId}
                 </span>
                 <span className="relative h-4 flex-1 bg-white/5">
@@ -99,42 +96,8 @@ export function AnalyticsContent() {
           })}
           {clicksByPlatform.size === 0 ? (
             <li className="text-sm text-muted-foreground">
-              No clicks yet. Paste a tracked link in a reply to start counting.
-            </li>
-          ) : null}
-        </ul>
-      </section>
-
-      {/* Top comments by clicks */}
-      <section className="border border-border">
-        <header className="border-b border-border px-4 py-3 text-sm font-medium">
-          Top comments by clicks
-        </header>
-        <ul>
-          {topLinks.map((link) => (
-            <li
-              key={link.code}
-              className="flex items-start justify-between gap-4 border-b border-border px-4 py-3 last:border-b-0"
-            >
-              <div className="min-w-0">
-                <p className="truncate text-sm font-medium">
-                  {link.label ?? link.targetUrl}
-                </p>
-                <p className="mt-0.5 text-xs text-muted-foreground">
-                  {link.platform} · /r/{link.code}
-                </p>
-              </div>
-              <div className="shrink-0 text-right text-sm tabular-nums">
-                <span className="font-medium">{link.clicks}</span>
-                <span className="ml-1 text-xs text-muted-foreground">
-                  clicks
-                </span>
-              </div>
-            </li>
-          ))}
-          {topLinks.length === 0 ? (
-            <li className="px-4 py-6 text-sm text-muted-foreground">
-              No tracked links yet.
+              No clicks yet. Copy your link on the dashboard, paste it in
+              replies, and every click shows up here with its source.
             </li>
           ) : null}
         </ul>

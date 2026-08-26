@@ -87,3 +87,95 @@ export const statsForProject = query({
     );
   },
 });
+
+const PROJECT_LINK_LABEL = "__project__";
+
+// One permanent tracked link per project. Attribution comes from the click's
+// referrer, so a single link still tells us which platform sent the visitor.
+export const getProjectLink = mutation({
+  args: { projectId: v.id("projects") },
+  handler: async (ctx, args) => {
+    const project = await requireOwnedProject(ctx, args.projectId);
+    if (!project.url) return { error: "no-url" as const };
+
+    const links = await ctx.db
+      .query("trackedLinks")
+      .withIndex("by_project", (q) => q.eq("projectId", args.projectId))
+      .collect();
+    const existing = links.find((l) => l.label === PROJECT_LINK_LABEL);
+    if (existing) {
+      if (existing.targetUrl !== project.url) {
+        await ctx.db.patch(existing._id, { targetUrl: project.url });
+      }
+      return { code: existing.code, path: `/r/${existing.code}` };
+    }
+
+    let code = randomCode();
+    while (
+      await ctx.db
+        .query("trackedLinks")
+        .withIndex("by_code", (q) => q.eq("code", code))
+        .unique()
+    ) {
+      code = randomCode();
+    }
+    await ctx.db.insert("trackedLinks", {
+      code,
+      projectId: args.projectId,
+      ownerClerkId: project.ownerClerkId,
+      targetUrl: project.url,
+      platform: "any",
+      label: PROJECT_LINK_LABEL,
+    });
+    return { code, path: `/r/${code}` };
+  },
+});
+
+// Which platform a click's referrer belongs to.
+function platformFromReferrer(referrer: string | undefined): string {
+  if (!referrer) return "direct";
+  let host = "";
+  try {
+    host = new URL(referrer).hostname.replace(/^www\./, "");
+  } catch {
+    return "direct";
+  }
+  if (host.endsWith("reddit.com")) return "reddit";
+  if (host.endsWith("ycombinator.com")) return "hn";
+  if (host.endsWith("bsky.app")) return "bluesky";
+  if (host.endsWith("threads.com") || host.endsWith("threads.net")) return "threads";
+  if (host.endsWith("facebook.com") || host === "l.facebook.com" || host === "lm.facebook.com") return "facebook";
+  if (host.endsWith("instagram.com") || host === "l.instagram.com") return "instagram";
+  if (host.endsWith("tiktok.com")) return "tiktok";
+  if (host.endsWith("github.com")) return "github";
+  if (host.endsWith("youtube.com") || host === "youtu.be") return "youtube";
+  if (host.endsWith("x.com") || host.endsWith("twitter.com") || host === "t.co") return "x";
+  return "other";
+}
+
+// Click totals broken down by where the visitor came from.
+export const clickBreakdown = query({
+  args: { projectId: v.id("projects") },
+  handler: async (ctx, args) => {
+    await requireOwnedProject(ctx, args.projectId);
+    const links = await ctx.db
+      .query("trackedLinks")
+      .withIndex("by_project", (q) => q.eq("projectId", args.projectId))
+      .collect();
+
+    let total = 0;
+    const byPlatform: Record<string, number> = {};
+    for (const link of links) {
+      const clicks = await ctx.db
+        .query("linkClicks")
+        .withIndex("by_link", (q) => q.eq("linkId", link._id))
+        .collect();
+      for (const click of clicks) {
+        total++;
+        const source = platformFromReferrer(click.referrer);
+        byPlatform[source] = (byPlatform[source] ?? 0) + 1;
+      }
+    }
+    return { total, byPlatform };
+  },
+});
