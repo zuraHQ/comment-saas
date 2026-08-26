@@ -38,6 +38,7 @@ function ProjectSettingsForm({ project }: { project: Project }) {
   const [fbPage, setFbPage] = useState("");
   const [igAccount, setIgAccount] = useState("");
   const [ttAccount, setTtAccount] = useState("");
+  const [xAccount, setXAccount] = useState("");
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [uploading, setUploading] = useState(false);
 
@@ -108,7 +109,7 @@ function ProjectSettingsForm({ project }: { project: Project }) {
   };
 
   const addToList = (
-    field: "facebookPages" | "instagramAccounts" | "tiktokAccounts",
+    field: "facebookPages" | "instagramAccounts" | "tiktokAccounts" | "xAccounts",
     raw: string,
     reset: () => void,
   ) => {
@@ -120,7 +121,7 @@ function ProjectSettingsForm({ project }: { project: Project }) {
   };
 
   const removeFromList = (
-    field: "facebookPages" | "instagramAccounts" | "tiktokAccounts",
+    field: "facebookPages" | "instagramAccounts" | "tiktokAccounts" | "xAccounts",
     value: string,
   ) => {
     void updateProject(project._id, {
@@ -424,6 +425,51 @@ function ProjectSettingsForm({ project }: { project: Project }) {
               <button
                 type="button"
                 onClick={() => removeFromList("tiktokAccounts", account)}
+                aria-label={`Remove ${account}`}
+                className="cursor-pointer text-muted-foreground transition-colors hover:text-foreground"
+              >
+                <X className="size-3.5" />
+              </button>
+            </span>
+          ))}
+        </div>
+      </Section>
+
+      <Section title="X accounts" platform="x">
+        <p className="text-sm text-muted-foreground">
+          We read the replies under these accounts&apos; posts. Pick founders
+          and creators your customers follow.
+        </p>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            addToList("xAccounts", xAccount, () => setXAccount(""));
+          }}
+          className="flex gap-2"
+        >
+          <Input
+            value={xAccount}
+            onChange={(e) => setXAccount(e.target.value)}
+            placeholder="@marc_louvion"
+            className="rounded-none"
+          />
+          <button
+            type="submit"
+            className="h-9 shrink-0 cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
+          >
+            Add
+          </button>
+        </form>
+        <div className="flex flex-wrap gap-2">
+          {(project.xAccounts ?? []).map((account) => (
+            <span
+              key={account}
+              className="flex items-center gap-2 border border-border px-3 py-1.5 text-sm"
+            >
+              @{account}
+              <button
+                type="button"
+                onClick={() => removeFromList("xAccounts", account)}
                 aria-label={`Remove ${account}`}
                 className="cursor-pointer text-muted-foreground transition-colors hover:text-foreground"
               >

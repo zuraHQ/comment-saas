@@ -55,6 +55,7 @@ type ProjectContextValue = {
       facebookPages?: string[];
       instagramAccounts?: string[];
       tiktokAccounts?: string[];
+      xAccounts?: string[];
       platforms?: string[];
       iconId?: Id<"_storage">;
     },

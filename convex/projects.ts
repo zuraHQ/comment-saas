@@ -31,6 +31,7 @@ function normalizeHandles(values: string[], stripPrefix: RegExp) {
 const FACEBOOK_PREFIX = /^(https?:\/\/)?(www\.)?facebook\.com\//;
 const INSTAGRAM_PREFIX = /^(https?:\/\/)?(www\.)?instagram\.com\/|^@/;
 const TIKTOK_PREFIX = /^(https?:\/\/)?(www\.)?tiktok\.com\/@?|^@/;
+const X_PREFIX = /^(https?:\/\/)?(www\.)?(x|twitter)\.com\/|^@/;
 
 // Accepts "r/SaaS", "/r/saas" or "saas" and stores "saas".
 function normalizeCommunities(communities: string[]) {
@@ -72,14 +73,19 @@ async function ensureJobs(
     facebookPages,
     instagramAccounts,
     tiktokAccounts,
+    xAccounts,
   }: {
     keywords?: string[];
     communities?: string[];
     facebookPages?: string[];
     instagramAccounts?: string[];
     tiktokAccounts?: string[];
+    xAccounts?: string[];
   },
 ) {
+  for (const account of xAccounts ?? []) {
+    await ensureJob(ctx, "x", "community", account);
+  }
   for (const page of facebookPages ?? []) {
     await ensureJob(ctx, "facebook", "community", page);
   }
@@ -189,6 +195,7 @@ export const update = mutation({
     facebookPages: v.optional(v.array(v.string())),
     instagramAccounts: v.optional(v.array(v.string())),
     tiktokAccounts: v.optional(v.array(v.string())),
+    xAccounts: v.optional(v.array(v.string())),
     platforms: v.optional(v.array(v.string())),
   },
   handler: async (ctx, args) => {
@@ -201,6 +208,7 @@ export const update = mutation({
       facebookPages,
       instagramAccounts,
       tiktokAccounts,
+      xAccounts,
       ...rest
     } = args;
     const patch: Record<string, unknown> = { ...rest };
@@ -215,6 +223,9 @@ export const update = mutation({
     }
     if (tiktokAccounts) {
       patch.tiktokAccounts = normalizeHandles(tiktokAccounts, TIKTOK_PREFIX);
+    }
+    if (xAccounts) {
+      patch.xAccounts = normalizeHandles(xAccounts, X_PREFIX);
     }
     if (lockedKeywords) patch.lockedKeywords = normalizeKeywords(lockedKeywords);
     if (keywords) {
@@ -232,6 +243,7 @@ export const update = mutation({
       facebookPages: patch.facebookPages as string[] | undefined,
       instagramAccounts: patch.instagramAccounts as string[] | undefined,
       tiktokAccounts: patch.tiktokAccounts as string[] | undefined,
+      xAccounts: patch.xAccounts as string[] | undefined,
     });
     await ctx.db.patch(projectId, patch);
   },

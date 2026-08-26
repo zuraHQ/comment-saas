@@ -47,6 +47,9 @@ export const ingest = internalMutation({
       if (args.platform === "tiktok") {
         return (p.tiktokAccounts ?? []).includes(args.query);
       }
+      if (args.platform === "x") {
+        return (p.xAccounts ?? []).includes(args.query);
+      }
       return p.communities.includes(args.query);
     });
     let inserted = 0;
@@ -126,6 +129,7 @@ export const jobsForProject = internalQuery({
     facebookPages: v.optional(v.array(v.string())),
     instagramAccounts: v.optional(v.array(v.string())),
     tiktokAccounts: v.optional(v.array(v.string())),
+    xAccounts: v.optional(v.array(v.string())),
     platforms: v.array(v.string()),
     olderThanMs: v.number(),
   },
@@ -162,6 +166,11 @@ export const jobsForProject = internalQuery({
     if (args.platforms.includes("tiktok")) {
       for (const account of args.tiktokAccounts ?? []) {
         wanted.push({ platform: "tiktok", kind: "community", query: account });
+      }
+    }
+    if (args.platforms.includes("x")) {
+      for (const account of args.xAccounts ?? []) {
+        wanted.push({ platform: "x", kind: "community", query: account });
       }
     }
 
@@ -304,6 +313,11 @@ export const rebuildJobs = internalMutation({
           await ensure("tiktok", "community", account);
         }
       }
+      if (project.platforms.includes("x")) {
+        for (const account of project.xAccounts ?? []) {
+          await ensure("x", "community", account);
+        }
+      }
     }
     return { projects: projects.length, created };
   },
@@ -351,6 +365,11 @@ export const pruneJobs = internalMutation({
           wanted.add(`tiktok:community:${account}`);
         }
       }
+      if (project.platforms.includes("x")) {
+        for (const account of project.xAccounts ?? []) {
+          wanted.add(`x:community:${account}`);
+        }
+      }
     }
 
     let deleted = 0;
@@ -393,7 +412,9 @@ export const backfillProject = internalMutation({
                 ? onPlatform && (project.instagramAccounts ?? []).includes(query)
                 : post.platform === "tiktok"
                   ? onPlatform && (project.tiktokAccounts ?? []).includes(query)
-                  : onPlatform && project.communities.includes(query);
+                  : post.platform === "x"
+                    ? onPlatform && (project.xAccounts ?? []).includes(query)
+                    : onPlatform && project.communities.includes(query);
       if (!interested) continue;
 
       const existing = await ctx.db
@@ -482,6 +503,7 @@ export const seedWatchTargets = internalMutation({
     facebookPages: v.optional(v.array(v.string())),
     instagramAccounts: v.optional(v.array(v.string())),
     tiktokAccounts: v.optional(v.array(v.string())),
+    xAccounts: v.optional(v.array(v.string())),
   },
   handler: async (ctx, args) => {
     let updated = 0;
@@ -490,6 +512,7 @@ export const seedWatchTargets = internalMutation({
       if (args.facebookPages) patch.facebookPages = args.facebookPages;
       if (args.instagramAccounts) patch.instagramAccounts = args.instagramAccounts;
       if (args.tiktokAccounts) patch.tiktokAccounts = args.tiktokAccounts;
+      if (args.xAccounts) patch.xAccounts = args.xAccounts;
       await ctx.db.patch(project._id, patch);
       updated++;
       for (const page of args.facebookPages ?? []) {
@@ -523,6 +546,17 @@ export const seedWatchTargets = internalMutation({
           .unique();
         if (!existing) {
           await ctx.db.insert("jobs", { platform: "tiktok", kind: "community", query: account });
+        }
+      }
+      for (const account of args.xAccounts ?? []) {
+        const existing = await ctx.db
+          .query("jobs")
+          .withIndex("by_platform_kind_query", (q) =>
+            q.eq("platform", "x").eq("kind", "community").eq("query", account),
+          )
+          .unique();
+        if (!existing) {
+          await ctx.db.insert("jobs", { platform: "x", kind: "community", query: account });
         }
       }
     }

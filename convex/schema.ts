@@ -28,6 +28,7 @@ export default defineSchema({
     facebookPages: v.optional(v.array(v.string())),
     instagramAccounts: v.optional(v.array(v.string())),
     tiktokAccounts: v.optional(v.array(v.string())),
+    xAccounts: v.optional(v.array(v.string())),
     // The subset of keywords we picked for the user; always kept in keywords.
     lockedKeywords: v.optional(v.array(v.string())),
     // Subreddit names without the r/ prefix, lowercased.
