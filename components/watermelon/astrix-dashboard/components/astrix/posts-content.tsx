@@ -598,10 +598,12 @@ export const ALL_PLATFORMS = PLATFORMS.map((platform) => {
 });
 
 const INTENT_STYLES: Record<Post["intent"], string> = {
-  High: "bg-primary text-primary-foreground",
-  Medium: "bg-foreground/10 text-foreground/80",
-  Low: "bg-foreground/5 text-muted-foreground",
+  High: "bg-[#FF6600] text-[#101010]",
+  Medium: "bg-[#FFC53D] text-[#101010]",
+  Low: "bg-foreground/10 text-muted-foreground",
 };
+
+const INTENT_FILTERS = ["All", "High", "Medium", "Low"] as const;
 
 function postUrl(platform: string, community: string) {
   if (platform === "reddit") return `https://www.reddit.com/${community}/`;
@@ -633,6 +635,8 @@ export function PostsContent() {
 
   const replied = new Set(repliedList ?? []);
   const hideReplied = project?.hideReplied ?? false;
+  const [intentFilter, setIntentFilter] =
+    useState<(typeof INTENT_FILTERS)[number]>("All");
 
   const [refreshing, setRefreshing] = useState(false);
   const [updatedLabel, setUpdatedLabel] = useState("2m ago");
@@ -662,7 +666,9 @@ export function PostsContent() {
   };
 
   const visiblePosts = active.posts.filter(
-    (post) => !hideReplied || !replied.has(post.id),
+    (post) =>
+      (!hideReplied || !replied.has(post.id)) &&
+      (intentFilter === "All" || post.intent === intentFilter),
   );
 
   return (
@@ -689,6 +695,24 @@ export function PostsContent() {
                 className={cn("size-4", refreshing && "animate-spin")}
               />
             </button>
+            <div className="flex items-center">
+              {INTENT_FILTERS.map((option) => (
+                <button
+                  key={option}
+                  type="button"
+                  onClick={() => setIntentFilter(option)}
+                  aria-pressed={intentFilter === option}
+                  className={cn(
+                    "h-9 cursor-pointer border border-l-0 px-3 text-[10px] font-bold tracking-wider uppercase transition-colors first:border-l",
+                    intentFilter === option
+                      ? "border-border bg-sidebar-accent text-foreground"
+                      : "border-border text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
+                  )}
+                >
+                  {option}
+                </button>
+              ))}
+            </div>
             <button
               type="button"
               onClick={() => {
