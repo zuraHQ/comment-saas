@@ -1,4 +1,3 @@
-import { Bug } from "lucide-react";
 import { FaDiscord } from "react-icons/fa";
 import { AccountMenu } from "./account-menu";
 import { AstrixLogo } from "./logo";
@@ -135,30 +134,7 @@ export function DashboardSidebar() {
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              tooltip="Report a bug"
-              className={cn(
-                "h-auto [&_svg]:size-5",
-                "group-data-[collapsible=icon]:size-12!",
-                "group-data-[collapsible=icon]:px-3.5!",
-              )}
-            >
-              <a
-                href="mailto:makaradze98.s@gmail.com?subject=Bug%20report"
-                className={cn(
-                  "flex h-12 w-full items-center gap-2.5 overflow-hidden rounded-xl px-3 py-2.5 text-muted-foreground hover:text-foreground",
-                  "transition-[width,padding] ease-linear",
-                )}
-              >
-                <Bug className="size-5" />
-                <span className="truncate text-base group-data-[collapsible=icon]:hidden">
-                  Report a bug
-                </span>
-              </a>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+
         </SidebarMenu>
       </SidebarContent>
 
