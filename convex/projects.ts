@@ -4,15 +4,22 @@ import { requireClerkId, requireOwnedProject } from "./auth";
 
 import { COMMUNITY_PLATFORMS, HN_FEEDS, KEYWORD_PLATFORMS } from "./platforms";
 
-// Communities where founders and small-business buyers actually talk. Seeded
-// on every new project; the user edits the list in settings.
+// The universal starter set from lib/subreddit-catalog.ts (kept in sync by
+// hand — convex/ cannot import from lib/). Used when a project is created
+// without an explicit community list.
 export const DEFAULT_COMMUNITIES = [
   "saas",
   "entrepreneur",
   "smallbusiness",
   "startups",
   "indiehackers",
-  "marketing",
+  "sideproject",
+  "microsaas",
+  "entrepreneurridealong",
+  "buildinpublic",
+  "alphaandbetausers",
+  "roastmystartup",
+  "growmybusiness",
 ];
 
 function normalizeKeywords(keywords: string[]) {

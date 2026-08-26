@@ -8,6 +8,7 @@ import { api } from "@/convex/_generated/api";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { PLATFORM_OPTIONS, useProject } from "./project-context";
+import { CATEGORIES, suggestCommunities } from "@/lib/subreddit-catalog";
 
 const STEPS = ["Your site", "What we found", "Platforms", "Done"] as const;
 
@@ -48,15 +49,21 @@ export function OnboardingContent() {
   const [description, setDescription] = useState("");
   const [keywords, setKeywords] = useState<string[]>([]);
   const [platforms, setPlatforms] = useState<string[]>(["reddit", "hn"]);
-  const [communities, setCommunities] = useState<string[]>([
-    "saas",
-    "entrepreneur",
-    "smallbusiness",
-    "startups",
-    "indiehackers",
-    "marketing",
-  ]);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [communities, setCommunities] = useState<string[]>(
+    suggestCommunities([]),
+  );
   const [community, setCommunity] = useState("");
+
+  const toggleCategory = (id: string) => {
+    const next = categories.includes(id)
+      ? categories.filter((c) => c !== id)
+      : [...categories, id];
+    setCategories(next);
+    // Re-derive the suggested rooms; manual edits after this stick until the
+    // next category change.
+    setCommunities(suggestCommunities(next));
+  };
   const [saving, setSaving] = useState(false);
 
   // Fake the scrape once on mount so the first step has something to show.
@@ -223,6 +230,35 @@ export function OnboardingContent() {
                 />
               </div>
 
+
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-medium">What space is it in?</label>
+                <div className="flex flex-wrap gap-2">
+                  {CATEGORIES.map((category) => {
+                    const on = categories.includes(category.id);
+                    return (
+                      <button
+                        key={category.id}
+                        type="button"
+                        onClick={() => toggleCategory(category.id)}
+                        aria-pressed={on}
+                        className={cn(
+                          "cursor-pointer border px-3 py-1.5 text-sm transition-colors",
+                          on
+                            ? "border-primary/40 bg-sidebar-accent/40 text-foreground"
+                            : "border-border text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
+                        )}
+                      >
+                        {category.label}
+                      </button>
+                    );
+                  })}
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Pick one or two. We use this to choose which communities to
+                  watch for you.
+                </p>
+              </div>
 
               <div className="flex flex-col gap-2">
                 <label className="text-sm font-medium">
