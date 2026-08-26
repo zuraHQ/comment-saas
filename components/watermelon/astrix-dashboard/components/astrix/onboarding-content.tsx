@@ -25,6 +25,7 @@ function fakeScrape(url: string) {
   const name = base.charAt(0).toUpperCase() + base.slice(1);
   return {
     name,
+    categories: ["marketing", "sales"],
     description: `${name} helps small teams stop doing a recurring manual job by hand. Built for founders and operators at companies under 20 people.`,
     keywords: [
       `${base} alternative`,
@@ -59,6 +60,7 @@ export function OnboardingContent() {
     const next = categories.includes(id)
       ? categories.filter((c) => c !== id)
       : [...categories, id];
+    if (next.length > 3) return;
     setCategories(next);
     // Re-derive the suggested rooms; manual edits after this stick until the
     // next category change.
@@ -74,6 +76,8 @@ export function OnboardingContent() {
       setName(result.name);
       setDescription(result.description);
       setKeywords(result.keywords);
+      setCategories(result.categories);
+      setCommunities(suggestCommunities(result.categories));
       setScanning(false);
     }, 1400);
     return () => {
@@ -255,8 +259,8 @@ export function OnboardingContent() {
                   })}
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Pick one or two. We use this to choose which communities to
-                  watch for you.
+                  Picked from your site, fix it if we are wrong. This decides
+                  which communities we watch for you.
                 </p>
               </div>
 
