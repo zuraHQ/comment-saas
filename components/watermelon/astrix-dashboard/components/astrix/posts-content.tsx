@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { HistoryPanel } from "./history-content";
+import { ProjectIcon } from "./project-icon";
 import { useProject } from "./project-context";
 import { api } from "@/convex/_generated/api";
 
@@ -591,9 +592,10 @@ export function PostsContent() {
   return (
     <div className="flex h-full flex-col gap-6 p-6">
       <div className="flex items-center justify-between gap-4">
-        <h1 className="text-xl font-semibold">
-          Looking posts for:{" "}
-          <span className="text-primary">{project?.name ?? "no project"}</span>
+        <h1 className="flex items-center gap-2 text-xl font-semibold">
+          Looking posts for:
+          <ProjectIcon project={project} className="h-6 w-6 text-xs" />
+          {project?.name ?? "no project"}
         </h1>
         <Sheet>
           <SheetTrigger
