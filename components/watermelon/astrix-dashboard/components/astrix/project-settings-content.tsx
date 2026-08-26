@@ -564,9 +564,7 @@ function Section({
               <meta.Icon className="h-3 w-3" style={{ color: meta.fg }} />
             </span>
           ) : GlobeIcon ? (
-            <span className="flex h-5 w-5 shrink-0 items-center justify-center bg-sidebar-accent">
-              <GlobeIcon className="h-3 w-3 text-foreground" />
-            </span>
+            <GlobeIcon className="size-5 shrink-0 text-foreground" />
           ) : null}
           {title}
         </h2>
