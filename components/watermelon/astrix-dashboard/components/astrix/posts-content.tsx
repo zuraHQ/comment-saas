@@ -136,9 +136,6 @@ export function PostsContent() {
             {project?.name ?? "no project"}
           </h1>
           <div className="ml-auto flex items-center gap-3">
-            <span className="hidden text-xs text-muted-foreground sm:inline">
-              {counts?.total ?? 0} found
-            </span>
             <button
               type="button"
               onClick={refresh}
