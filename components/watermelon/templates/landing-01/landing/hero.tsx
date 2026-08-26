@@ -74,8 +74,8 @@ export default function Hero() {
 
       {/* Crosshairs at intersections */}
       <div className="absolute top-[80px] left-8 hidden h-4 w-4 -translate-x-1/2 -translate-y-1/2 md:left-16 lg:block">
-        <div className="bg-primary/50 absolute top-1/2 right-0 left-0 h-px" />
-        <div className="bg-primary/50 absolute top-0 bottom-0 left-1/2 w-px" />
+        <div className="absolute top-1/2 right-0 left-0 h-px bg-white/20" />
+        <div className="absolute top-0 bottom-0 left-1/2 w-px bg-white/20" />
       </div>
       <div className="absolute top-[80px] right-8 hidden h-4 w-4 translate-x-1/2 -translate-y-1/2 md:right-16 lg:block">
         <div className="absolute top-1/2 right-0 left-0 h-px bg-white/20" />
