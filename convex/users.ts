@@ -103,3 +103,21 @@ export const resetOnboarding = internalMutation({
     return { reset: targets.length, wipedProjects: args.wipeProjects ?? false };
   },
 });
+
+// Flip a user-level integration on or off.
+export const setIntegration = mutation({
+  args: { integration: v.string(), enabled: v.boolean() },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) return;
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_clerk_id", (q) => q.eq("clerkId", identity.subject))
+      .unique();
+    if (!user) return;
+    const current = new Set(user.integrations ?? []);
+    if (args.enabled) current.add(args.integration);
+    else current.delete(args.integration);
+    await ctx.db.patch(user._id, { integrations: [...current] });
+  },
+});

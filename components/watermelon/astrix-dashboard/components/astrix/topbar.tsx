@@ -6,6 +6,7 @@ const PAGE_LABELS: Record<string, string> = {
   "/analytics": "Analytics",
   "/launchpad": "Launchpad",
   "/settings": "Settings",
+  "/profile": "Profile",
 };
 
 export function DashboardTopbar() {

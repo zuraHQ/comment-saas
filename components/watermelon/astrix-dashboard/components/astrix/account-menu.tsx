@@ -1,6 +1,6 @@
 "use client";
 
-import { LogOut, Moon, Sun } from "lucide-react";
+import { LogOut, Moon, Sun, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useClerk, useUser } from "@clerk/nextjs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { currentUser } from "../../data";
+import { useDashboardNavigation } from "./navigation";
 import { useTheme } from "./theme-provider";
 import { cn } from "@/lib/utils";
 
@@ -79,6 +80,7 @@ function Shell({
   onSignOut: (() => void) | null;
 }) {
   const { theme, toggleTheme } = useTheme();
+  const { navigate } = useDashboardNavigation();
 
   return (
     <DropdownMenu>
@@ -109,6 +111,10 @@ function Shell({
           </DropdownMenuLabel>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => navigate("/profile")}>
+          <User />
+          Profile
+        </DropdownMenuItem>
         <DropdownMenuItem onClick={toggleTheme}>
           {theme === "dark" ? <Sun /> : <Moon />}
           {theme === "dark" ? "Light mode" : "Dark mode"}

@@ -11,6 +11,7 @@ import {
   useDashboardNavigation,
 } from "./components/astrix/navigation";
 import { PostsContent } from "./components/astrix/posts-content";
+import { ProfileContent } from "./components/astrix/profile-content";
 import { ProjectSettingsContent } from "./components/astrix/project-settings-content";
 import { ProjectProvider } from "./components/astrix/project-context";
 import { useQuery } from "convex/react";
@@ -55,6 +56,7 @@ function DashboardRoute() {
   if (pathname === "/analytics") content = <AnalyticsContent />;
   else if (pathname === "/launchpad") content = <LaunchpadContent />;
   else if (pathname === "/settings") content = <ProjectSettingsContent />;
+  else if (pathname === "/profile") content = <ProfileContent />;
 
   return <DashboardLayout>{content}</DashboardLayout>;
 }
