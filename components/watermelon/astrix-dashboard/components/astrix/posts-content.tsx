@@ -788,27 +788,6 @@ export function PostsContent() {
 
           {/* Post feed */}
           <section className="flex min-w-0 flex-1 flex-col">
-            <header className="flex flex-wrap items-center gap-3 border-b border-border px-4 py-3">
-              <span
-                className="flex h-6 w-6 shrink-0 items-center justify-center"
-                style={{ backgroundColor: active.bg }}
-              >
-                <active.Icon
-                  className="h-3.5 w-3.5"
-                  style={{ color: active.iconColor }}
-                />
-              </span>
-              <span className="text-sm font-medium">
-                Found {active.posts.length} posts
-                {visiblePosts.length !== active.posts.length ? (
-                  <span className="text-muted-foreground">
-                    {" "}
-                    · showing {visiblePosts.length}
-                  </span>
-                ) : null}
-              </span>
-            </header>
-
             <ul className="no-scrollbar min-h-0 flex-1 overflow-y-auto">
               {visiblePosts.map((post) => (
                 <li
