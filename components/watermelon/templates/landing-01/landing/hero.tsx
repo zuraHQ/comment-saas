@@ -114,7 +114,7 @@ export default function Hero() {
               variant="big"
               className="text-foreground mb-2 font-sans font-semibold leading-[0.95] lg:text-[64px]"
             >
-              Customers,
+              We read the internet.
             </Heading>
           </motion.div>
 
@@ -124,7 +124,7 @@ export default function Hero() {
               variant="big"
               className="mb-8 font-sans font-semibold leading-[0.95] lg:text-[64px]"
             >
-              <span className="text-foreground">one reply away.</span>
+              <span className="text-foreground">You get customers.</span>
             </Heading>
           </motion.div>
 
