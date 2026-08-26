@@ -100,6 +100,7 @@ export function OnboardingContent() {
         url,
         description,
         keywords,
+        lockedKeywords: keywords,
         communities,
         platforms,
       });
@@ -222,6 +223,25 @@ export function OnboardingContent() {
                 />
               </div>
 
+
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-medium">
+                  Phrases we will watch for
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {keywords.map((k) => (
+                    <span
+                      key={k}
+                      className="border border-border px-3 py-1.5 text-sm text-muted-foreground"
+                    >
+                      {k}
+                    </span>
+                  ))}
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Picked from your site. You can add your own in settings later.
+                </p>
+              </div>
             </Step>
           ) : null}
 

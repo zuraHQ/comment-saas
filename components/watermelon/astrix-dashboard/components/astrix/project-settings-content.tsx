@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { Check, Trash2, X } from "lucide-react";
+import { Check, Lock, Trash2, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { useDashboardNavigation } from "./navigation";
@@ -72,7 +72,10 @@ function ProjectSettingsForm({ project }: { project: Project }) {
     setKeyword("");
   };
 
+  const lockedKeywords = new Set(project.lockedKeywords ?? []);
+
   const removeKeyword = (value: string) => {
+    if (lockedKeywords.has(value)) return; // ours, not removable
     void updateProject(project._id, {
       keywords: project.keywords.filter((k) => k !== value),
     });
@@ -250,22 +253,33 @@ function ProjectSettingsForm({ project }: { project: Project }) {
 
         {project.keywords.length ? (
           <div className="flex flex-wrap gap-2">
-            {project.keywords.map((k) => (
-              <span
-                key={k}
-                className="flex items-center gap-2 border border-border px-3 py-1.5 text-sm"
-              >
-                {k}
-                <button
-                  type="button"
-                  onClick={() => removeKeyword(k)}
-                  aria-label={`Remove ${k}`}
-                  className="cursor-pointer text-muted-foreground transition-colors hover:text-foreground"
+            {project.keywords.map((k) =>
+              lockedKeywords.has(k) ? (
+                <span
+                  key={k}
+                  title="Picked from your site"
+                  className="flex items-center gap-2 border border-border px-3 py-1.5 text-sm text-muted-foreground"
                 >
-                  <X className="size-3.5" />
-                </button>
-              </span>
-            ))}
+                  <Lock className="size-3" />
+                  {k}
+                </span>
+              ) : (
+                <span
+                  key={k}
+                  className="flex items-center gap-2 border border-border px-3 py-1.5 text-sm"
+                >
+                  {k}
+                  <button
+                    type="button"
+                    onClick={() => removeKeyword(k)}
+                    aria-label={`Remove ${k}`}
+                    className="cursor-pointer text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    <X className="size-3.5" />
+                  </button>
+                </span>
+              ),
+            )}
           </div>
         ) : (
           <p className="text-sm text-muted-foreground">

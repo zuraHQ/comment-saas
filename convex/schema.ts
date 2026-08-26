@@ -22,6 +22,8 @@ export default defineSchema({
     url: v.optional(v.string()),
     description: v.optional(v.string()),
     keywords: v.array(v.string()),
+    // The subset of keywords we picked for the user; always kept in keywords.
+    lockedKeywords: v.optional(v.array(v.string())),
     // Subreddit names without the r/ prefix, lowercased.
     communities: v.array(v.string()),
     platforms: v.array(v.string()),

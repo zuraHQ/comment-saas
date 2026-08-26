@@ -46,6 +46,7 @@ type ProjectContextValue = {
       url?: string;
       description?: string;
       keywords?: string[];
+      lockedKeywords?: string[];
       communities?: string[];
       platforms?: string[];
       iconId?: Id<"_storage">;

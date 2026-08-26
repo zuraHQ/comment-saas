@@ -150,14 +150,23 @@ export const update = mutation({
     url: v.optional(v.string()),
     description: v.optional(v.string()),
     keywords: v.optional(v.array(v.string())),
+    lockedKeywords: v.optional(v.array(v.string())),
     communities: v.optional(v.array(v.string())),
     platforms: v.optional(v.array(v.string())),
   },
   handler: async (ctx, args) => {
-    await requireOwnedProject(ctx, args.projectId);
-    const { projectId, keywords, communities, ...rest } = args;
+    const project = await requireOwnedProject(ctx, args.projectId);
+    const { projectId, keywords, lockedKeywords, communities, ...rest } = args;
     const patch: Record<string, unknown> = { ...rest };
-    if (keywords) patch.keywords = normalizeKeywords(keywords);
+    if (lockedKeywords) patch.lockedKeywords = normalizeKeywords(lockedKeywords);
+    if (keywords) {
+      // Our chosen keywords always survive, whatever list the client sends.
+      const locked =
+        (patch.lockedKeywords as string[] | undefined) ??
+        project.lockedKeywords ??
+        [];
+      patch.keywords = [...new Set([...locked, ...normalizeKeywords(keywords)])];
+    }
     if (communities) patch.communities = normalizeCommunities(communities);
     await ensureJobs(ctx, {
       keywords: patch.keywords as string[] | undefined,
