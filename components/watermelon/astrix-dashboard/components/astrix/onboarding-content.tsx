@@ -97,7 +97,7 @@ export function OnboardingContent() {
   return (
     <div className="flex min-h-screen justify-center bg-background px-4 py-16">
       <div className="w-full max-w-2xl">
-        <ol className="mb-8 flex flex-wrap items-center gap-x-3 gap-y-2">
+        <ol className="mb-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-2">
           {STEPS.map((label, i) => (
             <li key={label} className="flex items-center gap-3">
               <span
