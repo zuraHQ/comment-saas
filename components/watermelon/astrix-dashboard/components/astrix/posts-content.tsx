@@ -137,7 +137,9 @@ export function PostsContent() {
           </h1>
           <div className="ml-auto flex items-center gap-3">
             <span className="hidden text-xs text-muted-foreground sm:inline">
-              {counts?.total ?? 0} found
+              {counts?.total ?? 0} found ·{" "}
+              <span className="text-primary">{counts?.replied ?? 0} replied</span>{" "}
+              · {(counts?.total ?? 0) - (counts?.replied ?? 0)} to go
             </span>
             <button
               type="button"
