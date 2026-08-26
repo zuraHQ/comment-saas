@@ -130,7 +130,6 @@ export const jobsForProject = internalQuery({
     olderThanMs: v.number(),
   },
   handler: async (ctx, args) => {
-    const cutoff = Date.now() - args.olderThanMs;
     const wanted: Array<{ platform: string; kind: string; query: string }> = [];
 
     for (const platform of KEYWORD_PLATFORMS) {
@@ -166,6 +165,7 @@ export const jobsForProject = internalQuery({
       }
     }
 
+    const now = Date.now();
     const due = [];
     for (const want of wanted) {
       const job = await ctx.db
@@ -177,7 +177,14 @@ export const jobsForProject = internalQuery({
             .eq("query", want.query),
         )
         .unique();
-      if (job && (job.lastRunAt ?? 0) < cutoff) due.push(job);
+      if (!job) continue;
+      // Paid platforms keep their slow interval even on manual refresh, so
+      // hammering the button cannot burn Apify credit.
+      const interval = Math.max(
+        args.olderThanMs,
+        PLATFORM_MIN_INTERVAL_MS[want.platform] ?? 0,
+      );
+      if ((job.lastRunAt ?? 0) < now - interval) due.push(job);
     }
     return due;
   },
