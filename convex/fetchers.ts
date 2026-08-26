@@ -313,9 +313,9 @@ function isWorthScoring(text: string): boolean {
   return clean.length >= 15 && /[a-zA-Z]{3}/.test(clean);
 }
 
-// Keep Apify spend tiny: 2 recent posts per page, 20 comments per run.
-const APIFY_POSTS_PER_PAGE = 2;
-const APIFY_COMMENTS_PER_RUN = 20;
+// Testing spend: 1 post, 1 comment per run. Raise for launch.
+const APIFY_POSTS_PER_PAGE = 1;
+const APIFY_COMMENTS_PER_RUN = 1;
 
 async function fetchFacebookComments(page: string): Promise<Normalized[]> {
   const pageUrl = page.startsWith("http")
