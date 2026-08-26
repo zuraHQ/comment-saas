@@ -242,13 +242,21 @@ export function PostsContent() {
                 </button>
               );
             })}
-            <div className="hidden border-t border-border px-4 py-3 text-xs text-muted-foreground lg:mt-auto lg:block">
-              <span className="text-primary">{counts?.scored ?? 0}</span> scored
-              by AI
-              {counts && counts.total - counts.scored > 0 ? (
-                <span> · {counts.total - counts.scored} scoring...</span>
-              ) : null}
-            </div>
+            {counts && counts.total - counts.scored > 0 ? (
+              <div className="hidden border-t border-border px-4 py-3 lg:mt-auto lg:block">
+                <p className="text-xs text-muted-foreground">
+                  Scoring {counts.total - counts.scored} posts...
+                </p>
+                <div className="mt-2 h-1.5 w-full bg-sidebar-accent">
+                  <div
+                    className="h-full bg-primary transition-[width] duration-500"
+                    style={{
+                      width: `${Math.round((counts.scored / counts.total) * 100)}%`,
+                    }}
+                  />
+                </div>
+              </div>
+            ) : null}
           </nav>
 
           {/* Post feed */}
