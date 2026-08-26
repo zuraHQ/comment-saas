@@ -10,6 +10,7 @@ import {
   FaLinkedinIn,
   FaRedditAlien,
   FaThreads,
+  FaTiktok,
   FaXTwitter,
   FaYoutube,
 } from "react-icons/fa6";
@@ -29,10 +30,11 @@ export const PLATFORM_OPTIONS = [
   { id: "linkedin", label: "LinkedIn", Icon: FaLinkedinIn, bg: "#0A66C2", fg: "#ffffff", live: false },
   { id: "youtube", label: "YouTube", Icon: FaYoutube, bg: "#FF0000", fg: "#ffffff", live: true },
   { id: "bluesky", label: "Bluesky", Icon: FaBluesky, bg: "#0085FF", fg: "#ffffff", live: true },
-  { id: "threads", label: "Threads", Icon: FaThreads, bg: "#ffffff", fg: "#000000", live: false },
+  { id: "threads", label: "Threads", Icon: FaThreads, bg: "#ffffff", fg: "#000000", live: true },
   { id: "github", label: "GitHub", Icon: FaGithub, bg: "#ffffff", fg: "#000000", live: true },
   { id: "facebook", label: "Facebook", Icon: FaFacebook, bg: "#1877F2", fg: "#ffffff", live: true },
   { id: "instagram", label: "Instagram", Icon: FaInstagram, bg: "#E4405F", fg: "#ffffff", live: true },
+  { id: "tiktok", label: "TikTok", Icon: FaTiktok, bg: "#ffffff", fg: "#000000", live: true },
 ] as const;
 
 type ProjectContextValue = {
@@ -52,6 +54,7 @@ type ProjectContextValue = {
       communities?: string[];
       facebookPages?: string[];
       instagramAccounts?: string[];
+      tiktokAccounts?: string[];
       platforms?: string[];
       iconId?: Id<"_storage">;
     },

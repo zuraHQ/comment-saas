@@ -393,6 +393,68 @@ async function fetchInstagramComments(account: string): Promise<Normalized[]> {
     }));
 }
 
+// Threads keyword search (Apify, no first-party actor exists).
+async function searchThreads(keyword: string): Promise<Normalized[]> {
+  const items = await apifyRun("igview-owner~threads-search-scraper", {
+    search: keyword,
+    maxItems: 20,
+  });
+  return items
+    .filter((t: any) => t?.postId && t?.captionText)
+    .map((t: any) => ({
+      externalId: String(t.postId),
+      url: t.postUrl,
+      title: firstLine(t.captionText),
+      snippet: clip(t.captionText),
+      author: t.username ? `@${t.username}` : undefined,
+      postedAt: Date.parse(t.takenAtISO ?? "") || (t.takenAt ? t.takenAt * 1000 : Date.now()),
+      score: asNumber(t.likeCount),
+      commentCount: asNumber(t.directReplyCount),
+    }));
+}
+
+// TikTok: comments under a watched account's latest videos. Same
+// posts-are-plumbing model as Facebook/Instagram; only comments are leads.
+async function fetchTiktokComments(account: string): Promise<Normalized[]> {
+  const handle = account
+    .replace(/^https?:\/\/(www\.)?tiktok\.com\/@?/, "")
+    .replace(/^@/, "")
+    .replace(/\/$/, "");
+  const videos = await apifyRun("clockworks~tiktok-scraper", {
+    profiles: [handle],
+    resultsPerPage: APIFY_POSTS_PER_PAGE,
+    excludePinnedPosts: true,
+  });
+  const videoUrls = videos.map((v: any) => v?.webVideoUrl).filter(Boolean);
+  if (!videoUrls.length) return [];
+  const captions: Record<string, string> = {};
+  for (const v of videos) {
+    if (v?.webVideoUrl && v?.text) captions[v.webVideoUrl] = v.text;
+  }
+
+  const comments = await apifyRun("clockworks~tiktok-comments-scraper", {
+    postURLs: videoUrls,
+    commentsPerPost: APIFY_COMMENTS_PER_RUN,
+  });
+
+  return comments
+    .filter((c: any) => c?.cid && c?.text && isWorthScoring(c.text))
+    .map((c: any) => ({
+      externalId: String(c.cid),
+      url: c.videoWebUrl ?? videoUrls[0],
+      title: firstLine(c.text),
+      snippet: clip(c.text),
+      author: c.uniqueId ? `@${c.uniqueId}` : undefined,
+      subsource: `@${handle}`,
+      postedAt: Date.parse(c.createTimeISO ?? "") || Date.now(),
+      score: asNumber(c.diggCount),
+      commentCount: asNumber(c.replyCommentTotal),
+      type: "comment",
+      parentUrl: c.videoWebUrl ?? undefined,
+      parentTitle: c.videoWebUrl && captions[c.videoWebUrl] ? clip(captions[c.videoWebUrl], 200) : undefined,
+    }));
+}
+
 type Fetcher = (query: string) => Promise<Normalized[]>;
 
 const FETCHERS: Record<string, Fetcher | undefined> = {
@@ -405,6 +467,8 @@ const FETCHERS: Record<string, Fetcher | undefined> = {
   "youtube:keyword": searchYoutube,
   "facebook:community": fetchFacebookComments,
   "instagram:community": fetchInstagramComments,
+  "threads:keyword": searchThreads,
+  "tiktok:community": fetchTiktokComments,
 };
 
 type JobResult = {
@@ -474,6 +538,7 @@ export const refreshProject = action({
       communities: project.communities,
       facebookPages: project.facebookPages,
       instagramAccounts: project.instagramAccounts,
+      tiktokAccounts: project.tiktokAccounts,
       platforms: project.platforms,
       olderThanMs: 3 * 60 * 1000,
     });

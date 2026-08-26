@@ -44,6 +44,9 @@ export const ingest = internalMutation({
       if (args.platform === "instagram") {
         return (p.instagramAccounts ?? []).includes(args.query);
       }
+      if (args.platform === "tiktok") {
+        return (p.tiktokAccounts ?? []).includes(args.query);
+      }
       return p.communities.includes(args.query);
     });
     let inserted = 0;
@@ -122,6 +125,7 @@ export const jobsForProject = internalQuery({
     communities: v.array(v.string()),
     facebookPages: v.optional(v.array(v.string())),
     instagramAccounts: v.optional(v.array(v.string())),
+    tiktokAccounts: v.optional(v.array(v.string())),
     platforms: v.array(v.string()),
     olderThanMs: v.number(),
   },
@@ -154,6 +158,11 @@ export const jobsForProject = internalQuery({
     if (args.platforms.includes("instagram")) {
       for (const account of args.instagramAccounts ?? []) {
         wanted.push({ platform: "instagram", kind: "community", query: account });
+      }
+    }
+    if (args.platforms.includes("tiktok")) {
+      for (const account of args.tiktokAccounts ?? []) {
+        wanted.push({ platform: "tiktok", kind: "community", query: account });
       }
     }
 
@@ -283,6 +292,11 @@ export const rebuildJobs = internalMutation({
           await ensure("instagram", "community", account);
         }
       }
+      if (project.platforms.includes("tiktok")) {
+        for (const account of project.tiktokAccounts ?? []) {
+          await ensure("tiktok", "community", account);
+        }
+      }
     }
     return { projects: projects.length, created };
   },
@@ -325,6 +339,11 @@ export const pruneJobs = internalMutation({
           wanted.add(`instagram:community:${account}`);
         }
       }
+      if (project.platforms.includes("tiktok")) {
+        for (const account of project.tiktokAccounts ?? []) {
+          wanted.add(`tiktok:community:${account}`);
+        }
+      }
     }
 
     let deleted = 0;
@@ -365,7 +384,9 @@ export const backfillProject = internalMutation({
               ? onPlatform && (project.facebookPages ?? []).includes(query)
               : post.platform === "instagram"
                 ? onPlatform && (project.instagramAccounts ?? []).includes(query)
-                : onPlatform && project.communities.includes(query);
+                : post.platform === "tiktok"
+                  ? onPlatform && (project.tiktokAccounts ?? []).includes(query)
+                  : onPlatform && project.communities.includes(query);
       if (!interested) continue;
 
       const existing = await ctx.db

@@ -37,6 +37,7 @@ function ProjectSettingsForm({ project }: { project: Project }) {
   const [community, setCommunity] = useState("");
   const [fbPage, setFbPage] = useState("");
   const [igAccount, setIgAccount] = useState("");
+  const [ttAccount, setTtAccount] = useState("");
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [uploading, setUploading] = useState(false);
 
@@ -107,7 +108,7 @@ function ProjectSettingsForm({ project }: { project: Project }) {
   };
 
   const addToList = (
-    field: "facebookPages" | "instagramAccounts",
+    field: "facebookPages" | "instagramAccounts" | "tiktokAccounts",
     raw: string,
     reset: () => void,
   ) => {
@@ -119,7 +120,7 @@ function ProjectSettingsForm({ project }: { project: Project }) {
   };
 
   const removeFromList = (
-    field: "facebookPages" | "instagramAccounts",
+    field: "facebookPages" | "instagramAccounts" | "tiktokAccounts",
     value: string,
   ) => {
     void updateProject(project._id, {
@@ -379,6 +380,50 @@ function ProjectSettingsForm({ project }: { project: Project }) {
               <button
                 type="button"
                 onClick={() => removeFromList("instagramAccounts", account)}
+                aria-label={`Remove ${account}`}
+                className="cursor-pointer text-muted-foreground transition-colors hover:text-foreground"
+              >
+                <X className="size-3.5" />
+              </button>
+            </span>
+          ))}
+        </div>
+      </Section>
+
+      <Section title="TikTok accounts">
+        <p className="text-sm text-muted-foreground">
+          We read the comments under these accounts&apos; latest videos.
+        </p>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            addToList("tiktokAccounts", ttAccount, () => setTtAccount(""));
+          }}
+          className="flex gap-2"
+        >
+          <Input
+            value={ttAccount}
+            onChange={(e) => setTtAccount(e.target.value)}
+            placeholder="@shopify"
+            className="rounded-none"
+          />
+          <button
+            type="submit"
+            className="h-9 shrink-0 cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
+          >
+            Add
+          </button>
+        </form>
+        <div className="flex flex-wrap gap-2">
+          {(project.tiktokAccounts ?? []).map((account) => (
+            <span
+              key={account}
+              className="flex items-center gap-2 border border-border px-3 py-1.5 text-sm"
+            >
+              @{account}
+              <button
+                type="button"
+                onClick={() => removeFromList("tiktokAccounts", account)}
                 aria-label={`Remove ${account}`}
                 className="cursor-pointer text-muted-foreground transition-colors hover:text-foreground"
               >

@@ -16,9 +16,10 @@ const DESCRIPTIONS: Record<string, string> = {
   youtube: "New videos matching your keywords.",
   facebook: "Comment sections of pages you pick in project settings.",
   instagram: "Comments under the accounts you watch.",
+  tiktok: "Comments under the TikTok accounts you watch.",
   x: "Keyword search on X.",
   linkedin: "Coming later.",
-  threads: "Coming later.",
+  threads: "Keyword search across Threads.",
 };
 
 const INTEGRATIONS = PLATFORM_OPTIONS.map((platform) => ({

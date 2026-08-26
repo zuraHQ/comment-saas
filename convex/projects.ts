@@ -30,6 +30,7 @@ function normalizeHandles(values: string[], stripPrefix: RegExp) {
 
 const FACEBOOK_PREFIX = /^(https?:\/\/)?(www\.)?facebook\.com\//;
 const INSTAGRAM_PREFIX = /^(https?:\/\/)?(www\.)?instagram\.com\/|^@/;
+const TIKTOK_PREFIX = /^(https?:\/\/)?(www\.)?tiktok\.com\/@?|^@/;
 
 // Accepts "r/SaaS", "/r/saas" or "saas" and stores "saas".
 function normalizeCommunities(communities: string[]) {
@@ -70,11 +71,13 @@ async function ensureJobs(
     communities,
     facebookPages,
     instagramAccounts,
+    tiktokAccounts,
   }: {
     keywords?: string[];
     communities?: string[];
     facebookPages?: string[];
     instagramAccounts?: string[];
+    tiktokAccounts?: string[];
   },
 ) {
   for (const page of facebookPages ?? []) {
@@ -82,6 +85,9 @@ async function ensureJobs(
   }
   for (const account of instagramAccounts ?? []) {
     await ensureJob(ctx, "instagram", "community", account);
+  }
+  for (const account of tiktokAccounts ?? []) {
+    await ensureJob(ctx, "tiktok", "community", account);
   }
   for (const keyword of keywords ?? []) {
     for (const platform of KEYWORD_PLATFORMS) {
@@ -182,6 +188,7 @@ export const update = mutation({
     communities: v.optional(v.array(v.string())),
     facebookPages: v.optional(v.array(v.string())),
     instagramAccounts: v.optional(v.array(v.string())),
+    tiktokAccounts: v.optional(v.array(v.string())),
     platforms: v.optional(v.array(v.string())),
   },
   handler: async (ctx, args) => {
@@ -193,6 +200,7 @@ export const update = mutation({
       communities,
       facebookPages,
       instagramAccounts,
+      tiktokAccounts,
       ...rest
     } = args;
     const patch: Record<string, unknown> = { ...rest };
@@ -204,6 +212,9 @@ export const update = mutation({
         instagramAccounts,
         INSTAGRAM_PREFIX,
       );
+    }
+    if (tiktokAccounts) {
+      patch.tiktokAccounts = normalizeHandles(tiktokAccounts, TIKTOK_PREFIX);
     }
     if (lockedKeywords) patch.lockedKeywords = normalizeKeywords(lockedKeywords);
     if (keywords) {
@@ -220,6 +231,7 @@ export const update = mutation({
       communities: patch.communities as string[] | undefined,
       facebookPages: patch.facebookPages as string[] | undefined,
       instagramAccounts: patch.instagramAccounts as string[] | undefined,
+      tiktokAccounts: patch.tiktokAccounts as string[] | undefined,
     });
     await ctx.db.patch(projectId, patch);
   },
