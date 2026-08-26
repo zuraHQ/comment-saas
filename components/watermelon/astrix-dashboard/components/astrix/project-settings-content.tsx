@@ -187,7 +187,55 @@ function ProjectSettingsForm({ project }: { project: Project }) {
         </Field>
       </Section>
 
-      <Section title="Communities">
+      <Section
+        title="Platforms"
+        subtitle="Where we look for posts. We surface any post type that fits your keywords."
+      >
+        <div className="grid gap-2 sm:grid-cols-2">
+          {PLATFORM_OPTIONS.map((platform) => {
+            const on = project.platforms.includes(platform.id);
+            return (
+              <button
+                key={platform.id}
+                type="button"
+                onClick={() => togglePlatform(platform.id)}
+                className={cn(
+                  "flex cursor-pointer items-center gap-3 border p-3 text-left text-sm transition-colors",
+                  on
+                    ? "border-primary/40 bg-sidebar-accent/40"
+                    : "border-border hover:bg-sidebar-accent/60",
+                )}
+              >
+                <span
+                  className={cn(
+                    "flex size-6 shrink-0 items-center justify-center border transition-colors",
+                    on ? "border-primary bg-primary" : "border-border",
+                  )}
+                >
+                  {on ? <Check className="size-4 text-[#101010]" /> : null}
+                </span>
+                <span
+                  className="flex h-6 w-6 shrink-0 items-center justify-center"
+                  style={{ backgroundColor: platform.bg }}
+                >
+                  <platform.Icon
+                    className="h-3.5 w-3.5"
+                    style={{ color: platform.fg }}
+                  />
+                </span>
+                <span className="flex-1">{platform.label}</span>
+                {!platform.live ? (
+                  <span className="text-[10px] tracking-wider text-muted-foreground uppercase">
+                    soon
+                  </span>
+                ) : null}
+              </button>
+            );
+          })}
+        </div>
+      </Section>
+
+      <Section title="Reddit communities">
         <form onSubmit={addCommunity} className="flex gap-2">
           <Input
             value={community}
@@ -283,54 +331,6 @@ function ProjectSettingsForm({ project }: { project: Project }) {
             No keywords yet. Add the phrases people use when they need your product.
           </p>
         )}
-      </Section>
-
-      <Section
-        title="Platforms"
-        subtitle="Where we look for posts. We surface any post type that fits your keywords."
-      >
-        <div className="grid gap-2 sm:grid-cols-2">
-          {PLATFORM_OPTIONS.map((platform) => {
-            const on = project.platforms.includes(platform.id);
-            return (
-              <button
-                key={platform.id}
-                type="button"
-                onClick={() => togglePlatform(platform.id)}
-                className={cn(
-                  "flex cursor-pointer items-center gap-3 border p-3 text-left text-sm transition-colors",
-                  on
-                    ? "border-primary/40 bg-sidebar-accent/40"
-                    : "border-border hover:bg-sidebar-accent/60",
-                )}
-              >
-                <span
-                  className={cn(
-                    "flex size-6 shrink-0 items-center justify-center border transition-colors",
-                    on ? "border-primary bg-primary" : "border-border",
-                  )}
-                >
-                  {on ? <Check className="size-4 text-[#101010]" /> : null}
-                </span>
-                <span
-                  className="flex h-6 w-6 shrink-0 items-center justify-center"
-                  style={{ backgroundColor: platform.bg }}
-                >
-                  <platform.Icon
-                    className="h-3.5 w-3.5"
-                    style={{ color: platform.fg }}
-                  />
-                </span>
-                <span className="flex-1">{platform.label}</span>
-                {!platform.live ? (
-                  <span className="text-[10px] tracking-wider text-muted-foreground uppercase">
-                    soon
-                  </span>
-                ) : null}
-              </button>
-            );
-          })}
-        </div>
       </Section>
 
       <Section title="Danger zone">
