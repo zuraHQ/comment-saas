@@ -10,7 +10,6 @@ import {
   FaGithub,
   FaHackerNews,
   FaLinkedinIn,
-  FaQuora,
   FaRedditAlien,
   FaThreads,
   FaXTwitter,
@@ -26,7 +25,6 @@ const PLATFORMS = [
   { name: 'Threads', Icon: FaThreads, bg: '#ffffff', color: '#ffffff', iconColor: '#000000' },
   { name: 'Bluesky', Icon: FaBluesky, bg: '#0085FF', color: '#0085FF', iconColor: '#ffffff' },
   { name: 'GitHub', Icon: FaGithub, bg: '#ffffff', color: '#ffffff', iconColor: '#000000' },
-  { name: 'Quora', Icon: FaQuora, bg: '#B92B27', color: '#B92B27', iconColor: '#ffffff' },
 ] as const;
 
 export default function Hero() {

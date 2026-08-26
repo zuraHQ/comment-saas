@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useAction, useMutation, useQuery } from "convex/react";
-import { Check, History as HistoryIcon, RefreshCw } from "lucide-react";
+import { Check, History as HistoryIcon, Link2, RefreshCw } from "lucide-react";
 import { api } from "@/convex/_generated/api";
 import type { Doc } from "@/convex/_generated/dataModel";
 import {
@@ -86,6 +86,31 @@ export function PostsContent() {
     },
   );
   const refreshProject = useAction(api.fetchers.refreshProject);
+  const createLink = useMutation(api.links.createLink);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  // One tracked short link per reply: paste it in the reply, clicks land in
+  // Analytics. Target is the product site.
+  const copyTrackedLink = async (row: FeedRow) => {
+    if (!project) return;
+    if (!project.url) {
+      window.alert("Set your product URL in project settings first.");
+      return;
+    }
+    try {
+      const { path } = await createLink({
+        projectId: project._id,
+        targetUrl: project.url,
+        platform: row.post.platform,
+        label: row.post.title.slice(0, 120),
+      });
+      await navigator.clipboard.writeText(`${window.location.origin}${path}`);
+      setCopiedId(row.match._id);
+      setTimeout(() => setCopiedId(null), 1500);
+    } catch (err) {
+      console.error(err);
+    }
+  };
   const setHideRepliedPref = useMutation(api.replies.setHideReplied);
 
   // Rail: every live platform, always. What shows in the rail is navigation,
@@ -321,6 +346,7 @@ export function PostsContent() {
                           </p>
                         ) : null}
                       </div>
+                      <div className="flex shrink-0 flex-col gap-2">
                       <button
                         type="button"
                         onClick={(e) => {
@@ -343,6 +369,28 @@ export function PostsContent() {
                       >
                         <Check className="h-5 w-5" />
                       </button>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          void copyTrackedLink(row);
+                        }}
+                        aria-label="Copy tracked link"
+                        className={cn(
+                          "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border transition-colors",
+                          copiedId === row.match._id
+                            ? "border-primary text-primary"
+                            : "border-border text-muted-foreground/40 hover:border-foreground/40 hover:text-foreground",
+                        )}
+                      >
+                        {copiedId === row.match._id ? (
+                          <Check className="h-4 w-4" />
+                        ) : (
+                          <Link2 className="h-4 w-4" />
+                        )}
+                      </button>
+                      </div>
                     </div>
                   </a>
                 </li>
