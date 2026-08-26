@@ -72,11 +72,9 @@ export function PostsContent() {
 
   const rows = feed ?? [];
 
-  // Rail: only live platforms this project watches. "Soon" platforms (X,
-  // Threads, LinkedIn) stay out of the feed until they have fetchers.
-  const platforms = PLATFORM_OPTIONS.filter(
-    (option) => option.live && project?.platforms.includes(option.id),
-  );
+  // Rail: every live platform, always. What shows in the rail is navigation,
+  // not a reflection of project config or fetched data.
+  const platforms = PLATFORM_OPTIONS.filter((option) => option.live);
   const countFor = (id: string) =>
     rows.filter((row) => row.post.platform === id).length;
 

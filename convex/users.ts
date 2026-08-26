@@ -121,3 +121,19 @@ export const setIntegration = mutation({
     await ctx.db.patch(user._id, { integrations: [...current] });
   },
 });
+
+// One-shot CLI helper: add platforms to every project that lacks them.
+export const enablePlatformsForAll = internalMutation({
+  args: { platforms: v.array(v.string()) },
+  handler: async (ctx, args) => {
+    let updated = 0;
+    for (const project of await ctx.db.query("projects").collect()) {
+      const merged = [...new Set([...project.platforms, ...args.platforms])];
+      if (merged.length !== project.platforms.length) {
+        await ctx.db.patch(project._id, { platforms: merged });
+        updated++;
+      }
+    }
+    return updated;
+  },
+});
