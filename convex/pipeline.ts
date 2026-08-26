@@ -432,3 +432,59 @@ export const sourceStats = query({
     );
   },
 });
+
+// CLI helper: set watch targets on every project directly, bypassing the UI.
+//   npx convex run pipeline:seedWatchTargets '{"facebookPages":["shopify"]}' --prod
+export const seedWatchTargets = internalMutation({
+  args: {
+    facebookPages: v.optional(v.array(v.string())),
+    instagramAccounts: v.optional(v.array(v.string())),
+  },
+  handler: async (ctx, args) => {
+    let updated = 0;
+    for (const project of await ctx.db.query("projects").collect()) {
+      const patch: Record<string, unknown> = {};
+      if (args.facebookPages) patch.facebookPages = args.facebookPages;
+      if (args.instagramAccounts) patch.instagramAccounts = args.instagramAccounts;
+      await ctx.db.patch(project._id, patch);
+      updated++;
+      for (const page of args.facebookPages ?? []) {
+        const existing = await ctx.db
+          .query("jobs")
+          .withIndex("by_platform_kind_query", (q) =>
+            q.eq("platform", "facebook").eq("kind", "community").eq("query", page),
+          )
+          .unique();
+        if (!existing) {
+          await ctx.db.insert("jobs", { platform: "facebook", kind: "community", query: page });
+        }
+      }
+      for (const account of args.instagramAccounts ?? []) {
+        const existing = await ctx.db
+          .query("jobs")
+          .withIndex("by_platform_kind_query", (q) =>
+            q.eq("platform", "instagram").eq("kind", "community").eq("query", account),
+          )
+          .unique();
+        if (!existing) {
+          await ctx.db.insert("jobs", { platform: "instagram", kind: "community", query: account });
+        }
+      }
+    }
+    return updated;
+  },
+});
+
+// CLI helper: clear lastRunAt for a platform so its jobs run on the next pass.
+export const makeJobsDue = internalMutation({
+  args: { platform: v.string() },
+  handler: async (ctx, args) => {
+    let n = 0;
+    for (const job of await ctx.db.query("jobs").collect()) {
+      if (job.platform !== args.platform) continue;
+      await ctx.db.patch(job._id, { lastRunAt: undefined });
+      n++;
+    }
+    return n;
+  },
+});

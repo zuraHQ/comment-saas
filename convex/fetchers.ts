@@ -301,6 +301,13 @@ async function apifyRun(actorId: string, input: unknown): Promise<any[]> {
 }
 
 // Drop obvious junk before it costs scoring tokens: too short, no real words.
+// Apify actors are loose with types; likes arrive as "10" on Facebook.
+function asNumber(value: unknown): number | undefined {
+  if (value === null || value === undefined || value === "") return undefined;
+  const n = Number(value);
+  return Number.isFinite(n) ? n : undefined;
+}
+
 function isWorthScoring(text: string): boolean {
   const clean = text.trim();
   return clean.length >= 15 && /[a-zA-Z]{3}/.test(clean);
@@ -335,8 +342,8 @@ async function fetchFacebookComments(page: string): Promise<Normalized[]> {
       author: c.profileName ?? undefined,
       subsource: page.replace(/^https?:\/\/(www\.)?facebook\.com\//, ""),
       postedAt: Date.parse(c.date ?? "") || Date.now(),
-      score: c.likesCount ?? undefined,
-      commentCount: c.commentsCount ?? undefined,
+      score: asNumber(c.likesCount),
+      commentCount: asNumber(c.commentsCount),
       type: "comment",
       parentUrl: c.inputUrl ?? undefined,
       parentTitle: c.postTitle ? clip(c.postTitle, 200) : undefined,
@@ -377,8 +384,8 @@ async function fetchInstagramComments(account: string): Promise<Normalized[]> {
       author: c.ownerUsername ? `@${c.ownerUsername}` : undefined,
       subsource: `@${handle}`,
       postedAt: Date.parse(c.timestamp ?? "") || Date.now(),
-      score: c.likesCount ?? undefined,
-      commentCount: c.repliesCount ?? undefined,
+      score: asNumber(c.likesCount),
+      commentCount: asNumber(c.repliesCount),
       type: "comment",
       parentUrl: c.postUrl ?? undefined,
       parentTitle: c.postUrl && bycaption[c.postUrl] ? clip(bycaption[c.postUrl], 200) : undefined,
@@ -421,10 +428,13 @@ async function runJob(ctx: ActionCtx, job: Doc<"jobs">): Promise<JobResult> {
       query: job.query,
       posts,
     });
-    await ctx.runMutation(internal.pipeline.markJobRan, { jobId: job._id });
     return { ...label, fetched: posts.length, ...result };
   } catch (err) {
     return { ...label, error: String(err) };
+  } finally {
+    // Stamp failures too: a job missing credentials must wait its interval
+    // out instead of hogging every batch and starving other platforms.
+    await ctx.runMutation(internal.pipeline.markJobRan, { jobId: job._id });
   }
 }
 
@@ -434,7 +444,7 @@ export const runDueJobs = internalAction({
   handler: async (ctx): Promise<JobResult[]> => {
     const jobs: Doc<"jobs">[] = await ctx.runQuery(internal.pipeline.dueJobs, {
       olderThanMs: 10 * 60 * 1000,
-      limit: 20,
+      limit: 50,
     });
     const results: JobResult[] = [];
     for (const job of jobs) {
