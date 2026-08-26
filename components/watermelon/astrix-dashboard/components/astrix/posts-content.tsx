@@ -314,9 +314,22 @@ export function PostsContent() {
                 </li>
               ))}
               {feed === undefined ? (
-                <li className="px-4 py-12 text-center text-sm text-muted-foreground">
-                  Loading posts...
-                </li>
+                Array.from({ length: 8 }, (_, i) => (
+                  <li
+                    key={i}
+                    className="border-b border-border px-4 py-4 last:border-b-0"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="min-w-0 flex-1">
+                        <div className="h-4 w-2/3 bg-sidebar-accent" />
+                        <div className="mt-2 h-3 w-1/3 bg-sidebar-accent/70" />
+                        <div className="mt-3 h-3 w-full bg-sidebar-accent/50" />
+                        <div className="mt-1.5 h-3 w-4/5 bg-sidebar-accent/50" />
+                      </div>
+                      <div className="h-10 w-10 shrink-0 border border-border" />
+                    </div>
+                  </li>
+                ))
               ) : visibleRows.length === 0 ? (
                 <li className="px-4 py-12 text-center text-sm text-muted-foreground">
                   {platformRows.length > 0
