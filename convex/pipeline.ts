@@ -616,3 +616,25 @@ export const backfillMatchPlatform = internalMutation({
     return updated;
   },
 });
+
+// CLI helper: wipe one platform's posts and matches (bad fetches, changed
+// filters), then let the jobs refetch clean.
+//   npx convex run pipeline:purgePlatform '{"platform":"x"}' --prod
+export const purgePlatform = internalMutation({
+  args: { platform: v.string() },
+  handler: async (ctx, args) => {
+    let matches = 0;
+    let posts = 0;
+    for (const match of await ctx.db.query("matches").collect()) {
+      if (match.platform !== args.platform) continue;
+      await ctx.db.delete(match._id);
+      matches++;
+    }
+    for (const post of await ctx.db.query("posts").collect()) {
+      if (post.platform !== args.platform) continue;
+      await ctx.db.delete(post._id);
+      posts++;
+    }
+    return { matches, posts };
+  },
+});

@@ -493,29 +493,22 @@ async function searchX(keyword: string): Promise<Normalized[]> {
     });
 }
 
-// Watch an X account: everyone replying to their posts. The audience of a
-// big founder account is warm and topical; the reply threads are the leads.
-async function fetchXReplies(account: string): Promise<Normalized[]> {
+// Watch an X account: their own posts. A founder posting "we're building X"
+// is itself the lead — the user comments on the post, in front of its
+// audience. We deliberately do not mine individual repliers.
+async function fetchXAccountPosts(account: string): Promise<Normalized[]> {
   const handle = account
     .replace(/^https?:\/\/(www\.)?(x|twitter)\.com\//, "")
     .replace(/^@/, "")
     .replace(/\/$/, "");
   const items = await apifyRun("apidojo~tweet-scraper", {
-    searchTerms: [`to:${handle}`],
+    searchTerms: [`from:${handle} -filter:replies`],
     // Testing spend guard; raise for launch.
     maxItems: 10,
     sort: "Latest",
-    tweetLanguage: "en",
   });
   return items
     .filter((t: any) => t?.id && (t.fullText || t.text) && !t.isRetweet)
-    // Softer floor here: small legit accounts reply to big ones all the time.
-    .filter((t: any) => {
-      const followers = t.author?.followers;
-      if (typeof followers !== "number") return true;
-      return followers >= 10 || t.author?.isBlueVerified === true;
-    })
-    .filter((t: any) => isWorthScoring(t.fullText ?? t.text))
     .map((t: any) => {
       const text = t.fullText ?? t.text;
       const author = t.author?.userName;
@@ -529,10 +522,6 @@ async function fetchXReplies(account: string): Promise<Normalized[]> {
         postedAt: Date.parse(t.createdAt ?? "") || Date.now(),
         score: asNumber(t.likeCount),
         commentCount: asNumber(t.replyCount),
-        type: "comment",
-        parentUrl: t.inReplyToId
-          ? `https://x.com/i/status/${t.inReplyToId}`
-          : undefined,
       };
     });
 }
@@ -552,7 +541,7 @@ const FETCHERS: Record<string, Fetcher | undefined> = {
   "threads:keyword": searchThreads,
   "tiktok:community": fetchTiktokComments,
   "x:keyword": searchX,
-  "x:community": fetchXReplies,
+  "x:community": fetchXAccountPosts,
 };
 
 type JobResult = {

@@ -116,6 +116,10 @@ For each post, relative to the product described, return:
 - "medium": related conversation (adjacent product launch, discussion of the space, the audience fits) where a thoughtful reply builds credibility but likely not an immediate customer.
 - "low": unrelated, or a reply would be spam. When unsure, choose low.
 
+Watch for these traps:
+- A comment or reply praising or anticipating some OTHER product ("can't wait", "this looks great", "I've been looking for this") is directed at that product, not at ours. That is low, not high.
+- A post whose author is building or launching something related to the product's space is a genuine opportunity (the reply is made on that post, to its audience) - usually medium.
+
 reason: one short sentence, for the founder, on why this post is or is not worth replying to.
 
 Return one entry per post, echoing the exact id you were given for it.`;

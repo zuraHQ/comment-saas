@@ -443,8 +443,8 @@ function ProjectSettingsForm({ project }: { project: Project }) {
 
       <Section title="X accounts" platform="x">
         <p className="text-sm text-muted-foreground">
-          We read the replies under these accounts&apos; posts. Pick founders
-          and creators your customers follow.
+          We watch these accounts&apos; posts, so you can comment on the
+          relevant ones in front of their audience.
         </p>
         <form
           onSubmit={(e) => {
