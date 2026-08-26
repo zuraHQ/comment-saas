@@ -1,44 +1,35 @@
 "use client";
 
 import { useMutation, useQuery } from "convex/react";
-import { FaFacebook, FaGithub, FaInstagram } from "react-icons/fa6";
 import { Check } from "lucide-react";
 import { api } from "@/convex/_generated/api";
+import { PLATFORM_OPTIONS } from "./project-context";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 
-const INTEGRATIONS = [
-  {
-    id: "github",
-    label: "GitHub Discussions",
-    Icon: FaGithub,
-    iconBg: "#ffffff",
-    iconFg: "#000000",
-    description:
-      "Watch repo discussions like communities. Best for dev-tool products.",
-    ready: true,
-  },
-  {
-    id: "facebook",
-    label: "Facebook comments",
-    Icon: FaFacebook,
-    iconBg: "#1877F2",
-    iconFg: "#ffffff",
-    description:
-      "We read the comment sections of pages you pick in project settings.",
-    ready: true,
-  },
-  {
-    id: "instagram",
-    label: "Instagram comments",
-    Icon: FaInstagram,
-    iconBg: "#E4405F",
-    iconFg: "#ffffff",
-    description:
-      "Same for Instagram: comments under the accounts you watch.",
-    ready: true,
-  },
-];
+// One toggle per platform: the platform list IS the integration list.
+const DESCRIPTIONS: Record<string, string> = {
+  reddit: "Subreddits you watch plus keyword sweeps across Reddit.",
+  hn: "Every Hacker News story, Ask HN and Show HN.",
+  bluesky: "Keyword search across Bluesky.",
+  github: "Watch repo discussions like communities. Best for dev tools.",
+  youtube: "New videos matching your keywords.",
+  facebook: "Comment sections of pages you pick in project settings.",
+  instagram: "Comments under the accounts you watch.",
+  x: "Keyword search on X.",
+  linkedin: "Coming later.",
+  threads: "Coming later.",
+};
+
+const INTEGRATIONS = PLATFORM_OPTIONS.map((platform) => ({
+  id: platform.id,
+  label: platform.label,
+  Icon: platform.Icon,
+  iconBg: platform.bg,
+  iconFg: platform.fg,
+  description: DESCRIPTIONS[platform.id] ?? "",
+  ready: platform.live,
+}));
 
 export function ProfileContent() {
   const me = useQuery(api.users.me);
