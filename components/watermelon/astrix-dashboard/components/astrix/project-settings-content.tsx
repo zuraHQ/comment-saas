@@ -158,7 +158,7 @@ function ProjectSettingsForm({ project }: { project: Project }) {
             onBlur={() =>
               void updateProject(project._id, { name: name.trim() || project.name })
             }
-            className="rounded-none"
+            className="h-9 rounded-none"
           />
         </Field>
         <Field label="Product URL">
@@ -167,7 +167,7 @@ function ProjectSettingsForm({ project }: { project: Project }) {
             placeholder="https://yourproduct.com"
             onChange={(e) => setUrl(e.target.value)}
             onBlur={() => void updateProject(project._id, { url: url.trim() })}
-            className="rounded-none"
+            className="h-9 rounded-none"
           />
         </Field>
         <Field
@@ -266,7 +266,7 @@ function ProjectSettingsForm({ project }: { project: Project }) {
             value={community}
             onChange={(e) => setCommunity(e.target.value)}
             placeholder="r/smallbusiness"
-            className="rounded-none"
+            className="h-9 rounded-none"
           />
           <button
             type="submit"
@@ -318,7 +318,7 @@ function ProjectSettingsForm({ project }: { project: Project }) {
             value={fbPage}
             onChange={(e) => setFbPage(e.target.value)}
             placeholder="facebook.com/shopify or shopify"
-            className="rounded-none"
+            className="h-9 rounded-none"
           />
           <button
             type="submit"
@@ -362,7 +362,7 @@ function ProjectSettingsForm({ project }: { project: Project }) {
             value={igAccount}
             onChange={(e) => setIgAccount(e.target.value)}
             placeholder="@shopify"
-            className="rounded-none"
+            className="h-9 rounded-none"
           />
           <button
             type="submit"
@@ -406,7 +406,7 @@ function ProjectSettingsForm({ project }: { project: Project }) {
             value={ttAccount}
             onChange={(e) => setTtAccount(e.target.value)}
             placeholder="@shopify"
-            className="rounded-none"
+            className="h-9 rounded-none"
           />
           <button
             type="submit"
@@ -451,7 +451,7 @@ function ProjectSettingsForm({ project }: { project: Project }) {
             value={xAccount}
             onChange={(e) => setXAccount(e.target.value)}
             placeholder="@marc_louvion"
-            className="rounded-none"
+            className="h-9 rounded-none"
           />
           <button
             type="submit"
@@ -490,7 +490,7 @@ function ProjectSettingsForm({ project }: { project: Project }) {
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
             placeholder="e.g. hubspot alternative"
-            className="rounded-none"
+            className="h-9 rounded-none"
           />
           <button
             type="submit"

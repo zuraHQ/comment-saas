@@ -157,7 +157,7 @@ export function OnboardingContent() {
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
                   placeholder="yoursaas.com"
-                  className="rounded-none"
+                  className="h-9 rounded-none"
                 />
               </div>
 
@@ -206,7 +206,7 @@ export function OnboardingContent() {
                 <Input
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="rounded-none"
+                  className="h-9 rounded-none"
                 />
               </div>
 
