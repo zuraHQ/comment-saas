@@ -18,7 +18,7 @@ const DESCRIPTIONS: Record<string, string> = {
   instagram: "Comments under the accounts you watch.",
   tiktok: "Comments under the TikTok accounts you watch.",
   x: "Keyword search on X.",
-  linkedin: "Coming later.",
+  linkedin: "Keyword search across LinkedIn posts.",
   threads: "Coming later.",
 };
 

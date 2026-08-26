@@ -2,7 +2,7 @@ import { v } from "convex/values";
 import { internalMutation, internalQuery, mutation, query } from "./_generated/server";
 import { internal } from "./_generated/api";
 import { requireOwnedProject } from "./auth";
-import { COMMUNITY_PLATFORMS, HN_FEEDS, KEYWORD_PLATFORMS, PLATFORM_MIN_INTERVAL_MS } from "./platforms";
+import { COMMUNITY_PLATFORMS, HN_FEEDS, KEYWORD_PLATFORMS, platformMinIntervalMs } from "./platforms";
 
 export const normalizedPost = v.object({
   externalId: v.string(),
@@ -110,10 +110,7 @@ export const dueJobs = internalQuery({
     const jobs = await ctx.db.query("jobs").collect();
     return jobs
       .filter((j) => {
-        const interval = Math.max(
-          args.olderThanMs,
-          PLATFORM_MIN_INTERVAL_MS[j.platform] ?? 0,
-        );
+        const interval = Math.max(args.olderThanMs, platformMinIntervalMs(j.platform));
         return (j.lastRunAt ?? 0) < now - interval;
       })
       .sort((a, b) => (a.lastRunAt ?? 0) - (b.lastRunAt ?? 0))
@@ -191,7 +188,7 @@ export const jobsForProject = internalQuery({
       // hammering the button cannot burn Apify credit.
       const interval = Math.max(
         args.olderThanMs,
-        PLATFORM_MIN_INTERVAL_MS[want.platform] ?? 0,
+        platformMinIntervalMs(want.platform),
       );
       if ((job.lastRunAt ?? 0) < now - interval) due.push(job);
     }

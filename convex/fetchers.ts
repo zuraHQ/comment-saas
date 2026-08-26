@@ -111,18 +111,60 @@ async function redditGet(path: string): Promise<Normalized[]> {
   return parseRedditListing(await res.json());
 }
 
+// Apify fallback for Reddit (trudax/reddit-scraper-lite): ~$0.04/run floor,
+// so it runs on a slow interval. The official API takes over automatically
+// the moment REDDIT_CLIENT_ID exists on the deployment.
+function parseApifyReddit(items: any[]): Normalized[] {
+  return items
+    .filter((d: any) => d?.dataType === "post" && d?.id && d?.title && !d?.isAd)
+    .map((d: any) => ({
+      externalId: String(d.id).replace(/^t3_/, ""),
+      url: d.url,
+      title: d.title,
+      snippet: clip(d.body),
+      author: d.username ?? undefined,
+      subsource: d.communityName ?? undefined,
+      postedAt: Date.parse(d.createdAt ?? "") || Date.now(),
+      score: asNumber(d.upVotes),
+      commentCount: asNumber(d.numberOfComments),
+    }));
+}
+
+const APIFY_REDDIT_ITEMS = 5; // testing spend guard; raise for launch
+
 // Keyword sweep across all of Reddit: catches phrasings outside the watched
 // communities, noisier by nature.
-function searchReddit(keyword: string) {
-  return redditGet(
-    `/search?q=${encodeURIComponent(keyword)}&sort=new&t=week&limit=100&raw_json=1`,
-  );
+async function searchReddit(keyword: string): Promise<Normalized[]> {
+  if (process.env.REDDIT_CLIENT_ID) {
+    return redditGet(
+      `/search?q=${encodeURIComponent(keyword)}&sort=new&t=week&limit=100&raw_json=1`,
+    );
+  }
+  const items = await apifyRun("trudax~reddit-scraper-lite", {
+    searches: [keyword],
+    searchPosts: true,
+    searchComments: false,
+    skipComments: true,
+    sort: "new",
+    maxItems: APIFY_REDDIT_ITEMS,
+    maxPostCount: APIFY_REDDIT_ITEMS,
+  });
+  return parseApifyReddit(items);
 }
 
 // Read a community end to end. No query, so nothing is filtered out before we
 // get to judge it. This is the primary intake path.
-function fetchSubreddit(name: string) {
-  return redditGet(`/r/${encodeURIComponent(name)}/new?limit=100&raw_json=1`);
+async function fetchSubreddit(name: string): Promise<Normalized[]> {
+  if (process.env.REDDIT_CLIENT_ID) {
+    return redditGet(`/r/${encodeURIComponent(name)}/new?limit=100&raw_json=1`);
+  }
+  const items = await apifyRun("trudax~reddit-scraper-lite", {
+    startUrls: [{ url: `https://www.reddit.com/r/${name}/new/` }],
+    skipComments: true,
+    maxItems: APIFY_REDDIT_ITEMS,
+    maxPostCount: APIFY_REDDIT_ITEMS,
+  });
+  return parseApifyReddit(items);
 }
 
 // Bluesky: app.bsky.feed.searchPosts needs a session, so we sign in with an
@@ -526,6 +568,34 @@ async function fetchXAccountPosts(account: string): Promise<Normalized[]> {
     });
 }
 
+// LinkedIn via Apify (harvestapi, no cookies). The actor returns ~100 posts
+// per query (~$0.20) regardless of caps, hence the daily interval.
+async function searchLinkedin(keyword: string): Promise<Normalized[]> {
+  const items = await apifyRun("harvestapi~linkedin-post-search", {
+    searchQueries: [keyword],
+    maxItems: 100,
+    sortBy: "date",
+  });
+  return items
+    .filter((t: any) => t?.id && t?.content && isWorthScoring(t.content))
+    .map((t: any) => {
+      const author =
+        t.author?.name ?? t.author?.publicIdentifier ?? undefined;
+      return {
+        externalId: String(t.id),
+        url: t.linkedinUrl,
+        title: firstLine(t.content),
+        snippet: clip(t.content),
+        author,
+        postedAt:
+          asNumber(t.postedAt?.timestamp) ??
+          (Date.parse(t.postedAt?.date ?? "") || Date.now()),
+        commentCount: asNumber(t.commentIds?.length),
+        score: asNumber(t.reactions?.length),
+      };
+    });
+}
+
 type Fetcher = (query: string) => Promise<Normalized[]>;
 
 const FETCHERS: Record<string, Fetcher | undefined> = {
@@ -542,6 +612,7 @@ const FETCHERS: Record<string, Fetcher | undefined> = {
   "tiktok:community": fetchTiktokComments,
   "x:keyword": searchX,
   "x:community": fetchXAccountPosts,
+  "linkedin:keyword": searchLinkedin,
 };
 
 type JobResult = {
