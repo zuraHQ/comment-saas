@@ -193,7 +193,7 @@ export default function Hero() {
                 type="submit"
                 className="h-12 shrink-0 bg-primary px-8 text-xs font-bold tracking-widest text-background uppercase transition-all hover:bg-primary/90 active:scale-[0.97]"
               >
-                Find them
+                Find users
               </button>
             </form>
             <p className="mt-3 text-xs text-white/40">
