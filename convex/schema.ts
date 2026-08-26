@@ -22,6 +22,8 @@ export default defineSchema({
     url: v.optional(v.string()),
     description: v.optional(v.string()),
     keywords: v.array(v.string()),
+    // Subreddit names without the r/ prefix, lowercased.
+    communities: v.array(v.string()),
     platforms: v.array(v.string()),
     hideReplied: v.optional(v.boolean()),
   })
@@ -39,7 +41,7 @@ export default defineSchema({
     author: v.optional(v.string()),
     subsource: v.optional(v.string()),
     postedAt: v.number(),
-    fetchedByKeyword: v.string(),
+    fetchedVia: v.string(), // "community:saas" or "keyword:crm alternative"
     score: v.optional(v.number()),
     commentCount: v.optional(v.number()),
   })
@@ -51,7 +53,10 @@ export default defineSchema({
     projectId: v.id("projects"),
     ownerClerkId: v.string(),
     postId: v.id("posts"),
-    keyword: v.string(),
+    // How this post reached the project: reading a community, or a keyword
+    // sweep of the whole platform. Lets us measure which path pays off.
+    source: v.string(),
+    query: v.string(),
     intentScore: v.optional(v.string()),
     replied: v.boolean(),
     postedAt: v.number(),
@@ -61,13 +66,15 @@ export default defineSchema({
     .index("by_project_posted", ["projectId", "postedAt"])
     .index("by_owner", ["ownerClerkId"]),
 
-  // Globally deduped (platform, keyword) search jobs, shared across projects.
-  searchJobs: defineTable({
+  // Globally deduped fetch jobs, shared across projects: one job per
+  // (platform, kind, query) however many projects want it.
+  jobs: defineTable({
     platform: v.string(),
-    keyword: v.string(),
+    kind: v.string(), // "community" | "keyword"
+    query: v.string(), // subreddit name, or search phrase
     lastRunAt: v.optional(v.number()),
   })
-    .index("by_platform_keyword", ["platform", "keyword"])
+    .index("by_platform_kind_query", ["platform", "kind", "query"])
     .index("by_platform", ["platform"]),
 
   // Posts the user has replied to. Keyed by post key (mock feed ids today,

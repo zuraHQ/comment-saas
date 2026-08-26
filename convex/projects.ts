@@ -2,29 +2,67 @@ import { v } from "convex/values";
 import { mutation, query, type MutationCtx } from "./_generated/server";
 import { requireClerkId, requireOwnedProject } from "./auth";
 
-const FETCH_PLATFORMS = ["hn", "reddit"] as const;
+const KEYWORD_PLATFORMS = ["hn", "reddit"] as const;
+
+// Communities where founders and small-business buyers actually talk. Seeded
+// on every new project; the user edits the list in settings.
+export const DEFAULT_COMMUNITIES = [
+  "saas",
+  "entrepreneur",
+  "smallbusiness",
+  "startups",
+  "indiehackers",
+  "marketing",
+];
 
 function normalizeKeywords(keywords: string[]) {
   return [...new Set(keywords.map((k) => k.trim().toLowerCase()).filter(Boolean))];
+}
+
+// Accepts "r/SaaS", "/r/saas" or "saas" and stores "saas".
+function normalizeCommunities(communities: string[]) {
+  return [
+    ...new Set(
+      communities
+        .map((c) => c.trim().toLowerCase().replace(/^\/?r\//, "").replace(/\/$/, ""))
+        .filter(Boolean),
+    ),
+  ];
 }
 
 function slugify(name: string) {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "project";
 }
 
-// Keyword universe is global and deduped: ten projects tracking "crm" share
-// one search job.
-async function ensureSearchJobs(ctx: MutationCtx, keywords: string[]) {
-  for (const platform of FETCH_PLATFORMS) {
-    for (const keyword of keywords) {
-      const existing = await ctx.db
-        .query("searchJobs")
-        .withIndex("by_platform_keyword", (q) =>
-          q.eq("platform", platform).eq("keyword", keyword),
-        )
-        .unique();
-      if (!existing) await ctx.db.insert("searchJobs", { platform, keyword });
+// The job universe is global and deduped: ten projects watching r/saas share
+// one job, same for ten projects tracking "crm".
+async function ensureJob(
+  ctx: MutationCtx,
+  platform: string,
+  kind: "community" | "keyword",
+  query: string,
+) {
+  const existing = await ctx.db
+    .query("jobs")
+    .withIndex("by_platform_kind_query", (q) =>
+      q.eq("platform", platform).eq("kind", kind).eq("query", query),
+    )
+    .unique();
+  if (!existing) await ctx.db.insert("jobs", { platform, kind, query });
+}
+
+async function ensureJobs(
+  ctx: MutationCtx,
+  { keywords, communities }: { keywords?: string[]; communities?: string[] },
+) {
+  for (const keyword of keywords ?? []) {
+    for (const platform of KEYWORD_PLATFORMS) {
+      await ensureJob(ctx, platform, "keyword", keyword);
     }
+  }
+  // Communities are a Reddit concept for now.
+  for (const community of communities ?? []) {
+    await ensureJob(ctx, "reddit", "community", community);
   }
 }
 
@@ -58,11 +96,15 @@ export const create = mutation({
     url: v.optional(v.string()),
     description: v.optional(v.string()),
     keywords: v.optional(v.array(v.string())),
+    communities: v.optional(v.array(v.string())),
     platforms: v.optional(v.array(v.string())),
   },
   handler: async (ctx, args) => {
     const ownerClerkId = await requireClerkId(ctx);
     const keywords = normalizeKeywords(args.keywords ?? []);
+    const communities = normalizeCommunities(
+      args.communities ?? DEFAULT_COMMUNITIES,
+    );
 
     // Slugs only need to be unique per owner.
     const base = slugify(args.name);
@@ -86,10 +128,11 @@ export const create = mutation({
       url: args.url,
       description: args.description,
       keywords,
+      communities,
       // Default to the platforms we can actually fetch today.
       platforms: args.platforms ?? ["reddit", "hn"],
     });
-    await ensureSearchJobs(ctx, keywords);
+    await ensureJobs(ctx, { keywords, communities });
     return projectId;
   },
 });
@@ -102,17 +145,19 @@ export const update = mutation({
     url: v.optional(v.string()),
     description: v.optional(v.string()),
     keywords: v.optional(v.array(v.string())),
+    communities: v.optional(v.array(v.string())),
     platforms: v.optional(v.array(v.string())),
   },
   handler: async (ctx, args) => {
     await requireOwnedProject(ctx, args.projectId);
-    const { projectId, keywords, ...rest } = args;
+    const { projectId, keywords, communities, ...rest } = args;
     const patch: Record<string, unknown> = { ...rest };
-    if (keywords) {
-      const normalized = normalizeKeywords(keywords);
-      patch.keywords = normalized;
-      await ensureSearchJobs(ctx, normalized);
-    }
+    if (keywords) patch.keywords = normalizeKeywords(keywords);
+    if (communities) patch.communities = normalizeCommunities(communities);
+    await ensureJobs(ctx, {
+      keywords: patch.keywords as string[] | undefined,
+      communities: patch.communities as string[] | undefined,
+    });
     await ctx.db.patch(projectId, patch);
   },
 });

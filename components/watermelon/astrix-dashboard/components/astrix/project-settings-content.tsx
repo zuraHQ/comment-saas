@@ -34,6 +34,7 @@ function ProjectSettingsForm({ project }: { project: Project }) {
   const [url, setUrl] = useState(project.url ?? "");
   const [description, setDescription] = useState(project.description ?? "");
   const [keyword, setKeyword] = useState("");
+  const [community, setCommunity] = useState("");
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [uploading, setUploading] = useState(false);
 
@@ -74,6 +75,29 @@ function ProjectSettingsForm({ project }: { project: Project }) {
   const removeKeyword = (value: string) => {
     void updateProject(project._id, {
       keywords: project.keywords.filter((k) => k !== value),
+    });
+  };
+
+  const addCommunity = (e: FormEvent) => {
+    e.preventDefault();
+    const value = community
+      .trim()
+      .toLowerCase()
+      .replace(/^\/?r\//, "")
+      .replace(/\/$/, "");
+    if (!value || project.communities.includes(value)) {
+      setCommunity("");
+      return;
+    }
+    void updateProject(project._id, {
+      communities: [...project.communities, value],
+    });
+    setCommunity("");
+  };
+
+  const removeCommunity = (value: string) => {
+    void updateProject(project._id, {
+      communities: project.communities.filter((c) => c !== value),
     });
   };
 
@@ -161,8 +185,53 @@ function ProjectSettingsForm({ project }: { project: Project }) {
       </Section>
 
       <Section
+        title="Communities"
+        subtitle={`${project.communities.length} subreddits read end to end. This is where most leads come from.`}
+      >
+        <form onSubmit={addCommunity} className="flex gap-2">
+          <Input
+            value={community}
+            onChange={(e) => setCommunity(e.target.value)}
+            placeholder="r/smallbusiness"
+            className="rounded-none"
+          />
+          <button
+            type="submit"
+            className="h-9 shrink-0 cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
+          >
+            Add
+          </button>
+        </form>
+
+        {project.communities.length ? (
+          <div className="flex flex-wrap gap-2">
+            {project.communities.map((c) => (
+              <span
+                key={c}
+                className="flex items-center gap-2 border border-border px-3 py-1.5 text-sm"
+              >
+                r/{c}
+                <button
+                  type="button"
+                  onClick={() => removeCommunity(c)}
+                  aria-label={`Remove r/${c}`}
+                  className="cursor-pointer text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  <X className="size-3.5" />
+                </button>
+              </span>
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm text-muted-foreground">
+            No communities yet. Add the subreddits your customers hang out in.
+          </p>
+        )}
+      </Section>
+
+      <Section
         title="Keywords"
-        subtitle={`${project.keywords.length} tracked. We search every platform for these.`}
+        subtitle={`${project.keywords.length} tracked. A wide net across each platform, outside your communities.`}
       >
         <form onSubmit={addKeyword} className="flex gap-2">
           <Input

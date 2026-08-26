@@ -49,6 +49,15 @@ export function OnboardingContent() {
   const [keywords, setKeywords] = useState<string[]>([]);
   const [keyword, setKeyword] = useState("");
   const [platforms, setPlatforms] = useState<string[]>(["reddit", "hn"]);
+  const [communities, setCommunities] = useState<string[]>([
+    "saas",
+    "entrepreneur",
+    "smallbusiness",
+    "startups",
+    "indiehackers",
+    "marketing",
+  ]);
+  const [community, setCommunity] = useState("");
   const [saving, setSaving] = useState(false);
 
   // Fake the scrape once on mount so the first step has something to show.
@@ -73,6 +82,19 @@ export function OnboardingContent() {
     setKeyword("");
   };
 
+  const addCommunity = (e: FormEvent) => {
+    e.preventDefault();
+    const value = community
+      .trim()
+      .toLowerCase()
+      .replace(/^\/?r\//, "")
+      .replace(/\/$/, "");
+    if (value && !communities.includes(value)) {
+      setCommunities([...communities, value]);
+    }
+    setCommunity("");
+  };
+
   const togglePlatform = (id: string) =>
     setPlatforms((prev) =>
       prev.includes(id) ? prev.filter((p) => p !== id) : [...prev, id],
@@ -86,6 +108,7 @@ export function OnboardingContent() {
         url,
         description,
         keywords,
+        communities,
         platforms,
       });
       await complete({});
@@ -294,6 +317,54 @@ export function OnboardingContent() {
                   );
                 })}
               </div>
+
+              {platforms.includes("reddit") ? (
+                <div className="flex flex-col gap-3 border border-border p-4">
+                  <div>
+                    <p className="text-sm font-medium">Reddit communities</p>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      We read these end to end, so we catch posts that never
+                      mention your keywords.
+                    </p>
+                  </div>
+
+                  <form onSubmit={addCommunity} className="flex gap-2">
+                    <Input
+                      value={community}
+                      onChange={(e) => setCommunity(e.target.value)}
+                      placeholder="r/smallbusiness"
+                      className="rounded-none"
+                    />
+                    <button
+                      type="submit"
+                      className="h-9 shrink-0 cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase hover:bg-sidebar-accent hover:text-foreground"
+                    >
+                      Add
+                    </button>
+                  </form>
+
+                  <div className="flex flex-wrap gap-2">
+                    {communities.map((c) => (
+                      <span
+                        key={c}
+                        className="flex items-center gap-2 border border-border px-3 py-1.5 text-sm"
+                      >
+                        r/{c}
+                        <button
+                          type="button"
+                          aria-label={`Remove r/${c}`}
+                          onClick={() =>
+                            setCommunities(communities.filter((x) => x !== c))
+                          }
+                          className="cursor-pointer text-muted-foreground hover:text-foreground"
+                        >
+                          <X className="size-3.5" />
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
             </Step>
           ) : null}
 
@@ -306,6 +377,14 @@ export function OnboardingContent() {
                 <Row label="Product" value={name} />
                 <Row label="Site" value={url || "not set"} />
                 <Row label="Keywords" value={`${keywords.length} tracked`} />
+                <Row
+                  label="Communities"
+                  value={
+                    communities.length
+                      ? communities.map((c) => `r/${c}`).join(", ")
+                      : "none"
+                  }
+                />
                 <Row
                   label="Platforms"
                   value={platforms

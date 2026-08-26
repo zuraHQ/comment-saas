@@ -20,12 +20,19 @@ export const normalizedPost = v.object({
 export const ingest = internalMutation({
   args: {
     platform: v.string(),
-    keyword: v.string(),
+    kind: v.string(), // "community" | "keyword"
+    query: v.string(),
     posts: v.array(normalizedPost),
   },
   handler: async (ctx, args) => {
     const projects = await ctx.db.query("projects").collect();
-    const interested = projects.filter((p) => p.keywords.includes(args.keyword));
+    // A community job feeds every project watching that community; a keyword
+    // job feeds every project tracking that phrase.
+    const interested = projects.filter((p) =>
+      args.kind === "community"
+        ? p.communities.includes(args.query)
+        : p.keywords.includes(args.query),
+    );
     let inserted = 0;
     let matched = 0;
 
@@ -42,7 +49,7 @@ export const ingest = internalMutation({
         postId = await ctx.db.insert("posts", {
           ...post,
           platform: args.platform,
-          fetchedByKeyword: args.keyword,
+          fetchedVia: `${args.kind}:${args.query}`,
         });
         inserted++;
       }
@@ -59,7 +66,8 @@ export const ingest = internalMutation({
             projectId: project._id,
             ownerClerkId: project.ownerClerkId,
             postId,
-            keyword: args.keyword,
+            source: args.kind,
+            query: args.query,
             replied: false,
             postedAt: post.postedAt,
           });
@@ -75,7 +83,7 @@ export const dueJobs = internalQuery({
   args: { olderThanMs: v.number(), limit: v.number() },
   handler: async (ctx, args) => {
     const cutoff = Date.now() - args.olderThanMs;
-    const jobs = await ctx.db.query("searchJobs").collect();
+    const jobs = await ctx.db.query("jobs").collect();
     return jobs
       .filter((j) => (j.lastRunAt ?? 0) < cutoff)
       .sort((a, b) => (a.lastRunAt ?? 0) - (b.lastRunAt ?? 0))
@@ -83,28 +91,50 @@ export const dueJobs = internalQuery({
   },
 });
 
-export const jobsForKeywords = internalQuery({
-  args: { keywords: v.array(v.string()), olderThanMs: v.number() },
+// Everything one project needs fetched, both intake paths.
+export const jobsForProject = internalQuery({
+  args: {
+    keywords: v.array(v.string()),
+    communities: v.array(v.string()),
+    platforms: v.array(v.string()),
+    olderThanMs: v.number(),
+  },
   handler: async (ctx, args) => {
     const cutoff = Date.now() - args.olderThanMs;
-    const due = [];
+    const wanted: Array<{ platform: string; kind: string; query: string }> = [];
+
     for (const keyword of args.keywords) {
       for (const platform of ["hn", "reddit"]) {
-        const job = await ctx.db
-          .query("searchJobs")
-          .withIndex("by_platform_keyword", (q) =>
-            q.eq("platform", platform).eq("keyword", keyword),
-          )
-          .unique();
-        if (job && (job.lastRunAt ?? 0) < cutoff) due.push(job);
+        if (args.platforms.includes(platform)) {
+          wanted.push({ platform, kind: "keyword", query: keyword });
+        }
       }
+    }
+    if (args.platforms.includes("reddit")) {
+      for (const community of args.communities) {
+        wanted.push({ platform: "reddit", kind: "community", query: community });
+      }
+    }
+
+    const due = [];
+    for (const want of wanted) {
+      const job = await ctx.db
+        .query("jobs")
+        .withIndex("by_platform_kind_query", (q) =>
+          q
+            .eq("platform", want.platform)
+            .eq("kind", want.kind)
+            .eq("query", want.query),
+        )
+        .unique();
+      if (job && (job.lastRunAt ?? 0) < cutoff) due.push(job);
     }
     return due;
   },
 });
 
 export const markJobRan = internalMutation({
-  args: { jobId: v.id("searchJobs") },
+  args: { jobId: v.id("jobs") },
   handler: async (ctx, args) => {
     await ctx.db.patch(args.jobId, { lastRunAt: Date.now() });
   },
@@ -147,5 +177,45 @@ export const ownedProjectForRefresh = internalQuery({
     const project = await ctx.db.get(args.projectId);
     if (!project || project.ownerClerkId !== args.clerkId) return null;
     return project;
+  },
+});
+
+// Ops helper: recreate the deduped job list from every project's keywords and
+// communities. Safe to re-run; existing jobs keep their lastRunAt.
+//   npx convex run pipeline:rebuildJobs '{}' --prod
+export const rebuildJobs = internalMutation({
+  args: {},
+  handler: async (ctx) => {
+    const projects = await ctx.db.query("projects").collect();
+    let created = 0;
+
+    const ensure = async (platform: string, kind: string, query: string) => {
+      const existing = await ctx.db
+        .query("jobs")
+        .withIndex("by_platform_kind_query", (q) =>
+          q.eq("platform", platform).eq("kind", kind).eq("query", query),
+        )
+        .unique();
+      if (!existing) {
+        await ctx.db.insert("jobs", { platform, kind, query });
+        created++;
+      }
+    };
+
+    for (const project of projects) {
+      for (const keyword of project.keywords) {
+        for (const platform of ["hn", "reddit"]) {
+          if (project.platforms.includes(platform)) {
+            await ensure(platform, "keyword", keyword);
+          }
+        }
+      }
+      if (project.platforms.includes("reddit")) {
+        for (const community of project.communities) {
+          await ensure("reddit", "community", community);
+        }
+      }
+    }
+    return { projects: projects.length, created };
   },
 });

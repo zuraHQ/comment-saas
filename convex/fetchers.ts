@@ -65,14 +65,7 @@ async function redditToken(): Promise<string> {
   return data.access_token;
 }
 
-async function searchReddit(keyword: string): Promise<Normalized[]> {
-  const token = await redditToken();
-  const url = `https://oauth.reddit.com/search?q=${encodeURIComponent(keyword)}&sort=new&t=week&limit=30&raw_json=1`;
-  const res = await fetch(url, {
-    headers: { Authorization: `Bearer ${token}`, "User-Agent": REDDIT_UA },
-  });
-  if (!res.ok) throw new Error(`Reddit search failed: ${res.status}`);
-  const data = await res.json();
+function parseRedditListing(data: any): Normalized[] {
   return (data?.data?.children ?? [])
     .map((c: any) => c.data)
     .filter((d: any) => d?.id && d?.title)
@@ -89,34 +82,63 @@ async function searchReddit(keyword: string): Promise<Normalized[]> {
     }));
 }
 
-const SEARCHERS: Record<string, (keyword: string) => Promise<Normalized[]>> = {
-  hn: searchHn,
-  reddit: searchReddit,
+async function redditGet(path: string): Promise<Normalized[]> {
+  const token = await redditToken();
+  const res = await fetch(`https://oauth.reddit.com${path}`, {
+    headers: { Authorization: `Bearer ${token}`, "User-Agent": REDDIT_UA },
+  });
+  if (!res.ok) throw new Error(`Reddit request failed: ${res.status}`);
+  return parseRedditListing(await res.json());
+}
+
+// Keyword sweep across all of Reddit: catches phrasings outside the watched
+// communities, noisier by nature.
+function searchReddit(keyword: string) {
+  return redditGet(
+    `/search?q=${encodeURIComponent(keyword)}&sort=new&t=week&limit=100&raw_json=1`,
+  );
+}
+
+// Read a community end to end. No query, so nothing is filtered out before we
+// get to judge it. This is the primary intake path.
+function fetchSubreddit(name: string) {
+  return redditGet(`/r/${encodeURIComponent(name)}/new?limit=100&raw_json=1`);
+}
+
+type Fetcher = (query: string) => Promise<Normalized[]>;
+
+const FETCHERS: Record<string, Fetcher | undefined> = {
+  "reddit:community": fetchSubreddit,
+  "reddit:keyword": searchReddit,
+  "hn:keyword": searchHn,
 };
 
 type JobResult = {
   platform: string;
-  keyword: string;
+  kind: string;
+  query: string;
   fetched?: number;
   inserted?: number;
   matched?: number;
   error?: string;
 };
 
-async function runJob(ctx: ActionCtx, job: Doc<"searchJobs">): Promise<JobResult> {
-  const search = SEARCHERS[job.platform];
-  if (!search) return { platform: job.platform, keyword: job.keyword, error: "no searcher" };
+async function runJob(ctx: ActionCtx, job: Doc<"jobs">): Promise<JobResult> {
+  const label = { platform: job.platform, kind: job.kind, query: job.query };
+  const fetcher = FETCHERS[`${job.platform}:${job.kind}`];
+  if (!fetcher) return { ...label, error: "no fetcher for this job type" };
   try {
-    const posts = await search(job.keyword);
+    const posts = await fetcher(job.query);
     const result = await ctx.runMutation(internal.pipeline.ingest, {
       platform: job.platform,
-      keyword: job.keyword,
+      kind: job.kind,
+      query: job.query,
       posts,
     });
     await ctx.runMutation(internal.pipeline.markJobRan, { jobId: job._id });
-    return { platform: job.platform, keyword: job.keyword, fetched: posts.length, ...result };
+    return { ...label, fetched: posts.length, ...result };
   } catch (err) {
-    return { platform: job.platform, keyword: job.keyword, error: String(err) };
+    return { ...label, error: String(err) };
   }
 }
 
@@ -124,7 +146,7 @@ async function runJob(ctx: ActionCtx, job: Doc<"searchJobs">): Promise<JobResult
 export const runDueJobs = internalAction({
   args: {},
   handler: async (ctx): Promise<JobResult[]> => {
-    const jobs: Doc<"searchJobs">[] = await ctx.runQuery(internal.pipeline.dueJobs, {
+    const jobs: Doc<"jobs">[] = await ctx.runQuery(internal.pipeline.dueJobs, {
       olderThanMs: 10 * 60 * 1000,
       limit: 20,
     });
@@ -150,8 +172,10 @@ export const refreshProject = action({
     );
     if (!project) return { error: "unknown project" };
 
-    const jobs: Doc<"searchJobs">[] = await ctx.runQuery(internal.pipeline.jobsForKeywords, {
+    const jobs: Doc<"jobs">[] = await ctx.runQuery(internal.pipeline.jobsForProject, {
       keywords: project.keywords,
+      communities: project.communities,
+      platforms: project.platforms,
       olderThanMs: 3 * 60 * 1000,
     });
     const results: JobResult[] = [];
