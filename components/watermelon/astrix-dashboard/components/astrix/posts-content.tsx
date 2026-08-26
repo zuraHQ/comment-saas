@@ -15,6 +15,11 @@ import {
   FaXTwitter,
 } from "react-icons/fa6";
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
   Sheet,
   SheetContent,
   SheetHeader,
@@ -737,24 +742,37 @@ export function PostsContent() {
                         {post.snippet}
                       </p>
                     </div>
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        toggleReplied(post.id);
-                      }}
-                      aria-pressed={replied.has(post.id)}
-                      title={replied.has(post.id) ? "Replied" : "Mark as replied"}
-                      className={cn(
-                        "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border transition-colors",
-                        replied.has(post.id)
-                          ? "border-primary bg-primary text-primary-foreground"
-                          : "border-border text-muted-foreground/40 hover:border-foreground/40 hover:text-foreground",
-                      )}
-                    >
-                      <Check className="h-5 w-5" />
-                    </button>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            toggleReplied(post.id);
+                          }}
+                          aria-pressed={replied.has(post.id)}
+                          aria-label={
+                            replied.has(post.id)
+                              ? "Replied, click to undo"
+                              : "Mark as replied"
+                          }
+                          className={cn(
+                            "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border transition-colors",
+                            replied.has(post.id)
+                              ? "border-primary bg-primary text-primary-foreground"
+                              : "border-border text-muted-foreground/40 hover:border-foreground/40 hover:text-foreground",
+                          )}
+                        >
+                          <Check className="h-5 w-5" />
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent side="left" className="astrix-dashboard">
+                        {replied.has(post.id)
+                          ? "Replied, click to undo"
+                          : "Mark as replied"}
+                      </TooltipContent>
+                    </Tooltip>
                   </div>
                 </a>
               </li>
