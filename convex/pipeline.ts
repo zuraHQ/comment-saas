@@ -275,3 +275,58 @@ export const pruneJobs = internalMutation({
     return { kept: wanted.size, deleted };
   },
 });
+
+// New-project backfill: match the existing pool against a project so day one
+// is not an empty feed. Reuses the fetchedVia tag to decide interest.
+//   npx convex run pipeline:backfillProject '{"projectId":"..."}' --prod
+export const backfillProject = internalMutation({
+  args: { projectId: v.id("projects"), limit: v.optional(v.number()) },
+  handler: async (ctx, args) => {
+    const project = await ctx.db.get(args.projectId);
+    if (!project) return { error: "no such project" };
+
+    let matched = 0;
+    let scanned = 0;
+    const cap = args.limit ?? 500;
+
+    for await (const post of ctx.db.query("posts").order("desc")) {
+      if (++scanned > cap) break;
+
+      const [kind, ...rest] = post.fetchedVia.split(":");
+      const query = rest.join(":");
+      const interested =
+        post.platform === "hn"
+          ? project.platforms.includes("hn")
+          : kind === "community"
+            ? project.platforms.includes(post.platform) &&
+              project.communities.includes(query)
+            : project.platforms.includes(post.platform) &&
+              project.keywords.includes(query);
+      if (!interested) continue;
+
+      const existing = await ctx.db
+        .query("matches")
+        .withIndex("by_project_post", (q) =>
+          q.eq("projectId", project._id).eq("postId", post._id),
+        )
+        .unique();
+      if (existing) continue;
+
+      await ctx.db.insert("matches", {
+        projectId: project._id,
+        ownerClerkId: project.ownerClerkId,
+        postId: post._id,
+        source: kind,
+        query,
+        replied: false,
+        postedAt: post.postedAt,
+      });
+      matched++;
+    }
+
+    if (matched > 0) {
+      await ctx.scheduler.runAfter(0, internal.intentMarker.scoreDue, {});
+    }
+    return { scanned: scanned - 1, matched };
+  },
+});
