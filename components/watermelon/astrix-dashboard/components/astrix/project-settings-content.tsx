@@ -259,7 +259,7 @@ function ProjectSettingsForm({ project }: { project: Project }) {
         </div>
       </Section>
 
-      <Section title="Reddit communities">
+      <Section title="Reddit communities" platform="reddit">
         <form onSubmit={addCommunity} className="flex gap-2">
           <Input
             value={community}
@@ -301,7 +301,7 @@ function ProjectSettingsForm({ project }: { project: Project }) {
         )}
       </Section>
 
-      <Section title="Facebook pages">
+      <Section title="Facebook pages" platform="facebook">
         <p className="text-sm text-muted-foreground">
           We watch the comment sections of these pages. Add pages your
           customers follow, competitors included.
@@ -346,7 +346,7 @@ function ProjectSettingsForm({ project }: { project: Project }) {
         </div>
       </Section>
 
-      <Section title="Instagram accounts">
+      <Section title="Instagram accounts" platform="instagram">
         <p className="text-sm text-muted-foreground">
           Same idea: we read the comments under these accounts&apos; posts.
         </p>
@@ -390,7 +390,7 @@ function ProjectSettingsForm({ project }: { project: Project }) {
         </div>
       </Section>
 
-      <Section title="TikTok accounts">
+      <Section title="TikTok accounts" platform="tiktok">
         <p className="text-sm text-muted-foreground">
           We read the comments under these accounts&apos; latest videos.
         </p>
@@ -539,16 +539,29 @@ function ProjectSettingsForm({ project }: { project: Project }) {
 function Section({
   title,
   subtitle,
+  platform,
   children,
 }: {
   title: string;
   subtitle?: string;
+  platform?: string;
   children: React.ReactNode;
 }) {
+  const meta = platform
+    ? PLATFORM_OPTIONS.find((option) => option.id === platform)
+    : undefined;
   return (
     <section className="flex flex-col gap-4 border border-border p-5">
       <div>
-        <h2 className="text-xs font-bold tracking-wider text-muted-foreground uppercase">
+        <h2 className="flex items-center gap-2 text-xs font-bold tracking-wider text-muted-foreground uppercase">
+          {meta ? (
+            <span
+              className="flex h-5 w-5 shrink-0 items-center justify-center"
+              style={{ backgroundColor: meta.bg }}
+            >
+              <meta.Icon className="h-3 w-3" style={{ color: meta.fg }} />
+            </span>
+          ) : null}
           {title}
         </h2>
         {subtitle ? (
