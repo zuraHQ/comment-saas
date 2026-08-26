@@ -4,7 +4,7 @@
 // Platforms where we cannot read every post, so keywords are the way in.
 // Threads is off: its Apify actor bills ~$0.48 per RUN regardless of
 // result count, which the cron would turn into dollars a day.
-export const KEYWORD_PLATFORMS = ["reddit", "bluesky", "github", "youtube"];
+export const KEYWORD_PLATFORMS = ["reddit", "bluesky", "github", "youtube", "x"];
 
 // Minimum time between runs of one job, per platform. YouTube searches cost
 // 100 of a 10k/day quota, so they run a few times a day, not every 15 min.
@@ -15,6 +15,7 @@ export const PLATFORM_MIN_INTERVAL_MS: Record<string, number> = {
   instagram: 12 * 60 * 60 * 1000,
   threads: 12 * 60 * 60 * 1000,
   tiktok: 12 * 60 * 60 * 1000,
+  x: 12 * 60 * 60 * 1000,
 };
 
 // HN publishes only a few hundred stories a day, so we read all of it and

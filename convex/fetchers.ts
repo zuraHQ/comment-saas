@@ -456,6 +456,34 @@ async function fetchTiktokComments(account: string): Promise<Normalized[]> {
     }));
 }
 
+// X via Apify (apidojo/tweet-scraper): verified per-result pricing at
+// ~$0.0004/tweet, no flat run fee. Official API swap-in point later.
+async function searchX(keyword: string): Promise<Normalized[]> {
+  const items = await apifyRun("apidojo~tweet-scraper", {
+    searchTerms: [keyword],
+    // Testing spend guard; raise for launch.
+    maxItems: 10,
+    sort: "Latest",
+    tweetLanguage: "en",
+  });
+  return items
+    .filter((t: any) => t?.id && (t.fullText || t.text) && !t.isRetweet)
+    .map((t: any) => {
+      const text = t.fullText ?? t.text;
+      const handle = t.author?.userName;
+      return {
+        externalId: String(t.id),
+        url: t.url ?? `https://x.com/i/status/${t.id}`,
+        title: firstLine(text),
+        snippet: clip(text),
+        author: handle ? `@${handle}` : undefined,
+        postedAt: Date.parse(t.createdAt ?? "") || Date.now(),
+        score: asNumber(t.likeCount),
+        commentCount: asNumber(t.replyCount),
+      };
+    });
+}
+
 type Fetcher = (query: string) => Promise<Normalized[]>;
 
 const FETCHERS: Record<string, Fetcher | undefined> = {
@@ -470,6 +498,7 @@ const FETCHERS: Record<string, Fetcher | undefined> = {
   "instagram:community": fetchInstagramComments,
   "threads:keyword": searchThreads,
   "tiktok:community": fetchTiktokComments,
+  "x:keyword": searchX,
 };
 
 type JobResult = {
