@@ -2,10 +2,7 @@ import { v } from "convex/values";
 import { mutation, query, type MutationCtx } from "./_generated/server";
 import { requireClerkId, requireOwnedProject } from "./auth";
 
-// Keyword sweeps only make sense where we cannot read every post. HN is small
-// enough to pull in full, so it needs no keywords at all.
-const KEYWORD_PLATFORMS = ["reddit"] as const;
-const HN_FEEDS = ["all", "ask", "show"];
+import { COMMUNITY_PLATFORMS, HN_FEEDS, KEYWORD_PLATFORMS } from "./platforms";
 
 // Communities where founders and small-business buyers actually talk. Seeded
 // on every new project; the user edits the list in settings.
@@ -63,9 +60,10 @@ async function ensureJobs(
       await ensureJob(ctx, platform, "keyword", keyword);
     }
   }
-  // Communities are a Reddit concept for now.
-  for (const community of communities ?? []) {
-    await ensureJob(ctx, "reddit", "community", community);
+  for (const platform of COMMUNITY_PLATFORMS) {
+    for (const community of communities ?? []) {
+      await ensureJob(ctx, platform, "community", community);
+    }
   }
   // HN is small enough to read end to end, so every project gets the feeds.
   for (const feed of HN_FEEDS) {

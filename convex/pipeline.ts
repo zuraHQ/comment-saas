@@ -1,6 +1,7 @@
 import { v } from "convex/values";
 import { internalMutation, internalQuery, mutation, query } from "./_generated/server";
 import { requireOwnedProject } from "./auth";
+import { COMMUNITY_PLATFORMS, HN_FEEDS, KEYWORD_PLATFORMS } from "./platforms";
 
 export const normalizedPost = v.object({
   externalId: v.string(),
@@ -104,18 +105,20 @@ export const jobsForProject = internalQuery({
     const cutoff = Date.now() - args.olderThanMs;
     const wanted: Array<{ platform: string; kind: string; query: string }> = [];
 
-    if (args.platforms.includes("reddit")) {
+    for (const platform of KEYWORD_PLATFORMS) {
+      if (!args.platforms.includes(platform)) continue;
       for (const keyword of args.keywords) {
-        wanted.push({ platform: "reddit", kind: "keyword", query: keyword });
+        wanted.push({ platform, kind: "keyword", query: keyword });
       }
     }
-    if (args.platforms.includes("reddit")) {
+    for (const platform of COMMUNITY_PLATFORMS) {
+      if (!args.platforms.includes(platform)) continue;
       for (const community of args.communities) {
-        wanted.push({ platform: "reddit", kind: "community", query: community });
+        wanted.push({ platform, kind: "community", query: community });
       }
     }
     if (args.platforms.includes("hn")) {
-      for (const feed of ["all", "ask", "show"]) {
+      for (const feed of HN_FEEDS) {
         wanted.push({ platform: "hn", kind: "community", query: feed });
       }
     }
@@ -207,18 +210,20 @@ export const rebuildJobs = internalMutation({
     };
 
     for (const project of projects) {
-      if (project.platforms.includes("reddit")) {
+      for (const platform of KEYWORD_PLATFORMS) {
+        if (!project.platforms.includes(platform)) continue;
         for (const keyword of project.keywords) {
-          await ensure("reddit", "keyword", keyword);
+          await ensure(platform, "keyword", keyword);
         }
       }
-      if (project.platforms.includes("reddit")) {
+      for (const platform of COMMUNITY_PLATFORMS) {
+        if (!project.platforms.includes(platform)) continue;
         for (const community of project.communities) {
-          await ensure("reddit", "community", community);
+          await ensure(platform, "community", community);
         }
       }
       if (project.platforms.includes("hn")) {
-        for (const feed of ["all", "ask", "show"]) {
+        for (const feed of HN_FEEDS) {
           await ensure("hn", "community", feed);
         }
       }
@@ -237,16 +242,20 @@ export const pruneJobs = internalMutation({
     const wanted = new Set<string>();
 
     for (const project of projects) {
-      if (project.platforms.includes("reddit")) {
+      for (const platform of KEYWORD_PLATFORMS) {
+        if (!project.platforms.includes(platform)) continue;
         for (const keyword of project.keywords) {
-          wanted.add(`reddit:keyword:${keyword}`);
+          wanted.add(`${platform}:keyword:${keyword}`);
         }
+      }
+      for (const platform of COMMUNITY_PLATFORMS) {
+        if (!project.platforms.includes(platform)) continue;
         for (const community of project.communities) {
-          wanted.add(`reddit:community:${community}`);
+          wanted.add(`${platform}:community:${community}`);
         }
       }
       if (project.platforms.includes("hn")) {
-        for (const feed of ["all", "ask", "show"]) {
+        for (const feed of HN_FEEDS) {
           wanted.add(`hn:community:${feed}`);
         }
       }

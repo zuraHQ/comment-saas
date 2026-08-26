@@ -14,6 +14,7 @@ import type * as fetchers from "../fetchers.js";
 import type * as launches from "../launches.js";
 import type * as links from "../links.js";
 import type * as pipeline from "../pipeline.js";
+import type * as platforms from "../platforms.js";
 import type * as projects from "../projects.js";
 import type * as replies from "../replies.js";
 import type * as users from "../users.js";
@@ -31,6 +32,7 @@ declare const fullApi: ApiFromModules<{
   launches: typeof launches;
   links: typeof links;
   pipeline: typeof pipeline;
+  platforms: typeof platforms;
   projects: typeof projects;
   replies: typeof replies;
   users: typeof users;

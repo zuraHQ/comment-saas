@@ -122,6 +122,70 @@ function fetchSubreddit(name: string) {
   return redditGet(`/r/${encodeURIComponent(name)}/new?limit=100&raw_json=1`);
 }
 
+// Bluesky: app.bsky.feed.searchPosts needs a session, so we sign in with an
+// app password (Settings -> App Passwords) and reuse the token until it ages
+// out. There is no paid API key involved.
+let blueskySession: { token: string; expires: number } | null = null;
+
+async function blueskyToken(): Promise<string> {
+  if (blueskySession && blueskySession.expires > Date.now()) {
+    return blueskySession.token;
+  }
+  const identifier = process.env.BLUESKY_IDENTIFIER;
+  const password = process.env.BLUESKY_APP_PASSWORD;
+  if (!identifier || !password) {
+    throw new Error(
+      "BLUESKY_IDENTIFIER / BLUESKY_APP_PASSWORD not set on this deployment",
+    );
+  }
+  const res = await fetch(
+    "https://bsky.social/xrpc/com.atproto.server.createSession",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ identifier, password }),
+    },
+  );
+  if (!res.ok) throw new Error(`Bluesky login failed: ${res.status}`);
+  const data = await res.json();
+  // Access tokens last a couple of hours; refresh well before that.
+  blueskySession = { token: data.accessJwt, expires: Date.now() + 30 * 60 * 1000 };
+  return data.accessJwt;
+}
+
+// Posts have no title, so the first line doubles as one.
+function firstLine(text: string) {
+  const clean = text.replace(/\s+/g, " ").trim();
+  return clean.length > 120 ? `${clean.slice(0, 117)}...` : clean;
+}
+
+async function searchBluesky(keyword: string): Promise<Normalized[]> {
+  const token = await blueskyToken();
+  const url = `https://bsky.social/xrpc/app.bsky.feed.searchPosts?q=${encodeURIComponent(keyword)}&limit=100&sort=latest`;
+  const res = await fetch(url, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error(`Bluesky search failed: ${res.status}`);
+  const data = await res.json();
+
+  return (data.posts ?? [])
+    .filter((p: any) => p?.uri && p?.record?.text)
+    .map((p: any) => {
+      const rkey = String(p.uri).split("/").pop();
+      const handle = p.author?.handle;
+      return {
+        externalId: String(p.uri),
+        url: `https://bsky.app/profile/${handle}/post/${rkey}`,
+        title: firstLine(p.record.text),
+        snippet: clip(p.record.text),
+        author: handle ? `@${handle}` : undefined,
+        postedAt: Date.parse(p.record.createdAt ?? p.indexedAt ?? "") || Date.now(),
+        score: p.likeCount ?? undefined,
+        commentCount: p.replyCount ?? undefined,
+      };
+    });
+}
+
 type Fetcher = (query: string) => Promise<Normalized[]>;
 
 const FETCHERS: Record<string, Fetcher | undefined> = {
@@ -129,6 +193,7 @@ const FETCHERS: Record<string, Fetcher | undefined> = {
   "reddit:keyword": searchReddit,
   "hn:keyword": searchHn,
   "hn:community": fetchHnFeed,
+  "bluesky:keyword": searchBluesky,
 };
 
 type JobResult = {
