@@ -279,7 +279,7 @@ export function OnboardingContent() {
                     <p className="text-sm font-medium">Reddit communities</p>
                     <p className="mt-1 text-xs text-muted-foreground">
                       We read these end to end, so we catch posts that never
-                      mention your keywords.
+                      mention your product by name.
                     </p>
                   </div>
 
