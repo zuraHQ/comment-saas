@@ -591,7 +591,7 @@ export function PostsContent() {
 
   return (
     <div className="flex h-full flex-col gap-6 p-6">
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex items-center justify-between gap-4 border border-border px-4 py-3">
         <h1 className="flex items-center gap-2 text-xl font-semibold">
           Looking posts for:
           <ProjectIcon project={project} className="h-6 w-6 text-xs" />
