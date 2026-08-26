@@ -47,7 +47,6 @@ export function OnboardingContent() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [keywords, setKeywords] = useState<string[]>([]);
-  const [keyword, setKeyword] = useState("");
   const [platforms, setPlatforms] = useState<string[]>(["reddit", "hn"]);
   const [communities, setCommunities] = useState<string[]>([
     "saas",
@@ -74,13 +73,6 @@ export function OnboardingContent() {
       if (timer.current) clearTimeout(timer.current);
     };
   }, [site]);
-
-  const addKeyword = (e: FormEvent) => {
-    e.preventDefault();
-    const value = keyword.trim().toLowerCase();
-    if (value && !keywords.includes(value)) setKeywords([...keywords, value]);
-    setKeyword("");
-  };
 
   const addCommunity = (e: FormEvent) => {
     e.preventDefault();
@@ -230,43 +222,6 @@ export function OnboardingContent() {
                 />
               </div>
 
-              <div className="flex flex-col gap-2">
-                <label className="text-sm font-medium">Keywords</label>
-                <form onSubmit={addKeyword} className="flex gap-2">
-                  <Input
-                    value={keyword}
-                    onChange={(e) => setKeyword(e.target.value)}
-                    placeholder="add a phrase people would type"
-                    className="rounded-none"
-                  />
-                  <button
-                    type="submit"
-                    className="h-9 shrink-0 cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase hover:bg-sidebar-accent hover:text-foreground"
-                  >
-                    Add
-                  </button>
-                </form>
-                <div className="flex flex-wrap gap-2">
-                  {keywords.map((k) => (
-                    <span
-                      key={k}
-                      className="flex items-center gap-2 border border-border px-3 py-1.5 text-sm"
-                    >
-                      {k}
-                      <button
-                        type="button"
-                        aria-label={`Remove ${k}`}
-                        onClick={() =>
-                          setKeywords(keywords.filter((x) => x !== k))
-                        }
-                        className="cursor-pointer text-muted-foreground hover:text-foreground"
-                      >
-                        <X className="size-3.5" />
-                      </button>
-                    </span>
-                  ))}
-                </div>
-              </div>
             </Step>
           ) : null}
 
@@ -376,7 +331,6 @@ export function OnboardingContent() {
               <dl className="flex flex-col gap-3 border border-border p-4 text-sm">
                 <Row label="Product" value={name} />
                 <Row label="Site" value={url || "not set"} />
-                <Row label="Keywords" value={`${keywords.length} tracked`} />
                 <Row
                   label="Communities"
                   value={
