@@ -35,6 +35,8 @@ function ProjectSettingsForm({ project }: { project: Project }) {
   const [description, setDescription] = useState(project.description ?? "");
   const [keyword, setKeyword] = useState("");
   const [community, setCommunity] = useState("");
+  const [fbPage, setFbPage] = useState("");
+  const [igAccount, setIgAccount] = useState("");
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [uploading, setUploading] = useState(false);
 
@@ -101,6 +103,27 @@ function ProjectSettingsForm({ project }: { project: Project }) {
   const removeCommunity = (value: string) => {
     void updateProject(project._id, {
       communities: project.communities.filter((c) => c !== value),
+    });
+  };
+
+  const addToList = (
+    field: "facebookPages" | "instagramAccounts",
+    raw: string,
+    reset: () => void,
+  ) => {
+    const value = raw.trim();
+    reset();
+    if (!value) return;
+    const current = project[field] ?? [];
+    void updateProject(project._id, { [field]: [...current, value] });
+  };
+
+  const removeFromList = (
+    field: "facebookPages" | "instagramAccounts",
+    value: string,
+  ) => {
+    void updateProject(project._id, {
+      [field]: (project[field] ?? []).filter((x) => x !== value),
     });
   };
 
@@ -275,6 +298,95 @@ function ProjectSettingsForm({ project }: { project: Project }) {
             No communities yet. Add the subreddits your customers hang out in.
           </p>
         )}
+      </Section>
+
+      <Section title="Facebook pages">
+        <p className="text-sm text-muted-foreground">
+          We watch the comment sections of these pages. Add pages your
+          customers follow, competitors included.
+        </p>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            addToList("facebookPages", fbPage, () => setFbPage(""));
+          }}
+          className="flex gap-2"
+        >
+          <Input
+            value={fbPage}
+            onChange={(e) => setFbPage(e.target.value)}
+            placeholder="facebook.com/shopify or shopify"
+            className="rounded-none"
+          />
+          <button
+            type="submit"
+            className="h-9 shrink-0 cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
+          >
+            Add
+          </button>
+        </form>
+        <div className="flex flex-wrap gap-2">
+          {(project.facebookPages ?? []).map((page) => (
+            <span
+              key={page}
+              className="flex items-center gap-2 border border-border px-3 py-1.5 text-sm"
+            >
+              {page}
+              <button
+                type="button"
+                onClick={() => removeFromList("facebookPages", page)}
+                aria-label={`Remove ${page}`}
+                className="cursor-pointer text-muted-foreground transition-colors hover:text-foreground"
+              >
+                <X className="size-3.5" />
+              </button>
+            </span>
+          ))}
+        </div>
+      </Section>
+
+      <Section title="Instagram accounts">
+        <p className="text-sm text-muted-foreground">
+          Same idea: we read the comments under these accounts&apos; posts.
+        </p>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            addToList("instagramAccounts", igAccount, () => setIgAccount(""));
+          }}
+          className="flex gap-2"
+        >
+          <Input
+            value={igAccount}
+            onChange={(e) => setIgAccount(e.target.value)}
+            placeholder="@shopify"
+            className="rounded-none"
+          />
+          <button
+            type="submit"
+            className="h-9 shrink-0 cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
+          >
+            Add
+          </button>
+        </form>
+        <div className="flex flex-wrap gap-2">
+          {(project.instagramAccounts ?? []).map((account) => (
+            <span
+              key={account}
+              className="flex items-center gap-2 border border-border px-3 py-1.5 text-sm"
+            >
+              @{account}
+              <button
+                type="button"
+                onClick={() => removeFromList("instagramAccounts", account)}
+                aria-label={`Remove ${account}`}
+                className="cursor-pointer text-muted-foreground transition-colors hover:text-foreground"
+              >
+                <X className="size-3.5" />
+              </button>
+            </span>
+          ))}
+        </div>
       </Section>
 
       <Section

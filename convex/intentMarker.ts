@@ -31,7 +31,10 @@ export const nextBatch = internalQuery({
         items.push({
           matchId: match._id,
           title: post.title,
-          snippet: post.snippet ?? "",
+          snippet:
+            post.type === "comment" && post.parentTitle
+              ? `[comment on: ${post.parentTitle}] ${post.snippet ?? ""}`
+              : (post.snippet ?? ""),
           platform: post.platform,
           community: post.subsource ?? "",
         });

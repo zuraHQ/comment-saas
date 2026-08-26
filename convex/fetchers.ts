@@ -13,6 +13,9 @@ type Normalized = {
   postedAt: number;
   score?: number;
   commentCount?: number;
+  type?: string;
+  parentUrl?: string;
+  parentTitle?: string;
 };
 
 function clip(text: string | null | undefined, max = 500): string | undefined {
@@ -275,6 +278,113 @@ async function searchYoutube(keyword: string): Promise<Normalized[]> {
     }));
 }
 
+// ---- Apify-backed platforms: Facebook and Instagram comment sections ----
+// The page's own posts are only plumbing to find post URLs; ONLY comments
+// enter the pool as leads.
+
+async function apifyRun(actorId: string, input: unknown): Promise<any[]> {
+  const token = process.env.APIFY_TOKEN;
+  if (!token) throw new Error("APIFY_TOKEN not set on this deployment");
+  const res = await fetch(
+    `https://api.apify.com/v2/acts/${actorId}/run-sync-get-dataset-items?token=${token}&timeout=240`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(input),
+    },
+  );
+  if (!res.ok) {
+    throw new Error(`Apify ${actorId} failed: ${res.status}`);
+  }
+  const data = await res.json();
+  return Array.isArray(data) ? data : [];
+}
+
+// Drop obvious junk before it costs scoring tokens: too short, no real words.
+function isWorthScoring(text: string): boolean {
+  const clean = text.trim();
+  return clean.length >= 15 && /[a-zA-Z]{3}/.test(clean);
+}
+
+const APIFY_POSTS_PER_PAGE = 5;
+const APIFY_COMMENTS_PER_RUN = 50;
+
+async function fetchFacebookComments(page: string): Promise<Normalized[]> {
+  const pageUrl = page.startsWith("http")
+    ? page
+    : `https://www.facebook.com/${page}`;
+  const posts = await apifyRun("apify~facebook-posts-scraper", {
+    startUrls: [{ url: pageUrl }],
+    resultsLimit: APIFY_POSTS_PER_PAGE,
+  });
+  const postUrls = posts.map((p: any) => p?.url).filter(Boolean);
+  if (!postUrls.length) return [];
+
+  const comments = await apifyRun("apify~facebook-comments-scraper", {
+    startUrls: postUrls.map((url: string) => ({ url })),
+    resultsLimit: APIFY_COMMENTS_PER_RUN,
+  });
+
+  return comments
+    .filter((c: any) => c?.id && c?.text && isWorthScoring(c.text))
+    .map((c: any) => ({
+      externalId: String(c.id),
+      url: c.commentUrl ?? c.facebookUrl ?? pageUrl,
+      title: firstLine(c.text),
+      snippet: clip(c.text),
+      author: c.profileName ?? undefined,
+      subsource: page.replace(/^https?:\/\/(www\.)?facebook\.com\//, ""),
+      postedAt: Date.parse(c.date ?? "") || Date.now(),
+      score: c.likesCount ?? undefined,
+      commentCount: c.commentsCount ?? undefined,
+      type: "comment",
+      parentUrl: c.inputUrl ?? undefined,
+      parentTitle: c.postTitle ? clip(c.postTitle, 200) : undefined,
+    }));
+}
+
+async function fetchInstagramComments(account: string): Promise<Normalized[]> {
+  const handle = account
+    .replace(/^https?:\/\/(www\.)?instagram\.com\//, "")
+    .replace(/^@/, "")
+    .replace(/\/$/, "");
+  const posts = await apifyRun("apify~instagram-scraper", {
+    directUrls: [`https://www.instagram.com/${handle}/`],
+    resultsType: "posts",
+    resultsLimit: APIFY_POSTS_PER_PAGE,
+  });
+  const bycaption: Record<string, string> = {};
+  const postUrls: string[] = [];
+  for (const post of posts) {
+    if (!post?.url) continue;
+    postUrls.push(post.url);
+    if (post.caption) bycaption[post.url] = post.caption;
+  }
+  if (!postUrls.length) return [];
+
+  const comments = await apifyRun("apify~instagram-comment-scraper", {
+    directUrls: postUrls,
+    resultsLimit: APIFY_COMMENTS_PER_RUN,
+  });
+
+  return comments
+    .filter((c: any) => c?.id && c?.text && isWorthScoring(c.text))
+    .map((c: any) => ({
+      externalId: String(c.id),
+      url: c.commentUrl || c.postUrl || `https://www.instagram.com/${handle}/`,
+      title: firstLine(c.text),
+      snippet: clip(c.text),
+      author: c.ownerUsername ? `@${c.ownerUsername}` : undefined,
+      subsource: `@${handle}`,
+      postedAt: Date.parse(c.timestamp ?? "") || Date.now(),
+      score: c.likesCount ?? undefined,
+      commentCount: c.repliesCount ?? undefined,
+      type: "comment",
+      parentUrl: c.postUrl ?? undefined,
+      parentTitle: c.postUrl && bycaption[c.postUrl] ? clip(bycaption[c.postUrl], 200) : undefined,
+    }));
+}
+
 type Fetcher = (query: string) => Promise<Normalized[]>;
 
 const FETCHERS: Record<string, Fetcher | undefined> = {
@@ -285,6 +395,8 @@ const FETCHERS: Record<string, Fetcher | undefined> = {
   "bluesky:keyword": searchBluesky,
   "github:keyword": searchGithubDiscussions,
   "youtube:keyword": searchYoutube,
+  "facebook:community": fetchFacebookComments,
+  "instagram:community": fetchInstagramComments,
 };
 
 type JobResult = {
@@ -349,6 +461,8 @@ export const refreshProject = action({
     const jobs: Doc<"jobs">[] = await ctx.runQuery(internal.pipeline.jobsForProject, {
       keywords: project.keywords,
       communities: project.communities,
+      facebookPages: project.facebookPages,
+      instagramAccounts: project.instagramAccounts,
       platforms: project.platforms,
       olderThanMs: 3 * 60 * 1000,
     });

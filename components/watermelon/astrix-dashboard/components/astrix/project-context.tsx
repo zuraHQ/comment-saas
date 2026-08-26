@@ -3,6 +3,8 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
 import {
   FaBluesky,
+  FaFacebook,
+  FaInstagram,
   FaGithub,
   FaHackerNews,
   FaLinkedinIn,
@@ -29,6 +31,8 @@ export const PLATFORM_OPTIONS = [
   { id: "bluesky", label: "Bluesky", Icon: FaBluesky, bg: "#0085FF", fg: "#ffffff", live: true },
   { id: "threads", label: "Threads", Icon: FaThreads, bg: "#ffffff", fg: "#000000", live: false },
   { id: "github", label: "GitHub", Icon: FaGithub, bg: "#ffffff", fg: "#000000", live: true },
+  { id: "facebook", label: "Facebook", Icon: FaFacebook, bg: "#1877F2", fg: "#ffffff", live: true },
+  { id: "instagram", label: "Instagram", Icon: FaInstagram, bg: "#E4405F", fg: "#ffffff", live: true },
 ] as const;
 
 type ProjectContextValue = {
@@ -46,6 +50,8 @@ type ProjectContextValue = {
       keywords?: string[];
       lockedKeywords?: string[];
       communities?: string[];
+      facebookPages?: string[];
+      instagramAccounts?: string[];
       platforms?: string[];
       iconId?: Id<"_storage">;
     },

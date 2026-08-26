@@ -16,6 +16,21 @@ function normalizeKeywords(keywords: string[]) {
   return [...new Set(keywords.map((k) => k.trim().toLowerCase()).filter(Boolean))];
 }
 
+function normalizeHandles(values: string[], stripPrefix: RegExp) {
+  return [
+    ...new Set(
+      values
+        .map((value) =>
+          value.trim().toLowerCase().replace(stripPrefix, "").replace(/\/$/, ""),
+        )
+        .filter(Boolean),
+    ),
+  ];
+}
+
+const FACEBOOK_PREFIX = /^(https?:\/\/)?(www\.)?facebook\.com\//;
+const INSTAGRAM_PREFIX = /^(https?:\/\/)?(www\.)?instagram\.com\/|^@/;
+
 // Accepts "r/SaaS", "/r/saas" or "saas" and stores "saas".
 function normalizeCommunities(communities: string[]) {
   return [
@@ -50,8 +65,24 @@ async function ensureJob(
 
 async function ensureJobs(
   ctx: MutationCtx,
-  { keywords, communities }: { keywords?: string[]; communities?: string[] },
+  {
+    keywords,
+    communities,
+    facebookPages,
+    instagramAccounts,
+  }: {
+    keywords?: string[];
+    communities?: string[];
+    facebookPages?: string[];
+    instagramAccounts?: string[];
+  },
 ) {
+  for (const page of facebookPages ?? []) {
+    await ensureJob(ctx, "facebook", "community", page);
+  }
+  for (const account of instagramAccounts ?? []) {
+    await ensureJob(ctx, "instagram", "community", account);
+  }
   for (const keyword of keywords ?? []) {
     for (const platform of KEYWORD_PLATFORMS) {
       await ensureJob(ctx, platform, "keyword", keyword);
@@ -149,12 +180,31 @@ export const update = mutation({
     keywords: v.optional(v.array(v.string())),
     lockedKeywords: v.optional(v.array(v.string())),
     communities: v.optional(v.array(v.string())),
+    facebookPages: v.optional(v.array(v.string())),
+    instagramAccounts: v.optional(v.array(v.string())),
     platforms: v.optional(v.array(v.string())),
   },
   handler: async (ctx, args) => {
     const project = await requireOwnedProject(ctx, args.projectId);
-    const { projectId, keywords, lockedKeywords, communities, ...rest } = args;
+    const {
+      projectId,
+      keywords,
+      lockedKeywords,
+      communities,
+      facebookPages,
+      instagramAccounts,
+      ...rest
+    } = args;
     const patch: Record<string, unknown> = { ...rest };
+    if (facebookPages) {
+      patch.facebookPages = normalizeHandles(facebookPages, FACEBOOK_PREFIX);
+    }
+    if (instagramAccounts) {
+      patch.instagramAccounts = normalizeHandles(
+        instagramAccounts,
+        INSTAGRAM_PREFIX,
+      );
+    }
     if (lockedKeywords) patch.lockedKeywords = normalizeKeywords(lockedKeywords);
     if (keywords) {
       // Our chosen keywords always survive, whatever list the client sends.
@@ -168,6 +218,8 @@ export const update = mutation({
     await ensureJobs(ctx, {
       keywords: patch.keywords as string[] | undefined,
       communities: patch.communities as string[] | undefined,
+      facebookPages: patch.facebookPages as string[] | undefined,
+      instagramAccounts: patch.instagramAccounts as string[] | undefined,
     });
     await ctx.db.patch(projectId, patch);
   },

@@ -8,6 +8,9 @@ export const KEYWORD_PLATFORMS = ["reddit", "bluesky", "github", "youtube"];
 // 100 of a 10k/day quota, so they run a few times a day, not every 15 min.
 export const PLATFORM_MIN_INTERVAL_MS: Record<string, number> = {
   youtube: 6 * 60 * 60 * 1000,
+  // Apify runs spend real credit, twice per day is plenty for comments.
+  facebook: 12 * 60 * 60 * 1000,
+  instagram: 12 * 60 * 60 * 1000,
 };
 
 // HN publishes only a few hundred stories a day, so we read all of it and

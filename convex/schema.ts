@@ -24,6 +24,9 @@ export default defineSchema({
     url: v.optional(v.string()),
     description: v.optional(v.string()),
     keywords: v.array(v.string()),
+    // Pages/accounts whose comment sections we watch (facebook, instagram).
+    facebookPages: v.optional(v.array(v.string())),
+    instagramAccounts: v.optional(v.array(v.string())),
     // The subset of keywords we picked for the user; always kept in keywords.
     lockedKeywords: v.optional(v.array(v.string())),
     // Subreddit names without the r/ prefix, lowercased.
@@ -46,6 +49,10 @@ export default defineSchema({
     subsource: v.optional(v.string()),
     postedAt: v.number(),
     fetchedVia: v.string(), // "community:saas" or "keyword:crm alternative"
+    // Comments are posts with a parent; parentTitle gives the scorer context.
+    type: v.optional(v.string()), // "comment" when not a top-level post
+    parentUrl: v.optional(v.string()),
+    parentTitle: v.optional(v.string()),
     score: v.optional(v.number()),
     commentCount: v.optional(v.number()),
   })
