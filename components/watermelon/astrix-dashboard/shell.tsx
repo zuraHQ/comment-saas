@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useState, type ReactNode } from "react";
-import { usePathname } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import DashboardLayout from "./dashboard-layout";
@@ -56,8 +56,10 @@ function Gate({ children }: { children: ReactNode }) {
 // A slug that does not belong to this user should say so, not render blanks.
 function ProjectGuard({ children }: { children: ReactNode }) {
   const { project, projects, loading } = useProject();
-  const pathname = usePathname();
-  const isProjectRoute = /^\/dashboard\/[^/]+/.test(pathname ?? "");
+  // Account pages like /dashboard/profile are static routes with no [project]
+  // segment, so the param is what tells the two apart.
+  const params = useParams();
+  const isProjectRoute = typeof params?.project === "string";
 
   if (!isProjectRoute || loading || project) return <>{children}</>;
   if (!projects.length) return <>{children}</>;

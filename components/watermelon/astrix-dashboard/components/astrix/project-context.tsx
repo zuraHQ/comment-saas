@@ -68,6 +68,7 @@ const ProjectContext = createContext<ProjectContextValue | null>(null);
 
 export function ProjectProvider({ children }: { children: ReactNode }) {
   const projects = useQuery(api.projects.list);
+  const me = useQuery(api.users.me);
   const create = useMutation(api.projects.create);
   const update = useMutation(api.projects.update);
   const remove = useMutation(api.projects.remove);
@@ -79,7 +80,11 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
 
   const list = projects ?? [];
   // The URL decides which project is open; nothing else can disagree with it.
-  const project = list.find((p) => p.slug === slug) ?? null;
+  // Account pages carry no slug, so fall back to the last one used there.
+  const project =
+    (slug
+      ? list.find((p) => p.slug === slug)
+      : (list.find((p) => p._id === me?.lastProjectId) ?? list[0])) ?? null;
 
   // Keep the same sub-page when switching projects: /analytics stays there.
   const subPath = (() => {
