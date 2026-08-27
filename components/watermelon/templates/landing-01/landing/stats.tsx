@@ -23,81 +23,93 @@ const CHATTER = [
   { text: 'spreadsheets are killing me', Icon: FaRedditAlien, color: '#FF4500' },
 ];
 
+const SWEEP_SECONDS = 5;
+
+// Blips sit on the ring; each flashes as the sweep angle reaches it.
+const BLIPS = [{"angle": 25, "left": 62.68, "top": 22.81}, {"angle": 115, "left": 77.19, "top": 62.68}, {"angle": 205, "left": 37.32, "top": 77.19}, {"angle": 295, "left": 22.81, "top": 37.32}];
+
 function ScanVisual() {
+  const [active, setActive] = useState(0);
+
+  // Advance the surfaced comment in step with the sweep passing each blip.
+  useEffect(() => {
+    const timer = setInterval(
+      () => setActive((i) => (i + 1) % BLIPS.length),
+      (SWEEP_SECONDS * 1000) / BLIPS.length,
+    );
+    return () => clearInterval(timer);
+  }, []);
+
+  const item = CHATTER[active % CHATTER.length];
+
   return (
     <div className="relative flex h-80 items-center justify-center overflow-hidden">
-      {/* Radar rings with a rotating sweep */}
-      <div className="absolute flex h-72 w-72 items-center justify-center rounded-full border border-white/10">
+      <div className="relative flex h-72 w-72 items-center justify-center rounded-full border border-white/10">
+        {/* Sweep */}
         <motion.div
           className="absolute inset-0 rounded-full"
           style={{
             background:
-              'conic-gradient(from 0deg, rgba(163,255,18,0.25), rgba(163,255,18,0) 35%)',
+              'conic-gradient(from 0deg, rgba(163,255,18,0.28), rgba(163,255,18,0) 30%)',
           }}
           animate={{ rotate: 360 }}
-          transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
+          transition={{
+            duration: SWEEP_SECONDS,
+            repeat: Infinity,
+            ease: 'linear',
+          }}
         />
+
+        {/* Rings */}
         <div className="flex h-48 w-48 items-center justify-center rounded-full border border-white/10">
           <div className="bg-background flex h-24 w-24 items-center justify-center rounded-full border border-white/15">
             <Globe className="h-6 w-6 text-white/60" strokeWidth={1.25} />
           </div>
         </div>
-      </div>
 
-      {/* Chatter swapping out as the sweep picks up new posts */}
-      <div className="relative z-10 flex w-full flex-col gap-2 px-6">
-        {[0, 1, 2, 3].map((slot) => (
-          <ChatterSlot key={slot} slot={slot} />
+        {/* Contacts on the ring */}
+        {BLIPS.map((blip, i) => (
+          <motion.span
+            key={blip.angle}
+            className="bg-primary absolute h-2 w-2 rounded-full"
+            style={{
+              left: `${blip.left}%`,
+              top: `${blip.top}%`,
+              marginLeft: -4,
+              marginTop: -4,
+            }}
+            animate={{ opacity: [0.15, 1, 0.15], scale: [1, 1.6, 1] }}
+            transition={{
+              duration: SWEEP_SECONDS,
+              times: [0, 0.06, 0.5],
+              repeat: Infinity,
+              delay: (blip.angle / 360) * SWEEP_SECONDS,
+              ease: 'easeOut',
+            }}
+          />
         ))}
       </div>
+
+      {/* What the sweep just picked up */}
+      <div className="absolute bottom-2 left-0 flex w-full justify-center px-4">
+        <AnimatePresence mode="wait">
+          <motion.span
+            key={item.text}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.3, ease: 'easeOut' }}
+            className="bg-background/90 flex items-center gap-2 border border-white/10 px-3 py-1.5 text-xs whitespace-nowrap text-white/70 backdrop-blur-sm"
+          >
+            <item.Icon
+              className="h-3.5 w-3.5 shrink-0"
+              style={{ color: item.color }}
+            />
+            {item.text}
+          </motion.span>
+        </AnimatePresence>
+      </div>
     </div>
-  );
-}
-
-// Each slot cycles through the chatter list, offset so they swap one by one.
-function ChatterSlot({ slot }: { slot: number }) {
-  const [index, setIndex] = useState(slot);
-
-  useEffect(() => {
-    let timer: ReturnType<typeof setInterval>;
-    const start = setTimeout(() => {
-      timer = setInterval(
-        () => setIndex((i) => (i + 4) % CHATTER.length),
-        3200,
-      );
-    }, slot * 800);
-    return () => {
-      clearTimeout(start);
-      if (timer) clearInterval(timer);
-    };
-  }, [slot]);
-
-  const item = CHATTER[index % CHATTER.length];
-
-  return (
-    <span
-      className={cn(
-        'flex h-8 w-fit max-w-full items-center',
-        slot % 2 === 0 ? 'mr-auto' : 'ml-auto',
-      )}
-    >
-      <AnimatePresence mode="wait">
-        <motion.span
-          key={item.text}
-          className="bg-background/80 flex items-center gap-2 border border-white/10 px-3 py-1.5 text-xs whitespace-nowrap text-white/60 backdrop-blur-sm"
-          initial={{ opacity: 0, y: 6 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -6 }}
-          transition={{ duration: 0.35, ease: 'easeOut' }}
-        >
-          <item.Icon
-            className="h-3.5 w-3.5 shrink-0"
-            style={{ color: item.color }}
-          />
-          {item.text}
-        </motion.span>
-      </AnimatePresence>
-    </span>
   );
 }
 
