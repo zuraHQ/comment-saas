@@ -44,60 +44,34 @@ function ScanVisual() {
         </div>
       </div>
 
-      {/* Chatter swapping out as the sweep picks up new posts */}
+      {/* Chatter picked up by the sweep */}
       <div className="relative z-10 flex w-full flex-col gap-2 px-6">
-        {[0, 1, 2, 3].map((slot) => (
-          <ChatterSlot key={slot} slot={slot} />
+        {CHATTER.slice(0, 4).map((item, i) => (
+          <motion.span
+            key={item.text}
+            className={cn(
+              'bg-background/80 flex items-center gap-2 border border-white/10 px-3 py-1.5 text-xs text-white/60 backdrop-blur-sm',
+              i % 2 === 0 ? 'mr-auto' : 'ml-auto',
+            )}
+            initial={{ opacity: 0.15 }}
+            animate={{ opacity: [0.15, 1, 0.15] }}
+            transition={{
+              duration: 4,
+              times: [0, 0.25, 1],
+              repeat: Infinity,
+              delay: i,
+              ease: 'easeInOut',
+            }}
+          >
+            <item.Icon
+              className="h-3.5 w-3.5 shrink-0"
+              style={{ color: item.color }}
+            />
+            {item.text}
+          </motion.span>
         ))}
       </div>
     </div>
-  );
-}
-
-// Each slot cycles through the chatter list, offset so they swap one by one.
-function ChatterSlot({ slot }: { slot: number }) {
-  const [index, setIndex] = useState(slot);
-
-  useEffect(() => {
-    let timer: ReturnType<typeof setInterval>;
-    const start = setTimeout(() => {
-      timer = setInterval(
-        () => setIndex((i) => (i + 4) % CHATTER.length),
-        3200,
-      );
-    }, slot * 800);
-    return () => {
-      clearTimeout(start);
-      if (timer) clearInterval(timer);
-    };
-  }, [slot]);
-
-  const item = CHATTER[index % CHATTER.length];
-
-  return (
-    <span
-      className={cn(
-        'flex h-8 w-fit max-w-full items-center',
-        slot % 2 === 0 ? 'mr-auto' : 'ml-auto',
-      )}
-    >
-      <AnimatePresence mode="wait">
-        <motion.span
-          key={item.text}
-          className="bg-background/80 flex items-center gap-2 border border-white/10 px-3 py-1.5 text-xs whitespace-nowrap text-white/60 backdrop-blur-sm"
-          initial={{ opacity: 0, y: 6 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -6 }}
-          transition={{ duration: 0.35, ease: 'easeOut' }}
-        >
-          <item.Icon
-            className="h-3.5 w-3.5 shrink-0"
-            style={{ color: item.color }}
-          />
-          {item.text}
-        </motion.span>
-      </AnimatePresence>
-    </span>
   );
 }
 
