@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useState, type ReactNode } from "react";
+import { usePathname } from "next/navigation";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import DashboardLayout from "./dashboard-layout";
 import { AuthGate } from "./components/astrix/auth-gate";
 import { OnboardingContent } from "./components/astrix/onboarding-content";
 import { FeedFilterProvider } from "./components/astrix/feed-filter";
-import { ProjectProvider } from "./components/astrix/project-context";
+import { ProjectProvider, useProject } from "./components/astrix/project-context";
 import { ThemeProvider } from "./components/astrix/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
@@ -45,7 +46,27 @@ function Gate({ children }: { children: ReactNode }) {
   if (!settled && !hint) return <div className="min-h-screen bg-background" />;
   if (settled && !me.onboardedAt) return <OnboardingContent />;
 
-  return <DashboardLayout>{children}</DashboardLayout>;
+  return (
+    <DashboardLayout>
+      <ProjectGuard>{children}</ProjectGuard>
+    </DashboardLayout>
+  );
+}
+
+// A slug that does not belong to this user should say so, not render blanks.
+function ProjectGuard({ children }: { children: ReactNode }) {
+  const { project, projects, loading } = useProject();
+  const pathname = usePathname();
+  const isProjectRoute = /^\/dashboard\/[^/]+/.test(pathname ?? "");
+
+  if (!isProjectRoute || loading || project) return <>{children}</>;
+  if (!projects.length) return <>{children}</>;
+
+  return (
+    <div className="p-6 text-sm text-muted-foreground">
+      That project does not exist. Pick one from the switcher above.
+    </div>
+  );
 }
 
 export default function DashboardShell({ children }: { children: ReactNode }) {

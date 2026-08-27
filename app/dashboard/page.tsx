@@ -1,5 +1,6 @@
-import { PostsContent } from "@/components/watermelon/astrix-dashboard/components/astrix/posts-content";
+import ProjectRedirect from "@/components/watermelon/astrix-dashboard/project-redirect";
 
-export default function DashboardPage() {
-  return <PostsContent />;
+// /dashboard has no project of its own: send people to the one they last used.
+export default function DashboardIndexPage() {
+  return <ProjectRedirect />;
 }

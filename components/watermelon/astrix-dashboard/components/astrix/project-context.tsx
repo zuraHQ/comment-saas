@@ -1,6 +1,8 @@
 "use client";
 
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useContext, type ReactNode } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useProjectSlug } from "./navigation";
 import {
   FaBluesky,
   FaInstagram,
@@ -64,35 +66,54 @@ const ProjectContext = createContext<ProjectContextValue | null>(null);
 
 export function ProjectProvider({ children }: { children: ReactNode }) {
   const projects = useQuery(api.projects.list);
-  const me = useQuery(api.users.me);
   const create = useMutation(api.projects.create);
   const update = useMutation(api.projects.update);
   const remove = useMutation(api.projects.remove);
   const setLastProject = useMutation(api.users.setLastProject);
 
-  // Selection this session; falls back to the one Convex remembered for us.
-  const [pickedId, setPickedId] = useState<Id<"projects"> | null>(null);
+  const router = useRouter();
+  const pathname = usePathname();
+  const slug = useProjectSlug();
 
   const list = projects ?? [];
-  const selectedId = pickedId ?? me?.lastProjectId ?? null;
-  const project = list.find((p) => p._id === selectedId) ?? list[0] ?? null;
+  // The URL decides which project is open; nothing else can disagree with it.
+  const project = list.find((p) => p.slug === slug) ?? null;
+
+  // Keep the same sub-page when switching projects: /analytics stays there.
+  const subPath = (() => {
+    if (!slug || !pathname) return "";
+    const rest = pathname.replace(`/dashboard/${slug}`, "");
+    return rest === "/" ? "" : rest;
+  })();
+
+  const goToProject = (nextSlug: string) => {
+    router.push(`/dashboard/${nextSlug}${subPath}`);
+  };
 
   const setProjectId = (id: Id<"projects">) => {
-    setPickedId(id);
+    const target = list.find((p) => p._id === id);
+    if (!target) return;
     setLastProject({ projectId: id }).catch(console.error);
+    goToProject(target.slug);
   };
 
   const addProject = async (name: string) => {
     const id = await create({ name });
-    setProjectId(id);
+    setLastProject({ projectId: id }).catch(console.error);
+    // The new project's slug comes back on the next projects.list update, so
+    // route by name-derived slug the server would have produced.
+    const slugified =
+      name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") ||
+      "project";
+    router.push(`/dashboard/${slugified}/settings`);
     return id;
   };
 
   const removeProject = async (id: Id<"projects">) => {
     await remove({ projectId: id });
     const next = list.find((p) => p._id !== id);
-    if (next) setProjectId(next._id);
-    else setPickedId(null);
+    if (next) goToProject(next.slug);
+    else router.push("/dashboard");
   };
 
   return (
