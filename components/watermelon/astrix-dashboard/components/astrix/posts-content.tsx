@@ -72,6 +72,25 @@ export function IntentBadge({ match }: { match: Doc<"matches"> }) {
   );
 }
 
+// Placeholder drafts so the reply slot can be judged visually. The real ones
+// will come from the model.
+const MOCK_REPLIES = [
+  (product: string) =>
+    `Ran into this exact thing last year. We ended up building ${product} around it — happy to share how we handle the messy part if that helps.`,
+  (product: string) =>
+    `The tedious bit here is doing it by hand every day. That is basically why ${product} exists, though honestly even a rough script gets you most of the way.`,
+  (product: string) =>
+    `Same boat a few months ago. What worked for us was cutting the list down before reading any of it, which is the whole idea behind ${product}.`,
+  (product: string) =>
+    `Worth checking how much of this is repeat work — that was 80% of ours. We wrote ${product} for the repeat part and kept the judgement calls manual.`,
+];
+
+function mockReply(key: string, product: string): string {
+  let hash = 0;
+  for (let i = 0; i < key.length; i++) hash = (hash * 31 + key.charCodeAt(i)) | 0;
+  return MOCK_REPLIES[Math.abs(hash) % MOCK_REPLIES.length](product);
+}
+
 export function PostsContent() {
   const { project } = useProject();
 
@@ -325,11 +344,14 @@ export function PostsContent() {
 
           {/* Post feed */}
           <section className="flex min-w-0 flex-1 flex-col">
-            <ul className="no-scrollbar flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto p-3">
+            <ul className="no-scrollbar grid min-h-0 flex-1 auto-rows-min grid-cols-1 content-start gap-3 overflow-y-auto p-3 lg:grid-cols-2 2xl:grid-cols-3">
               {visibleRows.map((row) => (
                 <li
                   key={row.match._id}
-                  className="border border-border bg-card"
+                  className={cn(
+                    "border border-border bg-card p-3",
+                    row.match.replied && "opacity-50",
+                  )}
                 >
                   <a
                     href={row.post.url}
@@ -342,10 +364,7 @@ export function PostsContent() {
                         );
                       }
                     }}
-                    className={cn(
-                      "group block cursor-pointer p-4 transition-colors hover:bg-sidebar-accent/40",
-                      row.match.replied && "opacity-50",
-                    )}
+                    className="group block cursor-pointer border border-border bg-background p-4 transition-colors hover:border-foreground/25"
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div className="min-w-0">
@@ -420,12 +439,21 @@ export function PostsContent() {
                       </div>
                     </div>
                   </a>
+
+                  <div className="px-1 pt-3">
+                    <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
+                      Reply
+                    </p>
+                    <p className="mt-2 text-sm text-foreground/75">
+                      {mockReply(row.match._id, project?.name ?? "our tool")}
+                    </p>
+                  </div>
                 </li>
               ))}
               {feed === undefined ? (
                 Array.from({ length: 8 }, (_, i) => (
-                  <li key={i} className="border border-border bg-card p-4">
-                    <div className="flex items-start justify-between gap-4">
+                  <li key={i} className="border border-border bg-card p-3">
+                    <div className="flex items-start justify-between gap-4 border border-border bg-background p-4">
                       <div className="min-w-0 flex-1">
                         <div className="h-4 w-2/3 bg-sidebar-accent" />
                         <div className="mt-2 h-3 w-1/3 bg-sidebar-accent/70" />
@@ -434,10 +462,15 @@ export function PostsContent() {
                       </div>
                       <div className="h-10 w-10 shrink-0 border border-border" />
                     </div>
+                    <div className="px-1 pt-3">
+                      <div className="h-2.5 w-10 bg-sidebar-accent/70" />
+                      <div className="mt-3 h-3 w-11/12 bg-sidebar-accent/50" />
+                      <div className="mt-1.5 h-3 w-3/5 bg-sidebar-accent/50" />
+                    </div>
                   </li>
                 ))
               ) : visibleRows.length === 0 ? (
-                <li className="py-12 text-center text-sm text-muted-foreground">
+                <li className="col-span-full py-12 text-center text-sm text-muted-foreground">
                   {platformRows.length > 0
                     ? "Nothing matches the current filters."
                     : `No ${active?.label ?? ""} posts yet. They land here as we fetch.`}
