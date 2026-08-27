@@ -498,8 +498,8 @@ const STEPS = [
   },
   {
     number: '04',
-    title: 'You get customers',
-    body: 'Every reply carries a tracked link, so clicks come back tagged with the platform they came from. You see which conversations turned into visitors, and which channel is worth your next hour.',
+    title: 'You see what worked',
+    body: 'Every reply carries a tracked link, so clicks come back tagged with the platform they came from. You learn which conversations sent people to your site, and which channel is worth your next hour.',
     visual: <ResultVisual />,
   },
 ];
@@ -529,7 +529,7 @@ export default function Stats() {
             variant="big"
             className="text-foreground font-sans font-semibold text-balance lg:text-[48px]"
           >
-            How strangers become customers.
+            What happens in between
           </Heading>
         </div>
 
