@@ -5,6 +5,8 @@ import Hero from './landing/hero';
 // Real pipeline numbers, parked until they are worth showing off.
 // import LiveData from './landing/live-data';
 import ManualVs from './landing/manual-vs';
+import Cta from './landing/cta';
+import Faq from './landing/faq';
 import Pricing from './landing/pricing';
 import ProductShot from './landing/product-shot';
 import Stats from './landing/stats';
@@ -25,6 +27,8 @@ export default function Landing01Demo() {
       <ManualVs />
       {/* <LiveData /> */}
       <Pricing />
+      <Faq />
+      <Cta />
       <Footer />
     </main>
   );
