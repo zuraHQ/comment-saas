@@ -83,7 +83,7 @@ export function LaunchpadContent() {
             <div
               key={`${site.domain}-${site.name}`}
               className={cn(
-                "flex items-center border pr-3 transition-colors",
+                "flex items-center border bg-sidebar-accent/20 pr-3 transition-colors",
                 isLaunched ? "border-primary/40" : "border-border",
               )}
             >

@@ -41,7 +41,7 @@ export function ProfileContent() {
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 p-6">
       <h1 className="text-xl font-semibold">Profile</h1>
 
-      <section className="flex items-center gap-4 border border-border p-5">
+      <section className="flex items-center gap-4 border border-border bg-sidebar-accent/20 p-5">
         <Avatar className="size-14">
           <AvatarImage src={me?.imageUrl} alt={me?.name ?? ""} />
           <AvatarFallback>
@@ -56,7 +56,7 @@ export function ProfileContent() {
         </div>
       </section>
 
-      <section className="flex flex-col gap-4 border border-border p-5">
+      <section className="flex flex-col gap-4 border border-border bg-sidebar-accent/20 p-5">
         <div>
           <h2 className="text-xs font-bold tracking-wider text-muted-foreground uppercase">
             Billing
@@ -85,7 +85,7 @@ export function ProfileContent() {
         </div>
       </section>
 
-      <section className="flex flex-col gap-4 border border-border p-5">
+      <section className="flex flex-col gap-4 border border-border bg-sidebar-accent/20 p-5">
         <div>
           <h2 className="text-xs font-bold tracking-wider text-muted-foreground uppercase">
             Integrations

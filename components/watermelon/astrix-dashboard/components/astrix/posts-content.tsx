@@ -194,7 +194,7 @@ export function PostsContent() {
 
   return (
     <div className="flex h-full flex-col p-6">
-      <div className="flex min-h-0 flex-1 flex-col border border-border">
+      <div className="flex min-h-0 flex-1 flex-col border border-border bg-sidebar-accent/20">
         <div className="flex flex-wrap items-center gap-3 border-b border-border px-4 py-3">
           <h1 className="flex items-center gap-2 text-xl font-semibold">
             Looking posts for:

@@ -562,7 +562,7 @@ function Section({
     : undefined;
   const GlobeIcon = platform === "all" ? Globe : undefined;
   return (
-    <section className="flex flex-col gap-4 border border-border p-5">
+    <section className="flex flex-col gap-4 border border-border bg-sidebar-accent/20 p-5">
       <div>
         <h2 className="flex items-center gap-2 text-xs font-bold tracking-wider text-muted-foreground uppercase">
           {meta ? (
