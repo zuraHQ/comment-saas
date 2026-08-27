@@ -193,17 +193,7 @@ export function PostsContent() {
   return (
     <div className="flex h-full flex-col">
       <div className="flex min-h-0 flex-1 flex-col">
-        <div className="flex flex-wrap items-center justify-end gap-3 border-b border-border px-4 py-3">
-          <button
-            type="button"
-            onClick={refresh}
-            aria-label="Refresh posts"
-            disabled={refreshing}
-            className="flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground disabled:cursor-default"
-          >
-            <RefreshCw className={cn("size-4", refreshing && "animate-spin")} />
-          </button>
-
+        <div className="flex flex-wrap items-center gap-3 border-b border-border px-4 py-3">
           <div className="flex items-center">
             {INTENT_FILTERS.map((option) => (
               <button
@@ -222,6 +212,16 @@ export function PostsContent() {
               </button>
             ))}
           </div>
+
+          <button
+            type="button"
+            onClick={refresh}
+            aria-label="Refresh posts"
+            disabled={refreshing}
+            className="ml-auto flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground disabled:cursor-default"
+          >
+            <RefreshCw className={cn("size-4", refreshing && "animate-spin")} />
+          </button>
 
           <Sheet>
             <SheetTrigger
