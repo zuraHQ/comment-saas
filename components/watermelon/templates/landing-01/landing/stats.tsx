@@ -386,7 +386,7 @@ export default function Stats() {
             variant="big"
             className="text-foreground font-sans font-semibold text-balance lg:text-[48px]"
           >
-            Noise in. Customers out.
+            How strangers become customers.
           </Heading>
         </div>
 
