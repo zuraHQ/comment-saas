@@ -7,7 +7,6 @@ import Hero from './landing/hero';
 import ManualVs from './landing/manual-vs';
 import Pricing from './landing/pricing';
 import Stats from './landing/stats';
-import Testimonial from './landing/testimonial';
 import Footer from './landing/footer';
 
 export default function Landing01Demo() {
@@ -24,7 +23,6 @@ export default function Landing01Demo() {
       <ManualVs />
       {/* <LiveData /> */}
       <Pricing />
-      <Testimonial />
       <Footer />
     </main>
   );
