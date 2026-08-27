@@ -121,65 +121,6 @@ export function AnalyticsContent() {
         ) : null}
       </div>
 
-      {/* Your tracked link */}
-      <section className="flex flex-col gap-3 border border-border p-5">
-        <div>
-          <h2 className="flex items-center gap-2 text-sm font-semibold">
-            <Link2 className="size-4" />
-            Your tracked link
-          </h2>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Use this instead of your normal URL when you reply to a post.
-            Visitors land on your site as usual, and every click shows up below
-            with the platform it came from.
-          </p>
-        </div>
-
-        {hasUrl ? (
-          <div className="flex flex-wrap items-center gap-3">
-            <code className="min-w-0 flex-1 truncate border border-border bg-sidebar-accent/40 px-3 py-2 text-sm">
-              {link ?? "..."}
-            </code>
-            <button
-              type="button"
-              onClick={() => void copy()}
-              disabled={!link}
-              className={cn(
-                "flex h-9 shrink-0 cursor-pointer items-center gap-2 border px-4 text-xs font-bold tracking-wider uppercase transition-colors disabled:cursor-default disabled:opacity-50",
-                copied
-                  ? "border-primary text-primary"
-                  : "border-border text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
-              )}
-            >
-              {copied ? <Check className="size-3.5" /> : <Link2 className="size-3.5" />}
-              {copied ? "Copied" : "Copy link"}
-            </button>
-            <p className="w-full text-xs text-muted-foreground">
-              Redirects to{" "}
-              <span className="text-foreground">{project?.url}</span>
-            </p>
-          </div>
-        ) : (
-          <form onSubmit={saveUrl} className="flex flex-wrap items-center gap-3">
-            <Input
-              value={siteUrl}
-              onChange={(e) => setSiteUrl(e.target.value)}
-              placeholder="yourproduct.com"
-              className="h-9 min-w-0 flex-1 rounded-none"
-            />
-            <button
-              type="submit"
-              className="h-9 shrink-0 cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
-            >
-              Save
-            </button>
-            <p className="w-full text-xs text-muted-foreground">
-              Add your product URL to get a tracked link.
-            </p>
-          </form>
-        )}
-      </section>
-
       {/* Stat tiles */}
       <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
         {[
@@ -269,6 +210,65 @@ export function AnalyticsContent() {
           label={(row) => row.query}
         />
       </div>
+
+      {/* Your tracked link */}
+      <section className="flex flex-col gap-3 border border-border p-5">
+        <div>
+          <h2 className="flex items-center gap-2 text-sm font-semibold">
+            <Link2 className="size-4" />
+            Your tracked link
+          </h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Use this instead of your normal URL when you reply to a post.
+            Visitors land on your site as usual, and every click shows up below
+            with the platform it came from.
+          </p>
+        </div>
+
+        {hasUrl ? (
+          <div className="flex flex-wrap items-center gap-3">
+            <code className="min-w-0 flex-1 truncate border border-border bg-sidebar-accent/40 px-3 py-2 text-sm">
+              {link ?? "..."}
+            </code>
+            <button
+              type="button"
+              onClick={() => void copy()}
+              disabled={!link}
+              className={cn(
+                "flex h-9 shrink-0 cursor-pointer items-center gap-2 border px-4 text-xs font-bold tracking-wider uppercase transition-colors disabled:cursor-default disabled:opacity-50",
+                copied
+                  ? "border-primary text-primary"
+                  : "border-border text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
+              )}
+            >
+              {copied ? <Check className="size-3.5" /> : <Link2 className="size-3.5" />}
+              {copied ? "Copied" : "Copy link"}
+            </button>
+            <p className="w-full text-xs text-muted-foreground">
+              Redirects to{" "}
+              <span className="text-foreground">{project?.url}</span>
+            </p>
+          </div>
+        ) : (
+          <form onSubmit={saveUrl} className="flex flex-wrap items-center gap-3">
+            <Input
+              value={siteUrl}
+              onChange={(e) => setSiteUrl(e.target.value)}
+              placeholder="yourproduct.com"
+              className="h-9 min-w-0 flex-1 rounded-none"
+            />
+            <button
+              type="submit"
+              className="h-9 shrink-0 cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
+            >
+              Save
+            </button>
+            <p className="w-full text-xs text-muted-foreground">
+              Add your product URL to get a tracked link.
+            </p>
+          </form>
+        )}
+      </section>
     </div>
   );
 }
