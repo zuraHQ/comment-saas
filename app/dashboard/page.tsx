@@ -1,10 +1,5 @@
-import { Suspense } from "react";
-import AstrixDashboardDemo from "@/components/watermelon/astrix-dashboard/demo";
+import { PostsContent } from "@/components/watermelon/astrix-dashboard/components/astrix/posts-content";
 
 export default function DashboardPage() {
-  return (
-    <Suspense fallback={null}>
-      <AstrixDashboardDemo />
-    </Suspense>
-  );
+  return <PostsContent />;
 }

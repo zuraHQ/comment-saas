@@ -1,76 +1,43 @@
-import {
-  createContext,
-  useContext,
-  useMemo,
-  useState,
-  type AnchorHTMLAttributes,
-  type MouseEvent,
-  type ReactNode,
-} from "react";
+"use client";
 
-type DashboardNavigation = {
-  pathname: string;
-  navigate: (pathname: string) => void;
-};
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import type { AnchorHTMLAttributes, ReactNode } from "react";
 
-const DashboardNavigationContext = createContext<DashboardNavigation | null>(
-  null,
-);
+const BASE = "/dashboard";
+
+// Dashboard pages are real routes under /dashboard. Components keep using the
+// short paths ("/", "/analytics"), and these helpers map them to real URLs.
+export function toHref(path: string) {
+  return path === "/" ? BASE : `${BASE}${path}`;
+}
+
+function toShortPath(pathname: string) {
+  if (!pathname.startsWith(BASE)) return "/";
+  const rest = pathname.slice(BASE.length);
+  return rest === "" || rest === "/" ? "/" : rest.replace(/\/$/, "");
+}
 
 export function DashboardNavigationProvider({
   children,
 }: {
   children: ReactNode;
 }) {
-  const [pathname, setPathname] = useState("/");
-  const value = useMemo(
-    () => ({ pathname, navigate: setPathname }),
-    [pathname],
-  );
-
-  return (
-    <DashboardNavigationContext.Provider value={value}>
-      {children}
-    </DashboardNavigationContext.Provider>
-  );
+  return <>{children}</>;
 }
 
 export function useDashboardNavigation() {
-  const context = useContext(DashboardNavigationContext);
-
-  if (!context) {
-    throw new Error(
-      "useDashboardNavigation must be used within DashboardNavigationProvider",
-    );
-  }
-
-  return context;
+  const router = useRouter();
+  const pathname = usePathname();
+  return {
+    pathname: toShortPath(pathname ?? BASE),
+    navigate: (path: string) => router.push(toHref(path)),
+  };
 }
 
 export function DashboardLink({
   href,
-  onClick,
   ...props
 }: AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }) {
-  const { navigate } = useDashboardNavigation();
-
-  function handleClick(event: MouseEvent<HTMLAnchorElement>) {
-    onClick?.(event);
-
-    if (
-      event.defaultPrevented ||
-      event.button !== 0 ||
-      event.metaKey ||
-      event.ctrlKey ||
-      event.shiftKey ||
-      event.altKey
-    ) {
-      return;
-    }
-
-    event.preventDefault();
-    navigate(href);
-  }
-
-  return <a href={href} onClick={handleClick} {...props} />;
+  return <Link href={toHref(href)} {...props} />;
 }
