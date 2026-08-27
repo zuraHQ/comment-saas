@@ -1,6 +1,7 @@
 import Container from "./container";
 import Heading from "./heading";
 import SubHeading from "./subheading";
+import HeroDemo from "./hero-demo";
 import { motion, type Variants } from "motion/react";
 import Link from "next/link";
 import { useState } from "react";
@@ -123,11 +124,8 @@ export default function Hero() {
               <span className="h-2 w-2 bg-[#28C840]" />
             </div>
 
-            {/* Video demo drops in here */}
-            <div className="flex aspect-video w-full items-center justify-center">
-              <span className="font-mono text-xs tracking-widest text-white/30 uppercase">
-                [ Demo ]
-              </span>
+            <div className="aspect-video w-full overflow-hidden">
+              <HeroDemo />
             </div>
           </motion.div>
         </motion.div>
