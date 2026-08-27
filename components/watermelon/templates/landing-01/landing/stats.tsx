@@ -443,7 +443,7 @@ export default function Stats() {
   });
 
   return (
-    <section className="relative w-full py-24">
+    <section className="relative w-full pt-8 pb-24">
       <Container className="relative z-10 mx-auto">
         <div id="how-it-works" className="mb-16 flex flex-col items-center text-center">
           <p className="text-primary mb-6 inline-flex items-center font-mono text-xs font-bold tracking-widest uppercase">

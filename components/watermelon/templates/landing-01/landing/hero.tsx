@@ -27,6 +27,8 @@ const PLATFORMS = [
   { name: 'GitHub', Icon: FaGithub, bg: '#ffffff', color: '#ffffff', iconColor: '#000000' },
 ] as const;
 
+const HERO_MARKS = [{"i": 0, "left": 6.25, "top": 73.13}, {"i": 1, "left": 14.76, "top": 48.43}, {"i": 2, "left": 28.4, "top": 30.66}, {"i": 3, "left": 43.6, "top": 22.72}, {"i": 4, "left": 56.4, "top": 22.72}, {"i": 5, "left": 71.6, "top": 30.66}, {"i": 6, "left": 85.24, "top": 48.43}, {"i": 7, "left": 93.75, "top": 73.13}];
+
 export default function Hero() {
   const router = useRouter();
   const [wordIndex, setWordIndex] = useState(0);
@@ -63,7 +65,45 @@ export default function Hero() {
 
 
   return (
-    <section className="relative flex min-h-screen w-full flex-col justify-center overflow-x-hidden pt-48 pb-48 font-mono">
+    <section className="relative flex min-h-screen w-full flex-col justify-center overflow-x-hidden pt-48 pb-20 font-mono">
+      {/* Half radar arcing over the headline, with the platforms scattered on it */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-[70px] mx-auto hidden h-[420px] w-full max-w-5xl overflow-hidden lg:block"
+      >
+        <div className="absolute top-0 left-1/2 h-[840px] w-[840px] -translate-x-1/2 rounded-full border border-white/10" />
+        <div className="absolute top-[105px] left-1/2 h-[630px] w-[630px] -translate-x-1/2 rounded-full border border-dashed border-white/10" />
+        <div className="absolute top-[210px] left-1/2 h-[420px] w-[420px] -translate-x-1/2 rounded-full border border-white/5" />
+
+        {HERO_MARKS.map((mark) => {
+          const platform = PLATFORMS[mark.i % PLATFORMS.length];
+          return (
+            <motion.span
+              key={mark.i}
+              className="absolute flex h-8 w-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center"
+              style={{
+                left: `${mark.left}%`,
+                top: `${mark.top}%`,
+                backgroundColor: platform.bg,
+              }}
+              initial={{ opacity: 0.2 }}
+              animate={{ opacity: [0.2, 0.9, 0.2] }}
+              transition={{
+                duration: 6,
+                repeat: Infinity,
+                delay: mark.i * 0.7,
+                ease: 'easeInOut',
+              }}
+            >
+              <platform.Icon
+                className="h-4 w-4"
+                style={{ color: platform.iconColor }}
+              />
+            </motion.span>
+          );
+        })}
+      </div>
+
       {/* Abstract Background Concentric Circles (Left Edge) */}
       <div className="pointer-events-none absolute top-1/2 left-0 flex h-[800px] w-[800px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/5 opacity-30">
         <div className="flex h-[600px] w-[600px] items-center justify-center rounded-full border border-dashed border-white/10">
