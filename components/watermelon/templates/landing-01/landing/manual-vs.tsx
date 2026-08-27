@@ -15,10 +15,6 @@ export default function ManualVs() {
     <section className="relative w-full py-24">
       <Container className="relative z-10 mx-auto">
         <div className="mb-14 flex flex-col items-center text-center">
-          <p className="text-primary mb-6 inline-flex items-center font-mono text-xs font-bold tracking-widest uppercase">
-            <span className="mr-3 opacity-70">{'//'}</span>
-            The alternative
-          </p>
           <Heading
             as="h2"
             variant="big"
