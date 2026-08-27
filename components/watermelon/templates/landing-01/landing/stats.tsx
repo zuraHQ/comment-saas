@@ -203,83 +203,52 @@ function SortVisual() {
 }
 
 /* ---------------------------------------------------------------- 03 */
-// The point of this step is not that you reply - it is that you are first.
-const LATE_REPLIES = [
-  { author: 'u/toolstack_io', delay: '3h later', text: 'We do this too, check us out' },
-  { author: 'u/saasdigest', delay: '1d later', text: 'Have you tried [competitor]?' },
-];
-
+// A thread: the post, and your reply under it carrying a tracked link.
 function ReplyVisual() {
-  const [phase, setPhase] = useState(0);
-
-  // 0: post lands, 1: you reply, 2+: everyone else shows up late
-  useEffect(() => {
-    const timer = setInterval(() => setPhase((p) => (p + 1) % 5), 1400);
-    return () => clearInterval(timer);
-  }, []);
-
   return (
-    <div className="flex h-80 flex-col justify-center gap-3">
-      <article className="border border-white/15 bg-white/[0.04] p-4">
-        <div className="flex items-center gap-2">
-          <span className="flex h-5 w-5 shrink-0 items-center justify-center bg-[#FF4500]">
-            <FaRedditAlien className="h-3 w-3 text-white" />
-          </span>
-          <span className="text-[11px] text-white/40">
-            u/marta_builds · r/smallbusiness · just now
-          </span>
-          <span className="ml-auto bg-[#FF6600] px-2 py-0.5 font-mono text-[10px] font-bold tracking-widest text-[#101010] uppercase">
-            High
-          </span>
-        </div>
-        <p className="mt-2 text-xs text-white/75">
-          Looking for a simple invoicing tool for freelancers. Everything I try
-          wants an enterprise plan.
-        </p>
-      </article>
-
-      <div className="ml-5 flex flex-col gap-2 border-l border-white/10 pl-4">
-        <motion.div
-          animate={{
-            opacity: phase >= 1 ? 1 : 0.15,
-            y: phase >= 1 ? 0 : 6,
-          }}
-          transition={{ duration: 0.4, ease: 'easeOut' }}
-          className="border-primary/50 bg-primary/[0.06] border p-3"
-        >
+    <div className="flex h-80 flex-col justify-center">
+      <div className="divide-y divide-white/10 border border-white/10">
+        <article className="p-4">
           <div className="flex items-center gap-2">
-            <span className="bg-primary px-2 py-0.5 font-mono text-[10px] font-bold tracking-widest text-[#101010] uppercase">
-              1st reply
+            <span className="flex h-5 w-5 shrink-0 items-center justify-center bg-[#FF4500]">
+              <FaRedditAlien className="h-3 w-3 text-white" />
             </span>
-            <span className="text-[11px] text-white/50">
-              you · 4 minutes after it was posted
+            <span className="text-[11px] text-white/40">
+              u/marta_builds · r/smallbusiness · 4m
+            </span>
+            <span className="ml-auto bg-[#FF6600] px-2 py-0.5 font-mono text-[10px] font-bold tracking-widest text-[#101010] uppercase">
+              High
+            </span>
+          </div>
+          <p className="mt-2 text-xs text-white/75">
+            Looking for a simple invoicing tool for freelancers. Everything I
+            try wants an enterprise plan.
+          </p>
+        </article>
+
+        <div className="bg-white/[0.03] p-4 pl-8">
+          <div className="flex items-center gap-2">
+            <span className="bg-primary flex h-5 w-5 shrink-0 items-center justify-center">
+              <Check className="h-3 w-3 text-[#101010]" />
+            </span>
+            <span className="font-mono text-[10px] font-bold tracking-widest text-white/50 uppercase">
+              Your reply
             </span>
           </div>
           <p className="mt-2 text-xs text-white/80">
             Had the same problem, so I built something for it. Free tier covers
-            what you described.
+            what you described, no card needed.
           </p>
-          <div className="mt-3 flex items-center gap-2 border-t border-white/10 pt-2">
-            <Link2 className="text-primary h-3.5 w-3.5" />
-            <span className="font-mono text-[10px] text-white/40">
+          <div className="mt-3 flex items-center gap-2">
+            <Link2 className="text-primary h-3.5 w-3.5 shrink-0" />
+            <span className="truncate font-mono text-[10px] text-white/40">
               yoursaas.com/r/k3m9x2a
             </span>
-          </div>
-        </motion.div>
-
-        {LATE_REPLIES.map((reply, i) => (
-          <motion.div
-            key={reply.author}
-            animate={{ opacity: phase >= i + 2 ? 0.4 : 0.08 }}
-            transition={{ duration: 0.4, ease: 'easeOut' }}
-            className="border border-white/10 px-3 py-2"
-          >
-            <span className="text-[11px] text-white/40">
-              {reply.author} · {reply.delay}
+            <span className="text-primary ml-auto shrink-0 font-mono text-[10px] font-bold tracking-widest uppercase">
+              tracked
             </span>
-            <p className="mt-1 truncate text-xs text-white/40">{reply.text}</p>
-          </motion.div>
-        ))}
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -380,8 +349,8 @@ const STEPS = [
   },
   {
     number: '03',
-    title: 'You reply first',
-    body: 'You see the post minutes after it goes up, while it is still on the front page and nobody has answered. The first genuinely helpful reply is the one people click, and it carries your tracked link.',
+    title: 'You reply',
+    body: 'Open the post and answer like a person, not an ad. Every reply carries a tracked link, so the ones that actually bring people back are the ones you can see.',
     visual: <ReplyVisual />,
   },
   {
