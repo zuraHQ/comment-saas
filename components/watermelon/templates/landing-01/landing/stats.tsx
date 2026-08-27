@@ -98,7 +98,7 @@ const STEPS = [
 
 function ColumnLabel({ title, body }: { title: string; body: string }) {
   return (
-    <div className="mb-6">
+    <div>
       <p className="flex items-center gap-2 font-mono text-xs font-bold tracking-widest text-white uppercase">
         <span className="bg-primary h-1.5 w-1.5" />
         {title}
@@ -112,125 +112,126 @@ export default function Stats() {
   return (
     <section className="relative w-full overflow-hidden py-24">
       <Container className="relative z-10 mx-auto">
-        <div className="grid gap-10 lg:grid-cols-[1fr_auto_1fr] lg:gap-6">
-          {/* The internet: unfiltered noise */}
-          <div>
-            <ColumnLabel
-              title="The internet"
-              body="Millions of conversations happening right now"
-            />
-            <div className="relative h-[26rem] w-full">
-              {NOISE.map((item) => (
-                <span
-                  key={item.text}
-                  className="absolute max-w-[60%] truncate text-xs text-white/25"
-                  style={{ left: `${item.x}%`, top: `${item.y}%` }}
-                >
-                  {item.text}
-                </span>
-              ))}
-              {NOISE_MARKS.map((mark, i) => (
-                <mark.Icon
-                  key={i}
-                  className="absolute h-4 w-4 opacity-40"
-                  style={{
-                    left: `${mark.x}%`,
-                    top: `${mark.y}%`,
-                    color: mark.color,
-                  }}
+        {/* Two rows so the connecting web can span all three columns */}
+        <div className="grid gap-x-6 gap-y-10 lg:grid-cols-[1fr_14rem_1fr] lg:grid-rows-[auto_26rem]">
+          <ColumnLabel
+            title="The internet"
+            body="Millions of conversations happening right now"
+          />
+          <ColumnLabel
+            title="We find intent"
+            body="AI filters the noise and detects high-intent conversations"
+          />
+          <ColumnLabel
+            title="Customer opportunities"
+            body="High-intent posts, ready for you to reply"
+          />
+
+          {/* The web: left lines gather the noise, right lines feed the cards */}
+          <svg
+            viewBox="0 0 100 100"
+            preserveAspectRatio="none"
+            aria-hidden
+            className="pointer-events-none hidden h-full w-full lg:block"
+            style={{ gridColumn: "1 / -1", gridRow: 2 }}
+          >
+            {Array.from({ length: 16 }, (_, i) => {
+              const y = 4 + i * 6.2;
+              return (
+                <path
+                  key={`in-${i}`}
+                  d={`M2 ${y} C 30 ${y}, 40 50, 47 50`}
+                  className="stroke-white/10"
+                  fill="none"
+                  strokeWidth="0.15"
+                  vectorEffect="non-scaling-stroke"
                 />
-              ))}
-            </div>
-          </div>
+              );
+            })}
+            {[15, 38, 62, 85].map((y, i) => (
+              <path
+                key={`out-${i}`}
+                d={`M53 50 C 62 50, 70 ${y}, 98 ${y}`}
+                className="stroke-primary/40"
+                fill="none"
+                strokeWidth="0.15"
+                vectorEffect="non-scaling-stroke"
+              />
+            ))}
+          </svg>
 
-          {/* The filter */}
-          <div className="flex flex-col items-center">
-            <ColumnLabel
-              title="We find intent"
-              body="AI filters the noise and detects high-intent conversations"
-            />
-            <div className="relative flex h-[26rem] w-full items-center justify-center lg:w-56">
-              {/* Converging lines, left to centre and centre to right */}
-              <svg
-                viewBox="0 0 224 416"
-                className="absolute inset-0 h-full w-full"
-                preserveAspectRatio="none"
-                aria-hidden
+          {/* The internet: unfiltered noise */}
+          <div
+            className="relative h-[26rem] w-full"
+            style={{ gridColumn: 1, gridRow: 2 }}
+          >
+            {NOISE.map((item) => (
+              <span
+                key={item.text}
+                className="absolute max-w-[70%] truncate text-xs text-white/25"
+                style={{ left: `${item.x}%`, top: `${item.y}%` }}
               >
-                {Array.from({ length: 14 }, (_, i) => {
-                  const y = 24 + i * 28;
-                  return (
-                    <path
-                      key={`in-${i}`}
-                      d={`M0 ${y} C 70 ${y}, 80 208, 104 208`}
-                      className="stroke-white/10"
-                      fill="none"
-                      strokeWidth="1"
-                    />
-                  );
-                })}
-                {Array.from({ length: 5 }, (_, i) => {
-                  const y = 80 + i * 64;
-                  return (
-                    <path
-                      key={`out-${i}`}
-                      d={`M120 208 C 150 208, 170 ${y}, 224 ${y}`}
-                      className="stroke-primary/50"
-                      fill="none"
-                      strokeWidth="1"
-                    />
-                  );
-                })}
-              </svg>
-
-              {/* Hub */}
-              <span className="border-primary/60 bg-background relative flex h-16 w-16 items-center justify-center border">
-                <Globe className="text-primary h-6 w-6" />
+                {item.text}
               </span>
-            </div>
+            ))}
+            {NOISE_MARKS.map((mark, i) => (
+              <mark.Icon
+                key={i}
+                className="absolute h-4 w-4 opacity-40"
+                style={{
+                  left: `${mark.x}%`,
+                  top: `${mark.y}%`,
+                  color: mark.color,
+                }}
+              />
+            ))}
           </div>
 
-          {/* Opportunities */}
-          <div>
-            <ColumnLabel
-              title="Customer opportunities"
-              body="High-intent posts, ready for you to reply"
-            />
-            <ul className="flex flex-col gap-2">
-              {OPPORTUNITIES.map((item) => (
-                <li
-                  key={item.quote}
-                  className="flex items-center gap-3 border border-white/10 bg-white/[0.02] p-3"
-                >
-                  <span
-                    className="flex h-8 w-8 shrink-0 items-center justify-center"
-                    style={{ backgroundColor: item.bg }}
-                  >
-                    <item.Icon
-                      className="h-4 w-4"
-                      style={{ color: item.fg }}
-                    />
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <p className="line-clamp-2 text-sm text-white/90">
-                      &ldquo;{item.quote}&rdquo;
-                    </p>
-                    <p className="mt-1 text-xs text-white/40">
-                      {item.source} &middot; {item.time}
-                    </p>
-                  </div>
-                  <div className="shrink-0 text-right">
-                    <p className="font-mono text-[10px] tracking-widest text-white/40 uppercase">
-                      Intent
-                    </p>
-                    <p className="text-primary text-lg font-semibold">
-                      {item.intent}%
-                    </p>
-                  </div>
-                </li>
-              ))}
-            </ul>
+          {/* The hub, dead centre of the web */}
+          <div
+            className="flex h-[26rem] items-center justify-center"
+            style={{ gridColumn: 2, gridRow: 2 }}
+          >
+            <span className="border-primary/60 bg-background relative flex h-16 w-16 items-center justify-center border">
+              <Globe className="text-primary h-6 w-6" />
+            </span>
           </div>
+
+          {/* Opportunities: fixed heights so the lines meet each card */}
+          <ul
+            className="flex h-[26rem] flex-col justify-center gap-2"
+            style={{ gridColumn: 3, gridRow: 2 }}
+          >
+            {OPPORTUNITIES.map((item) => (
+              <li
+                key={item.quote}
+                className="flex h-[5.5rem] items-center gap-3 border border-white/10 bg-white/[0.02] p-3 backdrop-blur-sm"
+              >
+                <span
+                  className="flex h-8 w-8 shrink-0 items-center justify-center"
+                  style={{ backgroundColor: item.bg }}
+                >
+                  <item.Icon className="h-4 w-4" style={{ color: item.fg }} />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="line-clamp-2 text-sm text-white/90">
+                    &ldquo;{item.quote}&rdquo;
+                  </p>
+                  <p className="mt-1 text-xs text-white/40">
+                    {item.source} &middot; {item.time}
+                  </p>
+                </div>
+                <div className="shrink-0 text-right">
+                  <p className="font-mono text-[10px] tracking-widest text-white/40 uppercase">
+                    Intent
+                  </p>
+                  <p className="text-primary text-lg font-semibold">
+                    {item.intent}%
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ul>
         </div>
 
         {/* How it works */}
