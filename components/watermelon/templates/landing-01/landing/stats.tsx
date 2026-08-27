@@ -123,80 +123,118 @@ const INTENT_CHIP: Record<string, string> = {
   Low: 'bg-white/10 text-white/40',
 };
 
-// Posts arrive unscored, get a badge one by one, then the low ones drop out.
+// Posts get scored one by one; the low-intent ones slide out entirely and a
+// fresh high-intent post takes the empty slot.
+const INCOMING = [
+  {
+    author: 'u/nadia_ops',
+    where: 'r/startups',
+    time: 'now',
+    text: 'What do you all use to keep track of client invoices without a full accounting suite?',
+    Icon: FaRedditAlien,
+    color: '#FF4500',
+    intent: 'High',
+  },
+  {
+    author: 'Priya S.',
+    where: 'LinkedIn',
+    time: 'now',
+    text: 'Our finance ops still run on three spreadsheets. Open to recommendations.',
+    Icon: FaLinkedinIn,
+    color: '#0A66C2',
+    intent: 'High',
+  },
+];
+
 function SortVisual() {
   const [step, setStep] = useState(0);
+  const cycle = FEED.length + 4;
 
   useEffect(() => {
-    const timer = setInterval(
-      () => setStep((s) => (s + 1) % (FEED.length + 3)),
-      1000,
-    );
+    const timer = setInterval(() => setStep((s) => (s + 1) % cycle), 1000);
     return () => clearInterval(timer);
-  }, []);
+  }, [cycle]);
+
+  // After scoring finishes, low-intent rows leave and incoming ones replace them.
+  const swapped = step >= FEED.length + 2;
+  const rows = FEED.map((post, i) => {
+    if (post.intent !== 'Low') return { post, scored: step > i, incoming: false };
+    const replacement = INCOMING[FEED.filter((f, j) => f.intent === 'Low' && j < i).length];
+    return swapped && replacement
+      ? { post: replacement, scored: true, incoming: true }
+      : { post, scored: step > i, incoming: false };
+  });
 
   return (
     <div className="flex h-80 flex-col justify-center">
       <div className="divide-y divide-white/10 border border-white/10">
-      {FEED.map((post, i) => {
-        const scored = step > i;
-        const dropped = step >= FEED.length + 1 && post.intent === 'Low';
-        return (
-          <motion.article
-            key={post.author}
-            animate={{ opacity: dropped ? 0.2 : 1, x: dropped ? -14 : 0 }}
-            transition={{ duration: 0.45, ease: 'easeOut' }}
-            className={cn(
-              'p-3 transition-colors',
-              scored && !dropped ? 'bg-white/[0.03]' : '',
-            )}
-          >
-            <div className="flex items-center gap-2">
-              <span
-                className="flex h-5 w-5 shrink-0 items-center justify-center"
-                style={{ backgroundColor: post.color }}
-              >
-                <post.Icon
-                  className="h-3 w-3"
-                  style={{
-                    color: post.color === '#ffffff' ? '#000000' : '#ffffff',
+        {rows.map(({ post, scored, incoming }, i) => {
+          const leaving = step === FEED.length + 1 && post.intent === 'Low';
+          return (
+            <div key={i} className="overflow-hidden">
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.article
+                  key={post.author}
+                  initial={
+                    incoming ? { x: 40, opacity: 0 } : { x: 0, opacity: 1 }
+                  }
+                  animate={{
+                    x: leaving ? -260 : 0,
+                    opacity: leaving ? 0 : 1,
                   }}
-                />
-              </span>
-              <span className="truncate text-[11px] text-white/40">
-                {post.author} · {post.where} · {post.time}
-              </span>
-              <span className="ml-auto shrink-0">
-                {scored ? (
-                  <motion.span
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.25 }}
+                  exit={{ x: -260, opacity: 0 }}
+                  transition={{ duration: 0.45, ease: 'easeInOut' }}
+                  className={cn(
+                    'p-3 transition-colors',
+                    scored ? 'bg-white/[0.03]' : '',
+                  )}
+                >
+                  <div className="flex items-center gap-2">
+                    <span
+                      className="flex h-5 w-5 shrink-0 items-center justify-center"
+                      style={{ backgroundColor: post.color }}
+                    >
+                      <post.Icon
+                        className="h-3 w-3"
+                        style={{
+                          color:
+                            post.color === '#ffffff' ? '#000000' : '#ffffff',
+                        }}
+                      />
+                    </span>
+                    <span className="truncate text-[11px] text-white/40">
+                      {post.author} · {post.where} · {post.time}
+                    </span>
+                    <span className="ml-auto shrink-0">
+                      {scored ? (
+                        <span
+                          className={cn(
+                            'px-2 py-0.5 font-mono text-[10px] font-bold tracking-widest uppercase',
+                            INTENT_CHIP[post.intent],
+                          )}
+                        >
+                          {post.intent}
+                        </span>
+                      ) : (
+                        <span className="border border-white/10 px-2 py-0.5 font-mono text-[10px] font-bold tracking-widest text-white/25 uppercase">
+                          Scoring
+                        </span>
+                      )}
+                    </span>
+                  </div>
+                  <p
                     className={cn(
-                      'px-2 py-0.5 font-mono text-[10px] font-bold tracking-widest uppercase',
-                      INTENT_CHIP[post.intent],
+                      'mt-2 line-clamp-2 text-xs',
+                      scored ? 'text-white/75' : 'text-white/40',
                     )}
                   >
-                    {post.intent}
-                  </motion.span>
-                ) : (
-                  <span className="border border-white/10 px-2 py-0.5 font-mono text-[10px] font-bold tracking-widest text-white/25 uppercase">
-                    Scoring
-                  </span>
-                )}
-              </span>
+                    {post.text}
+                  </p>
+                </motion.article>
+              </AnimatePresence>
             </div>
-            <p
-              className={cn(
-                'mt-2 line-clamp-2 text-xs',
-                scored && !dropped ? 'text-white/75' : 'text-white/40',
-              )}
-            >
-              {post.text}
-            </p>
-          </motion.article>
-        );
-      })}
+          );
+        })}
       </div>
     </div>
   );
