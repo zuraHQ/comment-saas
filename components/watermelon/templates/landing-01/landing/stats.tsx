@@ -7,7 +7,7 @@ import {
 } from 'react-icons/fa6';
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { Check, Globe } from 'lucide-react';
+import { Check, Globe, Link2 } from 'lucide-react';
 import Container from './container';
 import Heading from './heading';
 import { cn } from '@/lib/utils';
@@ -202,38 +202,79 @@ function SortVisual() {
 }
 
 /* ---------------------------------------------------------------- 03 */
+const REPLY_TEXT =
+  "Had the same problem, so I built something for it. Free tier covers what you described.";
+
+// The post sits there, then the reply types itself in underneath.
 function ReplyVisual() {
+  const [chars, setChars] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setChars((c) => (c > REPLY_TEXT.length + 24 ? 0 : c + 1));
+    }, 38);
+    return () => clearInterval(timer);
+  }, []);
+
+  const typed = REPLY_TEXT.slice(0, chars);
+  const done = chars >= REPLY_TEXT.length;
+
   return (
-    <div className="flex h-80 flex-col justify-center gap-4">
-      <div className="border border-white/10 bg-white/[0.03] p-4">
+    <div className="flex h-80 flex-col justify-center gap-3">
+      {/* The post being answered */}
+      <article className="border border-white/15 bg-white/[0.04] p-4">
         <div className="flex items-center gap-2">
-          <span className="flex h-6 w-6 items-center justify-center bg-[#FF4500]">
-            <FaRedditAlien className="h-3.5 w-3.5 text-white" />
+          <span className="flex h-5 w-5 shrink-0 items-center justify-center bg-[#FF4500]">
+            <FaRedditAlien className="h-3 w-3 text-white" />
           </span>
-          <span className="text-xs text-white/40">r/smallbusiness · 4m ago</span>
+          <span className="text-[11px] text-white/40">
+            u/marta_builds · r/smallbusiness · 4m
+          </span>
           <span className="ml-auto bg-[#FF6600] px-2 py-0.5 font-mono text-[10px] font-bold tracking-widest text-[#101010] uppercase">
             High
           </span>
         </div>
-        <p className="mt-3 text-sm text-white/80">
-          &ldquo;Looking for a simple invoicing tool for freelancers. Everything
-          I try wants a monthly enterprise plan.&rdquo;
+        <p className="mt-2 text-xs text-white/75">
+          Looking for a simple invoicing tool for freelancers. Everything I try
+          wants an enterprise plan.
         </p>
-      </div>
+      </article>
 
-      <div className="border border-primary/40 bg-primary/[0.06] p-4">
-        <p className="font-mono text-[10px] font-bold tracking-widest text-primary uppercase">
-          Your reply
+      {/* Your reply, typing */}
+      <div className="border-primary/40 bg-primary/[0.05] ml-6 border p-4">
+        <div className="flex items-center gap-2">
+          <span className="bg-primary flex h-5 w-5 shrink-0 items-center justify-center">
+            <Check className="h-3 w-3 text-[#101010]" />
+          </span>
+          <span className="font-mono text-[10px] font-bold tracking-widest text-white/50 uppercase">
+            Your reply
+          </span>
+          <span className="ml-auto font-mono text-[10px] tracking-widest text-white/30 uppercase">
+            first to answer
+          </span>
+        </div>
+        <p className="mt-2 min-h-[2.5rem] text-xs text-white/80">
+          {typed}
+          <span
+            className={cn(
+              'bg-primary ml-0.5 inline-block h-3 w-[2px] align-middle',
+              done && 'opacity-0',
+            )}
+          />
         </p>
-        <p className="mt-2 text-sm text-white/70">
-          I built something for exactly this after the same problem. Free tier
-          covers what you described.
-        </p>
-      </div>
-
-      <div className="flex items-center gap-2 text-xs text-white/40">
-        <Check className="text-primary h-4 w-4" />
-        14 clicks tracked from this reply
+        <div className="mt-3 flex items-center gap-2 border-t border-white/10 pt-3">
+          <Link2 className="text-primary h-3.5 w-3.5" />
+          <span className="truncate font-mono text-[10px] text-white/40">
+            yoursaas.com/r/k3m9x2a
+          </span>
+          <motion.span
+            animate={{ opacity: done ? 1 : 0.25 }}
+            transition={{ duration: 0.3 }}
+            className="text-primary ml-auto font-mono text-[10px] font-bold tracking-widest uppercase"
+          >
+            tracked
+          </motion.span>
+        </div>
       </div>
     </div>
   );
