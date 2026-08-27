@@ -355,7 +355,7 @@ export function PostsContent() {
                           </p>
                           <IntentBadge match={row.match} />
                           {row.match.seenAt ? (
-                            <span className="shrink-0 border border-[#22d3ee]/40 px-2 py-0.5 text-[10px] font-bold tracking-wider text-[#22d3ee] uppercase">
+                            <span className="shrink-0 bg-[#22d3ee] px-2 py-0.5 text-[10px] font-bold tracking-wider text-[#101010] uppercase">
                               Seen
                             </span>
                           ) : null}
