@@ -392,10 +392,15 @@ export function PostsContent() {
                       <header className="flex items-center justify-between gap-3 bg-sidebar-accent/40 px-4 py-2.5">
                         <div className="flex min-w-0 items-center gap-2">
                           {platform ? (
-                            <platform.Icon
-                              className="size-4 shrink-0"
-                              style={{ color: platform.bg }}
-                            />
+                            <span className="relative flex size-4 shrink-0 items-center justify-center">
+                              {platform.id === "hn" ? (
+                                <span className="absolute inset-x-0 inset-y-px bg-white" />
+                              ) : null}
+                              <platform.Icon
+                                className="relative size-4"
+                                style={{ color: platform.bg }}
+                              />
+                            </span>
                           ) : null}
                           <span className="truncate text-xs text-muted-foreground">
                             {row.post.type === "comment" ? "comment · " : ""}
