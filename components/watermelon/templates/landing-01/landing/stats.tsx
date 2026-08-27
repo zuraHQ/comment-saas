@@ -99,7 +99,7 @@ export default function Stats() {
         </div>
 
         {/* Two rows so the connecting web can span all three columns */}
-        <div className="grid gap-x-6 gap-y-10 lg:grid-cols-[1fr_14rem_1fr] lg:grid-rows-[auto_26rem]">
+        <div className="grid gap-x-6 gap-y-10 lg:grid-cols-[1fr_1fr_26rem] lg:grid-rows-[auto_26rem]">
           <ColumnLabel
             title="The internet"
             body="Millions of conversations happening right now"
