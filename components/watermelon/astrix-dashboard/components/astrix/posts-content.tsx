@@ -325,11 +325,11 @@ export function PostsContent() {
 
           {/* Post feed */}
           <section className="flex min-w-0 flex-1 flex-col">
-            <ul className="no-scrollbar min-h-0 flex-1 overflow-y-auto">
+            <ul className="no-scrollbar flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto p-3">
               {visibleRows.map((row) => (
                 <li
                   key={row.match._id}
-                  className="border-b border-border last:border-b-0"
+                  className="border border-border bg-card"
                 >
                   <a
                     href={row.post.url}
@@ -343,7 +343,7 @@ export function PostsContent() {
                       }
                     }}
                     className={cn(
-                      "group block cursor-pointer px-4 py-4 transition-colors hover:bg-sidebar-accent/40",
+                      "group block cursor-pointer p-4 transition-colors hover:bg-sidebar-accent/40",
                       row.match.replied && "opacity-50",
                     )}
                   >
@@ -424,10 +424,7 @@ export function PostsContent() {
               ))}
               {feed === undefined ? (
                 Array.from({ length: 8 }, (_, i) => (
-                  <li
-                    key={i}
-                    className="border-b border-border px-4 py-4 last:border-b-0"
-                  >
+                  <li key={i} className="border border-border bg-card p-4">
                     <div className="flex items-start justify-between gap-4">
                       <div className="min-w-0 flex-1">
                         <div className="h-4 w-2/3 bg-sidebar-accent" />
@@ -440,7 +437,7 @@ export function PostsContent() {
                   </li>
                 ))
               ) : visibleRows.length === 0 ? (
-                <li className="px-4 py-12 text-center text-sm text-muted-foreground">
+                <li className="py-12 text-center text-sm text-muted-foreground">
                   {platformRows.length > 0
                     ? "Nothing matches the current filters."
                     : `No ${active?.label ?? ""} posts yet. They land here as we fetch.`}
