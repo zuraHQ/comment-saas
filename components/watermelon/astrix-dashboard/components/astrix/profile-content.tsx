@@ -14,7 +14,6 @@ const DESCRIPTIONS: Record<string, string> = {
   bluesky: "Keyword search across Bluesky.",
   github: "Watch repo discussions like communities. Best for dev tools.",
   youtube: "New videos matching your keywords.",
-  facebook: "Comment sections of pages you pick in project settings.",
   instagram: "Comments under the accounts you watch.",
   tiktok: "Comments under the TikTok accounts you watch.",
   x: "Keyword search on X.",

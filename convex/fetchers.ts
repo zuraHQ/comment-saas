@@ -320,7 +320,7 @@ async function searchYoutube(keyword: string): Promise<Normalized[]> {
     }));
 }
 
-// ---- Apify-backed platforms: Facebook and Instagram comment sections ----
+// ---- Apify-backed platforms: comment sections ----
 // The page's own posts are only plumbing to find post URLs; ONLY comments
 // enter the pool as leads.
 
@@ -343,7 +343,7 @@ async function apifyRun(actorId: string, input: unknown): Promise<any[]> {
 }
 
 // Drop obvious junk before it costs scoring tokens: too short, no real words.
-// Apify actors are loose with types; likes arrive as "10" on Facebook.
+// Apify actors are loose with types; counts sometimes arrive as strings.
 function asNumber(value: unknown): number | undefined {
   if (value === null || value === undefined || value === "") return undefined;
   const n = Number(value);
@@ -358,40 +358,6 @@ function isWorthScoring(text: string): boolean {
 // Testing spend: 1 post, 1 comment per run. Raise for launch.
 const APIFY_POSTS_PER_PAGE = 1;
 const APIFY_COMMENTS_PER_RUN = 1;
-
-async function fetchFacebookComments(page: string): Promise<Normalized[]> {
-  const pageUrl = page.startsWith("http")
-    ? page
-    : `https://www.facebook.com/${page}`;
-  const posts = await apifyRun("apify~facebook-posts-scraper", {
-    startUrls: [{ url: pageUrl }],
-    resultsLimit: APIFY_POSTS_PER_PAGE,
-  });
-  const postUrls = posts.map((p: any) => p?.url).filter(Boolean);
-  if (!postUrls.length) return [];
-
-  const comments = await apifyRun("apify~facebook-comments-scraper", {
-    startUrls: postUrls.map((url: string) => ({ url })),
-    resultsLimit: APIFY_COMMENTS_PER_RUN,
-  });
-
-  return comments
-    .filter((c: any) => c?.id && c?.text && isWorthScoring(c.text))
-    .map((c: any) => ({
-      externalId: String(c.id),
-      url: c.commentUrl ?? c.facebookUrl ?? pageUrl,
-      title: firstLine(c.text),
-      snippet: clip(c.text),
-      author: c.profileName ?? undefined,
-      subsource: page.replace(/^https?:\/\/(www\.)?facebook\.com\//, ""),
-      postedAt: Date.parse(c.date ?? "") || Date.now(),
-      score: asNumber(c.likesCount),
-      commentCount: asNumber(c.commentsCount),
-      type: "comment",
-      parentUrl: c.inputUrl ?? undefined,
-      parentTitle: c.postTitle ? clip(c.postTitle, 200) : undefined,
-    }));
-}
 
 async function fetchInstagramComments(account: string): Promise<Normalized[]> {
   const handle = account
@@ -457,7 +423,7 @@ async function searchThreads(keyword: string): Promise<Normalized[]> {
 }
 
 // TikTok: comments under a watched account's latest videos. Same
-// posts-are-plumbing model as Facebook/Instagram; only comments are leads.
+// posts-are-plumbing model as Instagram; only comments are leads.
 async function fetchTiktokComments(account: string): Promise<Normalized[]> {
   const handle = account
     .replace(/^https?:\/\/(www\.)?tiktok\.com\/@?/, "")
@@ -606,7 +572,6 @@ const FETCHERS: Record<string, Fetcher | undefined> = {
   "bluesky:keyword": searchBluesky,
   "github:keyword": searchGithubDiscussions,
   "youtube:keyword": searchYoutube,
-  "facebook:community": fetchFacebookComments,
   "instagram:community": fetchInstagramComments,
   "threads:keyword": searchThreads,
   "tiktok:community": fetchTiktokComments,
@@ -680,7 +645,6 @@ export const refreshProject = action({
     const jobs: Doc<"jobs">[] = await ctx.runQuery(internal.pipeline.jobsForProject, {
       keywords: project.keywords,
       communities: project.communities,
-      facebookPages: project.facebookPages,
       instagramAccounts: project.instagramAccounts,
       tiktokAccounts: project.tiktokAccounts,
       xAccounts: project.xAccounts,

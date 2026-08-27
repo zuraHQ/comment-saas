@@ -38,9 +38,6 @@ export const ingest = internalMutation({
       if (args.kind === "keyword") return p.keywords.includes(args.query);
       // HN feeds are not user-picked: everyone watching HN gets them.
       if (args.platform === "hn") return true;
-      if (args.platform === "facebook") {
-        return (p.facebookPages ?? []).includes(args.query);
-      }
       if (args.platform === "instagram") {
         return (p.instagramAccounts ?? []).includes(args.query);
       }
@@ -123,7 +120,6 @@ export const jobsForProject = internalQuery({
   args: {
     keywords: v.array(v.string()),
     communities: v.array(v.string()),
-    facebookPages: v.optional(v.array(v.string())),
     instagramAccounts: v.optional(v.array(v.string())),
     tiktokAccounts: v.optional(v.array(v.string())),
     xAccounts: v.optional(v.array(v.string())),
@@ -148,11 +144,6 @@ export const jobsForProject = internalQuery({
     if (args.platforms.includes("hn")) {
       for (const feed of HN_FEEDS) {
         wanted.push({ platform: "hn", kind: "community", query: feed });
-      }
-    }
-    if (args.platforms.includes("facebook")) {
-      for (const page of args.facebookPages ?? []) {
-        wanted.push({ platform: "facebook", kind: "community", query: page });
       }
     }
     if (args.platforms.includes("instagram")) {
@@ -305,11 +296,6 @@ export const rebuildJobs = internalMutation({
           await ensure("hn", "community", feed);
         }
       }
-      if (project.platforms.includes("facebook")) {
-        for (const page of project.facebookPages ?? []) {
-          await ensure("facebook", "community", page);
-        }
-      }
       if (project.platforms.includes("instagram")) {
         for (const account of project.instagramAccounts ?? []) {
           await ensure("instagram", "community", account);
@@ -355,11 +341,6 @@ export const pruneJobs = internalMutation({
       if (project.platforms.includes("hn")) {
         for (const feed of HN_FEEDS) {
           wanted.add(`hn:community:${feed}`);
-        }
-      }
-      if (project.platforms.includes("facebook")) {
-        for (const page of project.facebookPages ?? []) {
-          wanted.add(`facebook:community:${page}`);
         }
       }
       if (project.platforms.includes("instagram")) {
@@ -413,9 +394,7 @@ export const backfillProject = internalMutation({
           ? project.platforms.includes("hn")
           : kind === "keyword"
             ? onPlatform && project.keywords.includes(query)
-            : post.platform === "facebook"
-              ? onPlatform && (project.facebookPages ?? []).includes(query)
-              : post.platform === "instagram"
+            : post.platform === "instagram"
                 ? onPlatform && (project.instagramAccounts ?? []).includes(query)
                 : post.platform === "tiktok"
                   ? onPlatform && (project.tiktokAccounts ?? []).includes(query)
@@ -504,10 +483,9 @@ export const sourceStats = query({
 });
 
 // CLI helper: set watch targets on every project directly, bypassing the UI.
-//   npx convex run pipeline:seedWatchTargets '{"facebookPages":["shopify"]}' --prod
+//   npx convex run pipeline:seedWatchTargets '{"instagramAccounts":["shopify"]}' --prod
 export const seedWatchTargets = internalMutation({
   args: {
-    facebookPages: v.optional(v.array(v.string())),
     instagramAccounts: v.optional(v.array(v.string())),
     tiktokAccounts: v.optional(v.array(v.string())),
     xAccounts: v.optional(v.array(v.string())),
@@ -516,23 +494,11 @@ export const seedWatchTargets = internalMutation({
     let updated = 0;
     for (const project of await ctx.db.query("projects").collect()) {
       const patch: Record<string, unknown> = {};
-      if (args.facebookPages) patch.facebookPages = args.facebookPages;
       if (args.instagramAccounts) patch.instagramAccounts = args.instagramAccounts;
       if (args.tiktokAccounts) patch.tiktokAccounts = args.tiktokAccounts;
       if (args.xAccounts) patch.xAccounts = args.xAccounts;
       await ctx.db.patch(project._id, patch);
       updated++;
-      for (const page of args.facebookPages ?? []) {
-        const existing = await ctx.db
-          .query("jobs")
-          .withIndex("by_platform_kind_query", (q) =>
-            q.eq("platform", "facebook").eq("kind", "community").eq("query", page),
-          )
-          .unique();
-        if (!existing) {
-          await ctx.db.insert("jobs", { platform: "facebook", kind: "community", query: page });
-        }
-      }
       for (const account of args.instagramAccounts ?? []) {
         const existing = await ctx.db
           .query("jobs")

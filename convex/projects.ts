@@ -28,7 +28,6 @@ function normalizeHandles(values: string[], stripPrefix: RegExp) {
   ];
 }
 
-const FACEBOOK_PREFIX = /^(https?:\/\/)?(www\.)?facebook\.com\//;
 const INSTAGRAM_PREFIX = /^(https?:\/\/)?(www\.)?instagram\.com\/|^@/;
 const TIKTOK_PREFIX = /^(https?:\/\/)?(www\.)?tiktok\.com\/@?|^@/;
 const X_PREFIX = /^(https?:\/\/)?(www\.)?(x|twitter)\.com\/|^@/;
@@ -70,14 +69,12 @@ async function ensureJobs(
   {
     keywords,
     communities,
-    facebookPages,
     instagramAccounts,
     tiktokAccounts,
     xAccounts,
   }: {
     keywords?: string[];
     communities?: string[];
-    facebookPages?: string[];
     instagramAccounts?: string[];
     tiktokAccounts?: string[];
     xAccounts?: string[];
@@ -85,9 +82,6 @@ async function ensureJobs(
 ) {
   for (const account of xAccounts ?? []) {
     await ensureJob(ctx, "x", "community", account);
-  }
-  for (const page of facebookPages ?? []) {
-    await ensureJob(ctx, "facebook", "community", page);
   }
   for (const account of instagramAccounts ?? []) {
     await ensureJob(ctx, "instagram", "community", account);
@@ -192,7 +186,6 @@ export const update = mutation({
     keywords: v.optional(v.array(v.string())),
     lockedKeywords: v.optional(v.array(v.string())),
     communities: v.optional(v.array(v.string())),
-    facebookPages: v.optional(v.array(v.string())),
     instagramAccounts: v.optional(v.array(v.string())),
     tiktokAccounts: v.optional(v.array(v.string())),
     xAccounts: v.optional(v.array(v.string())),
@@ -205,16 +198,12 @@ export const update = mutation({
       keywords,
       lockedKeywords,
       communities,
-      facebookPages,
-      instagramAccounts,
+        instagramAccounts,
       tiktokAccounts,
       xAccounts,
       ...rest
     } = args;
     const patch: Record<string, unknown> = { ...rest };
-    if (facebookPages) {
-      patch.facebookPages = normalizeHandles(facebookPages, FACEBOOK_PREFIX);
-    }
     if (instagramAccounts) {
       patch.instagramAccounts = normalizeHandles(
         instagramAccounts,
@@ -240,7 +229,6 @@ export const update = mutation({
     await ensureJobs(ctx, {
       keywords: patch.keywords as string[] | undefined,
       communities: patch.communities as string[] | undefined,
-      facebookPages: patch.facebookPages as string[] | undefined,
       instagramAccounts: patch.instagramAccounts as string[] | undefined,
       tiktokAccounts: patch.tiktokAccounts as string[] | undefined,
       xAccounts: patch.xAccounts as string[] | undefined,

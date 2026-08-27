@@ -11,7 +11,6 @@ export const KEYWORD_PLATFORMS = ["reddit", "bluesky", "github", "youtube", "x",
 export const PLATFORM_MIN_INTERVAL_MS: Record<string, number> = {
   youtube: 6 * 60 * 60 * 1000,
   // Apify runs spend real credit, twice per day is plenty for comments.
-  facebook: 12 * 60 * 60 * 1000,
   instagram: 12 * 60 * 60 * 1000,
   threads: 12 * 60 * 60 * 1000,
   tiktok: 12 * 60 * 60 * 1000,

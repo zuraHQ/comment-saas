@@ -24,8 +24,7 @@ export default defineSchema({
     url: v.optional(v.string()),
     description: v.optional(v.string()),
     keywords: v.array(v.string()),
-    // Pages/accounts whose comment sections we watch (facebook, instagram).
-    facebookPages: v.optional(v.array(v.string())),
+    // Accounts whose comment sections we watch.
     instagramAccounts: v.optional(v.array(v.string())),
     tiktokAccounts: v.optional(v.array(v.string())),
     xAccounts: v.optional(v.array(v.string())),
