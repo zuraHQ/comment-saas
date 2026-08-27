@@ -9,12 +9,6 @@ const MANUAL = [
   { text: 'Track what you answered, and what it did', time: 'every day' },
 ];
 
-const WITH_US = [
-  { text: 'Paste your link, we pick the rest', time: '2 min, once' },
-  { text: 'Open a feed that is already ranked', time: 'done for you' },
-  { text: 'Reply in your own words', time: '10 min a day' },
-  { text: 'Clicks come back tagged by platform', time: 'automatic' },
-];
 
 export default function ManualVs() {
   return (
@@ -65,25 +59,27 @@ export default function ManualVs() {
             <p className="text-primary font-mono text-xs font-bold tracking-widest uppercase">
               With us
             </p>
-            <ul className="mt-8 flex flex-1 flex-col gap-6">
-              {WITH_US.map((item) => (
-                <li key={item.text} className="flex gap-3">
-                  <Check className="text-primary mt-0.5 h-4 w-4 shrink-0" />
-                  <div>
-                    <p className="text-base text-white/80">{item.text}</p>
-                    <p className="text-primary/70 mt-1.5 font-mono text-xs tracking-widest uppercase">
-                      {item.time}
-                    </p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-            <p className="mt-8 border-t border-white/10 pt-6 text-base text-white/60">
-              Two minutes to set up, then{' '}
-              <span className="font-semibold text-white">
-                ten minutes a day
-              </span>{' '}
-              writing replies that are yours.
+
+            <h3 className="mt-8 text-lg font-semibold text-white">
+              All you do is paste your link
+            </h3>
+            <p className="mt-4 text-base leading-relaxed text-white/70">
+              We read your site, work out what you sell and who buys it, then
+              pick the keywords and communities to watch. From there we read
+              nine platforms around the clock, score every post against your
+              product, and drop the ones worth answering into one feed with the
+              reason they matter.
+            </p>
+            <p className="mt-4 text-base leading-relaxed text-white/70">
+              You open it once a day and reply in your own words. Replied and
+              skipped posts leave the feed, and every click on your link comes
+              back tagged with the platform it came from.
+            </p>
+
+            <p className="mt-auto border-t border-white/10 pt-6 text-base text-white/60">
+              Total:{' '}
+              <span className="font-semibold text-white">2 minutes once</span>,
+              then ten minutes a day.
             </p>
           </div>
         </div>
