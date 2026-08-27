@@ -50,7 +50,7 @@ export default function Faq() {
   return (
     <section className="relative w-full py-12">
       <Container className="relative z-10 mx-auto">
-        <Faq1 title="Questions people ask before signing up" faqs={FAQS} />
+        <Faq1 title="FAQ" faqs={FAQS} />
       </Container>
     </section>
   );
