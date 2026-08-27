@@ -419,6 +419,33 @@ export function PostsContent() {
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
+                            copyReply(
+                              row.match._id,
+                              mockReply(
+                                row.match._id,
+                                project?.name ?? "our tool",
+                              ),
+                            );
+                          }}
+                          aria-label="Copy reply"
+                          className={cn(
+                            "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border transition-colors",
+                            copiedId === row.match._id
+                              ? "border-primary text-primary"
+                              : "border-border text-muted-foreground/40 hover:border-foreground/40 hover:text-foreground",
+                          )}
+                        >
+                          {copiedId === row.match._id ? (
+                            <Check className="h-5 w-5" />
+                          ) : (
+                            <Copy className="h-5 w-5" />
+                          )}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
                             toggleReplied(row);
                           }}
                           aria-pressed={row.match.replied}
@@ -453,33 +480,9 @@ export function PostsContent() {
                   </a>
 
                   <div className="mt-4 border-t border-border pt-3">
-                    <div className="flex items-center justify-between gap-3">
-                      <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
-                        Reply
-                      </p>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          copyReply(
-                            row.match._id,
-                            mockReply(row.match._id, project?.name ?? "our tool"),
-                          )
-                        }
-                        className={cn(
-                          "relative z-10 flex h-7 shrink-0 cursor-pointer items-center gap-1.5 border px-2.5 text-[10px] font-bold tracking-wider uppercase transition-colors",
-                          copiedId === row.match._id
-                            ? "border-primary text-primary"
-                            : "border-border text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
-                        )}
-                      >
-                        {copiedId === row.match._id ? (
-                          <Check className="size-3" />
-                        ) : (
-                          <Copy className="size-3" />
-                        )}
-                        {copiedId === row.match._id ? "Copied" : "Copy"}
-                      </button>
-                    </div>
+                    <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
+                      Reply
+                    </p>
                     <p className="mt-2 text-sm text-foreground/75">
                       {mockReply(row.match._id, project?.name ?? "our tool")}
                     </p>
