@@ -89,7 +89,7 @@ function ColumnLabel({ title, body }: { title: string; body: string }) {
 export default function Stats() {
   return (
     <section className="relative w-full overflow-hidden py-24">
-      <Container className="relative z-10 mx-auto">
+      <Container className="relative z-10 mx-auto max-w-[104rem]">
         <div id="how-it-works" className="mb-14 flex flex-col items-center text-center">
           <p className="text-primary mb-6 inline-flex items-center font-mono text-xs font-bold tracking-widest uppercase">
             <span className="mr-3 opacity-70">{'//'}</span>
@@ -118,6 +118,39 @@ export default function Stats() {
             title="Customer opportunities"
             body="High-intent posts, ready for you to reply"
           />
+
+          {/* The web: left lines gather the noise, right lines feed the cards */}
+          <svg
+            viewBox="0 0 100 100"
+            preserveAspectRatio="none"
+            aria-hidden
+            className="pointer-events-none hidden h-full w-full lg:block"
+            style={{ gridColumn: "1 / -1", gridRow: 2 }}
+          >
+            {Array.from({ length: 16 }, (_, i) => {
+              const y = 4 + i * 6.2;
+              return (
+                <path
+                  key={`in-${i}`}
+                  d={`M2 ${y} C 30 ${y}, 40 50, 47 50`}
+                  className="stroke-white/10"
+                  fill="none"
+                  strokeWidth="0.15"
+                  vectorEffect="non-scaling-stroke"
+                />
+              );
+            })}
+            {[15, 38, 62, 85].map((y, i) => (
+              <path
+                key={`out-${i}`}
+                d={`M53 50 C 62 50, 70 ${y}, 98 ${y}`}
+                className="stroke-primary/40"
+                fill="none"
+                strokeWidth="0.15"
+                vectorEffect="non-scaling-stroke"
+              />
+            ))}
+          </svg>
 
           {/* The internet: unfiltered noise */}
           <div
