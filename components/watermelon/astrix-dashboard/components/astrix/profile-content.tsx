@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 const DESCRIPTIONS: Record<string, string> = {
   reddit: "Subreddits you watch plus keyword sweeps across Reddit.",
   hn: "Every Hacker News story, Ask HN and Show HN.",
+  indiehackers: "Every new Indie Hackers post.",
   bluesky: "Keyword search across Bluesky.",
   github: "Watch repo discussions like communities. Best for dev tools.",
   youtube: "New videos matching your keywords.",

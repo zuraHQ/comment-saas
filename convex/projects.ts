@@ -2,7 +2,7 @@ import { v } from "convex/values";
 import { mutation, query, type MutationCtx } from "./_generated/server";
 import { requireClerkId, requireOwnedProject } from "./auth";
 
-import { COMMUNITY_PLATFORMS, HN_FEEDS, KEYWORD_PLATFORMS } from "./platforms";
+import { COMMUNITY_PLATFORMS, HN_FEEDS, IH_FEEDS, KEYWORD_PLATFORMS } from "./platforms";
 
 import { SUBREDDIT_CATALOG } from "../lib/subreddit-catalog";
 
@@ -72,12 +72,14 @@ async function ensureJobs(
     instagramAccounts,
     tiktokAccounts,
     xAccounts,
+    platforms,
   }: {
     keywords?: string[];
     communities?: string[];
     instagramAccounts?: string[];
     tiktokAccounts?: string[];
     xAccounts?: string[];
+    platforms?: string[];
   },
 ) {
   for (const account of xAccounts ?? []) {
@@ -99,9 +101,15 @@ async function ensureJobs(
       await ensureJob(ctx, platform, "community", community);
     }
   }
-  // HN is small enough to read end to end, so every project gets the feeds.
+  // HN and Indie Hackers are small enough to read end to end, so every
+  // project gets their feeds.
   for (const feed of HN_FEEDS) {
     await ensureJob(ctx, "hn", "community", feed);
+  }
+  if (platforms?.includes("indiehackers")) {
+    for (const feed of IH_FEEDS) {
+      await ensureJob(ctx, "indiehackers", "community", feed);
+    }
   }
 }
 
@@ -144,6 +152,8 @@ export const create = mutation({
     const communities = normalizeCommunities(
       args.communities ?? DEFAULT_COMMUNITIES,
     );
+    // Default to the platforms we can actually fetch today.
+    const platforms = args.platforms ?? ["reddit", "hn"];
 
     // Slugs only need to be unique per owner.
     const base = slugify(args.name);
@@ -168,10 +178,9 @@ export const create = mutation({
       description: args.description,
       keywords,
       communities,
-      // Default to the platforms we can actually fetch today.
-      platforms: args.platforms ?? ["reddit", "hn"],
+      platforms,
     });
-    await ensureJobs(ctx, { keywords, communities });
+    await ensureJobs(ctx, { keywords, communities, platforms });
     return projectId;
   },
 });
@@ -232,6 +241,7 @@ export const update = mutation({
       instagramAccounts: patch.instagramAccounts as string[] | undefined,
       tiktokAccounts: patch.tiktokAccounts as string[] | undefined,
       xAccounts: patch.xAccounts as string[] | undefined,
+      platforms: (patch.platforms as string[] | undefined) ?? project.platforms,
     });
     await ctx.db.patch(projectId, patch);
   },

@@ -2,7 +2,7 @@ import { v } from "convex/values";
 import { internalMutation, internalQuery, mutation, query } from "./_generated/server";
 import { internal } from "./_generated/api";
 import { requireOwnedProject } from "./auth";
-import { COMMUNITY_PLATFORMS, HN_FEEDS, KEYWORD_PLATFORMS, platformMinIntervalMs } from "./platforms";
+import { COMMUNITY_PLATFORMS, HN_FEEDS, IH_FEEDS, KEYWORD_PLATFORMS, platformMinIntervalMs } from "./platforms";
 
 export const normalizedPost = v.object({
   externalId: v.string(),
@@ -36,8 +36,9 @@ export const ingest = internalMutation({
     const interested = projects.filter((p) => {
       if (!p.platforms.includes(args.platform)) return false;
       if (args.kind === "keyword") return p.keywords.includes(args.query);
-      // HN feeds are not user-picked: everyone watching HN gets them.
-      if (args.platform === "hn") return true;
+      // HN and Indie Hackers feeds are not user-picked: everyone watching
+      // those platforms gets them.
+      if (args.platform === "hn" || args.platform === "indiehackers") return true;
       if (args.platform === "instagram") {
         return (p.instagramAccounts ?? []).includes(args.query);
       }
@@ -144,6 +145,11 @@ export const jobsForProject = internalQuery({
     if (args.platforms.includes("hn")) {
       for (const feed of HN_FEEDS) {
         wanted.push({ platform: "hn", kind: "community", query: feed });
+      }
+    }
+    if (args.platforms.includes("indiehackers")) {
+      for (const feed of IH_FEEDS) {
+        wanted.push({ platform: "indiehackers", kind: "community", query: feed });
       }
     }
     if (args.platforms.includes("instagram")) {
@@ -306,6 +312,11 @@ export const rebuildJobs = internalMutation({
           await ensure("hn", "community", feed);
         }
       }
+      if (project.platforms.includes("indiehackers")) {
+        for (const feed of IH_FEEDS) {
+          await ensure("indiehackers", "community", feed);
+        }
+      }
       if (project.platforms.includes("instagram")) {
         for (const account of project.instagramAccounts ?? []) {
           await ensure("instagram", "community", account);
@@ -351,6 +362,11 @@ export const pruneJobs = internalMutation({
       if (project.platforms.includes("hn")) {
         for (const feed of HN_FEEDS) {
           wanted.add(`hn:community:${feed}`);
+        }
+      }
+      if (project.platforms.includes("indiehackers")) {
+        for (const feed of IH_FEEDS) {
+          wanted.add(`indiehackers:community:${feed}`);
         }
       }
       if (project.platforms.includes("instagram")) {
@@ -400,8 +416,8 @@ export const backfillProject = internalMutation({
       const query = rest.join(":");
       const onPlatform = project.platforms.includes(post.platform);
       const interested =
-        post.platform === "hn"
-          ? project.platforms.includes("hn")
+        post.platform === "hn" || post.platform === "indiehackers"
+          ? onPlatform
           : kind === "keyword"
             ? onPlatform && project.keywords.includes(query)
             : post.platform === "instagram"
@@ -661,6 +677,11 @@ export const platformStatus = query({
     if (project.platforms.includes("hn")) {
       for (const feed of HN_FEEDS) {
         wanted.push({ platform: "hn", kind: "community", query: feed });
+      }
+    }
+    if (project.platforms.includes("indiehackers")) {
+      for (const feed of IH_FEEDS) {
+        wanted.push({ platform: "indiehackers", kind: "community", query: feed });
       }
     }
     const accountLists: Array<[string, string[] | undefined]> = [

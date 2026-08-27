@@ -566,6 +566,84 @@ async function searchLinkedin(keyword: string): Promise<Normalized[]> {
     });
 }
 
+// Indie Hackers has no API, but its listing pages are server rendered, so a
+// plain fetch and a parse is enough. Low volume, exactly the right audience:
+// read it all.
+const IH_PATHS: Record<string, string> = { newest: "/newest" };
+
+const IH_AGO_MS: Record<string, number> = {
+  minute: 60 * 1000,
+  hour: 60 * 60 * 1000,
+  day: 24 * 60 * 60 * 1000,
+  month: 30 * 24 * 60 * 60 * 1000,
+  year: 365 * 24 * 60 * 60 * 1000,
+};
+
+function decodeHtml(text: string) {
+  return text
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&#39;|&rsquo;/g, "'")
+    .replace(/&quot;|&ldquo;|&rdquo;/g, '"')
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&[a-z]+;/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+async function fetchIndieHackers(feed: string): Promise<Normalized[]> {
+  const path = IH_PATHS[feed];
+  if (!path) throw new Error(`Unknown Indie Hackers feed: ${feed}`);
+  const res = await fetch(`https://www.indiehackers.com${path}`, {
+    headers: { "User-Agent": "Mozilla/5.0 (compatible; comment-saas/0.1)" },
+  });
+  if (!res.ok) throw new Error(`Indie Hackers fetch failed: ${res.status}`);
+  const html = await res.text();
+
+  // Each post contributes several anchors to the same href: the title, the
+  // relative timestamp and the vote count. Group them, then pick the pieces
+  // apart rather than guessing from a single hit.
+  const byHref = new Map<string, string[]>();
+  const linkRe = /href="(\/post\/[^"#?]+)"[^>]*>([\s\S]*?)<\/a>/g;
+  let match: RegExpExecArray | null;
+  while ((match = linkRe.exec(html)) !== null) {
+    const text = decodeHtml(match[2]);
+    if (!text) continue;
+    const texts = byHref.get(match[1]);
+    if (texts) texts.push(text);
+    else byHref.set(match[1], [text]);
+  }
+
+  const now = Date.now();
+  const posts: Normalized[] = [];
+  for (const [href, texts] of byHref) {
+    let postedAt = now;
+    let title = "";
+    for (const text of texts) {
+      const ago = /^(\d+) (minute|hour|day|month|year)s? ago$/.exec(text);
+      if (ago) {
+        postedAt = now - Number(ago[1]) * IH_AGO_MS[ago[2]];
+      } else if (text.length > title.length) {
+        title = text;
+      }
+    }
+    if (!title) continue;
+
+    // Slugs end in a hex id ("...-bc7c6a8299"); fall back to the whole slug
+    // when the shape is unfamiliar so two posts can never collide on it.
+    const slug = href.replace("/post/", "").replace(/\/$/, "");
+    const tail = slug.slice(slug.lastIndexOf("-") + 1);
+    posts.push({
+      externalId: /^[0-9a-f]{6,}$/.test(tail) ? tail : slug,
+      url: `https://www.indiehackers.com${href}`,
+      title: title.slice(0, 200),
+      subsource: "Indie Hackers",
+      postedAt,
+    });
+  }
+  return posts;
+}
+
 type Fetcher = (query: string) => Promise<Normalized[]>;
 
 const FETCHERS: Record<string, Fetcher | undefined> = {
@@ -582,6 +660,7 @@ const FETCHERS: Record<string, Fetcher | undefined> = {
   "x:keyword": searchX,
   "x:community": fetchXAccountPosts,
   "linkedin:keyword": searchLinkedin,
+  "indiehackers:community": fetchIndieHackers,
 };
 
 type JobResult = {

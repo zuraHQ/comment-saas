@@ -33,5 +33,8 @@ export function platformMinIntervalMs(platform: string): number {
 // need no keywords there at all.
 export const HN_FEEDS = ["all", "ask", "show"];
 
+// Indie Hackers is one small site; read its newest posts end to end.
+export const IH_FEEDS = ["newest"];
+
 // Communities (subreddits) are a Reddit concept for now.
 export const COMMUNITY_PLATFORMS = ["reddit"];
