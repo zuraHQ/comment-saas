@@ -5,7 +5,8 @@ import {
   FaRedditAlien,
   FaXTwitter,
 } from 'react-icons/fa6';
-import { motion } from 'motion/react';
+import { useEffect, useState } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
 import { Check, Globe } from 'lucide-react';
 import Container from './container';
 import Heading from './heading';
@@ -43,74 +44,169 @@ function ScanVisual() {
         </div>
       </div>
 
-      {/* Chatter picked up by the sweep */}
+      {/* Chatter swapping out as the sweep picks up new posts */}
       <div className="relative z-10 flex w-full flex-col gap-2 px-6">
-        {CHATTER.slice(0, 4).map((item, i) => (
-          <motion.span
-            key={item.text}
-            className={cn(
-              'bg-background/80 flex items-center gap-2 border border-white/10 px-3 py-1.5 text-xs text-white/60 backdrop-blur-sm',
-              i % 2 === 0 ? 'mr-auto' : 'ml-auto',
-            )}
-            initial={{ opacity: 0.15 }}
-            animate={{ opacity: [0.15, 1, 0.15] }}
-            transition={{
-              duration: 4,
-              times: [0, 0.25, 1],
-              repeat: Infinity,
-              delay: i,
-              ease: 'easeInOut',
-            }}
-          >
-            <item.Icon
-              className="h-3.5 w-3.5 shrink-0"
-              style={{ color: item.color }}
-            />
-            {item.text}
-          </motion.span>
+        {[0, 1, 2, 3].map((slot) => (
+          <ChatterSlot key={slot} slot={slot} />
         ))}
       </div>
     </div>
   );
 }
 
+// Each slot cycles through the chatter list, offset so they swap one by one.
+function ChatterSlot({ slot }: { slot: number }) {
+  const [index, setIndex] = useState(slot);
+
+  useEffect(() => {
+    let timer: ReturnType<typeof setInterval>;
+    const start = setTimeout(() => {
+      timer = setInterval(
+        () => setIndex((i) => (i + 4) % CHATTER.length),
+        3200,
+      );
+    }, slot * 800);
+    return () => {
+      clearTimeout(start);
+      if (timer) clearInterval(timer);
+    };
+  }, [slot]);
+
+  const item = CHATTER[index % CHATTER.length];
+
+  return (
+    <span
+      className={cn(
+        'flex h-8 w-fit max-w-full items-center',
+        slot % 2 === 0 ? 'mr-auto' : 'ml-auto',
+      )}
+    >
+      <AnimatePresence mode="wait">
+        <motion.span
+          key={item.text}
+          className="bg-background/80 flex items-center gap-2 border border-white/10 px-3 py-1.5 text-xs whitespace-nowrap text-white/60 backdrop-blur-sm"
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -6 }}
+          transition={{ duration: 0.35, ease: 'easeOut' }}
+        >
+          <item.Icon
+            className="h-3.5 w-3.5 shrink-0"
+            style={{ color: item.color }}
+          />
+          {item.text}
+        </motion.span>
+      </AnimatePresence>
+    </span>
+  );
+}
+
 /* ---------------------------------------------------------------- 02 */
 const SORTED = [
-  { text: 'Looking for a simple invoicing tool for freelancers', intent: 'High', keep: true },
-  { text: 'spreadsheets are killing me, any automation?', intent: 'High', keep: true },
-  { text: 'has anyone tried Notion for CRM?', intent: 'Medium', keep: true },
-  { text: 'just launched v2 today', intent: 'Low', keep: false },
-  { text: 'good morning everyone', intent: 'Low', keep: false },
+  {
+    text: 'Looking for a simple invoicing tool for freelancers',
+    Icon: FaRedditAlien,
+    color: '#FF4500',
+    intent: 'High',
+  },
+  {
+    text: 'spreadsheets are killing me, any automation?',
+    Icon: FaBluesky,
+    color: '#0085FF',
+    intent: 'High',
+  },
+  {
+    text: 'has anyone tried Notion for CRM?',
+    Icon: FaHackerNews,
+    color: '#FF6600',
+    intent: 'Medium',
+  },
+  {
+    text: 'just launched v2 today',
+    Icon: FaXTwitter,
+    color: '#ffffff',
+    intent: 'Low',
+  },
+  {
+    text: 'good morning everyone',
+    Icon: FaInstagram,
+    color: '#E4405F',
+    intent: 'Low',
+  },
 ];
 
+const INTENT_CHIP: Record<string, string> = {
+  High: 'bg-[#FF6600] text-[#101010]',
+  Medium: 'bg-[#FFC53D] text-[#101010]',
+  Low: 'bg-white/10 text-white/40',
+};
+
+// Rows get scored one by one, then the low-intent ones fade out of the feed.
 function SortVisual() {
+  const [step, setStep] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(
+      () => setStep((s) => (s + 1) % (SORTED.length + 2)),
+      900,
+    );
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <div className="flex h-80 flex-col justify-center gap-2">
-      {SORTED.map((row) => (
-        <div
-          key={row.text}
-          className={cn(
-            'flex items-center gap-3 border px-3 py-2.5 text-xs',
-            row.keep
-              ? 'border-white/10 bg-white/[0.03] text-white/80'
-              : 'border-white/5 text-white/25 line-through',
-          )}
-        >
-          <span className="min-w-0 flex-1 truncate">{row.text}</span>
-          <span
+      {SORTED.map((row, i) => {
+        const scored = step > i;
+        const dropped = step >= SORTED.length + 1 && row.intent === 'Low';
+        return (
+          <motion.div
+            key={row.text}
+            animate={{
+              opacity: dropped ? 0.15 : scored ? 1 : 0.45,
+              x: dropped ? -12 : 0,
+            }}
+            transition={{ duration: 0.4, ease: 'easeOut' }}
             className={cn(
-              'shrink-0 px-2 py-0.5 font-mono text-[10px] font-bold tracking-widest uppercase',
-              row.intent === 'High'
-                ? 'bg-[#FF6600] text-[#101010]'
-                : row.intent === 'Medium'
-                  ? 'bg-[#FFC53D] text-[#101010]'
-                  : 'bg-white/10 text-white/40',
+              'flex items-center gap-3 border px-3 py-2.5 text-xs',
+              scored && !dropped
+                ? 'border-white/15 bg-white/[0.04] text-white/80'
+                : 'border-white/5 text-white/40',
             )}
           >
-            {row.intent}
-          </span>
-        </div>
-      ))}
+            <row.Icon
+              className="h-3.5 w-3.5 shrink-0"
+              style={{ color: row.color }}
+            />
+            <span className="min-w-0 flex-1 truncate">{row.text}</span>
+            <AnimatePresence mode="wait">
+              {scored ? (
+                <motion.span
+                  key="chip"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.25 }}
+                  className={cn(
+                    'shrink-0 px-2 py-0.5 font-mono text-[10px] font-bold tracking-widest uppercase',
+                    INTENT_CHIP[row.intent],
+                  )}
+                >
+                  {row.intent}
+                </motion.span>
+              ) : (
+                <motion.span
+                  key="scoring"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="shrink-0 border border-white/10 px-2 py-0.5 font-mono text-[10px] font-bold tracking-widest text-white/30 uppercase"
+                >
+                  Scoring
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </motion.div>
+        );
+      })}
     </div>
   );
 }
