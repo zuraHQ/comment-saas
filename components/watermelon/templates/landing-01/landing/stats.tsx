@@ -83,7 +83,7 @@ function ColumnLabel({ title, body }: { title: string; body: string }) {
 export default function Stats() {
   return (
     <section className="relative w-full overflow-hidden py-24">
-      <Container className="relative z-10 mx-auto max-w-[104rem]">
+      <Container className="relative z-10 mx-auto !max-w-none xl:px-24 2xl:px-32">
         <div id="how-it-works" className="mb-14 flex flex-col items-center text-center">
           <p className="text-primary mb-6 inline-flex items-center font-mono text-xs font-bold tracking-widest uppercase">
             <span className="mr-3 opacity-70">{'//'}</span>
