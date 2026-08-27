@@ -81,15 +81,7 @@ export function AnalyticsContent() {
 
   return (
     <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 p-6">
-      <div>
-        <h1 className="text-xl font-semibold">Analytics</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Where {project?.name ?? "no project"}&apos;s visitors come from. Every reply gets a
-          tracked link, so each click attributes back to the exact comment.
-          Copy a tracked link on any post, paste it in your reply, and every
-          click lands here.
-        </p>
-      </div>
+      <h1 className="text-xl font-semibold">Analytics</h1>
 
       <div className="flex flex-wrap items-center gap-3">
         <div className="flex items-center">
