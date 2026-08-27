@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 const POSTS = [
   {
     author: "u/marta_builds",
-    where: "r/smallbusiness",
+    where: "Reddit",
     time: "4m",
     text: "Looking for a simple invoicing tool for freelancers. Everything I try wants an enterprise plan.",
     Icon: FaRedditAlien,

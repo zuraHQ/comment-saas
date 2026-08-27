@@ -85,7 +85,7 @@ const JUDGED = [
   {
     author: 'u/marta_builds',
     score: 94,
-    where: 'r/smallbusiness',
+    where: 'Reddit',
     time: '4m',
     text: 'Looking for a simple invoicing tool for freelancers. Everything I try wants an enterprise plan.',
     Icon: FaRedditAlien,
