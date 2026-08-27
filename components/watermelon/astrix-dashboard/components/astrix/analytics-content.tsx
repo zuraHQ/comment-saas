@@ -127,7 +127,7 @@ export function AnalyticsContent() {
             value: (counts?.replied ?? 0).toLocaleString(),
           },
         ].map((tile) => (
-          <div key={tile.label} className="border border-border p-4">
+          <div key={tile.label} className="border border-border bg-sidebar-accent/20 p-4">
             <p className="text-xs font-bold tracking-wider text-muted-foreground uppercase">
               {tile.label}
             </p>
@@ -136,7 +136,7 @@ export function AnalyticsContent() {
         ))}
       </div>
 
-      <section className="border border-border">
+      <section className="border border-border bg-sidebar-accent/20">
         <header className="border-b border-border px-4 py-3 text-sm font-medium">
           Where your clicks came from
         </header>
@@ -204,7 +204,7 @@ export function AnalyticsContent() {
       </div>
 
       {/* Your tracked link */}
-      <section className="flex flex-col gap-3 border border-border p-5">
+      <section className="flex flex-col gap-3 border border-border bg-sidebar-accent/20 p-5">
         <div>
           <h2 className="flex items-center gap-2 text-sm font-semibold">
             <Link2 className="size-4" />
@@ -285,7 +285,7 @@ function SourceCard({
   label: (row: SourceRow) => string;
 }) {
   return (
-    <section className="border border-border">
+    <section className="border border-border bg-sidebar-accent/20">
       <div className="border-b border-border px-4 py-3">
         <h2 className="text-sm font-semibold">{title}</h2>
       </div>
