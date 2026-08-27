@@ -329,7 +329,7 @@ export function PostsContent() {
               {visibleRows.map((row) => (
                 <li
                   key={row.match._id}
-                  className="border border-border bg-card"
+                  className="border border-border bg-sidebar-accent/20"
                 >
                   <a
                     href={row.post.url}
@@ -424,7 +424,7 @@ export function PostsContent() {
               ))}
               {feed === undefined ? (
                 Array.from({ length: 8 }, (_, i) => (
-                  <li key={i} className="border border-border bg-card p-4">
+                  <li key={i} className="border border-border bg-sidebar-accent/20 p-4">
                     <div className="flex items-start justify-between gap-4">
                       <div className="min-w-0 flex-1">
                         <div className="h-4 w-2/3 bg-sidebar-accent" />
