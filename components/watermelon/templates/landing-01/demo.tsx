@@ -19,9 +19,9 @@ export default function Landing01Demo() {
     >
       <Navbar />
       <Hero />
-      <LiveData />
       <Stats />
       <ManualVs />
+      <LiveData />
       <Pricing />
       <Testimonial />
       <Footer />
