@@ -6,7 +6,7 @@ import {
   FaXTwitter,
 } from 'react-icons/fa6';
 import { useEffect, useRef, useState } from 'react';
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, motion, useScroll, useSpring } from 'motion/react';
 import { Check, Globe, Link2 } from 'lucide-react';
 import Container from './container';
 import Heading from './heading';
