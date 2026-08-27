@@ -385,10 +385,11 @@ function ReplyVisual() {
 
 /* ---------------------------------------------------------------- 04 */
 const CLICK_SOURCES = [
-  { label: 'Reddit', Icon: FaRedditAlien, color: '#FF4500', clicks: 84 },
-  { label: 'Hacker News', Icon: FaHackerNews, color: '#FF6600', clicks: 51 },
-  { label: 'LinkedIn', Icon: FaLinkedinIn, color: '#0A66C2', clicks: 33 },
-  { label: 'X/Twitter', Icon: FaXTwitter, color: '#ffffff', clicks: 18 },
+  { label: 'Reddit', Icon: FaRedditAlien, color: '#FF4500', clicks: 5204 },
+  { label: 'Hacker News', Icon: FaHackerNews, color: '#FF6600', clicks: 2918 },
+  { label: 'LinkedIn', Icon: FaLinkedinIn, color: '#0A66C2', clicks: 1640 },
+  { label: 'X/Twitter', Icon: FaXTwitter, color: '#ffffff', clicks: 902 },
+  { label: 'Instagram', Icon: FaInstagram, color: '#E4405F', clicks: 471 },
 ];
 
 // Bars grow once, the total counts up with them.
@@ -453,8 +454,8 @@ function ResultVisual() {
                 transition={{ duration: 0.8, delay: i * 0.12, ease: 'easeOut' }}
               />
             </span>
-            <span className="w-10 shrink-0 text-right text-xs tabular-nums text-white/60">
-              {source.clicks}
+            <span className="w-12 shrink-0 text-right text-xs tabular-nums text-white/60">
+              {source.clicks.toLocaleString()}
             </span>
           </div>
         ))}
