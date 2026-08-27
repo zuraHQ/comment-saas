@@ -18,7 +18,7 @@ export default function LiveData() {
   const stats = useQuery(api.publicStats.landing);
 
   const tiles = [
-    { label: "Posts fetched", value: stats?.posts },
+    { label: "Posts read", value: stats?.posts },
     { label: "Platforms watched", value: stats?.platforms },
     { label: "Replies sent", value: stats?.replies },
     { label: "Clicks captured", value: stats?.clicks },
@@ -37,8 +37,8 @@ export default function LiveData() {
           </Heading>
           <p className="mt-4 font-mono text-xs tracking-widest text-white/40 uppercase">
             {stats?.lastFetchedAt
-              ? `Last fetch ${ago(stats.lastFetchedAt)}`
-              : "Live from our own database"}
+              ? `Updated ${ago(stats.lastFetchedAt)}`
+              : "Our own numbers, live"}
           </p>
         </div>
 
