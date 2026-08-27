@@ -117,7 +117,7 @@ function Card({
   scored: boolean;
 }) {
   return (
-    <li className="flex flex-col border border-white/10 bg-white/[0.03]">
+    <li className="flex flex-col border-r border-b border-white/10 bg-white/[0.03]">
       <div className="flex items-center justify-between gap-3 bg-white/[0.04] px-3 py-2">
         <div className="flex min-w-0 items-center gap-2">
           <post.Icon
@@ -314,7 +314,7 @@ export default function HeroDemo() {
           </div>
 
           {/* Feed */}
-          <ul className="grid min-w-0 flex-1 auto-rows-fr grid-cols-1 content-start gap-2.5 overflow-hidden p-2.5 xl:grid-cols-2">
+          <ul className="grid min-w-0 flex-1 auto-rows-fr grid-cols-1 content-start overflow-hidden xl:grid-cols-2">
             {FEED.map((post, i) => (
               <Card key={post.id} post={post} scored={i < scoredCount} />
             ))}
