@@ -1,14 +1,27 @@
 "use client";
 
 import { useState } from "react";
-import { useMutation, useQuery } from "convex/react";
-import { Check, X as XIcon } from "lucide-react";
+import { useAction, useMutation, useQuery } from "convex/react";
+import {
+  Check,
+  History as HistoryIcon,
+  RefreshCw,
+  X as XIcon,
+} from "lucide-react";
 import { api } from "@/convex/_generated/api";
 import type { Doc } from "@/convex/_generated/dataModel";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { ProjectIcon } from "./project-icon";
 import { PLATFORM_OPTIONS, useProject } from "./project-context";
-import { useFeedFilter } from "./feed-filter";
+import { INTENT_FILTERS, useFeedFilter } from "./feed-filter";
+import { HistoryPanel } from "./history-content";
 
 export type FeedRow = { match: Doc<"matches">; post: Doc<"posts"> };
 
@@ -89,7 +102,22 @@ export function PostsContent() {
       }
     },
   );
-  const { intentFilter } = useFeedFilter();
+  const { intentFilter, setIntentFilter } = useFeedFilter();
+  const refreshProject = useAction(api.fetchers.refreshProject);
+  const markSeen = useMutation(api.pipeline.markSeen);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const refresh = async () => {
+    if (refreshing || !project) return;
+    setRefreshing(true);
+    try {
+      await refreshProject({ projectId: project._id });
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setRefreshing(false);
+    }
+  };
   const setSkipped = useMutation(api.pipeline.setSkipped).withOptimisticUpdate(
     (localStore, args) => {
       for (const { args: queryArgs, value } of localStore.getAllQueries(
@@ -165,6 +193,80 @@ export function PostsContent() {
   return (
     <div className="flex h-full flex-col">
       <div className="flex min-h-0 flex-1 flex-col">
+        <div className="flex flex-wrap items-center justify-end gap-3 border-b border-border px-4 py-3">
+          <button
+            type="button"
+            onClick={refresh}
+            aria-label="Refresh posts"
+            disabled={refreshing}
+            className="flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground disabled:cursor-default"
+          >
+            <RefreshCw className={cn("size-4", refreshing && "animate-spin")} />
+          </button>
+
+          <div className="flex items-center">
+            {INTENT_FILTERS.map((option) => (
+              <button
+                key={option}
+                type="button"
+                onClick={() => setIntentFilter(option)}
+                aria-pressed={intentFilter === option}
+                className={cn(
+                  "h-9 cursor-pointer border border-l-0 px-3 text-[10px] font-bold tracking-wider uppercase transition-colors first:border-l",
+                  intentFilter === option
+                    ? "border-border bg-sidebar-accent text-foreground"
+                    : "border-border text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
+                )}
+              >
+                {option}
+              </button>
+            ))}
+          </div>
+
+          <Sheet>
+            <SheetTrigger
+              type="button"
+              aria-label="Skipped"
+              className="flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground"
+            >
+              <XIcon className="size-4" />
+            </SheetTrigger>
+            <SheetContent
+              side="right"
+              className="astrix-dashboard flex w-full flex-col gap-0 p-0 sm:max-w-md"
+            >
+              <SheetHeader className="border-b border-border px-4 py-4">
+                <SheetTitle className="text-base">Skipped</SheetTitle>
+              </SheetHeader>
+              <HistoryPanel
+                rows={skippedRows}
+                onUnmark={unskip}
+                emptyText="Nothing skipped yet."
+                countLabel="skipped"
+              />
+            </SheetContent>
+          </Sheet>
+
+          <Sheet>
+            <SheetTrigger
+              type="button"
+              aria-label="History"
+              className="flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground"
+            >
+              <HistoryIcon className="size-4" />
+            </SheetTrigger>
+            <SheetContent
+              side="right"
+              className="astrix-dashboard flex w-full flex-col gap-0 p-0 sm:max-w-md"
+            >
+              <SheetHeader className="border-b border-border px-4 py-4">
+                <SheetTitle className="text-base">History</SheetTitle>
+              </SheetHeader>
+              <HistoryPanel rows={repliedRows} onUnmark={toggleReplied} />
+            </SheetContent>
+          </Sheet>
+        </div>
+
         <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
           {/* Platform rail */}
           <nav className="flex shrink-0 overflow-x-auto border-b border-border lg:w-56 lg:flex-col lg:overflow-visible lg:border-r lg:border-b-0">
@@ -233,6 +335,13 @@ export function PostsContent() {
                     href={row.post.url}
                     target="_blank"
                     rel="noreferrer"
+                    onClick={() => {
+                      if (!row.match.seenAt) {
+                        markSeen({ matchId: row.match._id }).catch(
+                          console.error,
+                        );
+                      }
+                    }}
                     className={cn(
                       "group block cursor-pointer px-4 py-4 transition-colors hover:bg-sidebar-accent/40",
                       row.match.replied && "opacity-50",
@@ -245,6 +354,11 @@ export function PostsContent() {
                             {row.post.title}
                           </p>
                           <IntentBadge match={row.match} />
+                          {row.match.seenAt ? (
+                            <span className="shrink-0 border border-[#22d3ee]/40 px-2 py-0.5 text-[10px] font-bold tracking-wider text-[#22d3ee] uppercase">
+                              Seen
+                            </span>
+                          ) : null}
                         </div>
                         <p className="mt-1 text-xs text-muted-foreground">
                           {row.post.type === "comment" ? "comment · " : ""}

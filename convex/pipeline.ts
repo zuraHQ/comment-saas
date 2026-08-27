@@ -226,6 +226,16 @@ export const feed = query({
   },
 });
 
+export const markSeen = mutation({
+  args: { matchId: v.id("matches") },
+  handler: async (ctx, args) => {
+    const match = await ctx.db.get(args.matchId);
+    if (!match || match.seenAt) return;
+    await requireOwnedProject(ctx, match.projectId);
+    await ctx.db.patch(args.matchId, { seenAt: Date.now() });
+  },
+});
+
 export const setSkipped = mutation({
   args: { matchId: v.id("matches"), skipped: v.boolean() },
   handler: async (ctx, args) => {

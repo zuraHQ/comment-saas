@@ -76,6 +76,8 @@ export default defineSchema({
     replied: v.boolean(),
     // Dismissed from the feed without replying; kept for the Skipped view.
     skipped: v.optional(v.boolean()),
+    // Set the first time the user opens the post.
+    seenAt: v.optional(v.number()),
     postedAt: v.number(),
   })
     .index("by_project", ["projectId"])
