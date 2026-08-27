@@ -5,6 +5,7 @@ import {
   FaRedditAlien,
   FaXTwitter,
 } from 'react-icons/fa6';
+import { motion } from 'motion/react';
 import { Check, Globe } from 'lucide-react';
 import Container from './container';
 import Heading from './heading';
@@ -23,32 +24,50 @@ const CHATTER = [
 
 function ScanVisual() {
   return (
-    <div className="relative flex h-80 items-center justify-center overflow-hidden border border-white/10 bg-white/[0.02]">
-      {/* Radar rings */}
+    <div className="relative flex h-80 items-center justify-center overflow-hidden">
+      {/* Radar rings with a rotating sweep */}
       <div className="absolute flex h-72 w-72 items-center justify-center rounded-full border border-white/10">
+        <motion.div
+          className="absolute inset-0 rounded-full"
+          style={{
+            background:
+              'conic-gradient(from 0deg, rgba(163,255,18,0.25), rgba(163,255,18,0) 35%)',
+          }}
+          animate={{ rotate: 360 }}
+          transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
+        />
         <div className="flex h-48 w-48 items-center justify-center rounded-full border border-white/10">
-          <div className="flex h-24 w-24 items-center justify-center rounded-full border border-primary/40">
+          <div className="border-primary/40 bg-background flex h-24 w-24 items-center justify-center rounded-full border">
             <Globe className="text-primary h-6 w-6" />
           </div>
         </div>
       </div>
 
-      {/* Chatter picked up around the edges */}
+      {/* Chatter picked up by the sweep */}
       <div className="relative z-10 flex w-full flex-col gap-2 px-6">
         {CHATTER.slice(0, 4).map((item, i) => (
-          <span
+          <motion.span
             key={item.text}
             className={cn(
-              'flex items-center gap-2 border border-white/10 bg-background/80 px-3 py-1.5 text-xs text-white/60 backdrop-blur-sm',
+              'bg-background/80 flex items-center gap-2 border border-white/10 px-3 py-1.5 text-xs text-white/60 backdrop-blur-sm',
               i % 2 === 0 ? 'mr-auto' : 'ml-auto',
             )}
+            initial={{ opacity: 0.15 }}
+            animate={{ opacity: [0.15, 1, 0.15] }}
+            transition={{
+              duration: 4,
+              times: [0, 0.25, 1],
+              repeat: Infinity,
+              delay: i,
+              ease: 'easeInOut',
+            }}
           >
             <item.Icon
               className="h-3.5 w-3.5 shrink-0"
               style={{ color: item.color }}
             />
             {item.text}
-          </span>
+          </motion.span>
         ))}
       </div>
     </div>
@@ -66,7 +85,7 @@ const SORTED = [
 
 function SortVisual() {
   return (
-    <div className="flex h-80 flex-col justify-center gap-2 border border-white/10 bg-white/[0.02] p-6">
+    <div className="flex h-80 flex-col justify-center gap-2">
       {SORTED.map((row) => (
         <div
           key={row.text}
@@ -99,7 +118,7 @@ function SortVisual() {
 /* ---------------------------------------------------------------- 03 */
 function ReplyVisual() {
   return (
-    <div className="flex h-80 flex-col justify-center gap-4 border border-white/10 bg-white/[0.02] p-6">
+    <div className="flex h-80 flex-col justify-center gap-4">
       <div className="border border-white/10 bg-white/[0.03] p-4">
         <div className="flex items-center gap-2">
           <span className="flex h-6 w-6 items-center justify-center bg-[#FF4500]">
