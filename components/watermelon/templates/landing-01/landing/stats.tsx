@@ -266,8 +266,8 @@ function ReplyVisual() {
             </span>
           </div>
           <p className="mt-3 text-xs text-white/75">
-            Looking for a simple invoicing tool for freelancers. Everything I
-            try wants an enterprise plan.
+            How do you find the threads where people are actually asking for a
+            product like yours? Searching manually every day is killing me.
           </p>
           <div className="mt-3 flex items-center gap-4 text-[11px] text-white/30">
             <span>▲ 47</span>
@@ -290,10 +290,10 @@ function ReplyVisual() {
             </div>
           </div>
           <p className="mt-3 text-xs text-white/80">
-            Had the same problem, so I built something for it. Free tier covers
-            what you described, no card needed —{' '}
+            Had the same problem, so I built something for it. It reads the
+            communities for you and scores what is worth answering —{' '}
             <span className="text-primary underline underline-offset-2">
-              yoursaas.com
+              commentsaas.com
             </span>
           </p>
           <div className="mt-3 flex items-center gap-4 text-[11px] text-white/30">
