@@ -349,7 +349,7 @@ const STEPS = [
   },
   {
     number: '03',
-    title: 'You reply',
+    title: 'You join the conversation',
     body: 'Open the post and answer like a person, not an ad. Every reply carries a tracked link, so the ones that actually bring people back are the ones you can see.',
     visual: <ReplyVisual />,
   },
