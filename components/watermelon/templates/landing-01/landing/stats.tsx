@@ -248,9 +248,12 @@ function ReplyVisual() {
       <div className="divide-y divide-white/10 border border-white/10">
         <article className="p-4">
           <div className="flex items-center gap-2.5">
-            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#3a2a24] text-[11px] font-semibold text-[#FF8A5B]">
-              m
-            </span>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="https://api.dicebear.com/9.x/notionists/svg?seed=marta&backgroundColor=1f2937"
+              alt=""
+              className="h-7 w-7 shrink-0 rounded-full bg-white/5"
+            />
             <div className="min-w-0">
               <p className="text-xs font-medium text-white/80">u/marta_builds</p>
               <p className="flex items-center gap-1.5 text-[11px] text-white/35">
@@ -275,9 +278,12 @@ function ReplyVisual() {
 
         <div className="bg-white/[0.03] p-4 pl-10">
           <div className="flex items-center gap-2.5">
-            <span className="bg-primary flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-[#101010]">
-              y
-            </span>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="https://api.dicebear.com/9.x/notionists/svg?seed=founder&backgroundColor=a3ff12"
+              alt=""
+              className="ring-primary/60 h-7 w-7 shrink-0 rounded-full bg-white/5 ring-1"
+            />
             <div className="min-w-0">
               <p className="text-xs font-medium text-white/80">you</p>
               <p className="text-[11px] text-white/35">just now</p>
