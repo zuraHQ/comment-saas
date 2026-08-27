@@ -64,16 +64,8 @@ export default function ManualVs() {
               All you do is paste your link
             </h3>
             <p className="mt-4 text-base leading-relaxed text-white/70">
-              We read your site, work out what you sell and who buys it, then
-              pick the keywords and communities to watch. From there we read
-              nine platforms around the clock, score every post against your
-              product, and drop the ones worth answering into one feed with the
-              reason they matter.
-            </p>
-            <p className="mt-4 text-base leading-relaxed text-white/70">
-              You open it once a day and reply in your own words. Replied and
-              skipped posts leave the feed, and every click on your link comes
-              back tagged with the platform it came from.
+              We watch nine platforms and rank what is worth answering. You
+              reply in your own words.
             </p>
 
             <p className="mt-auto border-t border-white/10 pt-6 text-base text-white/60">
