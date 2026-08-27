@@ -357,136 +357,138 @@ export function PostsContent() {
           {/* Post feed */}
           <section className="flex min-w-0 flex-1 flex-col">
             <ul className="no-scrollbar grid min-h-0 flex-1 auto-rows-min grid-cols-1 content-start gap-3 overflow-y-auto p-3 xl:grid-cols-2">
-              {visibleRows.map((row) => {
-                const reply = mockReply(
-                  row.match._id,
-                  project?.name ?? "our tool",
-                );
-                return (
-                  <li
-                    key={row.match._id}
-                    className={cn(
-                      "relative border border-border bg-card p-4 transition-colors hover:border-foreground/25",
-                      row.match.replied && "opacity-50",
-                    )}
+              {visibleRows.map((row) => (
+                <li
+                  key={row.match._id}
+                  className={cn(
+                    "relative border border-border bg-card p-4 transition-colors hover:border-foreground/25",
+                    row.match.replied && "opacity-50",
+                  )}
+                >
+                  <a
+                    href={row.post.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={() => {
+                      if (!row.match.seenAt) {
+                        markSeen({ matchId: row.match._id }).catch(
+                          console.error,
+                        );
+                      }
+                    }}
+                    className="group block cursor-pointer after:absolute after:inset-0 after:content-['']"
                   >
-                    <a
-                      href={row.post.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      onClick={() => {
-                        if (!row.match.seenAt) {
-                          markSeen({ matchId: row.match._id }).catch(
-                            console.error,
-                          );
-                        }
-                      }}
-                      className="block cursor-pointer after:absolute after:inset-0 after:content-['']"
-                    >
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="min-w-0">
-                          <div className="flex min-w-0 items-center gap-2">
-                            <p className="truncate text-sm font-medium">
-                              {row.post.title}
-                            </p>
-                            <IntentBadge match={row.match} />
-                            {row.match.seenAt ? (
-                              <span className="shrink-0 bg-[#7dd3fc] px-2 py-0.5 text-[10px] font-bold tracking-wider text-[#101010] uppercase">
-                                Seen
-                              </span>
-                            ) : null}
-                          </div>
-                          <p className="mt-1 text-xs text-muted-foreground">
-                            {row.post.type === "comment" ? "comment · " : ""}
-                            {[
-                              row.post.subsource,
-                              row.post.author,
-                              timeAgo(row.post.postedAt),
-                            ]
-                              .filter(Boolean)
-                              .join(" · ")}
-                          </p>
-                          {row.post.snippet ? (
-                            <p className="mt-2 line-clamp-2 text-sm text-foreground/70">
-                              {row.post.snippet}
-                            </p>
-                          ) : null}
-                          {row.match.intentReason &&
-                          row.match.intentScore !== "low" ? (
-                            <p className="mt-2 line-clamp-1 text-xs text-muted-foreground">
-                              Why: {row.match.intentReason}
-                            </p>
-                          ) : null}
-                        </div>
-                        <div className="relative z-10 flex shrink-0 items-start gap-2">
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              toggleReplied(row);
-                            }}
-                            aria-pressed={row.match.replied}
-                            aria-label={
-                              row.match.replied
-                                ? "Replied, click to undo"
-                                : "Mark as replied"
-                            }
-                            className={cn(
-                              "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border transition-colors",
-                              row.match.replied
-                                ? "border-primary bg-primary text-primary-foreground"
-                                : "border-border text-muted-foreground/40 hover:border-foreground/40 hover:text-foreground",
-                            )}
-                          >
-                            <Check className="h-5 w-5" />
-                          </button>
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              skip(row);
-                            }}
-                            aria-label="Skip this post"
-                            className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border border-border text-muted-foreground/40 transition-colors hover:border-red-500/40 hover:text-red-400"
-                          >
-                            <XIcon className="h-5 w-5" />
-                          </button>
-                        </div>
-                      </div>
-                    </a>
-
-                    <div className="mt-4 flex items-start justify-between gap-4 border-t border-border pt-3">
+                    <div className="flex items-start justify-between gap-4">
                       <div className="min-w-0">
-                        <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
-                          Reply
+                        <div className="flex min-w-0 items-center gap-2">
+                          <p className="truncate text-sm font-medium">
+                            {row.post.title}
+                          </p>
+                          <IntentBadge match={row.match} />
+                          {row.match.seenAt ? (
+                            <span className="shrink-0 bg-[#7dd3fc] px-2 py-0.5 text-[10px] font-bold tracking-wider text-[#101010] uppercase">
+                              Seen
+                            </span>
+                          ) : null}
+                        </div>
+                        <p className="mt-1 text-xs text-muted-foreground">
+                          {row.post.type === "comment" ? "comment · " : ""}
+                          {[
+                            row.post.subsource,
+                            row.post.author,
+                            timeAgo(row.post.postedAt),
+                          ]
+                            .filter(Boolean)
+                            .join(" · ")}
                         </p>
-                        <p className="mt-2 text-sm text-foreground/75">
-                          {reply}
-                        </p>
+                        {row.post.snippet ? (
+                          <p className="mt-2 line-clamp-2 text-sm text-foreground/70">
+                            {row.post.snippet}
+                          </p>
+                        ) : null}
+                        {row.match.intentReason &&
+                        row.match.intentScore !== "low" ? (
+                          <p className="mt-2 line-clamp-1 text-xs text-muted-foreground">
+                            Why: {row.match.intentReason}
+                          </p>
+                        ) : null}
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => copyReply(row.match._id, reply)}
-                        aria-label="Copy reply"
-                        className={cn(
-                          "relative z-10 flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border transition-colors",
-                          copiedId === row.match._id
-                            ? "border-primary text-primary"
-                            : "border-border text-muted-foreground/40 hover:border-foreground/40 hover:text-foreground",
-                        )}
-                      >
-                        {copiedId === row.match._id ? (
+                      <div className="relative z-10 flex shrink-0 items-start gap-2">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            copyReply(
+                              row.match._id,
+                              mockReply(
+                                row.match._id,
+                                project?.name ?? "our tool",
+                              ),
+                            );
+                          }}
+                          aria-label="Copy reply"
+                          className={cn(
+                            "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border transition-colors",
+                            copiedId === row.match._id
+                              ? "border-primary text-primary"
+                              : "border-border text-muted-foreground/40 hover:border-foreground/40 hover:text-foreground",
+                          )}
+                        >
+                          {copiedId === row.match._id ? (
+                            <Check className="h-5 w-5" />
+                          ) : (
+                            <Copy className="h-5 w-5" />
+                          )}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            toggleReplied(row);
+                          }}
+                          aria-pressed={row.match.replied}
+                          aria-label={
+                            row.match.replied
+                              ? "Replied, click to undo"
+                              : "Mark as replied"
+                          }
+                          className={cn(
+                            "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border transition-colors",
+                            row.match.replied
+                              ? "border-primary bg-primary text-primary-foreground"
+                              : "border-border text-muted-foreground/40 hover:border-foreground/40 hover:text-foreground",
+                          )}
+                        >
                           <Check className="h-5 w-5" />
-                        ) : (
-                          <Copy className="h-5 w-5" />
-                        )}
-                      </button>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            skip(row);
+                          }}
+                          aria-label="Skip this post"
+                          className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border border-border text-muted-foreground/40 transition-colors hover:border-red-500/40 hover:text-red-400"
+                        >
+                          <XIcon className="h-5 w-5" />
+                        </button>
+                      </div>
                     </div>
-                  </li>
-                );
-              })}
+                  </a>
+
+                  <div className="mt-4 border-t border-border pt-3">
+                    <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
+                      Reply
+                    </p>
+                    <p className="mt-2 text-sm text-foreground/75">
+                      {mockReply(row.match._id, project?.name ?? "our tool")}
+                    </p>
+                  </div>
+                </li>
+              ))}
               {feed === undefined ? (
                 Array.from({ length: 8 }, (_, i) => (
                   <li key={i} className="border border-border bg-card p-4">
@@ -499,13 +501,10 @@ export function PostsContent() {
                       </div>
                       <div className="h-10 w-10 shrink-0 border border-border" />
                     </div>
-                    <div className="mt-4 flex items-start justify-between gap-4 border-t border-border pt-3">
-                      <div className="min-w-0 flex-1">
-                        <div className="h-2.5 w-10 bg-sidebar-accent/70" />
-                        <div className="mt-3 h-3 w-11/12 bg-sidebar-accent/50" />
-                        <div className="mt-1.5 h-3 w-3/5 bg-sidebar-accent/50" />
-                      </div>
-                      <div className="h-10 w-10 shrink-0 border border-border" />
+                    <div className="mt-4 border-t border-border pt-3">
+                      <div className="h-2.5 w-10 bg-sidebar-accent/70" />
+                      <div className="mt-3 h-3 w-11/12 bg-sidebar-accent/50" />
+                      <div className="mt-1.5 h-3 w-3/5 bg-sidebar-accent/50" />
                     </div>
                   </li>
                 ))
