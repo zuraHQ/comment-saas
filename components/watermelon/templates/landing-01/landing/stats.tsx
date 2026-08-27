@@ -181,136 +181,148 @@ function SortVisual() {
         ? "#FFC53D"
         : "rgba(255,255,255,0.25)";
 
-  return (
-    <div className="border border-white/10">
-      <AnimatePresence mode="wait">
-        <motion.article
-          key={post.author}
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -8 }}
-          transition={{ duration: 0.25 }}
-          className="p-4"
-        >
-          <div className="flex items-center gap-2">
-            <span
-              className="flex h-5 w-5 shrink-0 items-center justify-center"
-              style={{ backgroundColor: post.color }}
-            >
-              <post.Icon
-                className="h-3 w-3"
-                style={{ color: post.color === "#ffffff" ? "#000000" : "#ffffff" }}
-              />
-            </span>
-            <span className="truncate text-[11px] text-white/40">
-              {post.author} · {post.where} · {post.time}
-            </span>
-            <span className="ml-auto shrink-0 font-mono text-[10px] tracking-widest text-white/25 uppercase">
-              {index + 1}/{JUDGED.length}
-            </span>
-          </div>
-          <p className="mt-2 line-clamp-2 h-8 max-w-md text-xs text-white/75">
-            {post.text}
-          </p>
-        </motion.article>
-      </AnimatePresence>
+  const circumference = 2 * Math.PI * 52;
 
-      <div className="h-[7rem] shrink-0 border-t border-white/10 p-4">
-        <AnimatePresence mode="wait">
-          {reading ? (
+  return (
+    <div className="flex h-80 flex-col justify-center">
+      <div className="border border-white/10">
+        <div className="flex items-center gap-6 p-6">
+          {/* The dial */}
+          <div className="relative shrink-0">
+            <svg viewBox="0 0 120 120" className="h-28 w-28 -rotate-90">
+              <circle
+                cx="60"
+                cy="60"
+                r="52"
+                stroke="rgba(255,255,255,0.08)"
+                strokeWidth="8"
+                fill="none"
+              />
+              <motion.circle
+                cx="60"
+                cy="60"
+                r="52"
+                stroke={accent}
+                strokeWidth="8"
+                fill="none"
+                strokeDasharray={circumference}
+                initial={false}
+                animate={{
+                  strokeDashoffset:
+                    circumference -
+                    (reading ? 0 : (post.score / 100) * circumference),
+                }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+              />
+            </svg>
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+              <span
+                className="text-3xl font-semibold tabular-nums"
+                style={{ color: reading ? "rgba(255,255,255,0.25)" : accent }}
+              >
+                {reading ? "--" : score}
+              </span>
+              <span className="font-mono text-[9px] tracking-widest text-white/30 uppercase">
+                Intent
+              </span>
+            </div>
+          </div>
+
+          {/* The post it is judging */}
+          <AnimatePresence mode="wait">
             <motion.div
-              key={`r-${index}`}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="flex items-center gap-3"
+              key={post.author}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.25 }}
+              className="min-w-0 flex-1"
             >
-              <span className="flex gap-1">
-                {[0, 1, 2].map((dot) => (
-                  <motion.span
-                    key={dot}
-                    className="bg-primary h-1.5 w-1.5 rounded-full"
-                    animate={{ opacity: [0.2, 1, 0.2] }}
-                    transition={{
-                      duration: 0.9,
-                      repeat: Infinity,
-                      delay: dot * 0.15,
+              <div className="flex items-center gap-2">
+                <span
+                  className="flex h-5 w-5 shrink-0 items-center justify-center"
+                  style={{ backgroundColor: post.color }}
+                >
+                  <post.Icon
+                    className="h-3 w-3"
+                    style={{
+                      color: post.color === "#ffffff" ? "#000000" : "#ffffff",
                     }}
                   />
-                ))}
-              </span>
-              <span className="font-mono text-[10px] tracking-widest text-white/40 uppercase">
-                Matching against your product...
-              </span>
-            </motion.div>
-          ) : (
-            <motion.div
-              key={`v-${index}`}
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <div className="flex items-center gap-3">
-                <span
-                  className={cn(
-                    "px-2 py-0.5 font-mono text-[10px] font-bold tracking-widest uppercase",
-                    INTENT_CHIP[post.intent],
-                  )}
-                >
-                  {post.intent} intent
                 </span>
-                <span className="relative h-1 flex-1 bg-white/10">
-                  <motion.span
-                    className="absolute inset-y-0 left-0"
-                    style={{ backgroundColor: accent }}
-                    initial={{ width: 0 }}
-                    animate={{ width: `${post.score}%` }}
-                    transition={{ duration: 0.5, ease: "easeOut" }}
-                  />
-                </span>
-                <span
-                  className="w-8 shrink-0 text-right font-mono text-xs tabular-nums"
-                  style={{ color: accent }}
-                >
-                  {score}
+                <span className="truncate text-[11px] text-white/40">
+                  {post.author} · {post.where} · {post.time}
                 </span>
               </div>
-              <p className="mt-2 line-clamp-2 h-8 max-w-md text-xs text-white/60">
-                {post.verdict}
+              <p className="mt-2 line-clamp-2 h-8 text-xs text-white/75">
+                {post.text}
               </p>
+              <div className="mt-3 h-8">
+                {reading ? (
+                  <span className="flex items-center gap-3">
+                    <span className="flex gap-1">
+                      {[0, 1, 2].map((dot) => (
+                        <motion.span
+                          key={dot}
+                          className="bg-primary h-1.5 w-1.5 rounded-full"
+                          animate={{ opacity: [0.2, 1, 0.2] }}
+                          transition={{
+                            duration: 0.9,
+                            repeat: Infinity,
+                            delay: dot * 0.15,
+                          }}
+                        />
+                      ))}
+                    </span>
+                    <span className="font-mono text-[10px] tracking-widest text-white/40 uppercase">
+                      Matching against your product...
+                    </span>
+                  </span>
+                ) : (
+                  <motion.p
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="line-clamp-2 border-l-2 pl-3 text-xs text-white/60"
+                    style={{ borderColor: accent }}
+                  >
+                    {post.verdict}
+                  </motion.p>
+                )}
+              </div>
             </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+          </AnimatePresence>
+        </div>
 
-      {/* Already judged, oldest first */}
-      <div className="mt-auto flex shrink-0 divide-x divide-white/10 border-t border-white/10">
-        {JUDGED.map((item, i) => (
-          <span
-            key={item.author}
-            className={cn(
-              "flex flex-1 items-center gap-1.5 px-2 py-2",
-              i === index ? "bg-white/[0.04]" : "",
-            )}
-          >
+        {/* Already judged, oldest first */}
+        <div className="flex shrink-0 divide-x divide-white/10 border-t border-white/10">
+          {JUDGED.map((item, i) => (
             <span
-              className="h-1.5 w-1.5 shrink-0 rounded-full"
-              style={{
-                backgroundColor:
-                  i > index
-                    ? "rgba(255,255,255,0.15)"
-                    : item.intent === "High"
-                      ? "#FF6600"
-                      : item.intent === "Medium"
-                        ? "#FFC53D"
-                        : "rgba(255,255,255,0.25)",
-              }}
-            />
-            <span className="truncate font-mono text-[9px] tracking-wider text-white/30 uppercase">
-              {item.where}
+              key={item.author}
+              className={cn(
+                "flex flex-1 items-center gap-1.5 px-2 py-2",
+                i === index ? "bg-white/[0.04]" : "",
+              )}
+            >
+              <span
+                className="h-1.5 w-1.5 shrink-0 rounded-full"
+                style={{
+                  backgroundColor:
+                    i > index
+                      ? "rgba(255,255,255,0.15)"
+                      : item.intent === "High"
+                        ? "#FF6600"
+                        : item.intent === "Medium"
+                          ? "#FFC53D"
+                          : "rgba(255,255,255,0.25)",
+                }}
+              />
+              <span className="truncate font-mono text-[9px] tracking-wider text-white/30 uppercase">
+                {item.where}
+              </span>
             </span>
-          </span>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );
