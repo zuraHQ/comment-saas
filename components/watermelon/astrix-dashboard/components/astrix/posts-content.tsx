@@ -194,8 +194,8 @@ export function PostsContent() {
 
   return (
     <div className="flex h-full flex-col p-6">
-      <div className="flex min-h-0 flex-1 flex-col border border-border bg-sidebar-accent/20">
-        <div className="flex flex-wrap items-center gap-3 border-b border-border px-4 py-3">
+      <div className="flex min-h-0 flex-1 flex-col border border-border">
+        <div className="flex flex-wrap items-center gap-3 border-b border-border bg-sidebar-accent/20 px-4 py-3">
           <h1 className="flex items-center gap-2 text-xl font-semibold">
             Looking posts for:
             <ProjectIcon project={project} className="h-6 w-6 text-xs" />
@@ -277,7 +277,7 @@ export function PostsContent() {
 
         <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
           {/* Platform rail */}
-          <nav className="flex shrink-0 overflow-x-auto border-b border-border lg:w-56 lg:flex-col lg:overflow-visible lg:border-r lg:border-b-0">
+          <nav className="flex shrink-0 overflow-x-auto border-b border-border bg-sidebar-accent/20 lg:w-56 lg:flex-col lg:overflow-visible lg:border-r lg:border-b-0">
             {platforms.map((platform) => {
               const isActive = platform.id === activeKey;
               return (
