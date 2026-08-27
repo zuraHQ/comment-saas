@@ -71,6 +71,10 @@ export function PostsContent() {
     api.pipeline.feedCounts,
     project ? { projectId: project._id } : "skip",
   );
+  const platformStatus = useQuery(
+    api.pipeline.platformStatus,
+    project ? { projectId: project._id } : "skip",
+  );
   // Flip the cached feed instantly; Convex confirms (or rolls back) behind it.
   const setReplied = useMutation(api.pipeline.setReplied).withOptimisticUpdate(
     (localStore, args) => {

@@ -627,3 +627,70 @@ export const jobByKey = internalQuery({
       )
       .unique(),
 });
+
+// Per-platform freshness for the dashboard rail: when each platform last ran,
+// and when its next run is allowed.
+export const platformStatus = query({
+  args: { projectId: v.id("projects") },
+  handler: async (ctx, args) => {
+    const project = await requireOwnedProject(ctx, args.projectId);
+
+    const wanted: Array<{ platform: string; kind: string; query: string }> = [];
+    for (const platform of KEYWORD_PLATFORMS) {
+      if (!project.platforms.includes(platform)) continue;
+      for (const keyword of project.keywords) {
+        wanted.push({ platform, kind: "keyword", query: keyword });
+      }
+    }
+    for (const platform of COMMUNITY_PLATFORMS) {
+      if (!project.platforms.includes(platform)) continue;
+      for (const community of project.communities) {
+        wanted.push({ platform, kind: "community", query: community });
+      }
+    }
+    if (project.platforms.includes("hn")) {
+      for (const feed of HN_FEEDS) {
+        wanted.push({ platform: "hn", kind: "community", query: feed });
+      }
+    }
+    const accountLists: Array<[string, string[] | undefined]> = [
+      ["instagram", project.instagramAccounts],
+      ["tiktok", project.tiktokAccounts],
+      ["x", project.xAccounts],
+    ];
+    for (const [platform, accounts] of accountLists) {
+      if (!project.platforms.includes(platform)) continue;
+      for (const account of accounts ?? []) {
+        wanted.push({ platform, kind: "community", query: account });
+      }
+    }
+
+    const status: Record<
+      string,
+      { lastRunAt: number | null; jobs: number; intervalMs: number }
+    > = {};
+    for (const want of wanted) {
+      const job = await ctx.db
+        .query("jobs")
+        .withIndex("by_platform_kind_query", (q) =>
+          q
+            .eq("platform", want.platform)
+            .eq("kind", want.kind)
+            .eq("query", want.query),
+        )
+        .unique();
+      if (!job) continue;
+      const entry = (status[want.platform] ??= {
+        lastRunAt: null,
+        jobs: 0,
+        intervalMs: platformMinIntervalMs(want.platform),
+      });
+      entry.jobs++;
+      // Newest run wins: that is when the platform last produced anything.
+      if (job.lastRunAt && (!entry.lastRunAt || job.lastRunAt > entry.lastRunAt)) {
+        entry.lastRunAt = job.lastRunAt;
+      }
+    }
+    return status;
+  },
+});
