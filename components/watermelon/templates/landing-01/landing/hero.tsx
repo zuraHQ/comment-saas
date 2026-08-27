@@ -1,44 +1,14 @@
-import Container from './container';
-import Heading from './heading';
-import SubHeading from './subheading';
-import { motion, type Variants, AnimatePresence } from 'motion/react';
+import Container from "./container";
+import Heading from "./heading";
+import SubHeading from "./subheading";
+import { motion, type Variants } from "motion/react";
 import Link from "next/link";
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import {
-  FaBluesky,
-  FaGithub,
-  FaHackerNews,
-  FaLinkedinIn,
-  FaRedditAlien,
-  FaXTwitter,
-  FaYoutube,
-} from 'react-icons/fa6';
-
-const PLATFORMS = [
-  { name: 'Reddit', Icon: FaRedditAlien, bg: '#FF4500', color: '#FF4500', iconColor: '#ffffff' },
-  { name: 'X/Twitter', Icon: FaXTwitter, bg: '#ffffff', color: '#ffffff', iconColor: '#000000' },
-  { name: 'LinkedIn', Icon: FaLinkedinIn, bg: '#0A66C2', color: '#0A66C2', iconColor: '#ffffff' },
-  { name: 'HN', Icon: FaHackerNews, bg: '#FF6600', color: '#FF6600', iconColor: '#ffffff' },
-  { name: 'YouTube', Icon: FaYoutube, bg: '#FF0000', color: '#FF0000', iconColor: '#ffffff' },
-  { name: 'Bluesky', Icon: FaBluesky, bg: '#0085FF', color: '#0085FF', iconColor: '#ffffff' },
-  { name: 'GitHub', Icon: FaGithub, bg: '#ffffff', color: '#ffffff', iconColor: '#000000' },
-] as const;
-
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Hero() {
   const router = useRouter();
-  const [wordIndex, setWordIndex] = useState(0);
-  const [site, setSite] = useState('');
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setWordIndex((prev) => (prev + 1) % PLATFORMS.length);
-    }, 2800);
-    return () => clearInterval(interval);
-  }, []);
-
-  const platform = PLATFORMS[wordIndex];
+  const [site, setSite] = useState("");
 
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -59,7 +29,6 @@ export default function Hero() {
       transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] },
     },
   };
-
 
   return (
     <section className="relative flex min-h-screen w-full flex-col justify-center overflow-x-hidden pt-48 pb-20 font-mono">
@@ -104,38 +73,8 @@ export default function Hero() {
           {/* Subheading */}
           <motion.div variants={itemVariants}>
             <SubHeading variant="big" className="mb-12 max-w-2xl text-pretty">
-              We find the conversations on{' '}
-              <span className="relative inline-block align-baseline">
-                  <AnimatePresence mode="wait">
-                    <motion.span
-                      key={platform.name}
-                      className="inline-flex max-w-full items-center gap-[0.25em] whitespace-nowrap align-baseline"
-                      style={{ color: platform.color }}
-                      initial={{ y: 12, opacity: 0, filter: 'blur(4px)' }}
-                      animate={{ y: 0, opacity: 1, filter: 'blur(0px)' }}
-                      exit={{
-                        y: -12,
-                        opacity: 0,
-                        filter: 'blur(4px)',
-                        transition: { duration: 0.15, ease: 'easeIn' },
-                      }}
-                      transition={{ duration: 0.3, ease: 'easeOut' }}
-                    >
-                      <span
-                        className="inline-flex h-[0.85em] w-[0.85em] shrink-0 items-center justify-center"
-                        style={{ backgroundColor: platform.bg }}
-                      >
-                        <platform.Icon
-                          className="h-[0.6em] w-[0.6em]"
-                          style={{ color: platform.iconColor }}
-                        />
-                      </span>
-                      {platform.name}
-                    </motion.span>
-                  </AnimatePresence>
-              </span>{' '}
-              where your product actually belongs, and draft the reply for
-              you.
+              We find the perfect conversations to mention your product, and
+              draft suggested replies.
             </SubHeading>
           </motion.div>
 
@@ -147,7 +86,9 @@ export default function Hero() {
                 e.preventDefault();
                 const value = site.trim();
                 if (!value) return;
-                const url = /^https?:\/\//i.test(value) ? value : `https://${value}`;
+                const url = /^https?:\/\//i.test(value)
+                  ? value
+                  : `https://${value}`;
                 router.push(`/login?site=${encodeURIComponent(url)}`);
               }}
             >
@@ -189,10 +130,7 @@ export default function Hero() {
               </span>
             </div>
           </motion.div>
-
-
         </motion.div>
-
       </Container>
     </section>
   );
