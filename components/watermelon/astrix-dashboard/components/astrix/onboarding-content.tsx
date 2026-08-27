@@ -8,6 +8,7 @@ import { Check, Loader2, LogOut, X } from "lucide-react";
 import { api } from "@/convex/_generated/api";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
+import Navbar from "@/components/watermelon/templates/landing-01/landing/navbar";
 import { PLATFORM_OPTIONS, useProject } from "./project-context";
 import { CATEGORIES, suggestCommunities } from "@/lib/subreddit-catalog";
 
@@ -112,15 +113,20 @@ export function OnboardingContent() {
   };
 
   return (
-    <div className="relative flex min-h-screen justify-center bg-background px-4 py-16">
-      <button
-        type="button"
-        onClick={() => signOut(() => router.push("/login"))}
-        className="absolute top-6 right-6 flex h-9 cursor-pointer items-center gap-2 border border-border px-3 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
-      >
-        <LogOut className="size-3.5" />
-        Log out
-      </button>
+    <div className="relative flex min-h-screen justify-center bg-background px-4 pt-32 pb-16">
+      <Navbar
+        minimal
+        action={
+          <button
+            type="button"
+            onClick={() => signOut(() => router.push("/login"))}
+            className="flex h-10 cursor-pointer items-center gap-2 border border-border px-6 font-mono text-xs font-bold tracking-widest uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
+          >
+            <LogOut className="size-3.5" />
+            Log out
+          </button>
+        }
+      />
 
       <div className="w-full max-w-2xl">
         <ol className="mb-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-2">

@@ -10,7 +10,15 @@ const NAV_LINKS = [
   { label: "Pricing", href: "#pricing" },
 ];
 
-export default function Navbar() {
+// `minimal` drops the section links, for pages that have no sections to jump
+// to; `action` replaces the Get Started button.
+export default function Navbar({
+  minimal = false,
+  action,
+}: {
+  minimal?: boolean;
+  action?: React.ReactNode;
+} = {}) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -42,7 +50,7 @@ export default function Navbar() {
 
         {/* Center nav */}
         <nav className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-8">
-          {NAV_LINKS.map((link) => (
+          {(minimal ? [] : NAV_LINKS).map((link) => (
             <a
               key={link.href}
               href={link.href}
@@ -55,14 +63,18 @@ export default function Navbar() {
 
         {/* Right side */}
         <div className="hidden md:flex items-center gap-4">
-          <Link href="/login" className="flex items-center h-10 border border-white/20 text-white font-mono font-bold tracking-widest uppercase px-6 text-xs hover:bg-white/10 transition-colors active:scale-[0.96]">
-            Get Started
-          </Link>
+          {action ?? (
+            <Link href="/login" className="flex items-center h-10 border border-white/20 text-white font-mono font-bold tracking-widest uppercase px-6 text-xs hover:bg-white/10 transition-colors active:scale-[0.96]">
+              Get Started
+            </Link>
+          )}
         </div>
 
         {/* Mobile Toggle */}
         <div className="flex md:hidden items-center gap-4">
-          <button 
+          {minimal ? action : null}
+          <button
+            hidden={minimal} 
             className="text-foreground p-1"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
