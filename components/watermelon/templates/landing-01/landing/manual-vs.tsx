@@ -87,6 +87,20 @@ export default function ManualVs() {
             </p>
           </div>
         </div>
+
+        <div className="mt-12 flex flex-col items-center gap-6 text-center">
+          <p className="text-xl font-semibold text-white">
+            That is{' '}
+            <span className="text-primary">30 – 60 hours a month</span> back,
+            for every product you run.
+          </p>
+          <a
+            href="/login"
+            className="bg-primary text-background hover:bg-primary/90 flex h-12 items-center px-8 font-mono text-xs font-bold tracking-widest uppercase transition-colors active:scale-[0.97]"
+          >
+            Get customers
+          </a>
+        </div>
       </Container>
     </section>
   );
