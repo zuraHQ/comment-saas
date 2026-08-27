@@ -20,7 +20,7 @@ export default function ManualVs() {
             variant="big"
             className="text-foreground font-sans font-semibold text-balance lg:text-[48px]"
           >
-            Or do it by hand, every day
+            Why use us?
           </Heading>
         </div>
 
