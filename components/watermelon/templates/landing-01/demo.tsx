@@ -4,8 +4,6 @@ import Navbar from './landing/navbar';
 import Hero from './landing/hero';
 import Pricing from './landing/pricing';
 import Stats from './landing/stats';
-import AnimatedBento from './landing/animated-bento';
-import ComponentsBento from './landing/component-bento';
 import Testimonial from './landing/testimonial';
 import Footer from './landing/footer';
 
@@ -20,8 +18,6 @@ export default function Landing01Demo() {
       <Navbar />
       <Hero />
       <Stats />
-      <AnimatedBento />
-      <ComponentsBento />
       <Pricing />
       <Testimonial />
       <Footer />
