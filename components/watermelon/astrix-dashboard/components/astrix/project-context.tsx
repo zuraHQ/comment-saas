@@ -35,8 +35,8 @@ export const PLATFORM_OPTIONS = [
   { id: "bluesky", label: "Bluesky", Icon: FaBluesky, bg: "#0085FF", fg: "#ffffff", live: true },
   { id: "threads", label: "Threads", Icon: FaThreads, bg: "#ffffff", fg: "#000000", live: false },
   { id: "github", label: "GitHub", Icon: FaGithub, bg: "#ffffff", fg: "#000000", live: true },
-  { id: "instagram", label: "Instagram", Icon: FaInstagram, bg: "#E4405F", fg: "#ffffff", live: true },
-  { id: "tiktok", label: "TikTok", Icon: FaTiktok, bg: "#ffffff", fg: "#000000", live: true },
+  { id: "instagram", label: "Instagram", Icon: FaInstagram, bg: "#E4405F", fg: "#ffffff", live: false },
+  { id: "tiktok", label: "TikTok", Icon: FaTiktok, bg: "#ffffff", fg: "#000000", live: false },
 ] as const;
 
 type ProjectContextValue = {
