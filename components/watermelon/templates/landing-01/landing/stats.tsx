@@ -3,6 +3,7 @@ import {
   FaHackerNews,
   FaInstagram,
   FaRedditAlien,
+  FaTiktok,
   FaXTwitter,
   FaYoutube,
 } from 'react-icons/fa6';
@@ -386,12 +387,25 @@ function ResultVisual() {
   );
 }
 
+const PLATFORM_MARKS = [
+  { label: 'Reddit', Icon: FaRedditAlien, bg: '#FF4500', fg: '#ffffff' },
+  { label: 'X', Icon: FaXTwitter, bg: '#ffffff', fg: '#000000' },
+  { label: 'Hacker News', Icon: FaHackerNews, bg: '#FF6600', fg: '#ffffff' },
+  { label: 'LinkedIn', Icon: FaLinkedinIn, bg: '#0A66C2', fg: '#ffffff' },
+  { label: 'Instagram', Icon: FaInstagram, bg: '#E4405F', fg: '#ffffff' },
+  { label: 'TikTok', Icon: FaTiktok, bg: '#ffffff', fg: '#000000' },
+  { label: 'YouTube', Icon: FaYoutube, bg: '#FF0000', fg: '#ffffff' },
+  { label: 'GitHub', Icon: FaGithub, bg: '#ffffff', fg: '#000000' },
+  { label: 'Bluesky', Icon: FaBluesky, bg: '#0085FF', fg: '#ffffff' },
+];
+
 /* ---------------------------------------------------------------- rows */
 const STEPS = [
   {
     number: '01',
     title: 'We read the internet',
-    body: 'Reddit, X, Hacker News, Bluesky, Instagram, TikTok, LinkedIn, GitHub and YouTube. Whole communities read end to end, not just keyword hits, so nothing relevant slips past.',
+    body: 'Whole communities read end to end, not just keyword hits, so nothing relevant slips past.',
+    marks: true,
     visual: <ScanVisual />,
   },
   {
@@ -468,6 +482,23 @@ export default function Stats() {
                   <p className="mt-3 max-w-md text-sm leading-relaxed text-white/50">
                     {step.body}
                   </p>
+                  {step.marks ? (
+                    <div className="mt-5 flex flex-wrap gap-2">
+                      {PLATFORM_MARKS.map((mark) => (
+                        <span
+                          key={mark.label}
+                          title={mark.label}
+                          className="flex h-8 w-8 items-center justify-center"
+                          style={{ backgroundColor: mark.bg }}
+                        >
+                          <mark.Icon
+                            className="h-4 w-4"
+                            style={{ color: mark.fg }}
+                          />
+                        </span>
+                      ))}
+                    </div>
+                  ) : null}
                 </div>
                 <div>{step.visual}</div>
               </div>
