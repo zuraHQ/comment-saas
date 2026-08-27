@@ -1,26 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { useAction, useMutation, useQuery } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import {
   Check,
-  History as HistoryIcon,
-  RefreshCw,
-  X as XIcon,
 } from "lucide-react";
 import { api } from "@/convex/_generated/api";
 import type { Doc } from "@/convex/_generated/dataModel";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import { HistoryPanel } from "./history-content";
 import { ProjectIcon } from "./project-icon";
 import { PLATFORM_OPTIONS, useProject } from "./project-context";
+import { useFeedFilter } from "./feed-filter";
 
 export type FeedRow = { match: Doc<"matches">; post: Doc<"posts"> };
 
@@ -29,8 +19,6 @@ const INTENT_STYLES: Record<string, string> = {
   medium: "bg-[#FFC53D] text-[#101010]",
   low: "bg-foreground/10 text-muted-foreground",
 };
-
-const INTENT_FILTERS = ["All", "High", "Medium", "Low"] as const;
 
 export function timeAgo(timestamp: number): string {
   const seconds = Math.max(0, (Date.now() - timestamp) / 1000);
@@ -103,7 +91,7 @@ export function PostsContent() {
       }
     },
   );
-  const refreshProject = useAction(api.fetchers.refreshProject);
+  const { intentFilter } = useFeedFilter();
   const setSkipped = useMutation(api.pipeline.setSkipped).withOptimisticUpdate(
     (localStore, args) => {
       for (const { args: queryArgs, value } of localStore.getAllQueries(
@@ -147,22 +135,6 @@ export function PostsContent() {
   );
   const rows = feed ?? [];
 
-  const [intentFilter, setIntentFilter] =
-    useState<(typeof INTENT_FILTERS)[number]>("All");
-  const [refreshing, setRefreshing] = useState(false);
-
-  const refresh = async () => {
-    if (refreshing || !project) return;
-    setRefreshing(true);
-    try {
-      await refreshProject({ projectId: project._id });
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setRefreshing(false);
-    }
-  };
-
   const skip = (row: FeedRow) => {
     setSkipped({ matchId: row.match._id, skipped: true }).catch(console.error);
   };
@@ -195,81 +167,6 @@ export function PostsContent() {
   return (
     <div className="flex h-full flex-col">
       <div className="flex min-h-0 flex-1 flex-col">
-        <div className="flex flex-wrap items-center justify-end gap-3 border-b border-border px-4 py-3">
-          <div className="ml-auto flex items-center gap-3">
-            <button
-              type="button"
-              onClick={refresh}
-              aria-label="Refresh posts"
-              disabled={refreshing}
-              className="flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground disabled:cursor-default"
-            >
-              <RefreshCw
-                className={cn("size-4", refreshing && "animate-spin")}
-              />
-            </button>
-            <div className="flex items-center">
-              {INTENT_FILTERS.map((option) => (
-                <button
-                  key={option}
-                  type="button"
-                  onClick={() => setIntentFilter(option)}
-                  aria-pressed={intentFilter === option}
-                  className={cn(
-                    "h-9 cursor-pointer border border-l-0 px-3 text-[10px] font-bold tracking-wider uppercase transition-colors first:border-l",
-                    intentFilter === option
-                      ? "border-border bg-sidebar-accent text-foreground"
-                      : "border-border text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
-                  )}
-                >
-                  {option}
-                </button>
-              ))}
-            </div>
-            <Sheet>
-              <SheetTrigger
-                type="button"
-                aria-label="Skipped"
-                className="flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground"
-              >
-                <XIcon className="size-4" />
-              </SheetTrigger>
-              <SheetContent
-                side="right"
-                className="astrix-dashboard flex w-full flex-col gap-0 p-0 sm:max-w-md"
-              >
-                <SheetHeader className="border-b border-border px-4 py-4">
-                  <SheetTitle className="text-base">Skipped</SheetTitle>
-                </SheetHeader>
-                <HistoryPanel
-                  rows={skippedRows}
-                  onUnmark={unskip}
-                  emptyText="Nothing skipped yet."
-                  countLabel="skipped"
-                />
-              </SheetContent>
-            </Sheet>
-            <Sheet>
-              <SheetTrigger
-                type="button"
-                aria-label="History"
-                className="flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground"
-              >
-                <HistoryIcon className="size-4" />
-              </SheetTrigger>
-              <SheetContent
-                side="right"
-                className="astrix-dashboard flex w-full flex-col gap-0 p-0 sm:max-w-md"
-              >
-                <SheetHeader className="border-b border-border px-4 py-4">
-                  <SheetTitle className="text-base">History</SheetTitle>
-                </SheetHeader>
-                <HistoryPanel rows={repliedRows} onUnmark={toggleReplied} />
-              </SheetContent>
-            </Sheet>
-          </div>
-        </div>
-
         <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
           {/* Platform rail */}
           <nav className="flex shrink-0 overflow-x-auto border-b border-border lg:w-56 lg:flex-col lg:overflow-visible lg:border-r lg:border-b-0">

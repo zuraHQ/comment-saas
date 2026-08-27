@@ -14,6 +14,7 @@ import { PostsContent } from "./components/astrix/posts-content";
 import { ProfileContent } from "./components/astrix/profile-content";
 import { ProjectSettingsContent } from "./components/astrix/project-settings-content";
 import { ProjectProvider } from "./components/astrix/project-context";
+import { FeedFilterProvider } from "./components/astrix/feed-filter";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { ThemeProvider } from "./components/astrix/theme-provider";
@@ -68,7 +69,9 @@ export default function AstrixDashboardDemo() {
       <ThemeProvider>
         <DashboardNavigationProvider>
           <ProjectProvider>
+            <FeedFilterProvider>
             <DashboardRoute />
+            </FeedFilterProvider>
           </ProjectProvider>
         </DashboardNavigationProvider>
       </ThemeProvider>
