@@ -2,7 +2,12 @@
 
 import { useState } from "react";
 import { useAction, useMutation, useQuery } from "convex/react";
-import { Check, History as HistoryIcon, Link2, RefreshCw } from "lucide-react";
+import {
+  Check,
+  History as HistoryIcon,
+  RefreshCw,
+  X as XIcon,
+} from "lucide-react";
 import { api } from "@/convex/_generated/api";
 import type { Doc } from "@/convex/_generated/dataModel";
 import {
@@ -86,29 +91,24 @@ export function PostsContent() {
     },
   );
   const refreshProject = useAction(api.fetchers.refreshProject);
-  const getProjectLink = useMutation(api.links.getProjectLink);
-  const [linkCopied, setLinkCopied] = useState(false);
-
-  // One permanent tracked link per project. Paste it in every reply; the
-  // click's referrer tells Analytics which platform it came from.
-  const copyTrackedLink = async () => {
-    if (!project) return;
-    try {
-      const result = await getProjectLink({ projectId: project._id });
-      if ("error" in result) {
-        window.alert("Set your product URL in project settings first.");
-        return;
+  const setSkipped = useMutation(api.pipeline.setSkipped).withOptimisticUpdate(
+    (localStore, args) => {
+      for (const { args: queryArgs, value } of localStore.getAllQueries(
+        api.pipeline.feed,
+      )) {
+        if (!value) continue;
+        localStore.setQuery(
+          api.pipeline.feed,
+          queryArgs,
+          value.map((row) =>
+            row.match._id === args.matchId
+              ? { ...row, match: { ...row.match, skipped: args.skipped } }
+              : row,
+          ),
+        );
       }
-      await navigator.clipboard.writeText(
-        `${window.location.origin}${result.path}`,
-      );
-      setLinkCopied(true);
-      setTimeout(() => setLinkCopied(false), 1500);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
+    },
+  );
 
   // Rail: every live platform, always. What shows in the rail is navigation,
   // not a reflection of project config or fetched data.
@@ -150,6 +150,14 @@ export function PostsContent() {
     }
   };
 
+  const skip = (row: FeedRow) => {
+    setSkipped({ matchId: row.match._id, skipped: true }).catch(console.error);
+  };
+
+  const unskip = (row: FeedRow) => {
+    setSkipped({ matchId: row.match._id, skipped: false }).catch(console.error);
+  };
+
   const toggleReplied = (row: FeedRow) => {
     setReplied({ matchId: row.match._id, replied: !row.match.replied }).catch(
       console.error,
@@ -157,14 +165,19 @@ export function PostsContent() {
   };
 
   const platformRows = rows;
-  // Replied posts leave the feed automatically; History holds them.
+  // Replied and skipped posts leave the feed automatically; the History and
+  // Skipped panels hold them.
   const visibleRows = platformRows.filter(
     (row) =>
       !row.match.replied &&
+      !row.match.skipped &&
       (intentFilter === "All" ||
         row.match.intentScore === intentFilter.toLowerCase()),
   );
   const repliedRows = rows.filter((row) => row.match.replied);
+  const skippedRows = rows.filter(
+    (row) => row.match.skipped && !row.match.replied,
+  );
 
   return (
     <div className="flex h-full flex-col p-6">
@@ -178,29 +191,14 @@ export function PostsContent() {
           <div className="ml-auto flex items-center gap-3">
             <button
               type="button"
-              onClick={() => void copyTrackedLink()}
-              className={cn(
-                "flex h-9 cursor-pointer items-center gap-2 border px-3 text-[10px] font-bold tracking-wider uppercase transition-colors",
-                linkCopied
-                  ? "border-primary text-primary"
-                  : "border-border text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
-              )}
-            >
-              {linkCopied ? (
-                <Check className="size-3.5" />
-              ) : (
-                <Link2 className="size-3.5" />
-              )}
-              {linkCopied ? "Copied" : "Copy my link"}
-            </button>
-            <button
-              type="button"
               onClick={refresh}
               aria-label="Refresh posts"
               disabled={refreshing}
               className="flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground disabled:cursor-default"
             >
-              <RefreshCw className={cn("size-4", refreshing && "animate-spin")} />
+              <RefreshCw
+                className={cn("size-4", refreshing && "animate-spin")}
+              />
             </button>
             <div className="flex items-center">
               {INTENT_FILTERS.map((option) => (
@@ -220,6 +218,29 @@ export function PostsContent() {
                 </button>
               ))}
             </div>
+            <Sheet>
+              <SheetTrigger
+                type="button"
+                aria-label="Skipped"
+                className="flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground"
+              >
+                <XIcon className="size-4" />
+              </SheetTrigger>
+              <SheetContent
+                side="right"
+                className="astrix-dashboard flex w-full flex-col gap-0 p-0 sm:max-w-md"
+              >
+                <SheetHeader className="border-b border-border px-4 py-4">
+                  <SheetTitle className="text-base">Skipped</SheetTitle>
+                </SheetHeader>
+                <HistoryPanel
+                  rows={skippedRows}
+                  onUnmark={unskip}
+                  emptyText="Nothing skipped yet."
+                  countLabel="skipped"
+                />
+              </SheetContent>
+            </Sheet>
             <Sheet>
               <SheetTrigger
                 type="button"
@@ -269,7 +290,9 @@ export function PostsContent() {
                     />
                   </span>
                   <span className="flex flex-col">
-                    <span className="text-sm font-medium">{platform.label}</span>
+                    <span className="text-sm font-medium">
+                      {platform.label}
+                    </span>
                     <span className="text-xs text-muted-foreground">
                       Found {countFor(platform.id)} posts
                     </span>
@@ -341,28 +364,42 @@ export function PostsContent() {
                           </p>
                         ) : null}
                       </div>
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          toggleReplied(row);
-                        }}
-                        aria-pressed={row.match.replied}
-                        aria-label={
-                          row.match.replied
-                            ? "Replied, click to undo"
-                            : "Mark as replied"
-                        }
-                        className={cn(
-                          "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border transition-colors",
-                          row.match.replied
-                            ? "border-primary bg-primary text-primary-foreground"
-                            : "border-border text-muted-foreground/40 hover:border-foreground/40 hover:text-foreground",
-                        )}
-                      >
-                        <Check className="h-5 w-5" />
-                      </button>
+                      <div className="flex shrink-0 items-start gap-2">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            toggleReplied(row);
+                          }}
+                          aria-pressed={row.match.replied}
+                          aria-label={
+                            row.match.replied
+                              ? "Replied, click to undo"
+                              : "Mark as replied"
+                          }
+                          className={cn(
+                            "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border transition-colors",
+                            row.match.replied
+                              ? "border-primary bg-primary text-primary-foreground"
+                              : "border-border text-muted-foreground/40 hover:border-foreground/40 hover:text-foreground",
+                          )}
+                        >
+                          <Check className="h-5 w-5" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            skip(row);
+                          }}
+                          aria-label="Skip this post"
+                          className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border border-border text-muted-foreground/40 transition-colors hover:border-red-500/40 hover:text-red-400"
+                        >
+                          <XIcon className="h-5 w-5" />
+                        </button>
+                      </div>
                     </div>
                   </a>
                 </li>

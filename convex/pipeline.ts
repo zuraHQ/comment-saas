@@ -235,6 +235,16 @@ export const feed = query({
   },
 });
 
+export const setSkipped = mutation({
+  args: { matchId: v.id("matches"), skipped: v.boolean() },
+  handler: async (ctx, args) => {
+    const match = await ctx.db.get(args.matchId);
+    if (!match) throw new Error("Match not found");
+    await requireOwnedProject(ctx, match.projectId);
+    await ctx.db.patch(args.matchId, { skipped: args.skipped });
+  },
+});
+
 export const setReplied = mutation({
   args: { matchId: v.id("matches"), replied: v.boolean() },
   handler: async (ctx, args) => {
@@ -587,13 +597,15 @@ export const feedCounts = query({
     const byPlatform: Record<string, number> = {};
     let replied = 0;
     let scored = 0;
+    let skipped = 0;
     for (const match of matches) {
       const key = match.platform ?? "unknown";
       byPlatform[key] = (byPlatform[key] ?? 0) + 1;
       if (match.replied) replied++;
+      if (match.skipped) skipped++;
       if (match.intentScore !== undefined) scored++;
     }
-    return { total: matches.length, replied, scored, byPlatform };
+    return { total: matches.length, replied, scored, skipped, byPlatform };
   },
 });
 

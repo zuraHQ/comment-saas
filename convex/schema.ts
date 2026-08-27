@@ -75,6 +75,8 @@ export default defineSchema({
     intentScore: v.optional(v.string()), // "high" | "medium" | "low"
     intentReason: v.optional(v.string()),
     replied: v.boolean(),
+    // Dismissed from the feed without replying; kept for the Skipped view.
+    skipped: v.optional(v.boolean()),
     postedAt: v.number(),
   })
     .index("by_project", ["projectId"])

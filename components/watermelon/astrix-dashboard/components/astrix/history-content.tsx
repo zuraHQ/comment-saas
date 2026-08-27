@@ -12,14 +12,18 @@ import { PLATFORM_OPTIONS } from "./project-context";
 export function HistoryPanel({
   rows,
   onUnmark,
+  emptyText = "Nothing marked as replied yet.",
+  countLabel = "replied",
 }: {
   rows: FeedRow[];
   onUnmark: (row: FeedRow) => void;
+  emptyText?: string;
+  countLabel?: string;
 }) {
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <p className="border-b border-border px-4 py-3 text-xs font-bold tracking-wider text-muted-foreground uppercase">
-        {rows.length} replied {rows.length === 1 ? "post" : "posts"}
+        {rows.length} {countLabel} {rows.length === 1 ? "post" : "posts"}
       </p>
       <ul className="slim-scrollbar min-h-0 flex-1 overflow-y-auto">
         {rows.map((row) => {
@@ -73,7 +77,7 @@ export function HistoryPanel({
         })}
         {rows.length === 0 ? (
           <li className="px-4 py-12 text-center text-sm text-muted-foreground">
-            Nothing marked as replied yet.
+            {emptyText}
           </li>
         ) : null}
       </ul>
