@@ -64,8 +64,7 @@ export default function ManualVs() {
               All you do is paste your link
             </h3>
             <p className="mt-4 text-base leading-relaxed text-white/70">
-              We watch nine platforms and rank what is worth answering. You
-              reply in your own words.
+              We watch nine platforms and rank what is worth answering.
             </p>
 
             <p className="mt-auto border-t border-white/10 pt-6 text-base text-white/60">
