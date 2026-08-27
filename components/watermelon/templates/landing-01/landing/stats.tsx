@@ -405,7 +405,7 @@ function ResultVisual() {
             Link clicks
           </p>
           <motion.p
-            className="text-primary text-2xl font-semibold"
+            className="text-2xl font-semibold text-white"
             initial={{ opacity: 0.4 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
