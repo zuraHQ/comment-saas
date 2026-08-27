@@ -209,7 +209,7 @@ function SortVisual() {
               {index + 1}/{JUDGED.length}
             </span>
           </div>
-          <p className="mt-2 line-clamp-2 h-8 text-xs text-white/75">
+          <p className="mt-2 line-clamp-2 h-8 max-w-md text-xs text-white/75">
             {post.text}
           </p>
         </motion.article>
@@ -275,7 +275,7 @@ function SortVisual() {
                   {score}
                 </span>
               </div>
-              <p className="mt-2 line-clamp-2 h-8 text-xs text-white/60">
+              <p className="mt-2 line-clamp-2 h-8 max-w-md text-xs text-white/60">
                 {post.verdict}
               </p>
             </motion.div>
@@ -334,7 +334,7 @@ function ReplyVisual() {
               <p className="text-xs font-medium text-white/80">u/marta_builds</p>
               <p className="flex items-center gap-1.5 text-[11px] text-white/35">
                 <FaRedditAlien className="h-3 w-3 text-[#FF4500]" />
-                r/smallbusiness · 4m
+                Reddit · 4m
               </p>
             </div>
             <span className="ml-auto bg-[#FF6600] px-2 py-0.5 font-mono text-[10px] font-bold tracking-widest text-[#101010] uppercase">
