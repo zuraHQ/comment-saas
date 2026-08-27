@@ -360,7 +360,7 @@ export function PostsContent() {
 
           {/* Post feed */}
           <section className="flex min-w-0 flex-1 flex-col">
-            <ul className="no-scrollbar flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto p-3">
+            <ul className="no-scrollbar grid min-h-0 flex-1 auto-rows-min grid-cols-1 content-start gap-3 overflow-y-auto p-3 xl:grid-cols-2">
               {visibleRows.map((row) => {
                 const platform =
                   PLATFORM_BY_ID[row.match.platform ?? row.post.platform];
@@ -514,7 +514,7 @@ export function PostsContent() {
                   </li>
                 ))
               ) : visibleRows.length === 0 ? (
-                <li className="py-12 text-center text-sm text-muted-foreground">
+                <li className="col-span-full py-12 text-center text-sm text-muted-foreground">
                   {platformRows.length > 0
                     ? "Nothing matches the current filters."
                     : `No ${active?.label ?? ""} posts yet. They land here as we fetch.`}
