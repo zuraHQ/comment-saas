@@ -2,7 +2,15 @@ import { v } from "convex/values";
 import { internalMutation, internalQuery, mutation, query } from "./_generated/server";
 import { internal } from "./_generated/api";
 import { requireOwnedProject } from "./auth";
-import { COMMUNITY_PLATFORMS, HN_FEEDS, IH_FEEDS, KEYWORD_PLATFORMS, platformMinIntervalMs } from "./platforms";
+import {
+  apifyEnabled,
+  COMMUNITY_PLATFORMS,
+  HN_FEEDS,
+  IH_FEEDS,
+  isApifyPlatform,
+  KEYWORD_PLATFORMS,
+  platformMinIntervalMs,
+} from "./platforms";
 
 export const normalizedPost = v.object({
   externalId: v.string(),
@@ -105,9 +113,11 @@ export const dueJobs = internalQuery({
   args: { olderThanMs: v.number(), limit: v.number() },
   handler: async (ctx, args) => {
     const now = Date.now();
+    const paidOn = apifyEnabled();
     const jobs = await ctx.db.query("jobs").collect();
     return jobs
       .filter((j) => {
+        if (!paidOn && isApifyPlatform(j.platform)) return false;
         const interval = Math.max(args.olderThanMs, platformMinIntervalMs(j.platform));
         return (j.lastRunAt ?? 0) < now - interval;
       })

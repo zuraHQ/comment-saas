@@ -1,6 +1,7 @@
 import { v } from "convex/values";
 import { action, internalAction, type ActionCtx } from "./_generated/server";
 import { internal } from "./_generated/api";
+import { apifyEnabled } from "./platforms";
 import type { Doc } from "./_generated/dataModel";
 
 type Normalized = {
@@ -329,6 +330,9 @@ async function searchYoutube(keyword: string): Promise<Normalized[]> {
 // enter the pool as leads.
 
 async function apifyRun(actorId: string, input: unknown): Promise<any[]> {
+  if (!apifyEnabled()) {
+    throw new Error("Apify fetching is off (set APIFY_ENABLED=true to spend)");
+  }
   const token = process.env.APIFY_TOKEN;
   if (!token) throw new Error("APIFY_TOKEN not set on this deployment");
   const res = await fetch(

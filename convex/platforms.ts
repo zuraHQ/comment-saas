@@ -38,3 +38,25 @@ export const IH_FEEDS = ["newest"];
 
 // Communities (subreddits) are a Reddit concept for now.
 export const COMMUNITY_PLATFORMS = ["reddit"];
+
+// Every platform whose intake runs through a paid Apify actor. Reddit only
+// counts while there are no official API credentials on the deployment.
+export const APIFY_PLATFORMS = [
+  "reddit",
+  "instagram",
+  "tiktok",
+  "threads",
+  "x",
+  "linkedin",
+];
+
+// Master switch for paid fetching. Off unless the deployment says otherwise:
+//   npx convex env set APIFY_ENABLED true --prod
+export function apifyEnabled(): boolean {
+  return process.env.APIFY_ENABLED === "true";
+}
+
+export function isApifyPlatform(platform: string): boolean {
+  if (platform === "reddit") return !process.env.REDDIT_CLIENT_ID;
+  return APIFY_PLATFORMS.includes(platform);
+}
