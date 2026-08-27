@@ -360,7 +360,7 @@ export function PostsContent() {
 
           {/* Post feed */}
           <section className="flex min-w-0 flex-1 flex-col">
-            <ul className="no-scrollbar grid min-h-0 flex-1 auto-rows-min grid-cols-1 content-start gap-3 overflow-y-auto p-3 xl:grid-cols-2">
+            <ul className="no-scrollbar grid min-h-0 flex-1 auto-rows-min grid-cols-1 content-start overflow-y-auto xl:grid-cols-2">
               {visibleRows.map((row) => {
                 const platform =
                   PLATFORM_BY_ID[row.match.platform ?? row.post.platform];
@@ -372,7 +372,7 @@ export function PostsContent() {
                   <li
                     key={row.match._id}
                     className={cn(
-                      "relative flex flex-col border border-border bg-card transition-colors hover:border-foreground/25",
+                      "relative flex flex-col border-r border-b border-border bg-card transition-colors hover:bg-sidebar-accent/20",
                       row.match.replied && "opacity-50",
                     )}
                   >
@@ -492,7 +492,7 @@ export function PostsContent() {
               })}
               {feed === undefined ? (
                 Array.from({ length: 8 }, (_, i) => (
-                  <li key={i} className="border border-border bg-card">
+                  <li key={i} className="border-r border-b border-border bg-card">
                     <div className="flex items-center justify-between gap-3 bg-sidebar-accent/40 px-4 py-2.5">
                       <div className="h-3 w-1/3 bg-sidebar-accent" />
                       <div className="h-4 w-20 bg-sidebar-accent" />
