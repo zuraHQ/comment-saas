@@ -3,10 +3,10 @@ import Container from './container';
 import Heading from './heading';
 
 const MANUAL = [
-  { text: 'Search nine platforms, every few hours', time: '20 – 40 min' },
-  { text: 'Read every mention, judge which ones fit', time: '20 – 40 min' },
-  { text: 'Write each reply from scratch', time: '30 – 60 min' },
-  { text: 'Track what you answered, and what it did', time: 'every day' },
+  { text: 'Search ten platforms, every few hours', time: '30 – 60 min' },
+  { text: 'Read every mention, judge which ones fit', time: '45 – 90 min' },
+  { text: 'Write each reply from scratch', time: '60 – 90 min' },
+  { text: 'Track what you answered, and what it did', time: '15 – 30 min' },
 ];
 
 
@@ -45,7 +45,7 @@ export default function ManualVs() {
             <p className="mt-8 border-t border-white/10 pt-6 text-base text-white/50">
               Roughly{' '}
               <span className="font-semibold text-red-400">
-                1 – 2 hours a day
+                2 – 4 hours a day
               </span>{' '}
               for one product.
             </p>
@@ -60,7 +60,7 @@ export default function ManualVs() {
               All you do is paste your link
             </h3>
             <p className="mt-4 text-base leading-relaxed text-white/70">
-              We watch nine platforms and rank what is worth answering.
+              We watch ten platforms and rank what is worth answering.
             </p>
 
             <p className="mt-auto border-t border-white/10 pt-6 text-base text-white/60">
@@ -74,7 +74,7 @@ export default function ManualVs() {
         <div className="mt-12 flex flex-col items-center gap-6 text-center">
           <p className="text-xl font-semibold text-white">
             That is{' '}
-            <span className="text-primary">30 – 60 hours a month</span> back,
+            <span className="text-primary">60 – 120 hours a month</span> back,
             for every product you run.
           </p>
           <a
