@@ -130,37 +130,32 @@ const INTENT_CHIP: Record<string, string> = {
   Low: 'bg-white/10 text-white/40',
 };
 
+// The point, with nothing in the way: a post, what the AI called it, and why.
 function SortVisual() {
   const [index, setIndex] = useState(0);
-  const [reading, setReading] = useState(true);
 
-  // Read for a beat, show the verdict, then move to the next post.
   useEffect(() => {
-    const verdict = setTimeout(() => setReading(false), 1100);
-    const next = setTimeout(() => {
-      setIndex((i) => (i + 1) % JUDGED.length);
-      setReading(true);
-    }, 3000);
-    return () => {
-      clearTimeout(verdict);
-      clearTimeout(next);
-    };
-  }, [index]);
+    const timer = setInterval(
+      () => setIndex((i) => (i + 1) % JUDGED.length),
+      3600,
+    );
+    return () => clearInterval(timer);
+  }, []);
 
   const post = JUDGED[index];
 
   return (
     <div className="flex h-80 flex-col justify-center">
-      <div className="border border-white/10">
-        <AnimatePresence mode="wait">
-          <motion.article
-            key={post.author}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.3, ease: 'easeOut' }}
-            className="p-4"
-          >
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={post.author}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+          transition={{ duration: 0.3, ease: 'easeOut' }}
+          className="border border-white/10"
+        >
+          <article className="p-4">
             <div className="flex items-center gap-2">
               <span
                 className="flex h-5 w-5 shrink-0 items-center justify-center"
@@ -176,71 +171,26 @@ function SortVisual() {
               <span className="truncate text-[11px] text-white/40">
                 {post.author} · {post.where} · {post.time}
               </span>
+              <span
+                className={cn(
+                  'ml-auto shrink-0 px-2 py-0.5 font-mono text-[10px] font-bold tracking-widest uppercase',
+                  INTENT_CHIP[post.intent],
+                )}
+              >
+                {post.intent} intent
+              </span>
             </div>
             <p className="mt-2 text-xs text-white/75">{post.text}</p>
-          </motion.article>
-        </AnimatePresence>
+          </article>
 
-        {/* What the model is doing with it */}
-        <div className="border-t border-white/10 p-4">
-          <AnimatePresence mode="wait">
-            {reading ? (
-              <motion.div
-                key={`reading-${index}`}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="flex items-center gap-3"
-              >
-                <motion.span
-                  className="bg-primary h-1.5 w-1.5 rounded-full"
-                  animate={{ opacity: [0.2, 1, 0.2] }}
-                  transition={{ duration: 1, repeat: Infinity }}
-                />
-                <span className="font-mono text-[10px] tracking-widest text-white/40 uppercase">
-                  AI reading the post...
-                </span>
-              </motion.div>
-            ) : (
-              <motion.div
-                key={`verdict-${index}`}
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, ease: 'easeOut' }}
-              >
-                <div className="flex items-center gap-2">
-                  <span
-                    className={cn(
-                      'px-2 py-0.5 font-mono text-[10px] font-bold tracking-widest uppercase',
-                      INTENT_CHIP[post.intent],
-                    )}
-                  >
-                    {post.intent} intent
-                  </span>
-                  <span className="font-mono text-[10px] tracking-widest text-white/30 uppercase">
-                    scored
-                  </span>
-                </div>
-                <p className="mt-2 text-xs text-white/60">{post.verdict}</p>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </div>
-
-      {/* Queue position */}
-      <div className="mt-3 flex gap-1.5">
-        {JUDGED.map((item, i) => (
-          <span
-            key={item.author}
-            className={cn(
-              'h-0.5 flex-1',
-              i === index ? 'bg-primary' : 'bg-white/10',
-            )}
-          />
-        ))}
-      </div>
+          <div className="flex items-start gap-2 border-t border-white/10 p-4">
+            <span className="bg-primary flex h-5 w-5 shrink-0 items-center justify-center font-mono text-[9px] font-bold text-[#101010]">
+              AI
+            </span>
+            <p className="text-xs text-white/60">{post.verdict}</p>
+          </div>
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 }
