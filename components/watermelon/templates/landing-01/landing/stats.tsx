@@ -249,6 +249,85 @@ function ReplyVisual() {
   );
 }
 
+/* ---------------------------------------------------------------- 04 */
+const CLICK_SOURCES = [
+  { label: 'Reddit', Icon: FaRedditAlien, color: '#FF4500', clicks: 84 },
+  { label: 'Hacker News', Icon: FaHackerNews, color: '#FF6600', clicks: 51 },
+  { label: 'Bluesky', Icon: FaBluesky, color: '#0085FF', clicks: 33 },
+  { label: 'X', Icon: FaXTwitter, color: '#ffffff', clicks: 18 },
+];
+
+// Bars grow once, the total counts up with them.
+function ResultVisual() {
+  const total = CLICK_SOURCES.reduce((sum, s) => sum + s.clicks, 0);
+  const max = Math.max(...CLICK_SOURCES.map((s) => s.clicks));
+
+  return (
+    <div className="flex h-80 flex-col justify-center gap-5">
+      <div className="flex items-end gap-6">
+        <div>
+          <p className="font-mono text-[10px] font-bold tracking-widest text-white/40 uppercase">
+            Link clicks
+          </p>
+          <motion.p
+            className="text-primary text-4xl font-semibold"
+            initial={{ opacity: 0.4 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+          >
+            {total}
+          </motion.p>
+        </div>
+        <div>
+          <p className="font-mono text-[10px] font-bold tracking-widest text-white/40 uppercase">
+            Replies sent
+          </p>
+          <p className="text-4xl font-semibold text-white">27</p>
+        </div>
+        <div>
+          <p className="font-mono text-[10px] font-bold tracking-widest text-white/40 uppercase">
+            Best channel
+          </p>
+          <p className="text-4xl font-semibold text-white">Reddit</p>
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-3">
+        {CLICK_SOURCES.map((source, i) => (
+          <div key={source.label} className="flex items-center gap-3">
+            <span
+              className="flex h-6 w-6 shrink-0 items-center justify-center"
+              style={{ backgroundColor: source.color }}
+            >
+              <source.Icon
+                className="h-3.5 w-3.5"
+                style={{
+                  color: source.color === '#ffffff' ? '#000000' : '#ffffff',
+                }}
+              />
+            </span>
+            <span className="w-24 shrink-0 text-xs text-white/60">
+              {source.label}
+            </span>
+            <span className="relative h-3 flex-1 bg-white/5">
+              <motion.span
+                className="bg-primary absolute inset-y-0 left-0"
+                initial={{ width: 0 }}
+                whileInView={{ width: `${(source.clicks / max) * 100}%` }}
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ duration: 0.8, delay: i * 0.12, ease: 'easeOut' }}
+              />
+            </span>
+            <span className="w-10 shrink-0 text-right text-xs tabular-nums text-white/60">
+              {source.clicks}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /* ---------------------------------------------------------------- rows */
 const STEPS = [
   {
@@ -268,6 +347,12 @@ const STEPS = [
     title: 'You reply first',
     body: 'Open the post, answer like a human, and drop your tracked link. Clicks come back with the platform they came from, so you learn which conversations turn into customers.',
     visual: <ReplyVisual />,
+  },
+  {
+    number: '04',
+    title: 'You get customers',
+    body: 'Every reply carries a tracked link, so clicks come back tagged with the platform they came from. You see which conversations turned into visitors, and which channel is worth your next hour.',
+    visual: <ResultVisual />,
   },
 ];
 
