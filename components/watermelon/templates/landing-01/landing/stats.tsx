@@ -84,6 +84,7 @@ function ScanVisual() {
 const JUDGED = [
   {
     author: 'u/marta_builds',
+    score: 94,
     where: 'r/smallbusiness',
     time: '4m',
     text: 'Looking for a simple invoicing tool for freelancers. Everything I try wants an enterprise plan.',
@@ -94,6 +95,7 @@ const JUDGED = [
   },
   {
     author: 'Priya S.',
+    score: 91,
     where: 'LinkedIn',
     time: '11m',
     text: 'Our finance ops still run on three spreadsheets. Open to recommendations.',
@@ -104,6 +106,7 @@ const JUDGED = [
   },
   {
     author: 'tomasz',
+    score: 61,
     where: 'Hacker News',
     time: '26m',
     text: 'Has anyone actually run a CRM out of Notion long term? Curious how it holds up.',
@@ -114,6 +117,7 @@ const JUDGED = [
   },
   {
     author: '@buildwithsam',
+    score: 12,
     where: 'X',
     time: '38m',
     text: 'just launched v2 today, thanks to everyone who tested it',
@@ -130,67 +134,180 @@ const INTENT_CHIP: Record<string, string> = {
   Low: 'bg-white/10 text-white/40',
 };
 
-// The point, with nothing in the way: a post, what the AI called it, and why.
+// A, developed: scanning bar over the post, score counting up, the reason
+// written out, and a queue strip showing what has already been judged.
+const READ_MS = 2200;
+const HOLD_MS = 6000;
+
 function SortVisual() {
   const [index, setIndex] = useState(0);
+  const [reading, setReading] = useState(true);
+  const [score, setScore] = useState(0);
 
   useEffect(() => {
-    const timer = setInterval(
-      () => setIndex((i) => (i + 1) % JUDGED.length),
-      3600,
-    );
-    return () => clearInterval(timer);
-  }, []);
+    setScore(0);
+    const done = setTimeout(() => setReading(false), READ_MS);
+    const next = setTimeout(() => {
+      setIndex((i) => (i + 1) % JUDGED.length);
+      setReading(true);
+    }, HOLD_MS);
+    return () => {
+      clearTimeout(done);
+      clearTimeout(next);
+    };
+  }, [index]);
 
   const post = JUDGED[index];
 
+  // Count the score up once the read finishes.
+  useEffect(() => {
+    if (reading) return;
+    let current = 0;
+    const step = setInterval(() => {
+      current += Math.max(1, Math.round(post.score / 18));
+      if (current >= post.score) {
+        current = post.score;
+        clearInterval(step);
+      }
+      setScore(current);
+    }, 26);
+    return () => clearInterval(step);
+  }, [reading, post.score]);
+
+  const accent =
+    post.intent === "High"
+      ? "#FF6600"
+      : post.intent === "Medium"
+        ? "#FFC53D"
+        : "rgba(255,255,255,0.25)";
+
   return (
-    <div className="flex h-80 flex-col justify-center">
+    <div className="border border-white/10">
       <AnimatePresence mode="wait">
-        <motion.div
+        <motion.article
           key={post.author}
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -8 }}
-          transition={{ duration: 0.3, ease: 'easeOut' }}
-          className="border border-white/10"
+          transition={{ duration: 0.25 }}
+          className="p-4"
         >
-          <article className="p-4">
-            <div className="flex items-center gap-2">
-              <span
-                className="flex h-5 w-5 shrink-0 items-center justify-center"
-                style={{ backgroundColor: post.color }}
-              >
-                <post.Icon
-                  className="h-3 w-3"
-                  style={{
-                    color: post.color === '#ffffff' ? '#000000' : '#ffffff',
-                  }}
-                />
-              </span>
-              <span className="truncate text-[11px] text-white/40">
-                {post.author} · {post.where} · {post.time}
-              </span>
-              <span
-                className={cn(
-                  'ml-auto shrink-0 px-2 py-0.5 font-mono text-[10px] font-bold tracking-widest uppercase',
-                  INTENT_CHIP[post.intent],
-                )}
-              >
-                {post.intent} intent
-              </span>
-            </div>
-            <p className="mt-2 text-xs text-white/75">{post.text}</p>
-          </article>
-
-          <div className="flex items-start gap-2 border-t border-white/10 p-4">
-            <span className="bg-primary flex h-5 w-5 shrink-0 items-center justify-center font-mono text-[9px] font-bold text-[#101010]">
-              AI
+          <div className="flex items-center gap-2">
+            <span
+              className="flex h-5 w-5 shrink-0 items-center justify-center"
+              style={{ backgroundColor: post.color }}
+            >
+              <post.Icon
+                className="h-3 w-3"
+                style={{ color: post.color === "#ffffff" ? "#000000" : "#ffffff" }}
+              />
             </span>
-            <p className="text-xs text-white/60">{post.verdict}</p>
+            <span className="truncate text-[11px] text-white/40">
+              {post.author} · {post.where} · {post.time}
+            </span>
+            <span className="ml-auto shrink-0 font-mono text-[10px] tracking-widest text-white/25 uppercase">
+              {index + 1}/{JUDGED.length}
+            </span>
           </div>
-        </motion.div>
+          <p className="mt-2 text-xs text-white/75">{post.text}</p>
+        </motion.article>
       </AnimatePresence>
+
+      <div className="border-t border-white/10 p-4">
+        <AnimatePresence mode="wait">
+          {reading ? (
+            <motion.div
+              key={`r-${index}`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="flex items-center gap-3"
+            >
+              <span className="flex gap-1">
+                {[0, 1, 2].map((dot) => (
+                  <motion.span
+                    key={dot}
+                    className="bg-primary h-1.5 w-1.5 rounded-full"
+                    animate={{ opacity: [0.2, 1, 0.2] }}
+                    transition={{
+                      duration: 0.9,
+                      repeat: Infinity,
+                      delay: dot * 0.15,
+                    }}
+                  />
+                ))}
+              </span>
+              <span className="font-mono text-[10px] tracking-widest text-white/40 uppercase">
+                Matching against your product...
+              </span>
+            </motion.div>
+          ) : (
+            <motion.div
+              key={`v-${index}`}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="flex items-center gap-3">
+                <span
+                  className={cn(
+                    "px-2 py-0.5 font-mono text-[10px] font-bold tracking-widest uppercase",
+                    INTENT_CHIP[post.intent],
+                  )}
+                >
+                  {post.intent} intent
+                </span>
+                <span className="relative h-1 flex-1 bg-white/10">
+                  <motion.span
+                    className="absolute inset-y-0 left-0"
+                    style={{ backgroundColor: accent }}
+                    initial={{ width: 0 }}
+                    animate={{ width: `${post.score}%` }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
+                  />
+                </span>
+                <span
+                  className="w-8 shrink-0 text-right font-mono text-xs tabular-nums"
+                  style={{ color: accent }}
+                >
+                  {score}
+                </span>
+              </div>
+              <p className="mt-2 text-xs text-white/60">{post.verdict}</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Already judged, oldest first */}
+      <div className="flex divide-x divide-white/10 border-t border-white/10">
+        {JUDGED.map((item, i) => (
+          <span
+            key={item.author}
+            className={cn(
+              "flex flex-1 items-center gap-1.5 px-2 py-2",
+              i === index ? "bg-white/[0.04]" : "",
+            )}
+          >
+            <span
+              className="h-1.5 w-1.5 shrink-0 rounded-full"
+              style={{
+                backgroundColor:
+                  i > index
+                    ? "rgba(255,255,255,0.15)"
+                    : item.intent === "High"
+                      ? "#FF6600"
+                      : item.intent === "Medium"
+                        ? "#FFC53D"
+                        : "rgba(255,255,255,0.25)",
+              }}
+            />
+            <span className="truncate font-mono text-[9px] tracking-wider text-white/30 uppercase">
+              {item.where}
+            </span>
+          </span>
+        ))}
+      </div>
     </div>
   );
 }
