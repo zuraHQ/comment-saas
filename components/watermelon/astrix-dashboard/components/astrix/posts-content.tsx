@@ -26,10 +26,6 @@ import { HistoryPanel } from "./history-content";
 
 export type FeedRow = { match: Doc<"matches">; post: Doc<"posts"> };
 
-const PLATFORM_BY_ID = Object.fromEntries(
-  PLATFORM_OPTIONS.map((option) => [option.id, option]),
-);
-
 const INTENT_STYLES: Record<string, string> = {
   high: "bg-[#FF6600] text-[#101010]",
   medium: "bg-[#FFC53D] text-[#101010]",
@@ -362,8 +358,6 @@ export function PostsContent() {
           <section className="flex min-w-0 flex-1 flex-col">
             <ul className="no-scrollbar grid min-h-0 flex-1 auto-rows-min grid-cols-1 content-start gap-3 overflow-y-auto p-3 xl:grid-cols-2">
               {visibleRows.map((row) => {
-                const platform =
-                  PLATFORM_BY_ID[row.match.platform ?? row.post.platform];
                 const reply = mockReply(
                   row.match._id,
                   project?.name ?? "our tool",
@@ -402,30 +396,15 @@ export function PostsContent() {
                               </span>
                             ) : null}
                           </div>
-                          <p className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
-                            {platform ? (
-                              <span className="relative flex size-3.5 shrink-0 items-center justify-center">
-                                {/* The HN glyph knocks the Y out of a filled
-                                    square, so it needs white behind it. */}
-                                {platform.id === "hn" ? (
-                                  <span className="absolute inset-px bg-white" />
-                                ) : null}
-                                <platform.Icon
-                                  className="relative size-3.5"
-                                  style={{ color: platform.bg }}
-                                />
-                              </span>
-                            ) : null}
-                            <span className="truncate">
-                              {row.post.type === "comment" ? "comment · " : ""}
-                              {[
-                                row.post.subsource,
-                                row.post.author,
-                                timeAgo(row.post.postedAt),
-                              ]
-                                .filter(Boolean)
-                                .join(" · ")}
-                            </span>
+                          <p className="mt-1 text-xs text-muted-foreground">
+                            {row.post.type === "comment" ? "comment · " : ""}
+                            {[
+                              row.post.subsource,
+                              row.post.author,
+                              timeAgo(row.post.postedAt),
+                            ]
+                              .filter(Boolean)
+                              .join(" · ")}
                           </p>
                           {row.post.snippet ? (
                             <p className="mt-2 line-clamp-2 text-sm text-foreground/70">
