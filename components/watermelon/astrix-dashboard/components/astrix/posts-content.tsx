@@ -394,7 +394,7 @@ export function PostsContent() {
                           {platform ? (
                             <span className="relative flex size-4 shrink-0 items-center justify-center">
                               {platform.id === "hn" ? (
-                                <span className="absolute inset-x-0 inset-y-px bg-white" />
+                                <span className="absolute inset-px bg-white" />
                               ) : null}
                               <platform.Icon
                                 className="relative size-4"
