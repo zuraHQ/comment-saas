@@ -156,6 +156,187 @@ function VersionA() {
   );
 }
 
+/* ----------------------------------------------------------------- A2 */
+// A, developed: scanning bar over the post, score counting up, the reason
+// written out, and a queue strip showing what has already been judged.
+const READ_MS = 1300;
+const HOLD_MS = 3400;
+
+function VersionA2() {
+  const [index, setIndex] = useState(0);
+  const [reading, setReading] = useState(true);
+  const [score, setScore] = useState(0);
+
+  useEffect(() => {
+    setScore(0);
+    const done = setTimeout(() => setReading(false), READ_MS);
+    const next = setTimeout(() => {
+      setIndex((i) => (i + 1) % POSTS.length);
+      setReading(true);
+    }, HOLD_MS);
+    return () => {
+      clearTimeout(done);
+      clearTimeout(next);
+    };
+  }, [index]);
+
+  const post = POSTS[index];
+
+  // Count the score up once the read finishes.
+  useEffect(() => {
+    if (reading) return;
+    let current = 0;
+    const step = setInterval(() => {
+      current += Math.max(1, Math.round(post.score / 18));
+      if (current >= post.score) {
+        current = post.score;
+        clearInterval(step);
+      }
+      setScore(current);
+    }, 26);
+    return () => clearInterval(step);
+  }, [reading, post.score]);
+
+  const accent =
+    post.intent === "High"
+      ? "#FF6600"
+      : post.intent === "Medium"
+        ? "#FFC53D"
+        : "rgba(255,255,255,0.25)";
+
+  return (
+    <div className="border border-white/10">
+      <AnimatePresence mode="wait">
+        <motion.article
+          key={post.author}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+          transition={{ duration: 0.25 }}
+          className="relative overflow-hidden p-4"
+        >
+          {/* Scan line sweeping down the post while it is being read */}
+          {reading ? (
+            <motion.span
+              className="from-primary/0 via-primary/60 to-primary/0 pointer-events-none absolute inset-x-0 h-10 bg-gradient-to-b"
+              initial={{ top: "-20%" }}
+              animate={{ top: "110%" }}
+              transition={{ duration: READ_MS / 1000, ease: "linear" }}
+            />
+          ) : null}
+
+          <div className="flex items-center gap-2">
+            <Mark post={post} />
+            <span className="truncate text-[11px] text-white/40">
+              {post.author} · {post.where} · {post.time}
+            </span>
+            <span className="ml-auto shrink-0 font-mono text-[10px] tracking-widest text-white/25 uppercase">
+              {index + 1}/{POSTS.length}
+            </span>
+          </div>
+          <p className="mt-2 text-xs text-white/75">{post.text}</p>
+        </motion.article>
+      </AnimatePresence>
+
+      <div className="border-t border-white/10 p-4">
+        <AnimatePresence mode="wait">
+          {reading ? (
+            <motion.div
+              key={`r-${index}`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="flex items-center gap-3"
+            >
+              <span className="flex gap-1">
+                {[0, 1, 2].map((dot) => (
+                  <motion.span
+                    key={dot}
+                    className="bg-primary h-1.5 w-1.5 rounded-full"
+                    animate={{ opacity: [0.2, 1, 0.2] }}
+                    transition={{
+                      duration: 0.9,
+                      repeat: Infinity,
+                      delay: dot * 0.15,
+                    }}
+                  />
+                ))}
+              </span>
+              <span className="font-mono text-[10px] tracking-widest text-white/40 uppercase">
+                Matching against your product...
+              </span>
+            </motion.div>
+          ) : (
+            <motion.div
+              key={`v-${index}`}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="flex items-center gap-3">
+                <span
+                  className={cn(
+                    "px-2 py-0.5 font-mono text-[10px] font-bold tracking-widest uppercase",
+                    CHIP[post.intent],
+                  )}
+                >
+                  {post.intent} intent
+                </span>
+                <span className="relative h-1 flex-1 bg-white/10">
+                  <motion.span
+                    className="absolute inset-y-0 left-0"
+                    style={{ backgroundColor: accent }}
+                    initial={{ width: 0 }}
+                    animate={{ width: `${post.score}%` }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
+                  />
+                </span>
+                <span
+                  className="w-8 shrink-0 text-right font-mono text-xs tabular-nums"
+                  style={{ color: accent }}
+                >
+                  {score}
+                </span>
+              </div>
+              <p className="mt-2 text-xs text-white/60">{post.verdict}</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Already judged, oldest first */}
+      <div className="flex divide-x divide-white/10 border-t border-white/10">
+        {POSTS.map((item, i) => (
+          <span
+            key={item.author}
+            className={cn(
+              "flex flex-1 items-center gap-1.5 px-2 py-2",
+              i === index ? "bg-white/[0.04]" : "",
+            )}
+          >
+            <span
+              className="h-1.5 w-1.5 shrink-0 rounded-full"
+              style={{
+                backgroundColor:
+                  i > index
+                    ? "rgba(255,255,255,0.15)"
+                    : item.intent === "High"
+                      ? "#FF6600"
+                      : item.intent === "Medium"
+                        ? "#FFC53D"
+                        : "rgba(255,255,255,0.25)",
+              }}
+            />
+            <span className="truncate font-mono text-[9px] tracking-wider text-white/30 uppercase">
+              {item.where}
+            </span>
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /* ------------------------------------------------------------------ B */
 // Chat: the model talks about the post like a teammate would.
 function VersionB() {
@@ -348,6 +529,7 @@ function VersionE() {
 
 const VERSIONS = [
   { id: "A", title: "Read then verdict", body: "One post at a time. The model reads, then explains its call.", el: <VersionA /> },
+  { id: "A2", title: "A, developed", body: "Scan line over the post, score counting up, and a strip of what has already been judged.", el: <VersionA2 /> },
   { id: "B", title: "AI as a teammate", body: "The model replies about the post like a person in a thread.", el: <VersionB /> },
   { id: "C", title: "Scoreboard", body: "Every post visible with a score bar. Static, no waiting.", el: <VersionC /> },
   { id: "D", title: "Terminal log", body: "Scoring as a live log. Technical, fast to read.", el: <VersionD /> },
