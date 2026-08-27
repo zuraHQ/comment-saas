@@ -53,12 +53,62 @@ function SocialLink({ href, icon: Icon }: { href: string; icon: React.ElementTyp
   );
 }
 
+// A big dome of radar rings anchored to the bottom edge. Purely decorative:
+// the circles are centred on the bottom of the viewBox, so only the top half
+// of each one is ever drawn.
+function FooterRadar() {
+  const rings = [140, 260, 380, 500, 620, 740];
+  const spokes = Array.from({ length: 13 }, (_, i) => (i * Math.PI) / 12);
+
+  return (
+    <svg
+      viewBox="0 0 1600 800"
+      preserveAspectRatio="xMidYMax slice"
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-x-0 bottom-0 h-[640px] w-full"
+      fill="none"
+    >
+      <defs>
+        <radialGradient id="footer-radar-glow" cx="50%" cy="100%" r="60%">
+          <stop offset="0%" stopColor="#A3FF12" stopOpacity="0.10" />
+          <stop offset="100%" stopColor="#A3FF12" stopOpacity="0" />
+        </radialGradient>
+      </defs>
+
+      <rect width="1600" height="800" fill="url(#footer-radar-glow)" />
+
+      {spokes.map((angle, i) => (
+        <line
+          key={`spoke-${i}`}
+          x1={800}
+          y1={800}
+          x2={800 + Math.cos(Math.PI + angle) * 780}
+          y2={800 + Math.sin(Math.PI + angle) * 780}
+          stroke="rgba(255,255,255,0.05)"
+        />
+      ))}
+
+      {rings.map((r, i) => (
+        <circle
+          key={`ring-${r}`}
+          cx={800}
+          cy={800}
+          r={r}
+          stroke={i === 1 ? "rgba(163,255,18,0.16)" : "rgba(255,255,255,0.07)"}
+        />
+      ))}
+    </svg>
+  );
+}
+
 export default function Footer() {
   return (
     <footer className="bg-background text-foreground relative mt-24 overflow-hidden border-t border-white/5 font-mono">
       {/* Decorative Technical Crosshairs at the very edges */}
       <Crosshair position="top-left" />
       <Crosshair position="top-right" />
+
+      <FooterRadar />
 
       <div className="relative z-10 container mx-auto px-4 pt-20 pb-12 md:px-8 lg:px-12 xl:px-16">
         {/* Top Grid */}
