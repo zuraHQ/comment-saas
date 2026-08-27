@@ -443,7 +443,7 @@ function ResultVisual() {
             <span className="w-24 shrink-0 text-xs text-white/60">
               {source.label}
             </span>
-            <span className="relative h-3 flex-1 bg-white/5">
+            <span className="relative h-1.5 flex-1 bg-white/5">
               <motion.span
                 className="absolute inset-y-0 left-0"
                 style={{ backgroundColor: source.color }}
