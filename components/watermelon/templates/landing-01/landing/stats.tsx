@@ -520,7 +520,7 @@ const STEPS = [
   },
   {
     number: "04",
-    title: "You see what worked",
+    title: "You get customers",
     body: "Every reply carries a tracked link, so clicks come back tagged with the platform they came from. You learn which conversations sent people to your site, and which channel is worth your next hour.",
     visual: <ResultVisual />,
   },
