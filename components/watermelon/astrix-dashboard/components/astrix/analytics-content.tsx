@@ -14,9 +14,10 @@ export function AnalyticsContent() {
     api.pipeline.sourceStats,
     project ? { projectId: project._id } : "skip",
   );
+  const [range, setRange] = useState<number>(30);
   const breakdown = useQuery(
     api.links.clickBreakdown,
-    project ? { projectId: project._id } : "skip",
+    project ? { projectId: project._id, days: range } : "skip",
   );
   const counts = useQuery(
     api.pipeline.feedCounts,
@@ -64,6 +65,16 @@ export function AnalyticsContent() {
   };
 
   const realClicks = breakdown?.total ?? 0;
+  const series = breakdown?.series ?? [];
+  const maxDayClicks = Math.max(1, ...series.map((d) => d.clicks));
+  const lastClick = breakdown?.lastClickAt
+    ? new Date(breakdown.lastClickAt).toLocaleString(undefined, {
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+      })
+    : null;
   const clicksByPlatform = new Map(Object.entries(breakdown?.byPlatform ?? {}));
   const bestChannel =
     [...clicksByPlatform.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ?? "—";
@@ -80,6 +91,36 @@ export function AnalyticsContent() {
           Copy a tracked link on any post, paste it in your reply, and every
           click lands here.
         </p>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-3">
+        <div className="flex items-center">
+          {[
+            { label: "7d", days: 7 },
+            { label: "30d", days: 30 },
+            { label: "90d", days: 90 },
+          ].map((option) => (
+            <button
+              key={option.days}
+              type="button"
+              onClick={() => setRange(option.days)}
+              aria-pressed={range === option.days}
+              className={cn(
+                "h-9 cursor-pointer border border-l-0 px-3 text-[10px] font-bold tracking-wider uppercase transition-colors first:border-l",
+                range === option.days
+                  ? "border-border bg-sidebar-accent text-foreground"
+                  : "border-border text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
+              )}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
+        {lastClick ? (
+          <span className="text-xs text-muted-foreground">
+            Last click {lastClick}
+          </span>
+        ) : null}
       </div>
 
       {/* Your tracked link */}
@@ -164,7 +205,34 @@ export function AnalyticsContent() {
         ))}
       </div>
 
-      {/* Clicks by platform */}
+      <section className="border border-border">
+        <header className="border-b border-border px-4 py-3 text-sm font-medium">
+          Clicks over time
+        </header>
+        <div className="flex h-40 items-end gap-[2px] p-4">
+          {series.map((day) => (
+            <div
+              key={day.day}
+              title={`${day.day}: ${day.clicks} clicks`}
+              className="flex-1 bg-sidebar-accent"
+              style={{
+                height: `${Math.max(2, (day.clicks / maxDayClicks) * 100)}%`,
+                backgroundColor: day.clicks
+                  ? "var(--primary)"
+                  : undefined,
+              }}
+            />
+          ))}
+        </div>
+        <div className="flex justify-between border-t border-border px-4 py-2 text-xs text-muted-foreground">
+          <span>{series[0]?.day ?? ""}</span>
+          <span>{series[series.length - 1]?.day ?? ""}</span>
+        </div>
+      </section>
+
+      <section className="border border-border">
+        <header className="border-b border-border px-4 py-3 text-sm font-medium">
+          Where your clicks came from
       <section className="border border-border">
         <header className="border-b border-border px-4 py-3 text-sm font-medium">
           Where your clicks came from
