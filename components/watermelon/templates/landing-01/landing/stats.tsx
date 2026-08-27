@@ -1,9 +1,10 @@
 import {
-  FaBluesky,
+  FaLinkedinIn,
   FaHackerNews,
   FaInstagram,
   FaRedditAlien,
   FaXTwitter,
+  FaYoutube,
 } from 'react-icons/fa6';
 import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion, useScroll, useSpring } from 'motion/react';
@@ -17,7 +18,7 @@ import { cn } from '@/lib/utils';
 const CHATTER = [
   { text: 'anyone know a good invoicing tool?', Icon: FaRedditAlien, color: '#FF4500' },
   { text: 'just launched v2 today', Icon: FaXTwitter, color: '#ffffff' },
-  { text: "what's the best way to track leads?", Icon: FaBluesky, color: '#0085FF' },
+  { text: "what's the best way to track leads?", Icon: FaLinkedinIn, color: '#0A66C2' },
   { text: 'need a better solution for scheduling', Icon: FaInstagram, color: '#E4405F' },
   { text: 'has anyone tried Notion for CRM?', Icon: FaHackerNews, color: '#FF6600' },
   { text: 'spreadsheets are killing me', Icon: FaRedditAlien, color: '#FF4500' },
@@ -88,12 +89,12 @@ const FEED = [
     intent: 'High',
   },
   {
-    author: '@devonruns',
-    where: 'Bluesky',
+    author: 'Devon R.',
+    where: 'LinkedIn',
     time: '11m',
-    text: 'spreadsheets are killing me. is there anything that just does this automatically',
-    Icon: FaBluesky,
-    color: '#0085FF',
+    text: 'Spreadsheets are killing me. Is there anything that just does this automatically?',
+    Icon: FaLinkedinIn,
+    color: '#0A66C2',
     intent: 'High',
   },
   {
@@ -146,9 +147,7 @@ function SortVisual() {
             transition={{ duration: 0.45, ease: 'easeOut' }}
             className={cn(
               'border p-3',
-              scored && !dropped
-                ? 'border-white/15 bg-white/[0.04]'
-                : 'border-white/10 bg-white/[0.01]',
+              scored && !dropped ? 'border-white/20' : 'border-white/10',
             )}
           >
             <div className="flex items-center gap-2">
@@ -288,7 +287,7 @@ function ReplyVisual() {
 const CLICK_SOURCES = [
   { label: 'Reddit', Icon: FaRedditAlien, color: '#FF4500', clicks: 84 },
   { label: 'Hacker News', Icon: FaHackerNews, color: '#FF6600', clicks: 51 },
-  { label: 'Bluesky', Icon: FaBluesky, color: '#0085FF', clicks: 33 },
+  { label: 'LinkedIn', Icon: FaLinkedinIn, color: '#0A66C2', clicks: 33 },
   { label: 'X', Icon: FaXTwitter, color: '#ffffff', clicks: 18 },
 ];
 
