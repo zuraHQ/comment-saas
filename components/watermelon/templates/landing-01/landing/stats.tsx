@@ -7,6 +7,7 @@ import {
 } from 'react-icons/fa6';
 import { Globe } from 'lucide-react';
 import Container from './container';
+import Heading from './heading';
 
 // Raw chatter on the left: what the internet looks like before filtering.
 const NOISE = [
@@ -89,6 +90,20 @@ export default function Stats() {
   return (
     <section className="relative w-full overflow-hidden py-24">
       <Container className="relative z-10 mx-auto">
+        <div id="how-it-works" className="mb-14 flex flex-col items-center text-center">
+          <p className="text-primary mb-6 inline-flex items-center font-mono text-xs font-bold tracking-widest uppercase">
+            <span className="mr-3 opacity-70">{'//'}</span>
+            How it works
+          </p>
+          <Heading
+            as="h2"
+            variant="big"
+            className="text-foreground font-sans font-semibold text-balance lg:text-[48px]"
+          >
+            Noise in. Customers out.
+          </Heading>
+        </div>
+
         {/* Two rows so the connecting web can span all three columns */}
         <div className="grid gap-x-6 gap-y-10 lg:grid-cols-[1fr_14rem_1fr] lg:grid-rows-[auto_26rem]">
           <ColumnLabel
