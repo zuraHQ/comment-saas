@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useClerk } from "@clerk/nextjs";
 import { useMutation } from "convex/react";
-import { Check, Loader2, X } from "lucide-react";
+import { Check, Loader2, LogOut, X } from "lucide-react";
 import { api } from "@/convex/_generated/api";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
@@ -38,6 +39,8 @@ function fakeScrape(url: string) {
 
 export function OnboardingContent() {
   const params = useSearchParams();
+  const router = useRouter();
+  const { signOut } = useClerk();
   const site = params.get("site") ?? "";
   const { addProject, updateProject } = useProject();
   const complete = useMutation(api.users.completeOnboarding);
@@ -109,7 +112,16 @@ export function OnboardingContent() {
   };
 
   return (
-    <div className="flex min-h-screen justify-center bg-background px-4 py-16">
+    <div className="relative flex min-h-screen justify-center bg-background px-4 py-16">
+      <button
+        type="button"
+        onClick={() => signOut(() => router.push("/login"))}
+        className="absolute top-6 right-6 flex h-9 cursor-pointer items-center gap-2 border border-border px-3 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
+      >
+        <LogOut className="size-3.5" />
+        Log out
+      </button>
+
       <div className="w-full max-w-2xl">
         <ol className="mb-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-2">
           {STEPS.map((label, i) => (
