@@ -215,7 +215,7 @@ function SortVisual() {
         </motion.article>
       </AnimatePresence>
 
-      <div className="min-h-[5.5rem] border-t border-white/10 p-4">
+      <div className="h-[7rem] shrink-0 border-t border-white/10 p-4">
         <AnimatePresence mode="wait">
           {reading ? (
             <motion.div
@@ -284,7 +284,7 @@ function SortVisual() {
       </div>
 
       {/* Already judged, oldest first */}
-      <div className="flex divide-x divide-white/10 border-t border-white/10">
+      <div className="mt-auto flex shrink-0 divide-x divide-white/10 border-t border-white/10">
         {JUDGED.map((item, i) => (
           <span
             key={item.author}
