@@ -409,14 +409,14 @@ function ResultVisual() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
           >
-            {total}
+            {total.toLocaleString()}
           </motion.p>
         </div>
         <div>
           <p className="font-mono text-[10px] font-bold tracking-widest text-white/40 uppercase">
             Replies sent
           </p>
-          <p className="text-4xl font-semibold text-white">27</p>
+          <p className="text-4xl font-semibold text-white">148</p>
         </div>
         <div>
           <p className="font-mono text-[10px] font-bold tracking-widest text-white/40 uppercase">
@@ -445,7 +445,8 @@ function ResultVisual() {
             </span>
             <span className="relative h-3 flex-1 bg-white/5">
               <motion.span
-                className="bg-primary absolute inset-y-0 left-0"
+                className="absolute inset-y-0 left-0"
+                style={{ backgroundColor: source.color }}
                 initial={{ width: 0 }}
                 whileInView={{ width: `${(source.clicks / max) * 100}%` }}
                 viewport={{ once: true, margin: '-80px' }}
