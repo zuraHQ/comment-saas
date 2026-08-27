@@ -322,23 +322,10 @@ function SortVisual() {
           <span
             key={item.author}
             className={cn(
-              "flex flex-1 items-center gap-1.5 px-2 py-2",
+              "flex flex-1 items-center justify-center px-2 py-2",
               i === index ? "bg-white/[0.04]" : "",
             )}
           >
-            <span
-              className="h-1.5 w-1.5 shrink-0 rounded-full"
-              style={{
-                backgroundColor:
-                  i > index
-                    ? "rgba(255,255,255,0.15)"
-                    : item.intent === "High"
-                      ? "#FF6600"
-                      : item.intent === "Medium"
-                        ? "#FFC53D"
-                        : "rgba(255,255,255,0.25)",
-              }}
-            />
             <span className="truncate font-mono text-[9px] tracking-wider text-white/30 uppercase">
               {item.where}
             </span>
