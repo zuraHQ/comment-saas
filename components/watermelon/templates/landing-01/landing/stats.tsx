@@ -80,8 +80,8 @@ function ScanVisual() {
 }
 
 /* ---------------------------------------------------------------- 02 */
-// Real-shaped posts: author, community, timestamp, body.
-const FEED = [
+// One post at a time: the model reads it, then says what it is and how hot.
+const JUDGED = [
   {
     author: 'u/marta_builds',
     where: 'r/smallbusiness',
@@ -90,15 +90,17 @@ const FEED = [
     Icon: FaRedditAlien,
     color: '#FF4500',
     intent: 'High',
+    verdict: 'Asking for a tool like yours, and priced out of the alternatives.',
   },
   {
-    author: 'Devon R.',
+    author: 'Priya S.',
     where: 'LinkedIn',
     time: '11m',
-    text: 'Spreadsheets are killing me. Is there anything that just does this automatically?',
+    text: 'Our finance ops still run on three spreadsheets. Open to recommendations.',
     Icon: FaLinkedinIn,
     color: '#0A66C2',
     intent: 'High',
+    verdict: 'Describes the exact manual work you replace, and invites suggestions.',
   },
   {
     author: 'tomasz',
@@ -108,6 +110,7 @@ const FEED = [
     Icon: FaHackerNews,
     color: '#FF6600',
     intent: 'Medium',
+    verdict: 'Adjacent problem. Worth a helpful reply, unlikely to buy today.',
   },
   {
     author: '@buildwithsam',
@@ -117,6 +120,7 @@ const FEED = [
     Icon: FaXTwitter,
     color: '#ffffff',
     intent: 'Low',
+    verdict: 'Launch announcement. Nothing here to answer.',
   },
 ];
 
@@ -126,118 +130,116 @@ const INTENT_CHIP: Record<string, string> = {
   Low: 'bg-white/10 text-white/40',
 };
 
-// Posts get scored one by one; the low-intent ones slide out entirely and a
-// fresh high-intent post takes the empty slot.
-const INCOMING = [
-  {
-    author: 'u/nadia_ops',
-    where: 'r/startups',
-    time: 'now',
-    text: 'What do you all use to keep track of client invoices without a full accounting suite?',
-    Icon: FaRedditAlien,
-    color: '#FF4500',
-    intent: 'High',
-  },
-  {
-    author: 'Priya S.',
-    where: 'LinkedIn',
-    time: 'now',
-    text: 'Our finance ops still run on three spreadsheets. Open to recommendations.',
-    Icon: FaLinkedinIn,
-    color: '#0A66C2',
-    intent: 'High',
-  },
-];
-
 function SortVisual() {
-  const [step, setStep] = useState(0);
-  const cycle = FEED.length + 4;
+  const [index, setIndex] = useState(0);
+  const [reading, setReading] = useState(true);
 
+  // Read for a beat, show the verdict, then move to the next post.
   useEffect(() => {
-    const timer = setInterval(() => setStep((s) => (s + 1) % cycle), 1000);
-    return () => clearInterval(timer);
-  }, [cycle]);
+    const verdict = setTimeout(() => setReading(false), 1100);
+    const next = setTimeout(() => {
+      setIndex((i) => (i + 1) % JUDGED.length);
+      setReading(true);
+    }, 3000);
+    return () => {
+      clearTimeout(verdict);
+      clearTimeout(next);
+    };
+  }, [index]);
 
-  // After scoring finishes, low-intent rows leave and incoming ones replace them.
-  const swapped = step >= FEED.length + 2;
-  const rows = FEED.map((post, i) => {
-    if (post.intent !== 'Low') return { post, scored: step > i, incoming: false };
-    const replacement = INCOMING[FEED.filter((f, j) => f.intent === 'Low' && j < i).length];
-    return swapped && replacement
-      ? { post: replacement, scored: true, incoming: true }
-      : { post, scored: step > i, incoming: false };
-  });
+  const post = JUDGED[index];
 
   return (
     <div className="flex h-80 flex-col justify-center">
-      <div className="divide-y divide-white/10 border border-white/10">
-        {rows.map(({ post, scored, incoming }, i) => {
-          const leaving = step === FEED.length + 1 && post.intent === 'Low';
-          return (
-            <div key={i} className="overflow-hidden">
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.article
-                  key={post.author}
-                  initial={
-                    incoming ? { x: 40, opacity: 0 } : { x: 0, opacity: 1 }
-                  }
-                  animate={{
-                    x: leaving ? -260 : 0,
-                    opacity: leaving ? 0 : 1,
+      <div className="border border-white/10">
+        <AnimatePresence mode="wait">
+          <motion.article
+            key={post.author}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3, ease: 'easeOut' }}
+            className="p-4"
+          >
+            <div className="flex items-center gap-2">
+              <span
+                className="flex h-5 w-5 shrink-0 items-center justify-center"
+                style={{ backgroundColor: post.color }}
+              >
+                <post.Icon
+                  className="h-3 w-3"
+                  style={{
+                    color: post.color === '#ffffff' ? '#000000' : '#ffffff',
                   }}
-                  exit={{ x: -260, opacity: 0 }}
-                  transition={{ duration: 0.45, ease: 'easeInOut' }}
-                  className={cn(
-                    'p-3 transition-colors',
-                    scored ? 'bg-white/[0.03]' : '',
-                  )}
-                >
-                  <div className="flex items-center gap-2">
-                    <span
-                      className="flex h-5 w-5 shrink-0 items-center justify-center"
-                      style={{ backgroundColor: post.color }}
-                    >
-                      <post.Icon
-                        className="h-3 w-3"
-                        style={{
-                          color:
-                            post.color === '#ffffff' ? '#000000' : '#ffffff',
-                        }}
-                      />
-                    </span>
-                    <span className="truncate text-[11px] text-white/40">
-                      {post.author} · {post.where} · {post.time}
-                    </span>
-                    <span className="ml-auto shrink-0">
-                      {scored ? (
-                        <span
-                          className={cn(
-                            'px-2 py-0.5 font-mono text-[10px] font-bold tracking-widest uppercase',
-                            INTENT_CHIP[post.intent],
-                          )}
-                        >
-                          {post.intent}
-                        </span>
-                      ) : (
-                        <span className="border border-white/10 px-2 py-0.5 font-mono text-[10px] font-bold tracking-widest text-white/25 uppercase">
-                          Scoring
-                        </span>
-                      )}
-                    </span>
-                  </div>
-                  <p
+                />
+              </span>
+              <span className="truncate text-[11px] text-white/40">
+                {post.author} · {post.where} · {post.time}
+              </span>
+            </div>
+            <p className="mt-2 text-xs text-white/75">{post.text}</p>
+          </motion.article>
+        </AnimatePresence>
+
+        {/* What the model is doing with it */}
+        <div className="border-t border-white/10 p-4">
+          <AnimatePresence mode="wait">
+            {reading ? (
+              <motion.div
+                key={`reading-${index}`}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="flex items-center gap-3"
+              >
+                <motion.span
+                  className="bg-primary h-1.5 w-1.5 rounded-full"
+                  animate={{ opacity: [0.2, 1, 0.2] }}
+                  transition={{ duration: 1, repeat: Infinity }}
+                />
+                <span className="font-mono text-[10px] tracking-widest text-white/40 uppercase">
+                  AI reading the post...
+                </span>
+              </motion.div>
+            ) : (
+              <motion.div
+                key={`verdict-${index}`}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, ease: 'easeOut' }}
+              >
+                <div className="flex items-center gap-2">
+                  <span
                     className={cn(
-                      'mt-2 line-clamp-2 text-xs',
-                      scored ? 'text-white/75' : 'text-white/40',
+                      'px-2 py-0.5 font-mono text-[10px] font-bold tracking-widest uppercase',
+                      INTENT_CHIP[post.intent],
                     )}
                   >
-                    {post.text}
-                  </p>
-                </motion.article>
-              </AnimatePresence>
-            </div>
-          );
-        })}
+                    {post.intent} intent
+                  </span>
+                  <span className="font-mono text-[10px] tracking-widest text-white/30 uppercase">
+                    scored
+                  </span>
+                </div>
+                <p className="mt-2 text-xs text-white/60">{post.verdict}</p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+
+      {/* Queue position */}
+      <div className="mt-3 flex gap-1.5">
+        {JUDGED.map((item, i) => (
+          <span
+            key={item.author}
+            className={cn(
+              'h-0.5 flex-1',
+              i === index ? 'bg-primary' : 'bg-white/10',
+            )}
+          />
+        ))}
       </div>
     </div>
   );
