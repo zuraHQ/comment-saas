@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useAction, useMutation, useQuery } from "convex/react";
 import {
   Check,
+  Copy,
   History as HistoryIcon,
   RefreshCw,
   X as XIcon,
@@ -93,6 +94,17 @@ function mockReply(key: string, product: string): string {
 
 export function PostsContent() {
   const { project } = useProject();
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const copyReply = (id: string, text: string) => {
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        setCopiedId(id);
+        setTimeout(() => setCopiedId((c) => (c === id ? null : c)), 1500);
+      })
+      .catch(console.error);
+  };
 
   const counts = useQuery(
     api.pipeline.feedCounts,
@@ -441,9 +453,33 @@ export function PostsContent() {
                   </a>
 
                   <div className="mt-4 border-t border-border pt-3">
-                    <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
-                      Reply
-                    </p>
+                    <div className="flex items-center justify-between gap-3">
+                      <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
+                        Reply
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          copyReply(
+                            row.match._id,
+                            mockReply(row.match._id, project?.name ?? "our tool"),
+                          )
+                        }
+                        className={cn(
+                          "relative z-10 flex h-7 shrink-0 cursor-pointer items-center gap-1.5 border px-2.5 text-[10px] font-bold tracking-wider uppercase transition-colors",
+                          copiedId === row.match._id
+                            ? "border-primary text-primary"
+                            : "border-border text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
+                        )}
+                      >
+                        {copiedId === row.match._id ? (
+                          <Check className="size-3" />
+                        ) : (
+                          <Copy className="size-3" />
+                        )}
+                        {copiedId === row.match._id ? "Copied" : "Copy"}
+                      </button>
+                    </div>
                     <p className="mt-2 text-sm text-foreground/75">
                       {mockReply(row.match._id, project?.name ?? "our tool")}
                     </p>
