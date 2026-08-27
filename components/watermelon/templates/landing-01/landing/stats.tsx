@@ -202,33 +202,30 @@ function SortVisual() {
 }
 
 /* ---------------------------------------------------------------- 03 */
-const REPLY_TEXT =
-  "Had the same problem, so I built something for it. Free tier covers what you described.";
+// The point of this step is not that you reply - it is that you are first.
+const LATE_REPLIES = [
+  { author: 'u/toolstack_io', delay: '3h later', text: 'We do this too, check us out' },
+  { author: 'u/saasdigest', delay: '1d later', text: 'Have you tried [competitor]?' },
+];
 
-// The post sits there, then the reply types itself in underneath.
 function ReplyVisual() {
-  const [chars, setChars] = useState(0);
+  const [phase, setPhase] = useState(0);
 
+  // 0: post lands, 1: you reply, 2+: everyone else shows up late
   useEffect(() => {
-    const timer = setInterval(() => {
-      setChars((c) => (c > REPLY_TEXT.length + 24 ? 0 : c + 1));
-    }, 38);
+    const timer = setInterval(() => setPhase((p) => (p + 1) % 5), 1400);
     return () => clearInterval(timer);
   }, []);
 
-  const typed = REPLY_TEXT.slice(0, chars);
-  const done = chars >= REPLY_TEXT.length;
-
   return (
     <div className="flex h-80 flex-col justify-center gap-3">
-      {/* The post being answered */}
       <article className="border border-white/15 bg-white/[0.04] p-4">
         <div className="flex items-center gap-2">
           <span className="flex h-5 w-5 shrink-0 items-center justify-center bg-[#FF4500]">
             <FaRedditAlien className="h-3 w-3 text-white" />
           </span>
           <span className="text-[11px] text-white/40">
-            u/marta_builds · r/smallbusiness · 4m
+            u/marta_builds · r/smallbusiness · just now
           </span>
           <span className="ml-auto bg-[#FF6600] px-2 py-0.5 font-mono text-[10px] font-bold tracking-widest text-[#101010] uppercase">
             High
@@ -240,41 +237,48 @@ function ReplyVisual() {
         </p>
       </article>
 
-      {/* Your reply, typing */}
-      <div className="border-primary/40 bg-primary/[0.05] ml-6 border p-4">
-        <div className="flex items-center gap-2">
-          <span className="bg-primary flex h-5 w-5 shrink-0 items-center justify-center">
-            <Check className="h-3 w-3 text-[#101010]" />
-          </span>
-          <span className="font-mono text-[10px] font-bold tracking-widest text-white/50 uppercase">
-            Your reply
-          </span>
-          <span className="ml-auto font-mono text-[10px] tracking-widest text-white/30 uppercase">
-            first to answer
-          </span>
-        </div>
-        <p className="mt-2 min-h-[2.5rem] text-xs text-white/80">
-          {typed}
-          <span
-            className={cn(
-              'bg-primary ml-0.5 inline-block h-3 w-[2px] align-middle',
-              done && 'opacity-0',
-            )}
-          />
-        </p>
-        <div className="mt-3 flex items-center gap-2 border-t border-white/10 pt-3">
-          <Link2 className="text-primary h-3.5 w-3.5" />
-          <span className="truncate font-mono text-[10px] text-white/40">
-            yoursaas.com/r/k3m9x2a
-          </span>
-          <motion.span
-            animate={{ opacity: done ? 1 : 0.25 }}
-            transition={{ duration: 0.3 }}
-            className="text-primary ml-auto font-mono text-[10px] font-bold tracking-widest uppercase"
+      <div className="ml-5 flex flex-col gap-2 border-l border-white/10 pl-4">
+        <motion.div
+          animate={{
+            opacity: phase >= 1 ? 1 : 0.15,
+            y: phase >= 1 ? 0 : 6,
+          }}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
+          className="border-primary/50 bg-primary/[0.06] border p-3"
+        >
+          <div className="flex items-center gap-2">
+            <span className="bg-primary px-2 py-0.5 font-mono text-[10px] font-bold tracking-widest text-[#101010] uppercase">
+              1st reply
+            </span>
+            <span className="text-[11px] text-white/50">
+              you · 4 minutes after it was posted
+            </span>
+          </div>
+          <p className="mt-2 text-xs text-white/80">
+            Had the same problem, so I built something for it. Free tier covers
+            what you described.
+          </p>
+          <div className="mt-3 flex items-center gap-2 border-t border-white/10 pt-2">
+            <Link2 className="text-primary h-3.5 w-3.5" />
+            <span className="font-mono text-[10px] text-white/40">
+              yoursaas.com/r/k3m9x2a
+            </span>
+          </div>
+        </motion.div>
+
+        {LATE_REPLIES.map((reply, i) => (
+          <motion.div
+            key={reply.author}
+            animate={{ opacity: phase >= i + 2 ? 0.4 : 0.08 }}
+            transition={{ duration: 0.4, ease: 'easeOut' }}
+            className="border border-white/10 px-3 py-2"
           >
-            tracked
-          </motion.span>
-        </div>
+            <span className="text-[11px] text-white/40">
+              {reply.author} · {reply.delay}
+            </span>
+            <p className="mt-1 truncate text-xs text-white/40">{reply.text}</p>
+          </motion.div>
+        ))}
       </div>
     </div>
   );
@@ -376,7 +380,7 @@ const STEPS = [
   {
     number: '03',
     title: 'You reply first',
-    body: 'Open the post, answer like a human, and drop your tracked link. Clicks come back with the platform they came from, so you learn which conversations turn into customers.',
+    body: 'You see the post minutes after it goes up, while it is still on the front page and nobody has answered. The first genuinely helpful reply is the one people click, and it carries your tracked link.',
     visual: <ReplyVisual />,
   },
   {
