@@ -104,7 +104,7 @@ export default function Hero() {
           {/* Subheading */}
           <motion.div variants={itemVariants}>
             <SubHeading variant="big" className="mb-12 max-w-2xl text-pretty">
-              We find the posts on{' '}
+              We find the conversations on{' '}
               <span className="relative inline-block align-baseline">
                   <AnimatePresence mode="wait">
                     <motion.span
@@ -134,8 +134,8 @@ export default function Hero() {
                     </motion.span>
                   </AnimatePresence>
               </span>{' '}
-              where people ask for a product like yours. Answer them, and win
-              the customer.
+              where your product actually belongs, and draft the reply for
+              you.
             </SubHeading>
           </motion.div>
 
