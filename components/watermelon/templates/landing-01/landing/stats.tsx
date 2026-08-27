@@ -405,7 +405,7 @@ function ResultVisual() {
             Link clicks
           </p>
           <motion.p
-            className="text-primary text-4xl font-semibold"
+            className="text-primary text-2xl font-semibold"
             initial={{ opacity: 0.4 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -423,7 +423,7 @@ function ResultVisual() {
           <p className="font-mono text-[10px] font-bold tracking-widest text-white/40 uppercase">
             Best channel
           </p>
-          <p className="text-4xl font-semibold text-white">Reddit</p>
+          <p className="text-2xl font-semibold text-white">Reddit</p>
         </div>
       </div>
 
@@ -446,8 +446,7 @@ function ResultVisual() {
             </span>
             <span className="relative h-1.5 flex-1 bg-white/5">
               <motion.span
-                className="absolute inset-y-0 left-0"
-                style={{ backgroundColor: source.color }}
+                className="bg-primary absolute inset-y-0 left-0"
                 initial={{ width: 0 }}
                 whileInView={{ width: `${(source.clicks / max) * 100}%` }}
                 viewport={{ once: true, margin: '-80px' }}
