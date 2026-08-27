@@ -1,6 +1,8 @@
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { DashboardLink, useDashboardNavigation } from "./navigation";
+import { ProjectIcon } from "./project-icon";
 import { ProjectSwitcher } from "./project-switcher";
+import { useProject } from "./project-context";
 
 const PAGE_LABELS: Record<string, string> = {
   "/analytics": "Analytics",
@@ -11,30 +13,34 @@ const PAGE_LABELS: Record<string, string> = {
 
 export function DashboardTopbar() {
   const { pathname } = useDashboardNavigation();
+  const { project } = useProject();
   const pageLabel = PAGE_LABELS[pathname];
 
   return (
     <header className="flex h-16 items-center justify-between gap-4 border-b px-4 md:px-6 md:pr-8">
       <SidebarTrigger className="size-10 md:hidden [&_svg]:size-5!" />
 
-      <nav aria-label="Breadcrumb" className="hidden items-center gap-2 text-sm md:flex">
-        <DashboardLink
-          href="/"
-          className={
-            pageLabel
-              ? "text-muted-foreground transition-colors hover:text-foreground"
-              : "text-foreground"
-          }
+      {pageLabel ? (
+        <nav
+          aria-label="Breadcrumb"
+          className="hidden items-center gap-2 text-sm md:flex"
         >
-          Dashboard
-        </DashboardLink>
-        {pageLabel ? (
-          <>
-            <span className="text-muted-foreground">/</span>
-            <span className="text-foreground">{pageLabel}</span>
-          </>
-        ) : null}
-      </nav>
+          <DashboardLink
+            href="/"
+            className="text-muted-foreground transition-colors hover:text-foreground"
+          >
+            Dashboard
+          </DashboardLink>
+          <span className="text-muted-foreground">/</span>
+          <span className="text-foreground">{pageLabel}</span>
+        </nav>
+      ) : (
+        <p className="hidden items-center gap-2 text-sm font-medium md:flex">
+          <span className="text-muted-foreground">Looking posts for:</span>
+          <ProjectIcon project={project} />
+          {project?.name ?? "no project"}
+        </p>
+      )}
 
       <div className="ml-auto flex shrink-0 items-center">
         <ProjectSwitcher />

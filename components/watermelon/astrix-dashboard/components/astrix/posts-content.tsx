@@ -195,12 +195,7 @@ export function PostsContent() {
   return (
     <div className="flex h-full flex-col">
       <div className="flex min-h-0 flex-1 flex-col">
-        <div className="flex flex-wrap items-center gap-3 border-b border-border px-4 py-3">
-          <h1 className="flex items-center gap-2 text-xl font-semibold">
-            Looking posts for:
-            <ProjectIcon project={project} className="h-6 w-6 text-xs" />
-            {project?.name ?? "no project"}
-          </h1>
+        <div className="flex flex-wrap items-center justify-end gap-3 border-b border-border px-4 py-3">
           <div className="ml-auto flex items-center gap-3">
             <button
               type="button"
