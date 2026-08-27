@@ -1,6 +1,5 @@
 import { FaRedditAlien } from 'react-icons/fa6';
 import Container from './container';
-import Heading from './heading';
 
 const INPUTS = [
   {
@@ -21,20 +20,6 @@ export default function AiReply() {
   return (
     <section className="relative w-full py-24">
       <Container className="relative z-10 mx-auto">
-        <div className="mb-14 flex flex-col items-center text-center">
-          <Heading
-            as="h2"
-            variant="big"
-            className="text-foreground font-sans font-semibold text-balance lg:text-[48px]"
-          >
-            The reply is already written
-          </Heading>
-          <p className="mt-4 max-w-xl text-base text-white/50">
-            A comment comes in, and we draft the answer you would have written
-            yourself.
-          </p>
-        </div>
-
         <div className="mx-auto grid max-w-5xl gap-6 lg:grid-cols-[1.4fr_1fr]">
           {/* The thread */}
           <div className="border border-white/10 bg-white/[0.02]">
