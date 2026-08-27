@@ -372,7 +372,7 @@ export function PostsContent() {
                   <li
                     key={row.match._id}
                     className={cn(
-                      "relative flex flex-col border border-border bg-card transition-colors hover:border-foreground/25",
+                      "relative border border-border bg-card p-4 transition-colors hover:border-foreground/25",
                       row.match.replied && "opacity-50",
                     )}
                   >
@@ -387,68 +387,112 @@ export function PostsContent() {
                           );
                         }
                       }}
-                      className="flex flex-1 cursor-pointer flex-col after:absolute after:inset-0 after:content-['']"
+                      className="block cursor-pointer after:absolute after:inset-0 after:content-['']"
                     >
-                      <header className="flex items-center justify-between gap-3 bg-sidebar-accent/40 px-4 py-2.5">
-                        <div className="flex min-w-0 items-center gap-2">
-                          {platform ? (
-                            <span className="relative flex size-4 shrink-0 items-center justify-center">
-                              {platform.id === "hn" ? (
-                                <span className="absolute inset-px bg-white" />
-                              ) : null}
-                              <platform.Icon
-                                className="relative size-4"
-                                style={{ color: platform.bg }}
-                              />
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="min-w-0">
+                          <div className="flex min-w-0 items-center gap-2">
+                            <p className="truncate text-sm font-medium">
+                              {row.post.title}
+                            </p>
+                            <IntentBadge match={row.match} />
+                            {row.match.seenAt ? (
+                              <span className="shrink-0 bg-[#7dd3fc] px-2 py-0.5 text-[10px] font-bold tracking-wider text-[#101010] uppercase">
+                                Seen
+                              </span>
+                            ) : null}
+                          </div>
+                          <p className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
+                            {platform ? (
+                              <span className="relative flex size-3.5 shrink-0 items-center justify-center">
+                                {/* The HN glyph knocks the Y out of a filled
+                                    square, so it needs white behind it. */}
+                                {platform.id === "hn" ? (
+                                  <span className="absolute inset-px bg-white" />
+                                ) : null}
+                                <platform.Icon
+                                  className="relative size-3.5"
+                                  style={{ color: platform.bg }}
+                                />
+                              </span>
+                            ) : null}
+                            <span className="truncate">
+                              {row.post.type === "comment" ? "comment · " : ""}
+                              {[
+                                row.post.subsource,
+                                row.post.author,
+                                timeAgo(row.post.postedAt),
+                              ]
+                                .filter(Boolean)
+                                .join(" · ")}
                             </span>
-                          ) : null}
-                          <span className="truncate text-xs text-muted-foreground">
-                            {row.post.type === "comment" ? "comment · " : ""}
-                            {[
-                              row.post.subsource,
-                              row.post.author,
-                              timeAgo(row.post.postedAt),
-                            ]
-                              .filter(Boolean)
-                              .join(" · ")}
-                          </span>
-                        </div>
-                        <div className="flex shrink-0 items-center gap-2">
-                          {row.match.seenAt ? (
-                            <span className="bg-[#7dd3fc] px-2 py-0.5 text-[10px] font-bold tracking-wider text-[#101010] uppercase">
-                              Seen
-                            </span>
-                          ) : null}
-                          <IntentBadge match={row.match} />
-                        </div>
-                      </header>
-
-                      <div className="flex-1 p-4">
-                        <p className="text-sm font-medium">{row.post.title}</p>
-                        {row.post.snippet ? (
-                          <p className="mt-2 line-clamp-2 text-sm text-foreground/70">
-                            {row.post.snippet}
                           </p>
-                        ) : null}
-                        {row.match.intentReason &&
-                        row.match.intentScore !== "low" ? (
-                          <p className="mt-2 line-clamp-1 text-xs text-muted-foreground">
-                            Why: {row.match.intentReason}
-                          </p>
-                        ) : null}
-                        <p className="mt-4 border border-border bg-background p-3 text-sm text-foreground/75">
-                          {reply}
-                        </p>
+                          {row.post.snippet ? (
+                            <p className="mt-2 line-clamp-2 text-sm text-foreground/70">
+                              {row.post.snippet}
+                            </p>
+                          ) : null}
+                          {row.match.intentReason &&
+                          row.match.intentScore !== "low" ? (
+                            <p className="mt-2 line-clamp-1 text-xs text-muted-foreground">
+                              Why: {row.match.intentReason}
+                            </p>
+                          ) : null}
+                        </div>
+                        <div className="relative z-10 flex shrink-0 items-start gap-2">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              toggleReplied(row);
+                            }}
+                            aria-pressed={row.match.replied}
+                            aria-label={
+                              row.match.replied
+                                ? "Replied, click to undo"
+                                : "Mark as replied"
+                            }
+                            className={cn(
+                              "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border transition-colors",
+                              row.match.replied
+                                ? "border-primary bg-primary text-primary-foreground"
+                                : "border-border text-muted-foreground/40 hover:border-foreground/40 hover:text-foreground",
+                            )}
+                          >
+                            <Check className="h-5 w-5" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              skip(row);
+                            }}
+                            aria-label="Skip this post"
+                            className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border border-border text-muted-foreground/40 transition-colors hover:border-red-500/40 hover:text-red-400"
+                          >
+                            <XIcon className="h-5 w-5" />
+                          </button>
+                        </div>
                       </div>
                     </a>
 
-                    <div className="relative z-10 flex items-center justify-end gap-2 border-t border-border px-4 py-3">
+                    <div className="mt-4 flex items-start justify-between gap-4 border-t border-border pt-3">
+                      <div className="min-w-0">
+                        <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
+                          Reply
+                        </p>
+                        <p className="mt-2 text-sm text-foreground/75">
+                          {reply}
+                        </p>
+                      </div>
                       <button
                         type="button"
                         onClick={() => copyReply(row.match._id, reply)}
                         aria-label="Copy reply"
                         className={cn(
-                          "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border transition-colors",
+                          "relative z-10 flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border transition-colors",
                           copiedId === row.match._id
                             ? "border-primary text-primary"
                             : "border-border text-muted-foreground/40 hover:border-foreground/40 hover:text-foreground",
@@ -460,56 +504,29 @@ export function PostsContent() {
                           <Copy className="h-5 w-5" />
                         )}
                       </button>
-                      <button
-                        type="button"
-                        onClick={() => toggleReplied(row)}
-                        aria-pressed={row.match.replied}
-                        aria-label={
-                          row.match.replied
-                            ? "Replied, click to undo"
-                            : "Mark as replied"
-                        }
-                        className={cn(
-                          "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border transition-colors",
-                          row.match.replied
-                            ? "border-primary bg-primary text-primary-foreground"
-                            : "border-border text-muted-foreground/40 hover:border-foreground/40 hover:text-foreground",
-                        )}
-                      >
-                        <Check className="h-5 w-5" />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => skip(row)}
-                        aria-label="Skip this post"
-                        className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border border-border text-muted-foreground/40 transition-colors hover:border-red-500/40 hover:text-red-400"
-                      >
-                        <XIcon className="h-5 w-5" />
-                      </button>
                     </div>
                   </li>
                 );
               })}
               {feed === undefined ? (
                 Array.from({ length: 8 }, (_, i) => (
-                  <li key={i} className="border border-border bg-card">
-                    <div className="flex items-center justify-between gap-3 bg-sidebar-accent/40 px-4 py-2.5">
-                      <div className="h-3 w-1/3 bg-sidebar-accent" />
-                      <div className="h-4 w-20 bg-sidebar-accent" />
+                  <li key={i} className="border border-border bg-card p-4">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="min-w-0 flex-1">
+                        <div className="h-4 w-2/3 bg-sidebar-accent" />
+                        <div className="mt-2 h-3 w-1/3 bg-sidebar-accent/70" />
+                        <div className="mt-3 h-3 w-full bg-sidebar-accent/50" />
+                        <div className="mt-1.5 h-3 w-4/5 bg-sidebar-accent/50" />
+                      </div>
+                      <div className="h-10 w-10 shrink-0 border border-border" />
                     </div>
-                    <div className="p-4">
-                      <div className="h-4 w-2/3 bg-sidebar-accent" />
-                      <div className="mt-3 h-3 w-full bg-sidebar-accent/50" />
-                      <div className="mt-1.5 h-3 w-4/5 bg-sidebar-accent/50" />
-                      <div className="mt-4 border border-border p-3">
-                        <div className="h-3 w-11/12 bg-sidebar-accent/50" />
+                    <div className="mt-4 flex items-start justify-between gap-4 border-t border-border pt-3">
+                      <div className="min-w-0 flex-1">
+                        <div className="h-2.5 w-10 bg-sidebar-accent/70" />
+                        <div className="mt-3 h-3 w-11/12 bg-sidebar-accent/50" />
                         <div className="mt-1.5 h-3 w-3/5 bg-sidebar-accent/50" />
                       </div>
-                    </div>
-                    <div className="flex justify-end gap-2 border-t border-border px-4 py-3">
-                      <div className="h-10 w-10 border border-border" />
-                      <div className="h-10 w-10 border border-border" />
-                      <div className="h-10 w-10 border border-border" />
+                      <div className="h-10 w-10 shrink-0 border border-border" />
                     </div>
                   </li>
                 ))
