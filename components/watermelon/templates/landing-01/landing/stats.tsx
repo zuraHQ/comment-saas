@@ -550,7 +550,7 @@ export default function Stats() {
             variant="big"
             className="text-foreground font-sans font-semibold text-balance lg:text-[48px]"
           >
-            Four steps, once a day
+            How it works
           </Heading>
         </div>
 
