@@ -4,6 +4,7 @@ import Navbar from './landing/navbar';
 import Hero from './landing/hero';
 // Real pipeline numbers, parked until they are worth showing off.
 // import LiveData from './landing/live-data';
+import AiReply from './landing/ai-reply';
 import ManualVs from './landing/manual-vs';
 import Cta from './landing/cta';
 import Faq from './landing/faq';
@@ -23,6 +24,7 @@ export default function Landing01Demo() {
       <Hero />
       <Stats />
       <ManualVs />
+      <AiReply />
       {/* <LiveData /> */}
       <Pricing />
       <Faq />
