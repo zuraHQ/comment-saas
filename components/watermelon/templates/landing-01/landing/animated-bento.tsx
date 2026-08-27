@@ -206,7 +206,6 @@ export default function AnimatedBento() {
 
             <div className="w-full h-full flex flex-col items-center justify-center p-6 relative overflow-hidden">
                {/* Decorative background grid */}
-               <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(163,255,18,0.1)_1px,transparent_1px)] bg-size-[12px_12px] opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
                
                <div className="relative z-10 flex flex-col items-center text-center">
                  <div className="text-5xl lg:text-6xl font-bold text-foreground tracking-tighter tabular-nums mb-3 font-mono">100+</div>

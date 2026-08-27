@@ -203,7 +203,7 @@ export function ThemingComponent() {
 
           {/* Faint grid below */}
           <motion.div
-            className="h-10 w-full bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.08)_1px,transparent_1px)]"
+            className="h-10 w-full"
             style={{
               backgroundSize: '12px 12px',
               WebkitMaskImage: 'linear-gradient(to right, black, transparent)',

@@ -114,7 +114,6 @@ export default function Footer() {
 
         {/* Middle Section (Strip) */}
         <div className="relative flex flex-col items-center justify-between gap-6 overflow-hidden border-b border-white/5 py-6 md:flex-row">
-          <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.05)_1px,transparent_1px)] bg-size-[16px_16px]" />
           <div className="relative z-10 flex w-full flex-col items-center justify-between gap-6 px-2 md:flex-row">
             <div className="flex items-center gap-3">
               <div className="bg-primary h-2 w-2 animate-pulse rounded-full shadow-[0_0_8px_rgba(163,255,18,0.6)]" />

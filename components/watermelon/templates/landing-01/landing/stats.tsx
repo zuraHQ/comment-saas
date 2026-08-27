@@ -127,39 +127,6 @@ export default function Stats() {
             body="High-intent posts, ready for you to reply"
           />
 
-          {/* The web: left lines gather the noise, right lines feed the cards */}
-          <svg
-            viewBox="0 0 100 100"
-            preserveAspectRatio="none"
-            aria-hidden
-            className="pointer-events-none hidden h-full w-full lg:block"
-            style={{ gridColumn: "1 / -1", gridRow: 2 }}
-          >
-            {Array.from({ length: 16 }, (_, i) => {
-              const y = 4 + i * 6.2;
-              return (
-                <path
-                  key={`in-${i}`}
-                  d={`M2 ${y} C 30 ${y}, 40 50, 47 50`}
-                  className="stroke-white/10"
-                  fill="none"
-                  strokeWidth="0.15"
-                  vectorEffect="non-scaling-stroke"
-                />
-              );
-            })}
-            {[15, 38, 62, 85].map((y, i) => (
-              <path
-                key={`out-${i}`}
-                d={`M53 50 C 62 50, 70 ${y}, 98 ${y}`}
-                className="stroke-primary/40"
-                fill="none"
-                strokeWidth="0.15"
-                vectorEffect="non-scaling-stroke"
-              />
-            ))}
-          </svg>
-
           {/* The internet: unfiltered noise */}
           <div
             className="relative h-[26rem] w-full"
