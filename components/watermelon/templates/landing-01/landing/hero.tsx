@@ -1,4 +1,5 @@
 import Container from './container';
+import Globe from './globe';
 import Heading from './heading';
 import SubHeading from './subheading';
 import { motion, type Variants, AnimatePresence } from 'motion/react';
@@ -65,6 +66,9 @@ export default function Hero() {
 
   return (
     <section className="relative flex min-h-screen w-full flex-col justify-center overflow-x-hidden pt-48 pb-20 font-mono">
+      {/* Wireframe globe sitting behind the copy. */}
+      <Globe className="pointer-events-none absolute top-1/2 left-1/2 h-[820px] w-[820px] -translate-x-1/2 -translate-y-1/2 opacity-40" />
+
       {/* Abstract Background Concentric Circles (Left Edge) */}
       <div className="pointer-events-none absolute top-1/2 left-0 flex h-[800px] w-[800px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/5 opacity-30">
         <div className="flex h-[600px] w-[600px] items-center justify-center rounded-full border border-dashed border-white/10">
