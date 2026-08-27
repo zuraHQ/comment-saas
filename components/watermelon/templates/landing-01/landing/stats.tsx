@@ -76,35 +76,42 @@ function ScanVisual() {
 }
 
 /* ---------------------------------------------------------------- 02 */
-const SORTED = [
+// Real-shaped posts: author, community, timestamp, body.
+const FEED = [
   {
-    text: 'Looking for a simple invoicing tool for freelancers',
+    author: 'u/marta_builds',
+    where: 'r/smallbusiness',
+    time: '4m',
+    text: 'Looking for a simple invoicing tool for freelancers. Everything I try wants an enterprise plan.',
     Icon: FaRedditAlien,
     color: '#FF4500',
     intent: 'High',
   },
   {
-    text: 'spreadsheets are killing me, any automation?',
+    author: '@devonruns',
+    where: 'Bluesky',
+    time: '11m',
+    text: 'spreadsheets are killing me. is there anything that just does this automatically',
     Icon: FaBluesky,
     color: '#0085FF',
     intent: 'High',
   },
   {
-    text: 'has anyone tried Notion for CRM?',
+    author: 'tomasz',
+    where: 'Hacker News',
+    time: '26m',
+    text: 'Has anyone actually run a CRM out of Notion long term? Curious how it holds up.',
     Icon: FaHackerNews,
     color: '#FF6600',
     intent: 'Medium',
   },
   {
-    text: 'just launched v2 today',
+    author: '@buildwithsam',
+    where: 'X',
+    time: '38m',
+    text: 'just launched v2 today, thanks to everyone who tested it',
     Icon: FaXTwitter,
     color: '#ffffff',
-    intent: 'Low',
-  },
-  {
-    text: 'good morning everyone',
-    Icon: FaInstagram,
-    color: '#E4405F',
     intent: 'Low',
   },
 ];
@@ -115,70 +122,79 @@ const INTENT_CHIP: Record<string, string> = {
   Low: 'bg-white/10 text-white/40',
 };
 
-// Rows get scored one by one, then the low-intent ones fade out of the feed.
+// Posts arrive unscored, get a badge one by one, then the low ones drop out.
 function SortVisual() {
   const [step, setStep] = useState(0);
 
   useEffect(() => {
     const timer = setInterval(
-      () => setStep((s) => (s + 1) % (SORTED.length + 2)),
-      900,
+      () => setStep((s) => (s + 1) % (FEED.length + 3)),
+      1000,
     );
     return () => clearInterval(timer);
   }, []);
 
   return (
-    <div className="flex h-80 flex-col justify-center gap-2">
-      {SORTED.map((row, i) => {
+    <div className="flex h-80 flex-col justify-center gap-2.5">
+      {FEED.map((post, i) => {
         const scored = step > i;
-        const dropped = step >= SORTED.length + 1 && row.intent === 'Low';
+        const dropped = step >= FEED.length + 1 && post.intent === 'Low';
         return (
-          <motion.div
-            key={row.text}
-            animate={{
-              opacity: dropped ? 0.15 : scored ? 1 : 0.45,
-              x: dropped ? -12 : 0,
-            }}
-            transition={{ duration: 0.4, ease: 'easeOut' }}
+          <motion.article
+            key={post.author}
+            animate={{ opacity: dropped ? 0.2 : 1, x: dropped ? -14 : 0 }}
+            transition={{ duration: 0.45, ease: 'easeOut' }}
             className={cn(
-              'flex items-center gap-3 border px-3 py-2.5 text-xs',
+              'border p-3',
               scored && !dropped
-                ? 'border-white/15 bg-white/[0.04] text-white/80'
-                : 'border-white/5 text-white/40',
+                ? 'border-white/15 bg-white/[0.04]'
+                : 'border-white/10 bg-white/[0.01]',
             )}
           >
-            <row.Icon
-              className="h-3.5 w-3.5 shrink-0"
-              style={{ color: row.color }}
-            />
-            <span className="min-w-0 flex-1 truncate">{row.text}</span>
-            <AnimatePresence mode="wait">
-              {scored ? (
-                <motion.span
-                  key="chip"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.25 }}
-                  className={cn(
-                    'shrink-0 px-2 py-0.5 font-mono text-[10px] font-bold tracking-widest uppercase',
-                    INTENT_CHIP[row.intent],
-                  )}
-                >
-                  {row.intent}
-                </motion.span>
-              ) : (
-                <motion.span
-                  key="scoring"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="shrink-0 border border-white/10 px-2 py-0.5 font-mono text-[10px] font-bold tracking-widest text-white/30 uppercase"
-                >
-                  Scoring
-                </motion.span>
+            <div className="flex items-center gap-2">
+              <span
+                className="flex h-5 w-5 shrink-0 items-center justify-center"
+                style={{ backgroundColor: post.color }}
+              >
+                <post.Icon
+                  className="h-3 w-3"
+                  style={{
+                    color: post.color === '#ffffff' ? '#000000' : '#ffffff',
+                  }}
+                />
+              </span>
+              <span className="truncate text-[11px] text-white/40">
+                {post.author} · {post.where} · {post.time}
+              </span>
+              <span className="ml-auto shrink-0">
+                {scored ? (
+                  <motion.span
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.25 }}
+                    className={cn(
+                      'px-2 py-0.5 font-mono text-[10px] font-bold tracking-widest uppercase',
+                      INTENT_CHIP[post.intent],
+                    )}
+                  >
+                    {post.intent}
+                  </motion.span>
+                ) : (
+                  <span className="border border-white/10 px-2 py-0.5 font-mono text-[10px] font-bold tracking-widest text-white/25 uppercase">
+                    Scoring
+                  </span>
+                )}
+              </span>
+            </div>
+            <p
+              className={cn(
+                'mt-2 line-clamp-2 text-xs',
+                scored && !dropped ? 'text-white/75' : 'text-white/40',
               )}
-            </AnimatePresence>
-          </motion.div>
+            >
+              {post.text}
+            </p>
+          </motion.article>
         );
       })}
     </div>
