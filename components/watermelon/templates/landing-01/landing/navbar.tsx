@@ -64,7 +64,7 @@ export default function Navbar({
         {/* Right side */}
         <div className="hidden md:flex items-center gap-4">
           {action ?? (
-            <Link href="/login" className="flex items-center h-10 text-white font-mono font-bold tracking-widest uppercase px-6 text-xs hover:bg-white/10 transition-colors">
+            <Link href="/login" className="flex items-center h-10 border border-white/20 text-white font-mono font-bold tracking-widest uppercase px-6 text-xs hover:bg-white/10 transition-colors active:scale-[0.96]">
               Get Started
             </Link>
           )}
@@ -99,7 +99,7 @@ export default function Navbar({
             ))}
           </nav>
 
-          <Link href="/login" className="w-full text-center text-white font-mono font-bold tracking-widest uppercase px-4 py-4 text-xs hover:bg-white/10 transition-colors mt-2">
+          <Link href="/login" className="w-full text-center border border-white/20 text-white font-mono font-bold tracking-widest uppercase px-4 py-4 text-xs hover:bg-white/10 transition-colors active:scale-[0.96] mt-2">
             Get Started
           </Link>
         </div>

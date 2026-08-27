@@ -37,10 +37,6 @@ export default function LoginPage() {
 function CardShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="relative border border-white/10 bg-black/40 p-8 backdrop-blur-md">
-      <div className="absolute left-0 top-0 h-2 w-2 border-l border-t border-white/40" />
-      <div className="absolute right-0 top-0 h-2 w-2 border-r border-t border-white/40" />
-      <div className="absolute bottom-0 left-0 h-2 w-2 border-b border-l border-white/40" />
-      <div className="absolute bottom-0 right-0 h-2 w-2 border-b border-r border-white/40" />
       {children}
     </div>
   );
