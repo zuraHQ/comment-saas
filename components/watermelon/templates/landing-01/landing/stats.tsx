@@ -37,8 +37,8 @@ function ScanVisual() {
           transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
         />
         <div className="flex h-48 w-48 items-center justify-center rounded-full border border-white/10">
-          <div className="border-primary/40 bg-background flex h-24 w-24 items-center justify-center rounded-full border">
-            <Globe className="text-primary h-6 w-6" />
+          <div className="bg-background flex h-24 w-24 items-center justify-center rounded-full border border-white/15">
+            <Globe className="h-6 w-6 text-white/60" strokeWidth={1.25} />
           </div>
         </div>
       </div>
