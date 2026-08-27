@@ -241,50 +241,59 @@ function SortVisual() {
 }
 
 /* ---------------------------------------------------------------- 03 */
-// A thread: the post, and your reply under it carrying a tracked link.
+// A real thread: post with an avatar, your reply nested under it.
 function ReplyVisual() {
   return (
     <div className="flex h-80 flex-col justify-center">
       <div className="divide-y divide-white/10 border border-white/10">
         <article className="p-4">
-          <div className="flex items-center gap-2">
-            <span className="flex h-5 w-5 shrink-0 items-center justify-center bg-[#FF4500]">
-              <FaRedditAlien className="h-3 w-3 text-white" />
+          <div className="flex items-center gap-2.5">
+            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#3a2a24] text-[11px] font-semibold text-[#FF8A5B]">
+              m
             </span>
-            <span className="text-[11px] text-white/40">
-              u/marta_builds · r/smallbusiness · 4m
-            </span>
+            <div className="min-w-0">
+              <p className="text-xs font-medium text-white/80">u/marta_builds</p>
+              <p className="flex items-center gap-1.5 text-[11px] text-white/35">
+                <FaRedditAlien className="h-3 w-3 text-[#FF4500]" />
+                r/smallbusiness · 4m
+              </p>
+            </div>
             <span className="ml-auto bg-[#FF6600] px-2 py-0.5 font-mono text-[10px] font-bold tracking-widest text-[#101010] uppercase">
               High
             </span>
           </div>
-          <p className="mt-2 text-xs text-white/75">
+          <p className="mt-3 text-xs text-white/75">
             Looking for a simple invoicing tool for freelancers. Everything I
             try wants an enterprise plan.
           </p>
+          <div className="mt-3 flex items-center gap-4 text-[11px] text-white/30">
+            <span>▲ 47</span>
+            <span>12 comments</span>
+            <span>share</span>
+          </div>
         </article>
 
-        <div className="bg-white/[0.03] p-4 pl-8">
-          <div className="flex items-center gap-2">
-            <span className="bg-primary flex h-5 w-5 shrink-0 items-center justify-center">
-              <Check className="h-3 w-3 text-[#101010]" />
+        <div className="bg-white/[0.03] p-4 pl-10">
+          <div className="flex items-center gap-2.5">
+            <span className="bg-primary flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-[#101010]">
+              y
             </span>
-            <span className="font-mono text-[10px] font-bold tracking-widest text-white/50 uppercase">
-              Your reply
-            </span>
+            <div className="min-w-0">
+              <p className="text-xs font-medium text-white/80">you</p>
+              <p className="text-[11px] text-white/35">just now</p>
+            </div>
           </div>
-          <p className="mt-2 text-xs text-white/80">
+          <p className="mt-3 text-xs text-white/80">
             Had the same problem, so I built something for it. Free tier covers
-            what you described, no card needed.
+            what you described, no card needed —{' '}
+            <span className="text-primary underline underline-offset-2">
+              yoursaas.com
+            </span>
           </p>
-          <div className="mt-3 flex items-center gap-2">
-            <Link2 className="text-primary h-3.5 w-3.5 shrink-0" />
-            <span className="truncate font-mono text-[10px] text-white/40">
-              yoursaas.com/r/k3m9x2a
-            </span>
-            <span className="text-primary ml-auto shrink-0 font-mono text-[10px] font-bold tracking-widest uppercase">
-              tracked
-            </span>
+          <div className="mt-3 flex items-center gap-4 text-[11px] text-white/30">
+            <span>▲ 8</span>
+            <span>reply</span>
+            <span>share</span>
           </div>
         </div>
       </div>
