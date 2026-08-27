@@ -412,7 +412,7 @@ const STEPS = [
   },
   {
     number: '02',
-    title: 'AI keeps only the real ones',
+    title: 'We rank them',
     body: 'Every post is scored against what your product actually does. High intent rises to the top, the rest never reaches your feed, and each match tells you why it matched.',
     visual: <SortVisual />,
   },
