@@ -10,40 +10,6 @@ import {
 import { cn } from "@/lib/utils";
 import LogoIcon from "@/assets/logo-icon";
 
-function Crosshair({
-  position,
-}: {
-  position: "top-left" | "top-right" | "bottom-left" | "bottom-right";
-}) {
-  const isTop = position.startsWith("top");
-  const isLeft = position.endsWith("left");
-
-  return (
-    <div
-      className={cn(
-        "pointer-events-none absolute h-8 w-8",
-        isTop ? "top-0" : "bottom-0",
-        isLeft ? "left-0" : "right-0",
-      )}
-    >
-      <div
-        className={cn(
-          "absolute h-full w-px bg-white/10",
-          isTop ? "top-0" : "bottom-0",
-          isLeft ? "left-4" : "right-4",
-        )}
-      />
-      <div
-        className={cn(
-          "absolute h-px w-full bg-white/10",
-          isTop ? "top-4" : "bottom-4",
-          isLeft ? "left-0" : "right-0",
-        )}
-      />
-    </div>
-  );
-}
-
 function FooterLinkColumn({
   title,
   children,
@@ -164,10 +130,6 @@ function FooterRadar() {
 export default function Footer() {
   return (
     <footer className="bg-background text-foreground relative mt-24 overflow-hidden border-t border-white/5 font-mono">
-      {/* Decorative Technical Crosshairs at the very edges */}
-      <Crosshair position="top-left" />
-      <Crosshair position="top-right" />
-
       <FooterRadar />
 
       <div className="relative z-10 container mx-auto px-4 pt-20 pb-12 md:px-8 lg:px-12 xl:px-16">
@@ -223,7 +185,6 @@ export default function Footer() {
           </div>
 
           {/* Vertical divider line for desktop */}
-          <div className="absolute top-0 bottom-0 left-[41.666%] hidden w-px bg-white/5 lg:block" />
         </div>
 
         {/* Middle Section (Strip) */}
@@ -268,7 +229,7 @@ export default function Footer() {
               </span>
             </div>
 
-            <div className="hidden flex-col border-l border-white/10 pl-8 md:flex">
+            <div className="hidden flex-col pl-8 md:flex">
               <span className="text-xs tracking-widest text-white/40">
                 The foundational layer for apps.
               </span>
@@ -312,9 +273,6 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Bottom Decorative Crosshairs */}
-      <Crosshair position="bottom-left" />
-      <Crosshair position="bottom-right" />
     </footer>
   );
 }
