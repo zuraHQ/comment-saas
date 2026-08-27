@@ -349,7 +349,7 @@ export function PostsContent() {
                 <li
                   key={row.match._id}
                   className={cn(
-                    "border border-border bg-card p-4 transition-colors hover:border-foreground/25",
+                    "relative border border-border bg-card p-4 transition-colors hover:border-foreground/25",
                     row.match.replied && "opacity-50",
                   )}
                 >
@@ -364,7 +364,7 @@ export function PostsContent() {
                         );
                       }
                     }}
-                    className="group block cursor-pointer"
+                    className="group block cursor-pointer after:absolute after:inset-0 after:content-['']"
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div className="min-w-0">
@@ -401,7 +401,7 @@ export function PostsContent() {
                           </p>
                         ) : null}
                       </div>
-                      <div className="flex shrink-0 items-start gap-2">
+                      <div className="relative z-10 flex shrink-0 items-start gap-2">
                         <button
                           type="button"
                           onClick={(e) => {
