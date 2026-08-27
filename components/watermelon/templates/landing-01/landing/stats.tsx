@@ -5,7 +5,7 @@ import {
   FaRedditAlien,
   FaXTwitter,
 } from 'react-icons/fa6';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Check, Globe, Link2 } from 'lucide-react';
 import Container from './container';
@@ -388,6 +388,17 @@ const STEPS = [
 ];
 
 export default function Stats() {
+  const stepsRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: stepsRef,
+    offset: ['start 65%', 'end 60%'],
+  });
+  const progress = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 24,
+    restDelta: 0.001,
+  });
+
   return (
     <section className="relative w-full py-24">
       <Container className="relative z-10 mx-auto">
@@ -405,26 +416,36 @@ export default function Stats() {
           </Heading>
         </div>
 
-        <div className="mx-auto flex max-w-6xl flex-col gap-20">
-          {STEPS.map((step) => (
-            <div
-              key={step.number}
-              className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16"
-            >
-              <div>
-                <p className="font-mono text-5xl font-semibold text-white/15">
-                  {step.number}
-                </p>
-                <h3 className="mt-4 text-2xl font-semibold text-white">
-                  {step.title}
-                </h3>
-                <p className="mt-3 max-w-md text-sm leading-relaxed text-white/50">
-                  {step.body}
-                </p>
+        {/* Progress rail fills as you scroll through the steps */}
+        <div ref={stepsRef} className="relative mx-auto max-w-6xl">
+          <div className="absolute top-0 bottom-0 left-0 hidden w-px bg-white/10 lg:block">
+            <motion.div
+              className="bg-primary absolute top-0 left-0 w-px origin-top"
+              style={{ height: '100%', scaleY: progress }}
+            />
+          </div>
+
+          <div className="flex flex-col gap-32 lg:pl-16">
+            {STEPS.map((step) => (
+              <div
+                key={step.number}
+                className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16"
+              >
+                <div>
+                  <p className="font-mono text-5xl font-semibold text-white/15">
+                    {step.number}
+                  </p>
+                  <h3 className="mt-4 text-2xl font-semibold text-white">
+                    {step.title}
+                  </h3>
+                  <p className="mt-3 max-w-md text-sm leading-relaxed text-white/50">
+                    {step.body}
+                  </p>
+                </div>
+                <div>{step.visual}</div>
               </div>
-              <div>{step.visual}</div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </Container>
     </section>
