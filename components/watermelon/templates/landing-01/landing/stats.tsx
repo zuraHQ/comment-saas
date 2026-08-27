@@ -8,23 +8,43 @@ import {
   FaTiktok,
   FaXTwitter,
   FaYoutube,
-} from 'react-icons/fa6';
-import { useEffect, useRef, useState } from 'react';
-import { AnimatePresence, motion, useScroll, useSpring } from 'motion/react';
-import { Check, Globe, Link2 } from 'lucide-react';
-import Container from './container';
-import Heading from './heading';
-import { cn } from '@/lib/utils';
+} from "react-icons/fa6";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion, useScroll, useSpring } from "motion/react";
+import { Check, Globe, Link2 } from "lucide-react";
+import Container from "./container";
+import Heading from "./heading";
+import { cn } from "@/lib/utils";
 
 /* ---------------------------------------------------------------- 01 */
 // Raw chatter arriving from every platform at once.
 const CHATTER = [
-  { text: 'anyone know a good invoicing tool?', Icon: FaRedditAlien, color: '#FF4500' },
-  { text: 'just launched v2 today', Icon: FaXTwitter, color: '#ffffff' },
-  { text: "what's the best way to track leads?", Icon: FaLinkedinIn, color: '#0A66C2' },
-  { text: 'need a better solution for scheduling', Icon: FaInstagram, color: '#E4405F' },
-  { text: 'has anyone tried Notion for CRM?', Icon: FaHackerNews, color: '#FF6600' },
-  { text: 'spreadsheets are killing me', Icon: FaRedditAlien, color: '#FF4500' },
+  {
+    text: "anyone know a good invoicing tool?",
+    Icon: FaRedditAlien,
+    color: "#FF4500",
+  },
+  { text: "just launched v2 today", Icon: FaXTwitter, color: "#ffffff" },
+  {
+    text: "what's the best way to track leads?",
+    Icon: FaLinkedinIn,
+    color: "#0A66C2",
+  },
+  {
+    text: "need a better solution for scheduling",
+    Icon: FaInstagram,
+    color: "#E4405F",
+  },
+  {
+    text: "has anyone tried Notion for CRM?",
+    Icon: FaHackerNews,
+    color: "#FF6600",
+  },
+  {
+    text: "spreadsheets are killing me",
+    Icon: FaRedditAlien,
+    color: "#FF4500",
+  },
 ];
 
 function ScanVisual() {
@@ -36,10 +56,10 @@ function ScanVisual() {
           className="absolute inset-0 rounded-full"
           style={{
             background:
-              'conic-gradient(from 0deg, rgba(163,255,18,0.25), rgba(163,255,18,0) 35%)',
+              "conic-gradient(from 0deg, rgba(163,255,18,0.25), rgba(163,255,18,0) 35%)",
           }}
           animate={{ rotate: 360 }}
-          transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
+          transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
         />
         <div className="flex h-48 w-48 items-center justify-center rounded-full border border-white/10">
           <div className="bg-background flex h-24 w-24 items-center justify-center rounded-full border border-white/15">
@@ -54,8 +74,8 @@ function ScanVisual() {
           <motion.span
             key={item.text}
             className={cn(
-              'bg-background/80 flex items-center gap-2 border border-white/10 px-3 py-1.5 text-xs text-white/60 backdrop-blur-sm',
-              i % 2 === 0 ? 'mr-auto' : 'ml-auto',
+              "bg-background/80 flex items-center gap-2 border border-white/10 px-3 py-1.5 text-xs text-white/60 backdrop-blur-sm",
+              i % 2 === 0 ? "mr-auto" : "ml-auto",
             )}
             initial={{ opacity: 0.15 }}
             animate={{ opacity: [0.15, 1, 0.15] }}
@@ -64,7 +84,7 @@ function ScanVisual() {
               times: [0, 0.25, 1],
               repeat: Infinity,
               delay: i,
-              ease: 'easeInOut',
+              ease: "easeInOut",
             }}
           >
             <item.Icon
@@ -83,55 +103,57 @@ function ScanVisual() {
 // One post at a time: the model reads it, then says what it is and how hot.
 const JUDGED = [
   {
-    author: 'u/marta_builds',
+    author: "u/marta_builds",
     score: 94,
-    where: 'Reddit',
-    time: '4m',
-    text: 'Looking for a simple invoicing tool for freelancers. Everything I try wants an enterprise plan.',
+    where: "Reddit",
+    time: "4m",
+    text: "Looking for a simple invoicing tool for freelancers. Everything I try wants an enterprise plan.",
     Icon: FaRedditAlien,
-    color: '#FF4500',
-    intent: 'High',
-    verdict: 'Asking for a tool like yours, and priced out of the alternatives.',
+    color: "#FF4500",
+    intent: "High",
+    verdict:
+      "Asking for a tool like yours, and priced out of the alternatives.",
   },
   {
-    author: 'Priya S.',
+    author: "Priya S.",
     score: 91,
-    where: 'LinkedIn',
-    time: '11m',
-    text: 'Our finance ops still run on three spreadsheets. Open to recommendations.',
+    where: "LinkedIn",
+    time: "11m",
+    text: "Our finance ops still run on three spreadsheets. Open to recommendations.",
     Icon: FaLinkedinIn,
-    color: '#0A66C2',
-    intent: 'High',
-    verdict: 'Describes the exact manual work you replace, and invites suggestions.',
+    color: "#0A66C2",
+    intent: "High",
+    verdict:
+      "Describes the exact manual work you replace, and invites suggestions.",
   },
   {
-    author: 'tomasz',
+    author: "tomasz",
     score: 61,
-    where: 'Hacker News',
-    time: '26m',
-    text: 'Has anyone actually run a CRM out of Notion long term? Curious how it holds up.',
+    where: "Hacker News",
+    time: "26m",
+    text: "Has anyone actually run a CRM out of Notion long term? Curious how it holds up.",
     Icon: FaHackerNews,
-    color: '#FF6600',
-    intent: 'Medium',
-    verdict: 'Adjacent problem. Worth a helpful reply, unlikely to buy today.',
+    color: "#FF6600",
+    intent: "Medium",
+    verdict: "Adjacent problem. Worth a helpful reply, unlikely to buy today.",
   },
   {
-    author: '@buildwithsam',
+    author: "@buildwithsam",
     score: 12,
-    where: 'X/Twitter',
-    time: '38m',
-    text: 'just launched v2 today, thanks to everyone who tested it',
+    where: "X/Twitter",
+    time: "38m",
+    text: "just launched v2 today, thanks to everyone who tested it",
     Icon: FaXTwitter,
-    color: '#ffffff',
-    intent: 'Low',
-    verdict: 'Launch announcement. Nothing here to answer.',
+    color: "#ffffff",
+    intent: "Low",
+    verdict: "Launch announcement. Nothing here to answer.",
   },
 ];
 
 const INTENT_CHIP: Record<string, string> = {
-  High: 'bg-[#FF6600] text-[#101010]',
-  Medium: 'bg-[#FFC53D] text-[#101010]',
-  Low: 'bg-white/10 text-white/40',
+  High: "bg-[#FF6600] text-[#101010]",
+  Medium: "bg-[#FFC53D] text-[#101010]",
+  Low: "bg-white/10 text-white/40",
 };
 
 // A, developed: scanning bar over the post, score counting up, the reason
@@ -184,8 +206,8 @@ function SortVisual() {
   const circumference = 2 * Math.PI * 52;
 
   return (
-    <div className="flex h-80 flex-col justify-center">
-      <div className="border border-white/10">
+    <div className="flex h-80 flex-col justify-center gap-3">
+      <div className="border border-white/10 bg-white/[0.02]">
         <div className="flex items-center gap-6 p-6">
           {/* The dial */}
           <div className="relative shrink-0">
@@ -292,36 +314,36 @@ function SortVisual() {
             </motion.div>
           </AnimatePresence>
         </div>
+      </div>
 
-        {/* Already judged, oldest first */}
-        <div className="flex shrink-0 divide-x divide-white/10 border-t border-white/10">
-          {JUDGED.map((item, i) => (
+      {/* Already judged, oldest first */}
+      <div className="flex shrink-0 divide-x divide-white/10 border border-white/10">
+        {JUDGED.map((item, i) => (
+          <span
+            key={item.author}
+            className={cn(
+              "flex flex-1 items-center gap-1.5 px-2 py-2",
+              i === index ? "bg-white/[0.04]" : "",
+            )}
+          >
             <span
-              key={item.author}
-              className={cn(
-                "flex flex-1 items-center gap-1.5 px-2 py-2",
-                i === index ? "bg-white/[0.04]" : "",
-              )}
-            >
-              <span
-                className="h-1.5 w-1.5 shrink-0 rounded-full"
-                style={{
-                  backgroundColor:
-                    i > index
-                      ? "rgba(255,255,255,0.15)"
-                      : item.intent === "High"
-                        ? "#FF6600"
-                        : item.intent === "Medium"
-                          ? "#FFC53D"
-                          : "rgba(255,255,255,0.25)",
-                }}
-              />
-              <span className="truncate font-mono text-[9px] tracking-wider text-white/30 uppercase">
-                {item.where}
-              </span>
+              className="h-1.5 w-1.5 shrink-0 rounded-full"
+              style={{
+                backgroundColor:
+                  i > index
+                    ? "rgba(255,255,255,0.15)"
+                    : item.intent === "High"
+                      ? "#FF6600"
+                      : item.intent === "Medium"
+                        ? "#FFC53D"
+                        : "rgba(255,255,255,0.25)",
+              }}
+            />
+            <span className="truncate font-mono text-[9px] tracking-wider text-white/30 uppercase">
+              {item.where}
             </span>
-          ))}
-        </div>
+          </span>
+        ))}
       </div>
     </div>
   );
@@ -342,7 +364,9 @@ function ReplyVisual() {
               className="h-7 w-7 shrink-0 rounded-full bg-white/5"
             />
             <div className="min-w-0">
-              <p className="text-xs font-medium text-white/80">u/marta_builds</p>
+              <p className="text-xs font-medium text-white/80">
+                u/marta_builds
+              </p>
               <p className="flex items-center gap-1.5 text-[11px] text-white/35">
                 <FaRedditAlien className="h-3 w-3 text-[#FF4500]" />
                 Reddit · 4m
@@ -378,7 +402,7 @@ function ReplyVisual() {
           </div>
           <p className="mt-3 text-xs text-white/80">
             Had the same problem, so I built something for it. It reads the
-            communities for you and scores what is worth answering —{' '}
+            communities for you and scores what is worth answering —{" "}
             <span className="text-primary underline underline-offset-2">
               commentsaas.com
             </span>
@@ -396,11 +420,11 @@ function ReplyVisual() {
 
 /* ---------------------------------------------------------------- 04 */
 const CLICK_SOURCES = [
-  { label: 'Reddit', Icon: FaRedditAlien, color: '#FF4500', clicks: 9840 },
-  { label: 'Hacker News', Icon: FaHackerNews, color: '#FF6600', clicks: 5310 },
-  { label: 'LinkedIn', Icon: FaLinkedinIn, color: '#0A66C2', clicks: 3120 },
-  { label: 'X/Twitter', Icon: FaXTwitter, color: '#ffffff', clicks: 1465 },
-  { label: 'Instagram', Icon: FaInstagram, color: '#E4405F', clicks: 780 },
+  { label: "Reddit", Icon: FaRedditAlien, color: "#FF4500", clicks: 9840 },
+  { label: "Hacker News", Icon: FaHackerNews, color: "#FF6600", clicks: 5310 },
+  { label: "LinkedIn", Icon: FaLinkedinIn, color: "#0A66C2", clicks: 3120 },
+  { label: "X/Twitter", Icon: FaXTwitter, color: "#ffffff", clicks: 1465 },
+  { label: "Instagram", Icon: FaInstagram, color: "#E4405F", clicks: 780 },
 ];
 
 // Bars grow once, the total counts up with them.
@@ -448,7 +472,7 @@ function ResultVisual() {
               <source.Icon
                 className="h-3.5 w-3.5"
                 style={{
-                  color: source.color === '#ffffff' ? '#000000' : '#ffffff',
+                  color: source.color === "#ffffff" ? "#000000" : "#ffffff",
                 }}
               />
             </span>
@@ -460,8 +484,8 @@ function ResultVisual() {
                 className="bg-primary absolute inset-y-0 left-0"
                 initial={{ width: 0 }}
                 whileInView={{ width: `${(source.clicks / max) * 100}%` }}
-                viewport={{ once: true, margin: '-80px' }}
-                transition={{ duration: 0.8, delay: i * 0.12, ease: 'easeOut' }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.8, delay: i * 0.12, ease: "easeOut" }}
               />
             </span>
             <span className="w-12 shrink-0 text-right text-xs tabular-nums text-white/60">
@@ -475,42 +499,42 @@ function ResultVisual() {
 }
 
 const PLATFORM_MARKS = [
-  { label: 'Reddit', Icon: FaRedditAlien, bg: '#FF4500', fg: '#ffffff' },
-  { label: 'X/Twitter', Icon: FaXTwitter, bg: '#ffffff', fg: '#000000' },
-  { label: 'Hacker News', Icon: FaHackerNews, bg: '#FF6600', fg: '#ffffff' },
-  { label: 'LinkedIn', Icon: FaLinkedinIn, bg: '#0A66C2', fg: '#ffffff' },
-  { label: 'Instagram', Icon: FaInstagram, bg: '#E4405F', fg: '#ffffff' },
-  { label: 'TikTok', Icon: FaTiktok, bg: '#ffffff', fg: '#000000' },
-  { label: 'YouTube', Icon: FaYoutube, bg: '#FF0000', fg: '#ffffff' },
-  { label: 'GitHub', Icon: FaGithub, bg: '#ffffff', fg: '#000000' },
-  { label: 'Bluesky', Icon: FaBluesky, bg: '#0085FF', fg: '#ffffff' },
+  { label: "Reddit", Icon: FaRedditAlien, bg: "#FF4500", fg: "#ffffff" },
+  { label: "X/Twitter", Icon: FaXTwitter, bg: "#ffffff", fg: "#000000" },
+  { label: "Hacker News", Icon: FaHackerNews, bg: "#FF6600", fg: "#ffffff" },
+  { label: "LinkedIn", Icon: FaLinkedinIn, bg: "#0A66C2", fg: "#ffffff" },
+  { label: "Instagram", Icon: FaInstagram, bg: "#E4405F", fg: "#ffffff" },
+  { label: "TikTok", Icon: FaTiktok, bg: "#ffffff", fg: "#000000" },
+  { label: "YouTube", Icon: FaYoutube, bg: "#FF0000", fg: "#ffffff" },
+  { label: "GitHub", Icon: FaGithub, bg: "#ffffff", fg: "#000000" },
+  { label: "Bluesky", Icon: FaBluesky, bg: "#0085FF", fg: "#ffffff" },
 ];
 
 /* ---------------------------------------------------------------- rows */
 const STEPS = [
   {
-    number: '01',
-    title: 'We pull posts and comments from 9 platforms',
-    body: 'Whole communities and comment sections read end to end, not just keyword hits, so nothing relevant slips past.',
+    number: "01",
+    title: "We pull posts and comments from 9 platforms",
+    body: "Whole communities and comment sections read end to end, not just keyword hits, so nothing relevant slips past.",
     marks: true,
     visual: <ScanVisual />,
   },
   {
-    number: '02',
-    title: 'We rank them',
-    body: 'Every post is scored against what your product actually does. High intent rises to the top, the rest never reaches your feed, and each match tells you why it matched.',
+    number: "02",
+    title: "We rank them",
+    body: "Every post is scored against what your product actually does. High intent rises to the top, the rest never reaches your feed, and each match tells you why it matched.",
     visual: <SortVisual />,
   },
   {
-    number: '03',
-    title: 'You join the conversation',
-    body: 'Open the post and answer like a person, not an ad. Every reply carries a tracked link, so the ones that actually bring people back are the ones you can see.',
+    number: "03",
+    title: "You join the conversation",
+    body: "Open the post and answer like a person, not an ad. Every reply carries a tracked link, so the ones that actually bring people back are the ones you can see.",
     visual: <ReplyVisual />,
   },
   {
-    number: '04',
-    title: 'You see what worked',
-    body: 'Every reply carries a tracked link, so clicks come back tagged with the platform they came from. You learn which conversations sent people to your site, and which channel is worth your next hour.',
+    number: "04",
+    title: "You see what worked",
+    body: "Every reply carries a tracked link, so clicks come back tagged with the platform they came from. You learn which conversations sent people to your site, and which channel is worth your next hour.",
     visual: <ResultVisual />,
   },
 ];
@@ -519,7 +543,7 @@ export default function Stats() {
   const stepsRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: stepsRef,
-    offset: ['start 65%', 'end 60%'],
+    offset: ["start 65%", "end 60%"],
   });
   const progress = useSpring(scrollYProgress, {
     stiffness: 120,
@@ -530,7 +554,10 @@ export default function Stats() {
   return (
     <section className="relative w-full pt-8 pb-24">
       <Container className="relative z-10 mx-auto">
-        <div id="how-it-works" className="mb-16 flex flex-col items-center text-center">
+        <div
+          id="how-it-works"
+          className="mb-16 flex flex-col items-center text-center"
+        >
           <Heading
             as="h2"
             variant="big"
@@ -545,7 +572,7 @@ export default function Stats() {
           <div className="absolute top-0 bottom-0 left-0 hidden w-px bg-white/10 lg:block">
             <motion.div
               className="bg-primary absolute top-0 left-0 w-px origin-top"
-              style={{ height: '100%', scaleY: progress }}
+              style={{ height: "100%", scaleY: progress }}
             />
           </div>
 
