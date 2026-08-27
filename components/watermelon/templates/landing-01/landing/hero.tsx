@@ -11,7 +11,6 @@ import {
   FaHackerNews,
   FaLinkedinIn,
   FaRedditAlien,
-  FaThreads,
   FaXTwitter,
   FaYoutube,
 } from 'react-icons/fa6';
@@ -22,7 +21,6 @@ const PLATFORMS = [
   { name: 'LinkedIn', Icon: FaLinkedinIn, bg: '#0A66C2', color: '#0A66C2', iconColor: '#ffffff' },
   { name: 'HN', Icon: FaHackerNews, bg: '#FF6600', color: '#FF6600', iconColor: '#ffffff' },
   { name: 'YouTube', Icon: FaYoutube, bg: '#FF0000', color: '#FF0000', iconColor: '#ffffff' },
-  { name: 'Threads', Icon: FaThreads, bg: '#ffffff', color: '#ffffff', iconColor: '#000000' },
   { name: 'Bluesky', Icon: FaBluesky, bg: '#0085FF', color: '#0085FF', iconColor: '#ffffff' },
   { name: 'GitHub', Icon: FaGithub, bg: '#ffffff', color: '#ffffff', iconColor: '#000000' },
 ] as const;
@@ -136,7 +134,7 @@ export default function Hero() {
                     </motion.span>
                   </AnimatePresence>
               </span>{' '}
-              where people ask for a product like yours. Reply first, and win
+              where people ask for a product like yours. Answer them, and win
               the customer.
             </SubHeading>
           </motion.div>
