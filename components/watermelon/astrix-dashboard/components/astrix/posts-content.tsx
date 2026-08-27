@@ -218,7 +218,7 @@ export function PostsContent() {
             onClick={refresh}
             aria-label="Refresh posts"
             disabled={refreshing}
-            className="ml-auto flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground disabled:cursor-default"
+            className="flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground disabled:cursor-default"
           >
             <RefreshCw className={cn("size-4", refreshing && "animate-spin")} />
           </button>
@@ -227,7 +227,7 @@ export function PostsContent() {
             <SheetTrigger
               type="button"
               aria-label="Skipped"
-              className="flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground"
+              className="ml-auto flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground"
             >
               <XIcon className="size-4" />
             </SheetTrigger>
