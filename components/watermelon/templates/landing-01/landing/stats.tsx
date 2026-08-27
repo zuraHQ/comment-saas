@@ -385,11 +385,11 @@ function ReplyVisual() {
 
 /* ---------------------------------------------------------------- 04 */
 const CLICK_SOURCES = [
-  { label: 'Reddit', Icon: FaRedditAlien, color: '#FF4500', clicks: 5204 },
-  { label: 'Hacker News', Icon: FaHackerNews, color: '#FF6600', clicks: 2918 },
-  { label: 'LinkedIn', Icon: FaLinkedinIn, color: '#0A66C2', clicks: 1640 },
-  { label: 'X/Twitter', Icon: FaXTwitter, color: '#ffffff', clicks: 902 },
-  { label: 'Instagram', Icon: FaInstagram, color: '#E4405F', clicks: 471 },
+  { label: 'Reddit', Icon: FaRedditAlien, color: '#FF4500', clicks: 9840 },
+  { label: 'Hacker News', Icon: FaHackerNews, color: '#FF6600', clicks: 5310 },
+  { label: 'LinkedIn', Icon: FaLinkedinIn, color: '#0A66C2', clicks: 3120 },
+  { label: 'X/Twitter', Icon: FaXTwitter, color: '#ffffff', clicks: 1465 },
+  { label: 'Instagram', Icon: FaInstagram, color: '#E4405F', clicks: 780 },
 ];
 
 // Bars grow once, the total counts up with them.
@@ -417,7 +417,7 @@ function ResultVisual() {
           <p className="font-mono text-[10px] font-bold tracking-widest text-white/40 uppercase">
             Replies sent
           </p>
-          <p className="text-2xl font-semibold text-white">1,284</p>
+          <p className="text-2xl font-semibold text-white">2,140</p>
         </div>
         <div>
           <p className="font-mono text-[10px] font-bold tracking-widest text-white/40 uppercase">
