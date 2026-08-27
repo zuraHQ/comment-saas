@@ -5,85 +5,162 @@ import {
   FaRedditAlien,
   FaXTwitter,
 } from 'react-icons/fa6';
-import { Globe } from 'lucide-react';
+import { Check, Globe } from 'lucide-react';
 import Container from './container';
 import Heading from './heading';
+import { cn } from '@/lib/utils';
 
-// Raw chatter on the left: what the internet looks like before filtering.
-
-const NOISE = [
-  { text: 'anyone know a good invoicing tool?', Icon: FaRedditAlien, color: '#FF4500', x: 2, y: 4 },
-  { text: 'just launched v2 today...', Icon: FaXTwitter, color: '#ffffff', x: 44, y: 10 },
-  { text: "what's the best way to track leads?", Icon: FaBluesky, color: '#0085FF', x: 8, y: 20 },
-  { text: 'need a better solution for scheduling', Icon: FaInstagram, color: '#E4405F', x: 40, y: 27 },
-  { text: 'I wish there was an app for this', Icon: FaRedditAlien, color: '#FF4500', x: 0, y: 36 },
-  { text: 'has anyone tried Notion for CRM?', Icon: FaHackerNews, color: '#FF6600', x: 38, y: 44 },
-  { text: 'recommend me a service that does...', Icon: FaXTwitter, color: '#ffffff', x: 4, y: 53 },
-  { text: 'alternatives to Hubspot?', Icon: FaBluesky, color: '#0085FF', x: 42, y: 60 },
-  { text: 'spreadsheets are killing me', Icon: FaRedditAlien, color: '#FF4500', x: 0, y: 69 },
-  { text: 'looking to automate onboarding', Icon: FaInstagram, color: '#E4405F', x: 38, y: 76 },
-  { text: 'why is it so hard to find a tool', Icon: FaHackerNews, color: '#FF6600', x: 6, y: 85 },
-  { text: 'what do you guys use for support?', Icon: FaXTwitter, color: '#ffffff', x: 36, y: 93 },
+/* ---------------------------------------------------------------- 01 */
+// Raw chatter arriving from every platform at once.
+const CHATTER = [
+  { text: 'anyone know a good invoicing tool?', Icon: FaRedditAlien, color: '#FF4500' },
+  { text: 'just launched v2 today', Icon: FaXTwitter, color: '#ffffff' },
+  { text: "what's the best way to track leads?", Icon: FaBluesky, color: '#0085FF' },
+  { text: 'need a better solution for scheduling', Icon: FaInstagram, color: '#E4405F' },
+  { text: 'has anyone tried Notion for CRM?', Icon: FaHackerNews, color: '#FF6600' },
+  { text: 'spreadsheets are killing me', Icon: FaRedditAlien, color: '#FF4500' },
 ];
 
-
-const OPPORTUNITIES = [
-  {
-    quote: 'I wish there was a better way to track my habits with friends.',
-    Icon: FaBluesky,
-    bg: '#0085FF',
-    fg: '#ffffff',
-    source: 'Bluesky',
-    time: '2m ago',
-    intent: 98,
-  },
-  {
-    quote: 'Any tool that helps me summarize long YouTube videos?',
-    Icon: FaXTwitter,
-    bg: '#ffffff',
-    fg: '#000000',
-    source: 'X (Twitter)',
-    time: '5m ago',
-    intent: 96,
-  },
-  {
-    quote: 'Looking for a simple invoicing tool for freelancers.',
-    Icon: FaRedditAlien,
-    bg: '#FF4500',
-    fg: '#ffffff',
-    source: 'Reddit',
-    time: '12m ago',
-    intent: 94,
-  },
-  {
-    quote: "Open source alternative to Linear that's actually fast?",
-    Icon: FaHackerNews,
-    bg: '#FF6600',
-    fg: '#ffffff',
-    source: 'Hacker News',
-    time: '18m ago',
-    intent: 93,
-  },
-];
-
-
-function ColumnLabel({ title, body }: { title: string; body: string }) {
+function ScanVisual() {
   return (
-    <div>
-      <p className="flex items-center gap-2 font-mono text-xs font-bold tracking-widest text-white uppercase">
-        <span className="bg-primary h-1.5 w-1.5" />
-        {title}
-      </p>
-      <p className="mt-2 text-sm text-white/50">{body}</p>
+    <div className="relative flex h-80 items-center justify-center overflow-hidden border border-white/10 bg-white/[0.02]">
+      {/* Radar rings */}
+      <div className="absolute flex h-72 w-72 items-center justify-center rounded-full border border-white/10">
+        <div className="flex h-48 w-48 items-center justify-center rounded-full border border-white/10">
+          <div className="flex h-24 w-24 items-center justify-center rounded-full border border-primary/40">
+            <Globe className="text-primary h-6 w-6" />
+          </div>
+        </div>
+      </div>
+
+      {/* Chatter picked up around the edges */}
+      <div className="relative z-10 flex w-full flex-col gap-2 px-6">
+        {CHATTER.slice(0, 4).map((item, i) => (
+          <span
+            key={item.text}
+            className={cn(
+              'flex items-center gap-2 border border-white/10 bg-background/80 px-3 py-1.5 text-xs text-white/60 backdrop-blur-sm',
+              i % 2 === 0 ? 'mr-auto' : 'ml-auto',
+            )}
+          >
+            <item.Icon
+              className="h-3.5 w-3.5 shrink-0"
+              style={{ color: item.color }}
+            />
+            {item.text}
+          </span>
+        ))}
+      </div>
     </div>
   );
 }
 
+/* ---------------------------------------------------------------- 02 */
+const SORTED = [
+  { text: 'Looking for a simple invoicing tool for freelancers', intent: 'High', keep: true },
+  { text: 'spreadsheets are killing me, any automation?', intent: 'High', keep: true },
+  { text: 'has anyone tried Notion for CRM?', intent: 'Medium', keep: true },
+  { text: 'just launched v2 today', intent: 'Low', keep: false },
+  { text: 'good morning everyone', intent: 'Low', keep: false },
+];
+
+function SortVisual() {
+  return (
+    <div className="flex h-80 flex-col justify-center gap-2 border border-white/10 bg-white/[0.02] p-6">
+      {SORTED.map((row) => (
+        <div
+          key={row.text}
+          className={cn(
+            'flex items-center gap-3 border px-3 py-2.5 text-xs',
+            row.keep
+              ? 'border-white/10 bg-white/[0.03] text-white/80'
+              : 'border-white/5 text-white/25 line-through',
+          )}
+        >
+          <span className="min-w-0 flex-1 truncate">{row.text}</span>
+          <span
+            className={cn(
+              'shrink-0 px-2 py-0.5 font-mono text-[10px] font-bold tracking-widest uppercase',
+              row.intent === 'High'
+                ? 'bg-[#FF6600] text-[#101010]'
+                : row.intent === 'Medium'
+                  ? 'bg-[#FFC53D] text-[#101010]'
+                  : 'bg-white/10 text-white/40',
+            )}
+          >
+            {row.intent}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ---------------------------------------------------------------- 03 */
+function ReplyVisual() {
+  return (
+    <div className="flex h-80 flex-col justify-center gap-4 border border-white/10 bg-white/[0.02] p-6">
+      <div className="border border-white/10 bg-white/[0.03] p-4">
+        <div className="flex items-center gap-2">
+          <span className="flex h-6 w-6 items-center justify-center bg-[#FF4500]">
+            <FaRedditAlien className="h-3.5 w-3.5 text-white" />
+          </span>
+          <span className="text-xs text-white/40">r/smallbusiness · 4m ago</span>
+          <span className="ml-auto bg-[#FF6600] px-2 py-0.5 font-mono text-[10px] font-bold tracking-widest text-[#101010] uppercase">
+            High
+          </span>
+        </div>
+        <p className="mt-3 text-sm text-white/80">
+          &ldquo;Looking for a simple invoicing tool for freelancers. Everything
+          I try wants a monthly enterprise plan.&rdquo;
+        </p>
+      </div>
+
+      <div className="border border-primary/40 bg-primary/[0.06] p-4">
+        <p className="font-mono text-[10px] font-bold tracking-widest text-primary uppercase">
+          Your reply
+        </p>
+        <p className="mt-2 text-sm text-white/70">
+          I built something for exactly this after the same problem. Free tier
+          covers what you described.
+        </p>
+      </div>
+
+      <div className="flex items-center gap-2 text-xs text-white/40">
+        <Check className="text-primary h-4 w-4" />
+        14 clicks tracked from this reply
+      </div>
+    </div>
+  );
+}
+
+/* ---------------------------------------------------------------- rows */
+const STEPS = [
+  {
+    number: '01',
+    title: 'We read the internet',
+    body: 'Reddit, X, Hacker News, Bluesky, Instagram, TikTok, LinkedIn, GitHub and YouTube. Whole communities read end to end, not just keyword hits, so nothing relevant slips past.',
+    visual: <ScanVisual />,
+  },
+  {
+    number: '02',
+    title: 'AI sorts the noise',
+    body: 'Every post is scored against what your product actually does. High intent rises to the top, the rest never reaches your feed, and each match tells you why it matched.',
+    visual: <SortVisual />,
+  },
+  {
+    number: '03',
+    title: 'You reply first',
+    body: 'Open the post, answer like a human, and drop your tracked link. Clicks come back with the platform they came from, so you learn which conversations turn into customers.',
+    visual: <ReplyVisual />,
+  },
+];
+
 export default function Stats() {
   return (
-    <section className="relative w-full overflow-hidden py-24">
-      <Container className="relative z-10 mx-auto !max-w-none xl:px-24 2xl:px-32">
-        <div id="how-it-works" className="mb-14 flex flex-col items-center text-center">
+    <section className="relative w-full py-24">
+      <Container className="relative z-10 mx-auto">
+        <div id="how-it-works" className="mb-16 flex flex-col items-center text-center">
           <p className="text-primary mb-6 inline-flex items-center font-mono text-xs font-bold tracking-widest uppercase">
             <span className="mr-3 opacity-70">{'//'}</span>
             How it works
@@ -97,90 +174,27 @@ export default function Stats() {
           </Heading>
         </div>
 
-        {/* Two rows so the connecting web can span all three columns */}
-        <div className="grid gap-x-6 gap-y-10 lg:grid-cols-[1fr_1fr_26rem] lg:grid-rows-[auto_26rem]">
-          <ColumnLabel
-            title="The internet"
-            body="Millions of conversations happening right now"
-          />
-          <ColumnLabel
-            title="We find intent"
-            body="AI filters the noise and detects high-intent conversations"
-          />
-          <ColumnLabel
-            title="Customer opportunities"
-            body="High-intent posts, ready for you to reply"
-          />
-
-          {/* The internet: unfiltered noise */}
-          <div
-            className="relative h-[26rem] w-full"
-            style={{ gridColumn: 1, gridRow: 2 }}
-          >
-            {NOISE.map((item) => (
-              <span
-                key={item.text}
-                className="absolute flex max-w-[58%] items-center gap-2 whitespace-nowrap"
-                style={{ left: `${item.x}%`, top: `${item.y}%` }}
-              >
-                <item.Icon
-                  className="h-3.5 w-3.5 shrink-0 opacity-50"
-                  style={{ color: item.color }}
-                />
-                <span className="truncate text-xs text-white/35">
-                  {item.text}
-                </span>
-              </span>
-            ))}
-          </div>
-
-          {/* The hub, dead centre of the web */}
-          <div
-            className="flex h-[26rem] items-center justify-center"
-            style={{ gridColumn: 2, gridRow: 2 }}
-          >
-            <span className="border-primary/60 bg-background relative flex h-16 w-16 items-center justify-center border">
-              <Globe className="text-primary h-6 w-6" />
-            </span>
-          </div>
-
-          {/* Opportunities: fixed heights so the lines meet each card */}
-          <ul
-            className="flex h-[26rem] flex-col justify-center gap-2"
-            style={{ gridColumn: 3, gridRow: 2 }}
-          >
-            {OPPORTUNITIES.map((item) => (
-              <li
-                key={item.quote}
-                className="flex h-[5.5rem] items-center gap-3 border border-white/10 bg-white/[0.02] p-3 backdrop-blur-sm"
-              >
-                <span
-                  className="flex h-8 w-8 shrink-0 items-center justify-center"
-                  style={{ backgroundColor: item.bg }}
-                >
-                  <item.Icon className="h-4 w-4" style={{ color: item.fg }} />
-                </span>
-                <div className="min-w-0 flex-1">
-                  <p className="line-clamp-2 text-sm text-white/90">
-                    &ldquo;{item.quote}&rdquo;
-                  </p>
-                  <p className="mt-1 text-xs text-white/40">
-                    {item.source} &middot; {item.time}
-                  </p>
-                </div>
-                <div className="shrink-0 text-right">
-                  <p className="font-mono text-[10px] tracking-widest text-white/40 uppercase">
-                    Intent
-                  </p>
-                  <p className="text-primary text-lg font-semibold">
-                    {item.intent}%
-                  </p>
-                </div>
-              </li>
-            ))}
-          </ul>
+        <div className="mx-auto flex max-w-6xl flex-col gap-20">
+          {STEPS.map((step, i) => (
+            <div
+              key={step.number}
+              className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16"
+            >
+              <div className={cn(i % 2 === 1 && 'lg:order-2')}>
+                <p className="font-mono text-5xl font-semibold text-white/15">
+                  {step.number}
+                </p>
+                <h3 className="mt-4 text-2xl font-semibold text-white">
+                  {step.title}
+                </h3>
+                <p className="mt-3 max-w-md text-sm leading-relaxed text-white/50">
+                  {step.body}
+                </p>
+              </div>
+              <div className={cn(i % 2 === 1 && 'lg:order-1')}>{step.visual}</div>
+            </div>
+          ))}
         </div>
-
       </Container>
     </section>
   );
