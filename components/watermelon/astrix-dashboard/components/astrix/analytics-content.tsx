@@ -65,8 +65,6 @@ export function AnalyticsContent() {
   };
 
   const realClicks = breakdown?.total ?? 0;
-  const series = breakdown?.series ?? [];
-  const maxDayClicks = Math.max(1, ...series.map((d) => d.clicks));
   const lastClick = breakdown?.lastClickAt
     ? new Date(breakdown.lastClickAt).toLocaleString(undefined, {
         month: "short",
@@ -204,31 +202,6 @@ export function AnalyticsContent() {
           </div>
         ))}
       </div>
-
-      <section className="border border-border">
-        <header className="border-b border-border px-4 py-3 text-sm font-medium">
-          Clicks over time
-        </header>
-        <div className="flex h-40 items-end gap-[2px] p-4">
-          {series.map((day) => (
-            <div
-              key={day.day}
-              title={`${day.day}: ${day.clicks} clicks`}
-              className="flex-1 bg-sidebar-accent"
-              style={{
-                height: `${Math.max(2, (day.clicks / maxDayClicks) * 100)}%`,
-                backgroundColor: day.clicks
-                  ? "var(--primary)"
-                  : undefined,
-              }}
-            />
-          ))}
-        </div>
-        <div className="flex justify-between border-t border-border px-4 py-2 text-xs text-muted-foreground">
-          <span>{series[0]?.day ?? ""}</span>
-          <span>{series[series.length - 1]?.day ?? ""}</span>
-        </div>
-      </section>
 
       <section className="border border-border">
         <header className="border-b border-border px-4 py-3 text-sm font-medium">
