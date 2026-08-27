@@ -5,9 +5,8 @@ import {
   FaRedditAlien,
   FaXTwitter,
 } from 'react-icons/fa6';
-import { Globe, Radar, Filter, Zap, Users } from 'lucide-react';
+import { Globe } from 'lucide-react';
 import Container from './container';
-import { cn } from '@/lib/utils';
 
 // Raw chatter on the left: what the internet looks like before filtering.
 const NOISE = [
@@ -73,28 +72,6 @@ const OPPORTUNITIES = [
   },
 ];
 
-const STEPS = [
-  {
-    Icon: Radar,
-    title: '1. We scan',
-    body: '24/7 monitoring millions of conversations across the web.',
-  },
-  {
-    Icon: Filter,
-    title: '2. We find intent',
-    body: 'AI detects people actively looking for solutions.',
-  },
-  {
-    Icon: Zap,
-    title: '3. You reply first',
-    body: 'Be the first to respond and start the conversation.',
-  },
-  {
-    Icon: Users,
-    title: '4. You get customers',
-    body: 'Turn conversations into loyal paying customers.',
-  },
-];
 
 function ColumnLabel({ title, body }: { title: string; body: string }) {
   return (
@@ -201,26 +178,6 @@ export default function Stats() {
           </ul>
         </div>
 
-        {/* How it works */}
-        <div
-          id="how-it-works"
-          className="mt-16 grid gap-8 border-t border-white/10 pt-10 sm:grid-cols-2 lg:grid-cols-4"
-        >
-          {STEPS.map((step) => (
-            <div key={step.title} className="flex items-start gap-4">
-              <step.Icon
-                className={cn('text-primary h-8 w-8 shrink-0')}
-                strokeWidth={1.25}
-              />
-              <div>
-                <p className="text-base font-semibold text-white">
-                  {step.title}
-                </p>
-                <p className="mt-1 text-sm text-white/50">{step.body}</p>
-              </div>
-            </div>
-          ))}
-        </div>
       </Container>
     </section>
   );
