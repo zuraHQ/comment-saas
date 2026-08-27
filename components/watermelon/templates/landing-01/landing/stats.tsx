@@ -118,7 +118,7 @@ const JUDGED = [
   {
     author: '@buildwithsam',
     score: 12,
-    where: 'X',
+    where: 'X/Twitter',
     time: '38m',
     text: 'just launched v2 today, thanks to everyone who tested it',
     Icon: FaXTwitter,
@@ -388,7 +388,7 @@ const CLICK_SOURCES = [
   { label: 'Reddit', Icon: FaRedditAlien, color: '#FF4500', clicks: 84 },
   { label: 'Hacker News', Icon: FaHackerNews, color: '#FF6600', clicks: 51 },
   { label: 'LinkedIn', Icon: FaLinkedinIn, color: '#0A66C2', clicks: 33 },
-  { label: 'X', Icon: FaXTwitter, color: '#ffffff', clicks: 18 },
+  { label: 'X/Twitter', Icon: FaXTwitter, color: '#ffffff', clicks: 18 },
 ];
 
 // Bars grow once, the total counts up with them.
@@ -464,7 +464,7 @@ function ResultVisual() {
 
 const PLATFORM_MARKS = [
   { label: 'Reddit', Icon: FaRedditAlien, bg: '#FF4500', fg: '#ffffff' },
-  { label: 'X', Icon: FaXTwitter, bg: '#ffffff', fg: '#000000' },
+  { label: 'X/Twitter', Icon: FaXTwitter, bg: '#ffffff', fg: '#000000' },
   { label: 'Hacker News', Icon: FaHackerNews, bg: '#FF6600', fg: '#ffffff' },
   { label: 'LinkedIn', Icon: FaLinkedinIn, bg: '#0A66C2', fg: '#ffffff' },
   { label: 'Instagram', Icon: FaInstagram, bg: '#E4405F', fg: '#ffffff' },

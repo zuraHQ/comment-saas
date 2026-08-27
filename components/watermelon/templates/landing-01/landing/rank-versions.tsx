@@ -46,7 +46,7 @@ const POSTS = [
   },
   {
     author: "@buildwithsam",
-    where: "X",
+    where: "X/Twitter",
     time: "38m",
     text: "just launched v2 today, thanks to everyone who tested it",
     Icon: FaXTwitter,
