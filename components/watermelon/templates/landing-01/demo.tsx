@@ -2,6 +2,7 @@
 
 import Navbar from './landing/navbar';
 import Hero from './landing/hero';
+import GlobeSection from './landing/globe-section';
 import ManualVs from './landing/manual-vs';
 import Pricing from './landing/pricing';
 import Stats from './landing/stats';
@@ -18,6 +19,7 @@ export default function Landing01Demo() {
     >
       <Navbar />
       <Hero />
+      <GlobeSection />
       <Stats />
       <ManualVs />
       <Pricing />
