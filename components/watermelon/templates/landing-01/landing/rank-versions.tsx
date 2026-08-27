@@ -8,6 +8,7 @@ import {
   FaRedditAlien,
   FaXTwitter,
 } from "react-icons/fa6";
+import { ArrowUpRight, Check, Link2, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const POSTS = [
@@ -527,6 +528,192 @@ function VersionE() {
   );
 }
 
+/* ------------------------------------------------------ results: R1..R4 */
+const CLICKS = [
+  { label: "Reddit", Icon: FaRedditAlien, color: "#FF4500", clicks: 84 },
+  { label: "Hacker News", Icon: FaHackerNews, color: "#FF6600", clicks: 51 },
+  { label: "LinkedIn", Icon: FaLinkedinIn, color: "#0A66C2", clicks: 33 },
+  { label: "X/Twitter", Icon: FaXTwitter, color: "#ffffff", clicks: 18 },
+];
+const TOTAL = CLICKS.reduce((sum, c) => sum + c.clicks, 0);
+const MAX = Math.max(...CLICKS.map((c) => c.clicks));
+
+// R1: current build - stat row plus bars.
+function ResultsR1() {
+  return (
+    <div className="flex flex-col gap-5">
+      <div className="flex items-end gap-6">
+        <div>
+          <p className="font-mono text-[10px] tracking-widest text-white/40 uppercase">
+            Link clicks
+          </p>
+          <p className="text-primary text-4xl font-semibold">{TOTAL}</p>
+        </div>
+        <div>
+          <p className="font-mono text-[10px] tracking-widest text-white/40 uppercase">
+            Replies sent
+          </p>
+          <p className="text-4xl font-semibold text-white">27</p>
+        </div>
+      </div>
+      <div className="flex flex-col gap-3">
+        {CLICKS.map((source) => (
+          <div key={source.label} className="flex items-center gap-3">
+            <span
+              className="flex h-6 w-6 shrink-0 items-center justify-center"
+              style={{ backgroundColor: source.color }}
+            >
+              <source.Icon
+                className="h-3.5 w-3.5"
+                style={{
+                  color: source.color === "#ffffff" ? "#000000" : "#ffffff",
+                }}
+              />
+            </span>
+            <span className="w-24 shrink-0 text-xs text-white/60">
+              {source.label}
+            </span>
+            <span className="relative h-3 flex-1 bg-white/5">
+              <motion.span
+                className="bg-primary absolute inset-y-0 left-0"
+                initial={{ width: 0 }}
+                whileInView={{ width: `${(source.clicks / MAX) * 100}%` }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+              />
+            </span>
+            <span className="w-8 shrink-0 text-right text-xs text-white/60 tabular-nums">
+              {source.clicks}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// R2: the link itself, then the clicks it brought back.
+function ResultsR2() {
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="flex items-center gap-2 border border-white/10 p-3">
+        <Link2 className="text-primary h-4 w-4 shrink-0" />
+        <span className="truncate font-mono text-[11px] text-white/50">
+          yoursaas.com/r/k3m9x2a
+        </span>
+        <span className="text-primary ml-auto shrink-0 font-mono text-[10px] font-bold tracking-widest uppercase">
+          in your reply
+        </span>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        {CLICKS.slice(0, 3).map((source, i) => (
+          <motion.div
+            key={source.label}
+            initial={{ opacity: 0, x: -8 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: i * 0.15 }}
+            className="flex items-center gap-3 border border-white/10 px-3 py-2"
+          >
+            <span
+              className="flex h-5 w-5 shrink-0 items-center justify-center"
+              style={{ backgroundColor: source.color }}
+            >
+              <source.Icon
+                className="h-3 w-3"
+                style={{
+                  color: source.color === "#ffffff" ? "#000000" : "#ffffff",
+                }}
+              />
+            </span>
+            <span className="text-xs text-white/60">
+              {source.clicks} clicks from {source.label}
+            </span>
+            <ArrowUpRight className="ml-auto h-3.5 w-3.5 text-white/20" />
+          </motion.div>
+        ))}
+      </div>
+
+      <p className="text-xs text-white/40">
+        <span className="text-primary font-semibold">{TOTAL} visitors</span>{" "}
+        this week, all from replies.
+      </p>
+    </div>
+  );
+}
+
+// R3: one big number, the way a founder checks it.
+function ResultsR3() {
+  return (
+    <div className="flex flex-col items-center justify-center gap-4 border border-white/10 py-10">
+      <p className="font-mono text-[10px] tracking-widest text-white/40 uppercase">
+        Visitors from your replies
+      </p>
+      <p className="text-primary text-6xl font-semibold">{TOTAL}</p>
+      <div className="flex items-center gap-2 text-xs text-white/40">
+        <TrendingUp className="text-primary h-4 w-4" />
+        up from 41 last week
+      </div>
+      <div className="mt-2 flex gap-2">
+        {CLICKS.map((source) => (
+          <span
+            key={source.label}
+            title={`${source.label}: ${source.clicks}`}
+            className="flex h-6 w-6 items-center justify-center"
+            style={{ backgroundColor: source.color }}
+          >
+            <source.Icon
+              className="h-3.5 w-3.5"
+              style={{
+                color: source.color === "#ffffff" ? "#000000" : "#ffffff",
+              }}
+            />
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// R4: the loop closing - reply, then what it produced.
+function ResultsR4() {
+  return (
+    <div className="flex flex-col gap-2">
+      <div className="border border-white/10 p-3">
+        <div className="flex items-center gap-2">
+          <span className="flex h-5 w-5 items-center justify-center bg-[#FF4500]">
+            <FaRedditAlien className="h-3 w-3 text-white" />
+          </span>
+          <span className="text-[11px] text-white/40">
+            your reply · Reddit · 2d ago
+          </span>
+        </div>
+        <p className="mt-2 text-xs text-white/70">
+          Had the same problem, so I built something for it...
+        </p>
+      </div>
+
+      <div className="flex justify-center py-1">
+        <span className="h-4 w-px bg-white/15" />
+      </div>
+
+      <div className="border-primary/40 bg-primary/[0.05] flex items-center gap-3 border p-3">
+        <span className="bg-primary flex h-6 w-6 shrink-0 items-center justify-center">
+          <Check className="h-3.5 w-3.5 text-[#101010]" />
+        </span>
+        <span className="text-xs text-white/80">
+          <span className="text-primary font-semibold">84 clicks</span> to your
+          site
+        </span>
+        <span className="ml-auto font-mono text-[10px] tracking-widest text-white/30 uppercase">
+          tracked
+        </span>
+      </div>
+    </div>
+  );
+}
+
 const VERSIONS = [
   { id: "A", title: "Read then verdict", body: "One post at a time. The model reads, then explains its call.", el: <VersionA /> },
   { id: "A2", title: "A, developed", body: "Scan line over the post, score counting up, and a strip of what has already been judged.", el: <VersionA2 /> },
@@ -534,6 +721,13 @@ const VERSIONS = [
   { id: "C", title: "Scoreboard", body: "Every post visible with a score bar. Static, no waiting.", el: <VersionC /> },
   { id: "D", title: "Terminal log", body: "Scoring as a live log. Technical, fast to read.", el: <VersionD /> },
   { id: "E", title: "Split funnel", body: "Everything on the left, only the keepers on the right.", el: <VersionE /> },
+];
+
+const RESULT_VERSIONS = [
+  { id: "R1", title: "Stats and bars", body: "Current build: totals on top, clicks per platform underneath.", el: <ResultsR1 /> },
+  { id: "R2", title: "Link then clicks", body: "Shows the tracked link first, then what it brought back.", el: <ResultsR2 /> },
+  { id: "R3", title: "One big number", body: "The number a founder actually checks, with the sources under it.", el: <ResultsR3 /> },
+  { id: "R4", title: "Loop closed", body: "A reply from two days ago and the clicks it produced.", el: <ResultsR4 /> },
 ];
 
 export default function RankVersions() {
@@ -550,6 +744,22 @@ export default function RankVersions() {
 
         <div className="mt-12 grid gap-12 lg:grid-cols-2">
           {VERSIONS.map((version) => (
+            <section key={version.id}>
+              <p className="text-primary font-mono text-xs font-bold tracking-widest uppercase">
+                Version {version.id}
+              </p>
+              <h2 className="mt-1 text-lg font-semibold">{version.title}</h2>
+              <p className="mt-1 mb-5 text-sm text-white/50">{version.body}</p>
+              {version.el}
+            </section>
+          ))}
+        </div>
+
+        <h1 className="mt-24 text-2xl font-semibold">
+          &ldquo;You get customers&rdquo; — versions
+        </h1>
+        <div className="mt-12 grid gap-12 lg:grid-cols-2">
+          {RESULT_VERSIONS.map((version) => (
             <section key={version.id}>
               <p className="text-primary font-mono text-xs font-bold tracking-widest uppercase">
                 Version {version.id}
