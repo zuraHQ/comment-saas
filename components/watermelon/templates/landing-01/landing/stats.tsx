@@ -264,7 +264,7 @@ function SortVisual() {
                       {[0, 1, 2].map((dot) => (
                         <motion.span
                           key={dot}
-                          className="bg-primary h-1.5 w-1.5 rounded-full"
+                          className="h-1.5 w-1.5 rounded-full bg-white/30"
                           animate={{ opacity: [0.2, 1, 0.2] }}
                           transition={{
                             duration: 0.9,
