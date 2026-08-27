@@ -1,18 +1,31 @@
-import { ArrowRight } from 'lucide-react';
 import Container from './container';
-import { Cta1 } from '@/components/watermelon-ui/cta-1';
+import Heading from './heading';
 
 export default function Cta() {
   return (
     <section className="relative w-full pb-24">
-      <Container className="relative z-10 mx-auto flex justify-center">
-        <Cta1
-          title="Someone is asking for your product right now"
-          description="Paste your link, and the first ranked posts land in a couple of minutes."
-          buttonText="Get customers"
-          buttonLink="/login"
-          buttonIcon={<ArrowRight className="h-4 w-4" />}
-        />
+      <Container className="relative z-10 mx-auto">
+        <div className="mx-auto flex max-w-5xl flex-col items-start justify-between gap-8 border border-white/10 bg-white/[0.02] p-10 md:flex-row md:items-center md:p-14">
+          <div className="max-w-xl">
+            <Heading
+              as="h2"
+              variant="big"
+              className="text-foreground font-sans font-semibold text-balance lg:text-[36px]"
+            >
+              Someone is asking for your product right now
+            </Heading>
+            <p className="mt-4 text-base text-white/50">
+              Paste your link. The first ranked posts land in a couple of
+              minutes.
+            </p>
+          </div>
+          <a
+            href="/login"
+            className="bg-primary text-background hover:bg-primary/90 flex h-12 shrink-0 items-center px-8 font-mono text-xs font-bold tracking-widest uppercase transition-colors active:scale-[0.97]"
+          >
+            Get customers
+          </a>
+        </div>
       </Container>
     </section>
   );

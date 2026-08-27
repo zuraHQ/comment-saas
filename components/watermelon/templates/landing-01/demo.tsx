@@ -8,7 +8,6 @@ import ManualVs from './landing/manual-vs';
 import Cta from './landing/cta';
 import Faq from './landing/faq';
 import Pricing from './landing/pricing';
-import ProductShot from './landing/product-shot';
 import Stats from './landing/stats';
 import Footer from './landing/footer';
 
@@ -23,7 +22,6 @@ export default function Landing01Demo() {
       <Navbar />
       <Hero />
       <Stats />
-      <ProductShot />
       <ManualVs />
       {/* <LiveData /> */}
       <Pricing />
