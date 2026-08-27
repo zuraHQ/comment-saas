@@ -2,7 +2,17 @@
 
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { Check, Copy, X } from 'lucide-react';
+import {
+  BarChart3,
+  Check,
+  ChevronDown,
+  Copy,
+  Home,
+  RefreshCw,
+  Rocket,
+  X,
+} from 'lucide-react';
+import { FaDiscord } from 'react-icons/fa6';
 import {
   FaHackerNews,
   FaLinkedinIn,
@@ -148,6 +158,11 @@ function Card({ post }: { post: (typeof FEED)[number] }) {
   );
 }
 
+const SIDEBAR = [
+  { label: 'Dashboard', Icon: Home, active: true },
+  { label: 'Analytics', Icon: BarChart3 },
+];
+
 export default function HeroDemo() {
   const [count, setCount] = useState(2);
 
@@ -164,66 +179,134 @@ export default function HeroDemo() {
   }).filter(Boolean) as Array<{ post: (typeof FEED)[number]; key: string }>;
 
   return (
-    <div className="flex h-full w-full flex-col text-left">
-      {/* Top bar */}
-      <div className="flex shrink-0 items-center gap-4 border-b border-white/10 px-4 py-2.5">
-        <span className="flex items-center gap-2">
+    <div className="flex h-full w-full text-left">
+      {/* Sidebar */}
+      <aside className="hidden w-52 shrink-0 flex-col border-r border-white/10 md:flex">
+        <div className="flex h-12 items-center gap-2 px-3">
           <span className="flex h-6 w-6 items-center justify-center bg-[#A3FF12] font-mono text-[10px] font-bold text-[#101010]">
-            A
+            R
           </span>
-          <span className="text-xs font-medium text-white">Acme</span>
-        </span>
-        <nav className="flex items-center gap-1">
-          {['Posts', 'Analytics', 'Launchpad'].map((item, i) => (
+          <span className="text-sm font-medium text-white">Replies</span>
+        </div>
+
+        <nav className="flex flex-col gap-1.5 px-3 py-2">
+          {SIDEBAR.map((item) => (
             <span
-              key={item}
-              className={`px-2.5 py-1 font-mono text-[10px] tracking-widest uppercase ${
-                i === 0 ? 'bg-white/10 text-white' : 'text-white/35'
+              key={item.label}
+              className={`flex h-9 items-center gap-2.5 rounded-lg px-2.5 text-xs ${
+                item.active
+                  ? 'bg-white/[0.07] text-[#A3FF12]'
+                  : 'text-white/40'
               }`}
             >
-              {item}
+              <item.Icon className="size-4" />
+              {item.label}
             </span>
           ))}
         </nav>
-        <span className="ml-auto font-mono text-[10px] tracking-widest text-white/30 tabular-nums uppercase">
-          {(750 + count).toLocaleString()} posts · 41 high intent
-        </span>
-      </div>
 
-      <div className="flex min-h-0 flex-1">
-        {/* Platform rail */}
-        <div className="hidden w-48 shrink-0 flex-col border-r border-white/10 sm:flex">
-          {RAIL.map((item, i) => (
-            <div
-              key={item.label}
-              className={`flex items-center gap-2.5 px-3 py-3 ${i === 0 ? 'bg-white/[0.06]' : ''}`}
-            >
-              <span
-                className="flex h-7 w-7 shrink-0 items-center justify-center"
-                style={{ backgroundColor: item.bg }}
-              >
-                <item.Icon className="h-3.5 w-3.5" style={{ color: item.fg }} />
-              </span>
-              <span className="flex min-w-0 flex-col">
-                <span className="truncate text-xs font-medium text-white">
-                  {item.label}
-                </span>
-                <span className="font-mono text-[10px] text-white/30 tabular-nums">
-                  {item.base + (i === 0 ? count : 0)} posts
-                </span>
-              </span>
-            </div>
-          ))}
+        <p className="px-5 pt-3 pb-1 font-mono text-[9px] tracking-widest text-white/25 uppercase">
+          Launch
+        </p>
+        <nav className="flex flex-col gap-1.5 px-3">
+          <span className="flex h-9 items-center gap-2.5 rounded-lg px-2.5 text-xs text-white/40">
+            <Rocket className="size-4" />
+            Launch sites
+          </span>
+        </nav>
+
+        <p className="px-5 pt-3 pb-1 font-mono text-[9px] tracking-widest text-white/25 uppercase">
+          Community
+        </p>
+        <nav className="flex flex-col gap-1.5 px-3">
+          <span className="flex h-9 items-center gap-2.5 rounded-lg px-2.5 text-xs text-white/40">
+            <FaDiscord className="size-4" />
+            Discord
+          </span>
+        </nav>
+
+        <div className="mt-auto flex items-center gap-2 border-t border-white/10 px-3 py-3">
+          <span className="h-7 w-7 shrink-0 rounded-full bg-white/10" />
+          <span className="min-w-0">
+            <span className="block truncate text-xs text-white/70">
+              You
+            </span>
+            <span className="block truncate text-[10px] text-white/30">
+              Pro plan
+            </span>
+          </span>
+        </div>
+      </aside>
+
+      <div className="flex min-w-0 flex-1 flex-col">
+        {/* Topbar */}
+        <div className="flex h-12 shrink-0 items-center gap-3 border-b border-white/10 px-3">
+          <span className="flex items-center gap-2 border border-white/10 px-2.5 py-1.5">
+            <span className="flex h-4 w-4 items-center justify-center bg-[#A3FF12] font-mono text-[8px] font-bold text-[#101010]">
+              A
+            </span>
+            <span className="text-[11px] text-white">Acme</span>
+            <ChevronDown className="size-3 text-white/30" />
+          </span>
+          <span className="ml-auto font-mono text-[10px] tracking-widest text-white/30 tabular-nums uppercase">
+            {(750 + count).toLocaleString()} posts · 41 high intent
+          </span>
         </div>
 
-        {/* Feed */}
-        <ul className="grid min-w-0 flex-1 auto-rows-fr grid-cols-1 content-start gap-2.5 overflow-hidden p-2.5 lg:grid-cols-2">
-          <AnimatePresence initial={false}>
-            {visible.map(({ post, key }) => (
-              <Card key={key} post={post} />
+        {/* Filter row */}
+        <div className="flex shrink-0 items-center gap-2 border-b border-white/10 px-3 py-2">
+          {['All', 'High', 'Medium', 'Low'].map((label, i) => (
+            <span
+              key={label}
+              className={`px-2.5 py-1 font-mono text-[9px] font-bold tracking-widest uppercase ${
+                i === 0
+                  ? 'bg-white/10 text-white'
+                  : 'border border-white/10 text-white/35'
+              }`}
+            >
+              {label}
+            </span>
+          ))}
+          <span className="flex h-6 w-6 items-center justify-center border border-white/10 text-white/30">
+            <RefreshCw className="size-3" />
+          </span>
+        </div>
+
+        <div className="flex min-h-0 flex-1">
+          {/* Platform rail */}
+          <div className="hidden w-40 shrink-0 flex-col border-r border-white/10 lg:flex">
+            {RAIL.map((item, i) => (
+              <div
+                key={item.label}
+                className={`flex items-center gap-2 px-3 py-2.5 ${i === 0 ? 'bg-white/[0.06]' : ''}`}
+              >
+                <span
+                  className="flex h-6 w-6 shrink-0 items-center justify-center"
+                  style={{ backgroundColor: item.bg }}
+                >
+                  <item.Icon className="h-3 w-3" style={{ color: item.fg }} />
+                </span>
+                <span className="flex min-w-0 flex-col">
+                  <span className="truncate text-[11px] font-medium text-white">
+                    {item.label}
+                  </span>
+                  <span className="font-mono text-[9px] text-white/30 tabular-nums">
+                    {item.base + (i === 0 ? count : 0)} posts
+                  </span>
+                </span>
+              </div>
             ))}
-          </AnimatePresence>
-        </ul>
+          </div>
+
+          {/* Feed */}
+          <ul className="grid min-w-0 flex-1 auto-rows-fr grid-cols-1 content-start gap-2.5 overflow-hidden p-2.5 xl:grid-cols-2">
+            <AnimatePresence initial={false}>
+              {visible.map(({ post, key }) => (
+                <Card key={key} post={post} />
+              ))}
+            </AnimatePresence>
+          </ul>
+        </div>
       </div>
     </div>
   );
