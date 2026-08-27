@@ -1,48 +1,90 @@
+"use client";
+
+import { motion } from "motion/react";
 import {
   ArrowUpRight01Icon,
   NewTwitterIcon,
   GithubIcon,
   DiscordIcon,
-} from 'hugeicons-react';
-import { cn } from '@/lib/utils';
-import LogoIcon from '@/assets/logo-icon';
+} from "hugeicons-react";
+import { cn } from "@/lib/utils";
+import LogoIcon from "@/assets/logo-icon";
 
-function Crosshair({ position }: { position: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' }) {
-  const isTop = position.startsWith('top');
-  const isLeft = position.endsWith('left');
-  
+function Crosshair({
+  position,
+}: {
+  position: "top-left" | "top-right" | "bottom-left" | "bottom-right";
+}) {
+  const isTop = position.startsWith("top");
+  const isLeft = position.endsWith("left");
+
   return (
-    <div className={cn(
-      "pointer-events-none absolute h-8 w-8",
-      isTop ? "top-0" : "bottom-0",
-      isLeft ? "left-0" : "right-0"
-    )}>
-      <div className={cn("absolute h-full w-px bg-white/10", isTop ? "top-0" : "bottom-0", isLeft ? "left-4" : "right-4")} />
-      <div className={cn("absolute h-px w-full bg-white/10", isTop ? "top-4" : "bottom-4", isLeft ? "left-0" : "right-0")} />
+    <div
+      className={cn(
+        "pointer-events-none absolute h-8 w-8",
+        isTop ? "top-0" : "bottom-0",
+        isLeft ? "left-0" : "right-0",
+      )}
+    >
+      <div
+        className={cn(
+          "absolute h-full w-px bg-white/10",
+          isTop ? "top-0" : "bottom-0",
+          isLeft ? "left-4" : "right-4",
+        )}
+      />
+      <div
+        className={cn(
+          "absolute h-px w-full bg-white/10",
+          isTop ? "top-4" : "bottom-4",
+          isLeft ? "left-0" : "right-0",
+        )}
+      />
     </div>
   );
 }
 
-function FooterLinkColumn({ title, children }: { title: string; children: React.ReactNode }) {
+function FooterLinkColumn({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className="flex flex-col gap-5">
       <div className="text-primary mb-2 flex gap-2 font-mono text-xs tracking-widest">
-        <span className="opacity-70">{'//'}</span> {title}
+        <span className="opacity-70">{"//"}</span> {title}
       </div>
       {children}
     </div>
   );
 }
 
-function FooterLink({ href, children }: { href: string; children: React.ReactNode }) {
+function FooterLink({
+  href,
+  children,
+}: {
+  href: string;
+  children: React.ReactNode;
+}) {
   return (
-    <a href={href} className="text-sm text-white/50 transition-colors hover:text-white">
+    <a
+      href={href}
+      className="text-sm text-white/50 transition-colors hover:text-white"
+    >
       {children}
     </a>
   );
 }
 
-function SocialLink({ href, icon: Icon }: { href: string; icon: React.ElementType }) {
+function SocialLink({
+  href,
+  icon: Icon,
+}: {
+  href: string;
+  icon: React.ElementType;
+}) {
   return (
     <a
       href={href}
@@ -61,43 +103,61 @@ function FooterRadar() {
   const spokes = Array.from({ length: 13 }, (_, i) => (i * Math.PI) / 12);
 
   return (
-    <svg
-      viewBox="0 0 1600 800"
-      preserveAspectRatio="xMidYMax slice"
+    <div
       aria-hidden="true"
-      className="pointer-events-none absolute inset-x-0 bottom-0 h-[640px] w-full"
-      fill="none"
+      className="pointer-events-none absolute inset-x-0 bottom-0 h-[640px] overflow-hidden"
     >
-      <defs>
-        <radialGradient id="footer-radar-glow" cx="50%" cy="100%" r="60%">
-          <stop offset="0%" stopColor="#A3FF12" stopOpacity="0.10" />
-          <stop offset="100%" stopColor="#A3FF12" stopOpacity="0" />
-        </radialGradient>
-      </defs>
+      {/* The sweep: a cone of light turning around the same centre as the
+          rings, with its lower half clipped away by the footer edge. */}
+      <motion.div
+        className="absolute bottom-0 left-1/2 h-[1480px] w-[1480px] -translate-x-1/2 translate-y-1/2 rounded-full"
+        style={{
+          background:
+            "conic-gradient(from 0deg, rgba(163,255,18,0.16), rgba(163,255,18,0) 32%)",
+        }}
+        animate={{ rotate: 360 }}
+        transition={{ duration: 9, repeat: Infinity, ease: "linear" }}
+      />
 
-      <rect width="1600" height="800" fill="url(#footer-radar-glow)" />
+      <svg
+        viewBox="0 0 1600 800"
+        preserveAspectRatio="xMidYMax slice"
+        className="absolute inset-0 h-full w-full"
+        fill="none"
+      >
+        <defs>
+          <radialGradient id="footer-radar-glow" cx="50%" cy="100%" r="60%">
+            <stop offset="0%" stopColor="#A3FF12" stopOpacity="0.10" />
+            <stop offset="100%" stopColor="#A3FF12" stopOpacity="0" />
+          </radialGradient>
+        </defs>
 
-      {spokes.map((angle, i) => (
-        <line
-          key={`spoke-${i}`}
-          x1={800}
-          y1={800}
-          x2={800 + Math.cos(Math.PI + angle) * 780}
-          y2={800 + Math.sin(Math.PI + angle) * 780}
-          stroke="rgba(255,255,255,0.05)"
-        />
-      ))}
+        <rect width="1600" height="800" fill="url(#footer-radar-glow)" />
 
-      {rings.map((r, i) => (
-        <circle
-          key={`ring-${r}`}
-          cx={800}
-          cy={800}
-          r={r}
-          stroke={i === 1 ? "rgba(163,255,18,0.16)" : "rgba(255,255,255,0.07)"}
-        />
-      ))}
-    </svg>
+        {spokes.map((angle, i) => (
+          <line
+            key={`spoke-${i}`}
+            x1={800}
+            y1={800}
+            x2={800 + Math.cos(Math.PI + angle) * 780}
+            y2={800 + Math.sin(Math.PI + angle) * 780}
+            stroke="rgba(255,255,255,0.05)"
+          />
+        ))}
+
+        {rings.map((r, i) => (
+          <circle
+            key={`ring-${r}`}
+            cx={800}
+            cy={800}
+            r={r}
+            stroke={
+              i === 1 ? "rgba(163,255,18,0.16)" : "rgba(255,255,255,0.07)"
+            }
+          />
+        ))}
+      </svg>
+    </div>
   );
 }
 
@@ -116,7 +176,7 @@ export default function Footer() {
           {/* Left Side: Brand & Newsletter (span 5) */}
           <div className="flex flex-col items-start pr-0 lg:col-span-5 lg:pr-8">
             <div className="text-primary mb-6 flex items-center gap-2 font-mono text-xs tracking-widest">
-              <span className="opacity-70">{'//'}</span> WATERMELON UI
+              <span className="opacity-70">{"//"}</span> WATERMELON UI
             </div>
             <h3 className="mb-6 font-sans text-3xl tracking-tight text-balance md:text-5xl">
               Building the future <br className="hidden lg:block" /> of
@@ -147,8 +207,12 @@ export default function Footer() {
 
             <FooterLinkColumn title="COMMUNITY">
               <FooterLink href="">Discord</FooterLink>
-              <FooterLink href="https://github.com/WatermelonCorp/watermelon-platform">GitHub</FooterLink>
-              <FooterLink href="https://x.com/watermelonui">X (Twitter)</FooterLink>
+              <FooterLink href="https://github.com/WatermelonCorp/watermelon-platform">
+                GitHub
+              </FooterLink>
+              <FooterLink href="https://x.com/watermelonui">
+                X (Twitter)
+              </FooterLink>
             </FooterLinkColumn>
 
             <FooterLinkColumn title="COMPANY">
@@ -178,15 +242,15 @@ export default function Footer() {
                 <div
                   key={i}
                   className={cn(
-                    'h-4 w-1.5 transition-colors',
-                    i < 12 ? 'bg-primary' : 'bg-white/10',
+                    "h-4 w-1.5 transition-colors",
+                    i < 12 ? "bg-primary" : "bg-white/10",
                   )}
                 />
               ))}
             </div>
 
             <div className="text-primary font-mono text-xs tracking-widest">
-              {'[ WATERMELON UI ]'}
+              {"[ WATERMELON UI ]"}
             </div>
           </div>
         </div>
@@ -231,11 +295,17 @@ export default function Footer() {
 
           <div className="flex w-full flex-col items-start gap-3 xl:w-auto xl:items-end">
             <div className="text-primary flex items-center gap-2 font-mono text-xs tracking-widest">
-              <span className="opacity-70">{'//'}</span> CONNECT
+              <span className="opacity-70">{"//"}</span> CONNECT
             </div>
             <div className="flex items-center gap-4">
-              <SocialLink href="https://x.com/watermelonui" icon={NewTwitterIcon} />
-              <SocialLink href="https://github.com/WatermelonCorp/watermelon-platform" icon={GithubIcon} />
+              <SocialLink
+                href="https://x.com/watermelonui"
+                icon={NewTwitterIcon}
+              />
+              <SocialLink
+                href="https://github.com/WatermelonCorp/watermelon-platform"
+                icon={GithubIcon}
+              />
               <SocialLink href="#" icon={DiscordIcon} />
             </div>
           </div>
