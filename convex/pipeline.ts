@@ -613,3 +613,17 @@ export const purgePlatform = internalMutation({
     return { matches, posts };
   },
 });
+
+export const jobByKey = internalQuery({
+  args: { platform: v.string(), kind: v.string(), query: v.string() },
+  handler: async (ctx, args) =>
+    ctx.db
+      .query("jobs")
+      .withIndex("by_platform_kind_query", (q) =>
+        q
+          .eq("platform", args.platform)
+          .eq("kind", args.kind)
+          .eq("query", args.query),
+      )
+      .unique(),
+});

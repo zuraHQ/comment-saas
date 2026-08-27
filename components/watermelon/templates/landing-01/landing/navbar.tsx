@@ -4,11 +4,9 @@ import { Menu01Icon, Cancel01Icon } from "hugeicons-react";
 import { cn } from "@/lib/utils";
 import LogoIcon from "@/assets/logo-icon";
 
+// Only link to sections that exist; add back as the sections land.
 const NAV_LINKS = [
   { label: "How it works", href: "#how-it-works" },
-  { label: "Use cases", href: "#use-cases" },
-  { label: "Pricing", href: "#pricing" },
-  { label: "FAQ", href: "#faq" },
 ];
 
 export default function Navbar() {

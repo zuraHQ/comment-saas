@@ -130,7 +130,7 @@ function parseApifyReddit(items: any[]): Normalized[] {
     }));
 }
 
-const APIFY_REDDIT_ITEMS = 5; // testing spend guard; raise for launch
+const APIFY_REDDIT_ITEMS = 1; // testing spend guard; raise for launch
 
 // Keyword sweep across all of Reddit: catches phrasings outside the watched
 // communities, noisier by nature.
@@ -143,7 +143,11 @@ async function searchReddit(keyword: string): Promise<Normalized[]> {
   const items = await apifyRun("trudax~reddit-scraper-lite", {
     searches: [keyword],
     searchPosts: true,
+    // Without these the actor also returns community and user hits, which can
+    // eat the whole item budget before a single post is saved.
     searchComments: false,
+    searchCommunities: false,
+    searchUsers: false,
     skipComments: true,
     sort: "new",
     maxItems: APIFY_REDDIT_ITEMS,
@@ -656,5 +660,20 @@ export const refreshProject = action({
       results.push(await runJob(ctx, job));
     }
     return results;
+  },
+});
+
+// Testing helper: run exactly one job, ignoring intervals. Keeps paid
+// platforms from firing when you only want to check one.
+//   npx convex run fetchers:runOneJob '{"platform":"reddit","kind":"community","query":"saas"}' --prod
+export const runOneJob = internalAction({
+  args: { platform: v.string(), kind: v.string(), query: v.string() },
+  handler: async (ctx, args): Promise<JobResult> => {
+    const job: Doc<"jobs"> | null = await ctx.runQuery(
+      internal.pipeline.jobByKey,
+      args,
+    );
+    if (!job) return { ...args, error: "no such job" };
+    return runJob(ctx, job);
   },
 });
