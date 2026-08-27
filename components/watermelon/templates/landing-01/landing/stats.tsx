@@ -185,8 +185,8 @@ function SortVisual() {
 
   return (
     <div className="flex h-80 flex-col justify-center">
-      <div className="border border-white/10">
-        <div className="flex items-center gap-6 p-6">
+      <div>
+        <div className="flex items-center gap-6 py-6">
           {/* The dial */}
           <div className="relative shrink-0">
             <svg viewBox="0 0 120 120" className="h-28 w-28 -rotate-90">

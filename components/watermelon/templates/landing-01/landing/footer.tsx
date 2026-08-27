@@ -71,23 +71,28 @@ function FooterRadar() {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none absolute inset-x-0 bottom-0 h-[640px] overflow-hidden"
+      className="pointer-events-none absolute inset-x-0 bottom-0 h-[820px] overflow-hidden"
     >
-      {/* The sweep: a cone of light turning around the same centre as the
+      {/* The sweep: a cone of light swinging across the same centre as the
           rings, with its lower half clipped away by the footer edge. */}
       <motion.div
         className="absolute bottom-0 left-1/2 h-[1480px] w-[1480px] -translate-x-1/2 translate-y-1/2 rounded-full"
         style={{
           background:
-            "conic-gradient(from 0deg, rgba(163,255,18,0.16), rgba(163,255,18,0) 32%)",
+            "conic-gradient(from 0deg, rgba(163,255,18,0.18), rgba(163,255,18,0) 18%)",
         }}
-        animate={{ rotate: 360 }}
-        transition={{ duration: 9, repeat: Infinity, ease: "linear" }}
+        animate={{ rotate: [-90, 90] }}
+        transition={{
+          duration: 7,
+          repeat: Infinity,
+          repeatType: "reverse",
+          ease: "easeInOut",
+        }}
       />
 
       <svg
         viewBox="0 0 1600 800"
-        preserveAspectRatio="xMidYMax slice"
+        preserveAspectRatio="xMidYMax meet"
         className="absolute inset-0 h-full w-full"
         fill="none"
       >
@@ -129,10 +134,10 @@ function FooterRadar() {
 
 export default function Footer() {
   return (
-    <footer className="bg-background text-foreground relative mt-24 overflow-hidden border-t border-white/5 font-mono">
+    <footer className="text-foreground relative mt-24 overflow-hidden border-t border-white/5 bg-[#101010] font-mono">
       <FooterRadar />
 
-      <div className="relative z-10 container mx-auto px-4 pt-20 pb-12 md:px-8 lg:px-12 xl:px-16">
+      <div className="relative z-10 container mx-auto px-4 pt-24 pb-28 md:px-8 lg:px-12 xl:px-16">
         {/* Top Grid */}
         <div className="relative grid grid-cols-1 gap-12 border-b border-white/5 pb-16 lg:grid-cols-12 lg:gap-8">
           {/* Left Side: Brand & Newsletter (span 5) */}
