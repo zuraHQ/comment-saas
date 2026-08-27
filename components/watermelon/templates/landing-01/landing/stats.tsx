@@ -175,12 +175,12 @@ export default function Stats() {
         </div>
 
         <div className="mx-auto flex max-w-6xl flex-col gap-20">
-          {STEPS.map((step, i) => (
+          {STEPS.map((step) => (
             <div
               key={step.number}
               className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16"
             >
-              <div className={cn(i % 2 === 1 && 'lg:order-2')}>
+              <div>
                 <p className="font-mono text-5xl font-semibold text-white/15">
                   {step.number}
                 </p>
@@ -191,7 +191,7 @@ export default function Stats() {
                   {step.body}
                 </p>
               </div>
-              <div className={cn(i % 2 === 1 && 'lg:order-1')}>{step.visual}</div>
+              <div>{step.visual}</div>
             </div>
           ))}
         </div>
