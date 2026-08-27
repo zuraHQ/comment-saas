@@ -91,42 +91,42 @@ function Card({ post }: { post: (typeof FEED)[number] }) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.35, ease: 'easeOut' }}
-      className="border border-white/10 bg-white/[0.03]"
+      className="flex flex-col border border-white/10 bg-white/[0.03]"
     >
       <div className="flex items-center justify-between gap-3 bg-white/[0.04] px-3 py-2">
         <div className="flex min-w-0 items-center gap-2">
-          <post.Icon className="size-3 shrink-0" style={{ color: post.color }} />
-          <span className="truncate text-[10px] text-white/40">{post.meta}</span>
+          <post.Icon className="size-3.5 shrink-0" style={{ color: post.color }} />
+          <span className="truncate text-[11px] text-white/40">{post.meta}</span>
         </div>
         {scored ? (
           <motion.span
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className={`shrink-0 px-1.5 py-0.5 font-mono text-[9px] font-bold tracking-wider uppercase ${INTENT[post.intent]}`}
+            className={`shrink-0 px-2 py-0.5 font-mono text-[10px] font-bold tracking-wider uppercase ${INTENT[post.intent]}`}
           >
             {post.intent} intent
           </motion.span>
         ) : (
-          <span className="shrink-0 font-mono text-[9px] tracking-wider text-white/25 uppercase">
+          <span className="shrink-0 font-mono text-[10px] tracking-wider text-white/25 uppercase">
             Scoring...
           </span>
         )}
       </div>
 
-      <div className="p-3">
-        <p className="truncate text-[11px] font-medium text-white">
+      <div className="flex-1 p-3.5">
+        <p className="line-clamp-2 text-[13px] leading-snug font-medium text-white">
           {post.title}
         </p>
-        <p className="mt-1 truncate text-[10px] text-white/45">
+        <p className="mt-1.5 line-clamp-2 text-[11px] leading-snug text-white/45">
           {post.snippet}
         </p>
-        <div className="mt-2 h-[34px]">
+        <div className="mt-2.5">
           {scored ? (
             <motion.p
               initial={{ opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
-              className="line-clamp-2 border border-white/10 bg-[#101010] p-2 text-[10px] text-white/60"
+              className="line-clamp-2 border border-white/10 bg-[#101010] p-2.5 text-[11px] leading-snug text-white/60"
             >
               {post.reply}
             </motion.p>
@@ -134,13 +134,13 @@ function Card({ post }: { post: (typeof FEED)[number] }) {
         </div>
       </div>
 
-      <div className="flex items-center justify-end gap-1.5 border-t border-white/10 px-3 py-2">
+      <div className="flex items-center justify-end gap-2 border-t border-white/10 px-3.5 py-2.5">
         {[Copy, Check, X].map((Icon, i) => (
           <span
             key={i}
-            className="flex h-6 w-6 items-center justify-center border border-white/10 text-white/25"
+            className="flex h-7 w-7 items-center justify-center border border-white/10 text-white/25"
           >
-            <Icon className="h-3 w-3" />
+            <Icon className="h-3.5 w-3.5" />
           </span>
         ))}
       </div>
@@ -149,61 +149,82 @@ function Card({ post }: { post: (typeof FEED)[number] }) {
 }
 
 export default function HeroDemo() {
-  const [count, setCount] = useState(1);
+  const [count, setCount] = useState(2);
 
   useEffect(() => {
     const timer = setInterval(() => setCount((c) => c + 1), ARRIVE_MS);
     return () => clearInterval(timer);
   }, []);
 
-  // Newest first, three on screen. The key carries the pass number so a post
+  // Newest first, four on screen. The key carries the pass number so a post
   // coming round again animates in as a fresh arrival.
-  const visible = Array.from({ length: 3 }, (_, i) => {
+  const visible = Array.from({ length: 4 }, (_, i) => {
     const n = count - 1 - i;
     return n < 0 ? null : { post: FEED[n % FEED.length], key: `${n}` };
   }).filter(Boolean) as Array<{ post: (typeof FEED)[number]; key: string }>;
 
   return (
-    <div className="flex h-full w-full text-left">
-      {/* Platform rail */}
-      <div className="hidden w-44 shrink-0 flex-col border-r border-white/10 sm:flex">
-        <div className="flex items-center gap-2 border-b border-white/10 px-3 py-2.5">
-          <span className="flex h-5 w-5 items-center justify-center bg-[#A3FF12] font-mono text-[9px] font-bold text-[#101010]">
+    <div className="flex h-full w-full flex-col text-left">
+      {/* Top bar */}
+      <div className="flex shrink-0 items-center gap-4 border-b border-white/10 px-4 py-2.5">
+        <span className="flex items-center gap-2">
+          <span className="flex h-6 w-6 items-center justify-center bg-[#A3FF12] font-mono text-[10px] font-bold text-[#101010]">
             A
           </span>
-          <span className="text-[11px] font-medium text-white">Acme</span>
-        </div>
-        {RAIL.map((item, i) => (
-          <div
-            key={item.label}
-            className={`flex items-center gap-2 px-3 py-2.5 ${i === 0 ? 'bg-white/[0.06]' : ''}`}
-          >
+          <span className="text-xs font-medium text-white">Acme</span>
+        </span>
+        <nav className="flex items-center gap-1">
+          {['Posts', 'Analytics', 'Launchpad'].map((item, i) => (
             <span
-              className="flex h-6 w-6 shrink-0 items-center justify-center"
-              style={{ backgroundColor: item.bg }}
+              key={item}
+              className={`px-2.5 py-1 font-mono text-[10px] tracking-widest uppercase ${
+                i === 0 ? 'bg-white/10 text-white' : 'text-white/35'
+              }`}
             >
-              <item.Icon className="h-3 w-3" style={{ color: item.fg }} />
+              {item}
             </span>
-            <span className="flex min-w-0 flex-col">
-              <span className="truncate text-[11px] font-medium text-white">
-                {item.label}
-              </span>
-              <span className="font-mono text-[9px] text-white/30 tabular-nums">
-                {item.base + (i === 0 ? count : 0)} posts
-              </span>
-            </span>
-          </div>
-        ))}
+          ))}
+        </nav>
+        <span className="ml-auto font-mono text-[10px] tracking-widest text-white/30 tabular-nums uppercase">
+          {(750 + count).toLocaleString()} posts · 41 high intent
+        </span>
       </div>
 
-      {/* Feed */}
-      <ul className="flex min-w-0 flex-1 flex-col gap-2 overflow-hidden p-3">
-        <AnimatePresence initial={false}>
-          {visible.map(({ post, key }) => (
-            <Card key={key} post={post} />
+      <div className="flex min-h-0 flex-1">
+        {/* Platform rail */}
+        <div className="hidden w-48 shrink-0 flex-col border-r border-white/10 sm:flex">
+          {RAIL.map((item, i) => (
+            <div
+              key={item.label}
+              className={`flex items-center gap-2.5 px-3 py-3 ${i === 0 ? 'bg-white/[0.06]' : ''}`}
+            >
+              <span
+                className="flex h-7 w-7 shrink-0 items-center justify-center"
+                style={{ backgroundColor: item.bg }}
+              >
+                <item.Icon className="h-3.5 w-3.5" style={{ color: item.fg }} />
+              </span>
+              <span className="flex min-w-0 flex-col">
+                <span className="truncate text-xs font-medium text-white">
+                  {item.label}
+                </span>
+                <span className="font-mono text-[10px] text-white/30 tabular-nums">
+                  {item.base + (i === 0 ? count : 0)} posts
+                </span>
+              </span>
+            </div>
           ))}
-        </AnimatePresence>
-      </ul>
+        </div>
+
+        {/* Feed */}
+        <ul className="grid min-w-0 flex-1 auto-rows-fr grid-cols-1 content-start gap-2.5 overflow-hidden p-2.5 lg:grid-cols-2">
+          <AnimatePresence initial={false}>
+            {visible.map(({ post, key }) => (
+              <Card key={key} post={post} />
+            ))}
+          </AnimatePresence>
+        </ul>
+      </div>
     </div>
   );
 }
