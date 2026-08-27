@@ -182,12 +182,6 @@ export default function Hero() {
             variants={itemVariants}
             className="relative mt-16 w-[min(72rem,calc(100vw-2rem))] shrink-0 border border-white/10 bg-black/40 text-left backdrop-blur-md"
           >
-            {/* Corner accents */}
-            <div className="absolute top-0 left-0 h-2 w-2 border-t border-l border-white/40" />
-            <div className="absolute top-0 right-0 h-2 w-2 border-t border-r border-white/40" />
-            <div className="absolute bottom-0 left-0 h-2 w-2 border-b border-l border-white/40" />
-            <div className="absolute bottom-0 right-0 h-2 w-2 border-b border-r border-white/40" />
-
             {/* Window bar */}
             <div className="flex items-center gap-2 border-b border-white/10 bg-white/5 px-4 py-2.5">
               <span className="h-2 w-2 bg-[#FF5F57]" />
