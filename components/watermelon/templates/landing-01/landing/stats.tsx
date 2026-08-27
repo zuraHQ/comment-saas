@@ -209,11 +209,13 @@ function SortVisual() {
               {index + 1}/{JUDGED.length}
             </span>
           </div>
-          <p className="mt-2 text-xs text-white/75">{post.text}</p>
+          <p className="mt-2 line-clamp-2 h-8 text-xs text-white/75">
+            {post.text}
+          </p>
         </motion.article>
       </AnimatePresence>
 
-      <div className="border-t border-white/10 p-4">
+      <div className="min-h-[5.5rem] border-t border-white/10 p-4">
         <AnimatePresence mode="wait">
           {reading ? (
             <motion.div
@@ -273,7 +275,9 @@ function SortVisual() {
                   {score}
                 </span>
               </div>
-              <p className="mt-2 text-xs text-white/60">{post.verdict}</p>
+              <p className="mt-2 line-clamp-2 h-8 text-xs text-white/60">
+                {post.verdict}
+              </p>
             </motion.div>
           )}
         </AnimatePresence>
