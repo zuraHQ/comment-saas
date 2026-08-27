@@ -520,16 +520,12 @@ export default function Stats() {
     <section className="relative w-full pt-8 pb-24">
       <Container className="relative z-10 mx-auto">
         <div id="how-it-works" className="mb-16 flex flex-col items-center text-center">
-          <p className="text-primary mb-6 inline-flex items-center font-mono text-xs font-bold tracking-widest uppercase">
-            <span className="mr-3 opacity-70">{'//'}</span>
-            How it works
-          </p>
           <Heading
             as="h2"
             variant="big"
             className="text-foreground font-sans font-semibold text-balance lg:text-[48px]"
           >
-            What happens in between
+            Four steps, once a day
           </Heading>
         </div>
 
