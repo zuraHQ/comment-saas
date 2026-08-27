@@ -417,7 +417,7 @@ function ResultVisual() {
           <p className="font-mono text-[10px] font-bold tracking-widest text-white/40 uppercase">
             Replies sent
           </p>
-          <p className="text-4xl font-semibold text-white">148</p>
+          <p className="text-2xl font-semibold text-white">1,284</p>
         </div>
         <div>
           <p className="font-mono text-[10px] font-bold tracking-widest text-white/40 uppercase">
