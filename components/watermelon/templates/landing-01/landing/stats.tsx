@@ -1,4 +1,6 @@
 import {
+  FaBluesky,
+  FaGithub,
   FaLinkedinIn,
   FaHackerNews,
   FaInstagram,
