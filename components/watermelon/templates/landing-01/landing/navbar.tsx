@@ -7,6 +7,7 @@ import LogoIcon from "@/assets/logo-icon";
 // Only link to sections that exist; add back as the sections land.
 const NAV_LINKS = [
   { label: "How it works", href: "#how-it-works" },
+  { label: "Pricing", href: "#pricing" },
 ];
 
 export default function Navbar() {
