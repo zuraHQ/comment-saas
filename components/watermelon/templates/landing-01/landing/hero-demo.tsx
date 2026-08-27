@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { AnimatePresence, motion } from 'motion/react';
+import { useEffect, useState } from "react";
+import { motion } from "motion/react";
 import {
   BarChart3,
   Check,
@@ -11,107 +11,128 @@ import {
   RefreshCw,
   Rocket,
   X,
-} from 'lucide-react';
-import { FaDiscord } from 'react-icons/fa6';
+} from "lucide-react";
+import { FaDiscord } from "react-icons/fa6";
 import {
   FaHackerNews,
   FaLinkedinIn,
   FaRedditAlien,
   FaXTwitter,
-} from 'react-icons/fa6';
+} from "react-icons/fa6";
 
 const RAIL = [
-  { label: 'Reddit', Icon: FaRedditAlien, bg: '#FF4500', fg: '#ffffff', base: 412 },
-  { label: 'Hacker News', Icon: FaHackerNews, bg: '#FF6600', fg: '#ffffff', base: 96 },
-  { label: 'X / Twitter', Icon: FaXTwitter, bg: '#ffffff', fg: '#000000', base: 188 },
-  { label: 'LinkedIn', Icon: FaLinkedinIn, bg: '#0A66C2', fg: '#ffffff', base: 54 },
+  {
+    label: "Reddit",
+    Icon: FaRedditAlien,
+    bg: "#FF4500",
+    fg: "#ffffff",
+    base: 412,
+  },
+  {
+    label: "Hacker News",
+    Icon: FaHackerNews,
+    bg: "#FF6600",
+    fg: "#ffffff",
+    base: 96,
+  },
+  {
+    label: "X / Twitter",
+    Icon: FaXTwitter,
+    bg: "#ffffff",
+    fg: "#000000",
+    base: 188,
+  },
+  {
+    label: "LinkedIn",
+    Icon: FaLinkedinIn,
+    bg: "#0A66C2",
+    fg: "#ffffff",
+    base: 54,
+  },
 ];
 
 const FEED = [
   {
-    id: 'invoicing',
-    meta: 'r/freelance · u/marta_builds · just now',
-    intent: 'High',
-    title: 'Looking for a simple invoicing tool that is not enterprise priced',
+    id: "invoicing",
+    meta: "r/freelance · u/marta_builds · just now",
+    intent: "High",
+    title: "Looking for a simple invoicing tool that is not enterprise priced",
     snippet:
-      'Every option wants a sales call and a seat minimum. I bill six clients a month.',
+      "Every option wants a sales call and a seat minimum. I bill six clients a month.",
     reply:
-      'Ran into this exact thing last year. Happy to share how we handle the chasing part if that helps.',
+      "Ran into this exact thing last year. Happy to share how we handle the chasing part if that helps.",
     Icon: FaRedditAlien,
-    color: '#FF4500',
+    color: "#FF4500",
   },
   {
-    id: 'latepayers',
-    meta: 'r/smallbusiness · u/deniz_k · just now',
-    intent: 'Medium',
-    title: 'How do you handle late payers without being rude about it',
+    id: "latepayers",
+    meta: "r/smallbusiness · u/deniz_k · just now",
+    intent: "Medium",
+    title: "How do you handle late payers without being rude about it",
     snippet:
-      'Two clients are 30 days out and I hate sending the follow up email every week.',
+      "Two clients are 30 days out and I hate sending the follow up email every week.",
     reply:
-      'The tedious bit is doing it by hand. A reminder on a schedule fixed most of it for us.',
+      "The tedious bit is doing it by hand. A reminder on a schedule fixed most of it for us.",
     Icon: FaRedditAlien,
-    color: '#FF4500',
+    color: "#FF4500",
   },
   {
-    id: 'spreadsheets',
-    meta: 'LinkedIn · Priya S. · just now',
-    intent: 'High',
-    title: 'Our finance ops still run on three spreadsheets. Open to recommendations.',
+    id: "spreadsheets",
+    meta: "LinkedIn · Priya S. · just now",
+    intent: "High",
+    title:
+      "Our finance ops still run on three spreadsheets. Open to recommendations.",
     snippet:
-      'Month end takes two days and something always slips through the cracks.',
+      "Month end takes two days and something always slips through the cracks.",
     reply:
-      'We were on four of them. Worth mapping which parts are actually repeat work first.',
+      "We were on four of them. Worth mapping which parts are actually repeat work first.",
     Icon: FaLinkedinIn,
-    color: '#0A66C2',
+    color: "#0A66C2",
   },
   {
-    id: 'notion-crm',
-    meta: 'Hacker News · tomasz · just now',
-    intent: 'Medium',
-    title: 'Has anyone run a CRM out of Notion long term?',
-    snippet: 'Curious how it holds up once you pass a few hundred contacts.',
+    id: "notion-crm",
+    meta: "Hacker News · tomasz · just now",
+    intent: "Medium",
+    title: "Has anyone run a CRM out of Notion long term?",
+    snippet: "Curious how it holds up once you pass a few hundred contacts.",
     reply:
-      'It held up to about 300 for us, then the manual upkeep got worse than the tool.',
+      "It held up to about 300 for us, then the manual upkeep got worse than the tool.",
     Icon: FaHackerNews,
-    color: '#FF6600',
+    color: "#FF6600",
   },
 ];
 
 const INTENT: Record<string, string> = {
-  High: 'bg-[#FF6600] text-[#101010]',
-  Medium: 'bg-[#FFC53D] text-[#101010]',
+  High: "bg-[#FF6600] text-[#101010]",
+  Medium: "bg-[#FFC53D] text-[#101010]",
 };
 
-const ARRIVE_MS = 2600;
-const SCORE_MS = 900;
+const SCORE_MS = 1100;
 
-function Card({ post }: { post: (typeof FEED)[number] }) {
-  // Each card lands unscored, then the verdict and the draft appear.
-  const [scored, setScored] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setScored(true), SCORE_MS);
-    return () => clearTimeout(timer);
-  }, []);
-
+function Card({
+  post,
+  scored,
+}: {
+  post: (typeof FEED)[number];
+  scored: boolean;
+}) {
   return (
-    <motion.li
-      layout
-      initial={{ opacity: 0, y: -12 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.35, ease: 'easeOut' }}
-      className="flex flex-col border border-white/10 bg-white/[0.03]"
-    >
+    <li className="flex flex-col border border-white/10 bg-white/[0.03]">
       <div className="flex items-center justify-between gap-3 bg-white/[0.04] px-3 py-2">
         <div className="flex min-w-0 items-center gap-2">
-          <post.Icon className="size-3.5 shrink-0" style={{ color: post.color }} />
-          <span className="truncate text-[11px] text-white/40">{post.meta}</span>
+          <post.Icon
+            className="size-3.5 shrink-0"
+            style={{ color: post.color }}
+          />
+          <span className="truncate text-[11px] text-white/40">
+            {post.meta}
+          </span>
         </div>
         {scored ? (
           <motion.span
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.25 }}
             className={`shrink-0 px-2 py-0.5 font-mono text-[10px] font-bold tracking-wider uppercase ${INTENT[post.intent]}`}
           >
             {post.intent} intent
@@ -130,11 +151,12 @@ function Card({ post }: { post: (typeof FEED)[number] }) {
         <p className="mt-1.5 line-clamp-2 text-[11px] leading-snug text-white/45">
           {post.snippet}
         </p>
-        <div className="mt-2.5">
+        {/* Reserved either way, so nothing reflows when the draft appears. */}
+        <div className="mt-2.5 h-[52px]">
           {scored ? (
             <motion.p
-              initial={{ opacity: 0, y: 4 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               transition={{ duration: 0.3 }}
               className="line-clamp-2 border border-white/10 bg-[#101010] p-2.5 text-[11px] leading-snug text-white/60"
             >
@@ -154,29 +176,26 @@ function Card({ post }: { post: (typeof FEED)[number] }) {
           </span>
         ))}
       </div>
-    </motion.li>
+    </li>
   );
 }
 
 const SIDEBAR = [
-  { label: 'Dashboard', Icon: Home, active: true },
-  { label: 'Analytics', Icon: BarChart3 },
+  { label: "Dashboard", Icon: Home, active: true },
+  { label: "Analytics", Icon: BarChart3 },
 ];
 
 export default function HeroDemo() {
-  const [count, setCount] = useState(2);
+  // Nothing moves: the cards stay put and get scored one after another, then
+  // the pass starts over.
+  const [scoredCount, setScoredCount] = useState(0);
 
   useEffect(() => {
-    const timer = setInterval(() => setCount((c) => c + 1), ARRIVE_MS);
+    const timer = setInterval(() => {
+      setScoredCount((n) => (n > FEED.length ? 0 : n + 1));
+    }, SCORE_MS);
     return () => clearInterval(timer);
   }, []);
-
-  // Newest first, four on screen. The key carries the pass number so a post
-  // coming round again animates in as a fresh arrival.
-  const visible = Array.from({ length: 4 }, (_, i) => {
-    const n = count - 1 - i;
-    return n < 0 ? null : { post: FEED[n % FEED.length], key: `${n}` };
-  }).filter(Boolean) as Array<{ post: (typeof FEED)[number]; key: string }>;
 
   return (
     <div className="flex h-full w-full text-left">
@@ -194,9 +213,7 @@ export default function HeroDemo() {
             <span
               key={item.label}
               className={`flex h-9 items-center gap-2.5 rounded-lg px-2.5 text-xs ${
-                item.active
-                  ? 'bg-white/[0.07] text-[#A3FF12]'
-                  : 'text-white/40'
+                item.active ? "bg-white/[0.07] text-[#A3FF12]" : "text-white/40"
               }`}
             >
               <item.Icon className="size-4" />
@@ -228,9 +245,7 @@ export default function HeroDemo() {
         <div className="mt-auto flex items-center gap-2 border-t border-white/10 px-3 py-3">
           <span className="h-7 w-7 shrink-0 rounded-full bg-white/10" />
           <span className="min-w-0">
-            <span className="block truncate text-xs text-white/70">
-              You
-            </span>
+            <span className="block truncate text-xs text-white/70">You</span>
             <span className="block truncate text-[10px] text-white/30">
               Pro plan
             </span>
@@ -249,19 +264,19 @@ export default function HeroDemo() {
             <ChevronDown className="size-3 text-white/30" />
           </span>
           <span className="ml-auto font-mono text-[10px] tracking-widest text-white/30 tabular-nums uppercase">
-            {(750 + count).toLocaleString()} posts · 41 high intent
+            750 posts · 41 high intent
           </span>
         </div>
 
         {/* Filter row */}
         <div className="flex shrink-0 items-center gap-2 border-b border-white/10 px-3 py-2">
-          {['All', 'High', 'Medium', 'Low'].map((label, i) => (
+          {["All", "High", "Medium", "Low"].map((label, i) => (
             <span
               key={label}
               className={`px-2.5 py-1 font-mono text-[9px] font-bold tracking-widest uppercase ${
                 i === 0
-                  ? 'bg-white/10 text-white'
-                  : 'border border-white/10 text-white/35'
+                  ? "bg-white/10 text-white"
+                  : "border border-white/10 text-white/35"
               }`}
             >
               {label}
@@ -278,7 +293,7 @@ export default function HeroDemo() {
             {RAIL.map((item, i) => (
               <div
                 key={item.label}
-                className={`flex items-center gap-2 px-3 py-2.5 ${i === 0 ? 'bg-white/[0.06]' : ''}`}
+                className={`flex items-center gap-2 px-3 py-2.5 ${i === 0 ? "bg-white/[0.06]" : ""}`}
               >
                 <span
                   className="flex h-6 w-6 shrink-0 items-center justify-center"
@@ -291,7 +306,7 @@ export default function HeroDemo() {
                     {item.label}
                   </span>
                   <span className="font-mono text-[9px] text-white/30 tabular-nums">
-                    {item.base + (i === 0 ? count : 0)} posts
+                    {item.base} posts
                   </span>
                 </span>
               </div>
@@ -300,11 +315,9 @@ export default function HeroDemo() {
 
           {/* Feed */}
           <ul className="grid min-w-0 flex-1 auto-rows-fr grid-cols-1 content-start gap-2.5 overflow-hidden p-2.5 xl:grid-cols-2">
-            <AnimatePresence initial={false}>
-              {visible.map(({ post, key }) => (
-                <Card key={key} post={post} />
-              ))}
-            </AnimatePresence>
+            {FEED.map((post, i) => (
+              <Card key={post.id} post={post} scored={i < scoredCount} />
+            ))}
           </ul>
         </div>
       </div>
