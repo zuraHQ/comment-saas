@@ -405,7 +405,7 @@ const PLATFORM_MARKS = [
 const STEPS = [
   {
     number: '01',
-    title: 'We read the internet',
+    title: 'We watch nine platforms',
     body: 'Whole communities read end to end, not just keyword hits, so nothing relevant slips past.',
     marks: true,
     visual: <ScanVisual />,
