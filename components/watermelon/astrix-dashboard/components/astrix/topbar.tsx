@@ -4,7 +4,7 @@ import { ProjectSwitcher } from "./project-switcher";
 
 const PAGE_LABELS: Record<string, string> = {
   "/analytics": "Analytics",
-  "/launchpad": "Launchpad",
+  "/launchpad": "Launch sites",
   "/settings": "Settings",
   "/profile": "Profile",
 };

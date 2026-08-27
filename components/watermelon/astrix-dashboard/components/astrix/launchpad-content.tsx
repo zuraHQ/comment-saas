@@ -60,7 +60,7 @@ export function LaunchpadContent() {
   return (
     <div className="flex flex-col gap-4 p-6">
       <div>
-        <h1 className="text-xl font-semibold">Launchpad</h1>
+        <h1 className="text-xl font-semibold">Launch sites</h1>
         <p className="mt-1 text-sm text-muted-foreground">
           {LAUNCH_SITES.length} places to launch your product for free and get your first users.
           Ranked from most popular to least, so start at the top.

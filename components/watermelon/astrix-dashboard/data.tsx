@@ -396,5 +396,5 @@ export const workspaceNavigation: NavigationItem[] = [
 ];
 
 export const launchNavigation: NavigationItem[] = [
-  { name: "Launchpad", href: "/launchpad", icon: IntegrationIcon },
+  { name: "Launch sites", href: "/launchpad", icon: IntegrationIcon },
 ];
