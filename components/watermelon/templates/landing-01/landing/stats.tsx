@@ -136,7 +136,8 @@ function SortVisual() {
   }, []);
 
   return (
-    <div className="flex h-80 flex-col justify-center gap-2.5">
+    <div className="flex h-80 flex-col justify-center">
+      <div className="divide-y divide-white/10 border border-white/10">
       {FEED.map((post, i) => {
         const scored = step > i;
         const dropped = step >= FEED.length + 1 && post.intent === 'Low';
@@ -146,8 +147,8 @@ function SortVisual() {
             animate={{ opacity: dropped ? 0.2 : 1, x: dropped ? -14 : 0 }}
             transition={{ duration: 0.45, ease: 'easeOut' }}
             className={cn(
-              'border p-3',
-              scored && !dropped ? 'border-white/20' : 'border-white/10',
+              'p-3 transition-colors',
+              scored && !dropped ? 'bg-white/[0.03]' : '',
             )}
           >
             <div className="flex items-center gap-2">
@@ -196,6 +197,7 @@ function SortVisual() {
           </motion.article>
         );
       })}
+      </div>
     </div>
   );
 }
