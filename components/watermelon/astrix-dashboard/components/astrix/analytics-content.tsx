@@ -233,9 +233,6 @@ export function AnalyticsContent() {
       <section className="border border-border">
         <header className="border-b border-border px-4 py-3 text-sm font-medium">
           Where your clicks came from
-      <section className="border border-border">
-        <header className="border-b border-border px-4 py-3 text-sm font-medium">
-          Where your clicks came from
         </header>
         <ul className="flex flex-col gap-4 p-4">
           {[...clicksByPlatform.entries()].map(([platformId, clicks]) => {
