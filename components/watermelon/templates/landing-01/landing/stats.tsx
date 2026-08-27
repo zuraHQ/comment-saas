@@ -185,8 +185,8 @@ function SortVisual() {
 
   return (
     <div className="flex h-80 flex-col justify-center">
-      <div>
-        <div className="flex items-center gap-6 py-6">
+      <div className="border border-white/10">
+        <div className="flex items-center gap-6 p-6">
           {/* The dial */}
           <div className="relative shrink-0">
             <svg viewBox="0 0 120 120" className="h-28 w-28 -rotate-90">
@@ -283,8 +283,7 @@ function SortVisual() {
                     initial={{ opacity: 0, y: 6 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="line-clamp-2 border-l-2 pl-3 text-xs text-white/60"
-                    style={{ borderColor: accent }}
+                    className="line-clamp-2 text-xs text-white/60"
                   >
                     {post.verdict}
                   </motion.p>
