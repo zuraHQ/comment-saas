@@ -6,6 +6,7 @@ import Hero from './landing/hero';
 // import LiveData from './landing/live-data';
 import ManualVs from './landing/manual-vs';
 import Pricing from './landing/pricing';
+import ProductShot from './landing/product-shot';
 import Stats from './landing/stats';
 import Footer from './landing/footer';
 
@@ -20,6 +21,7 @@ export default function Landing01Demo() {
       <Navbar />
       <Hero />
       <Stats />
+      <ProductShot />
       <ManualVs />
       {/* <LiveData /> */}
       <Pricing />
