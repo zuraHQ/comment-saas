@@ -1,7 +1,6 @@
 import { Check, Copy, X } from 'lucide-react';
 import { FaHackerNews, FaRedditAlien, FaXTwitter, FaYoutube } from 'react-icons/fa6';
 import Container from './container';
-import Heading from './heading';
 
 const RAIL = [
   { label: 'Reddit', Icon: FaRedditAlien, bg: '#FF4500', fg: '#ffffff', count: '412 posts', active: true },
@@ -43,19 +42,6 @@ export default function ProductShot() {
   return (
     <section className="relative w-full py-24">
       <Container className="relative z-10 mx-auto">
-        <div className="mb-14 flex flex-col items-center text-center">
-          <Heading
-            as="h2"
-            variant="big"
-            className="text-foreground font-sans font-semibold text-balance lg:text-[48px]"
-          >
-            This is what you open every morning
-          </Heading>
-          <p className="mt-4 max-w-xl text-base text-white/50">
-            Ranked posts on the left, a reply already written under each one.
-          </p>
-        </div>
-
         <div className="mx-auto max-w-6xl border border-white/10 bg-[#101010]">
           {/* Top bar */}
           <div className="flex items-center gap-3 border-b border-white/10 px-4 py-3">
