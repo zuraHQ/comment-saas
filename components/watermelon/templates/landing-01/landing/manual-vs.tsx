@@ -29,17 +29,17 @@ export default function ManualVs() {
         </div>
 
         <div className="mx-auto grid max-w-5xl gap-6 md:grid-cols-2">
-          <div className="flex flex-col border border-white/10 p-8">
-            <p className="font-mono text-xs font-bold tracking-widest text-white/50 uppercase">
+          <div className="flex flex-col border border-red-500/30 bg-red-500/[0.03] p-8">
+            <p className="font-mono text-xs font-bold tracking-widest text-red-400/80 uppercase">
               By hand
             </p>
             <ul className="mt-8 flex flex-1 flex-col gap-6">
               {MANUAL.map((item) => (
                 <li key={item.text} className="flex gap-3">
-                  <X className="mt-0.5 h-4 w-4 shrink-0 text-white/25" />
+                  <X className="mt-0.5 h-4 w-4 shrink-0 text-red-400/70" />
                   <div>
                     <p className="text-base text-white/70">{item.text}</p>
-                    <p className="mt-1.5 font-mono text-xs tracking-widest text-white/30 uppercase">
+                    <p className="mt-1.5 font-mono text-xs tracking-widest text-red-400/50 uppercase">
                       {item.time}
                     </p>
                   </div>
@@ -48,7 +48,7 @@ export default function ManualVs() {
             </ul>
             <p className="mt-8 border-t border-white/10 pt-6 text-base text-white/50">
               Roughly{' '}
-              <span className="font-semibold text-white">
+              <span className="font-semibold text-red-400">
                 1 – 2 hours a day
               </span>{' '}
               for one product.
