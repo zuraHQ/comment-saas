@@ -44,6 +44,15 @@ export function timeAgo(timestamp: number): string {
   return `${Math.floor(days / 30)}mo ago`;
 }
 
+// Rail subtitle suffix: when this platform last fetched anything.
+function platformLabel(
+  status: { lastRunAt: number | null } | undefined,
+): string {
+  if (!status) return " · off";
+  if (!status.lastRunAt) return " · never run";
+  return ` · ${timeAgo(status.lastRunAt)}`;
+}
+
 export function IntentBadge({ match }: { match: Doc<"matches"> }) {
   if (!match.intentScore) {
     return (
@@ -293,12 +302,13 @@ export function PostsContent() {
                       style={{ color: platform.fg }}
                     />
                   </span>
-                  <span className="flex flex-col">
+                  <span className="flex min-w-0 flex-col">
                     <span className="text-sm font-medium">
                       {platform.label}
                     </span>
-                    <span className="text-xs text-muted-foreground">
-                      Found {countFor(platform.id)} posts
+                    <span className="truncate text-xs text-muted-foreground">
+                      {countFor(platform.id)} posts
+                      {platformLabel(platformStatus?.[platform.id])}
                     </span>
                   </span>
                 </button>
