@@ -562,7 +562,7 @@ export default function Stats() {
             >
               <div className="px-1">
                 <p className="text-xs font-bold tracking-widest text-neutral-400">
-                  STEP {step.number}
+                  {step.number}
                 </p>
                 <h3 className="mt-3 text-2xl font-semibold text-neutral-900">
                   {step.title}
