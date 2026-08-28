@@ -511,7 +511,7 @@ const STEPS = [
   {
     number: "01",
     title: "We read eight platforms end to end",
-    body: "Whole communities, not keyword hits, so the post that never says your product name still reaches you.",
+    body: "Most tools wait for someone to type your product name. We read whole communities instead, every new post, so we catch the person saying \"month end took me two days again\" who has never heard of you and has no idea a tool like yours exists.",
     marks: true,
     visual: <ScanVisual />,
   },
