@@ -5,13 +5,12 @@ import { useAction, useMutation, useQuery } from "convex/react";
 import {
   Check,
   Copy,
-  Sparkles,
   History as HistoryIcon,
   RefreshCw,
   X as XIcon,
 } from "lucide-react";
 import { api } from "@/convex/_generated/api";
-import type { Doc, Id } from "@/convex/_generated/dataModel";
+import type { Doc } from "@/convex/_generated/dataModel";
 import {
   Sheet,
   SheetContent,
@@ -81,22 +80,6 @@ export function IntentBadge({ match }: { match: Doc<"matches"> }) {
 export function PostsContent() {
   const { project } = useProject();
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [draftingId, setDraftingId] = useState<string | null>(null);
-  const [draftError, setDraftError] = useState<string | null>(null);
-  const writeDraft = useAction(api.replyDrafter.draft);
-
-  // Written once and kept on the match, so opening a post again is free.
-  const requestDraft = (matchId: Id<"matches">) => {
-    setDraftingId(matchId);
-    setDraftError(null);
-    writeDraft({ matchId })
-      .then((result) => {
-        if ("error" in result) setDraftError(result.error);
-      })
-      .catch((err) => setDraftError(String(err)))
-      .finally(() => setDraftingId((id) => (id === matchId ? null : id)));
-  };
-
   const copyReply = (id: string, text: string) => {
     navigator.clipboard
       .writeText(text)
@@ -362,7 +345,6 @@ export function PostsContent() {
                 const platform =
                   PLATFORM_BY_ID[row.match.platform ?? row.post.platform];
                 const reply = row.match.draft;
-                const drafting = draftingId === row.match._id;
                 return (
                   <li
                     key={row.match._id}
@@ -384,7 +366,7 @@ export function PostsContent() {
                       }}
                       className="flex flex-1 cursor-pointer flex-col after:absolute after:inset-0 after:content-['']"
                     >
-                      <header className="flex items-center justify-between gap-3 bg-sidebar-accent/40 px-4 py-2.5">
+                      <header className="flex items-center justify-between gap-3 px-4 pt-4">
                         <div className="flex min-w-0 items-center gap-2">
                           {platform ? (
                             <span className="relative flex size-4 shrink-0 items-center justify-center">
@@ -415,7 +397,7 @@ export function PostsContent() {
                         ) : null}
                       </header>
 
-                      <div className="flex-1 p-4">
+                      <div className="flex-1 px-4 pt-2 pb-4">
                         <p className="text-sm font-medium">{row.post.title}</p>
                         {row.post.snippet ? (
                           <p className="mt-2 line-clamp-2 text-sm text-foreground/70">
@@ -432,24 +414,7 @@ export function PostsContent() {
                           <p className="mt-4 border border-border bg-background p-3 text-sm text-foreground/75">
                             {reply}
                           </p>
-                        ) : (
-                          <div className="relative z-10 mt-4 border border-dashed border-border p-3">
-                            <button
-                              type="button"
-                              onClick={() => requestDraft(row.match._id)}
-                              disabled={drafting}
-                              className="flex h-8 cursor-pointer items-center gap-2 border border-border px-3 text-[10px] font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground disabled:cursor-default disabled:opacity-50"
-                            >
-                              <Sparkles className="size-3.5" />
-                              {drafting ? "Writing..." : "Write the reply"}
-                            </button>
-                            {draftError ? (
-                              <p className="mt-2 text-xs text-red-400">
-                                {draftError}
-                              </p>
-                            ) : null}
-                          </div>
-                        )}
+                        ) : null}
                       </div>
                     </a>
 
