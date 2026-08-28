@@ -23,7 +23,7 @@ export function DashboardTopbar() {
   const pageLabel = PAGE_LABELS[pathname];
 
   return (
-    <header className="flex h-16 items-center justify-between gap-4 border-b px-4 md:px-6 md:pr-8">
+    <header className="flex h-16 items-center justify-between gap-4 border-b px-4">
       <SidebarTrigger className="size-10 md:hidden [&_svg]:size-5!" />
 
       {pageLabel ? (
