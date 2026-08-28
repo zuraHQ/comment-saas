@@ -45,10 +45,10 @@ function ScanVisual() {
       {PLATFORMS.map((platform) => (
         <div
           key={platform.label}
-          className="flex items-center gap-3 rounded-xl border border-neutral-200 bg-white p-3"
+          className="flex items-center gap-3 rounded-md border border-neutral-200 bg-white p-3"
         >
           <span
-            className="flex size-9 shrink-0 items-center justify-center rounded-lg"
+            className="flex size-9 shrink-0 items-center justify-center rounded"
             style={{ backgroundColor: platform.bg }}
           >
             <platform.Icon
@@ -518,7 +518,7 @@ export default function Stats() {
             <div
               key={step.number}
               className={cn(
-                "grid items-stretch overflow-hidden rounded-2xl bg-neutral-50 lg:grid-cols-2",
+                "grid items-stretch overflow-hidden rounded-lg bg-neutral-50 lg:grid-cols-2",
                 i % 2 === 1 && "lg:[&>*:first-child]:order-2",
               )}
             >
