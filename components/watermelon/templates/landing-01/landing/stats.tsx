@@ -496,7 +496,7 @@ const PLATFORM_MARKS = [
 const STEPS = [
   {
     number: "01",
-    title: "We read eight platforms end to end",
+    title: "Eight platforms, every new post",
     body: "We read every new post in the communities your customers sit in.",
     marks: true,
     visual: <ScanVisual />,
