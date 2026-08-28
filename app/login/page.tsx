@@ -14,7 +14,7 @@ function LoginCard() {
 
 export default function LoginPage() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-white px-4 py-12 font-sans">
+    <main className="light-page flex min-h-screen items-center justify-center bg-white px-4 py-12 font-sans">
       <div className="w-full max-w-sm">
         <Link href="/" className="mb-10 flex items-center justify-center gap-3">
           <LogoIcon className="text-primary h-8 w-8" />

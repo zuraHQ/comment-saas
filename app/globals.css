@@ -96,8 +96,8 @@
   --popover-foreground: oklch(0.985 0 0);
   --primary: #A3FF12;
   --primary-foreground: #101010;
-  --brand: #fafafa;
-  --brand-foreground: #171717;
+  --brand: #171717;
+  --brand-foreground: #ffffff;
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.269 0 0);
@@ -133,4 +133,11 @@
   html {
     @apply font-sans;
   }
+}
+.light-page,
+.light-page * {
+  --primary: #171717;
+  --primary-foreground: #ffffff;
+  --brand: #171717;
+  --brand-foreground: #ffffff;
 }

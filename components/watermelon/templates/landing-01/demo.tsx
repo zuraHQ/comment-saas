@@ -16,7 +16,7 @@ export default function Landing01Demo() {
     // Landing renders entirely in Inter: the template's hardcoded font-mono
     // classes resolve to Inter via this scoped variable remap.
     <main
-      className="min-h-screen overflow-x-hidden bg-white font-sans"
+      className="light-page min-h-screen overflow-x-hidden bg-white font-sans"
       style={{ "--font-geist-mono": "var(--font-inter)" } as React.CSSProperties}
     >
       <Navbar />
