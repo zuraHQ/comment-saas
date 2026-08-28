@@ -527,7 +527,7 @@ export default function Stats() {
             variant="big"
             className="text-foreground font-sans font-semibold text-balance lg:text-[48px]"
           >
-            How it works
+            We find the conversations that bring you customers
           </Heading>
         </div>
 
