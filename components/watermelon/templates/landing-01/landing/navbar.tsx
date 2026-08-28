@@ -4,7 +4,6 @@ import { Menu01Icon, Cancel01Icon } from "hugeicons-react";
 import { cn } from "@/lib/utils";
 import LogoIcon from "@/assets/logo-icon";
 import GetStartedDialog from "./get-started-dialog";
-import ThemeToggle from "./theme-toggle";
 
 // Only link to sections that exist; add back as the sections land.
 const NAV_LINKS = [
@@ -65,7 +64,6 @@ export default function Navbar({
 
         {/* Right side */}
         <div className="hidden md:flex items-center gap-4">
-          <ThemeToggle />
           {action ?? (
             <GetStartedDialog
               trigger={
