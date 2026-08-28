@@ -54,7 +54,7 @@ function ScanVisual() {
           <motion.span
             key={item.text}
             className={cn(
-              "flex items-center gap-2 border border-neutral-200 bg-white px-3 py-2 text-xs font-medium text-neutral-900 shadow-sm",
+              "flex w-fit items-center gap-2 text-sm font-medium text-neutral-900",
               i % 2 === 0 ? "mr-auto" : "ml-auto",
             )}
             initial={{ opacity: 0.55 }}
@@ -569,7 +569,7 @@ export default function Stats() {
                 <h3 className="mt-3 text-3xl font-semibold text-neutral-900">
                   {step.title}
                 </h3>
-                <p className="mt-3 max-w-md text-sm leading-relaxed text-neutral-500">
+                <p className="mt-4 max-w-md text-lg leading-relaxed text-neutral-600">
                   {step.body}
                 </p>
                 {step.marks ? (
