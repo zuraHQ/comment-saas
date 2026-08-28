@@ -51,7 +51,7 @@ function ScanVisual() {
   return (
     <div className="relative flex h-80 items-center justify-center overflow-hidden">
       {/* Radar rings with a rotating sweep */}
-      <div className="absolute flex h-72 w-72 items-center justify-center rounded-full border border-white/10">
+      <div className="absolute flex h-72 w-72 items-center justify-center rounded-full border border-neutral-200">
         <motion.div
           className="absolute inset-0 rounded-full"
           style={{
@@ -61,9 +61,9 @@ function ScanVisual() {
           animate={{ rotate: 360 }}
           transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
         />
-        <div className="flex h-48 w-48 items-center justify-center rounded-full border border-white/10">
-          <div className="bg-background flex h-24 w-24 items-center justify-center rounded-full border border-white/15">
-            <Globe className="h-6 w-6 text-white/60" strokeWidth={1.25} />
+        <div className="flex h-48 w-48 items-center justify-center rounded-full border border-neutral-200">
+          <div className="bg-background flex h-24 w-24 items-center justify-center rounded-full border border-neutral-200">
+            <Globe className="h-6 w-6 text-neutral-600" strokeWidth={1.25} />
           </div>
         </div>
       </div>
@@ -74,7 +74,7 @@ function ScanVisual() {
           <motion.span
             key={item.text}
             className={cn(
-              "bg-background/80 flex items-center gap-2 border border-white/10 px-3 py-1.5 text-xs text-white/60 backdrop-blur-sm",
+              "bg-white/80 flex items-center gap-2 border border-neutral-200 px-3 py-1.5 text-xs text-neutral-600 backdrop-blur-sm",
               i % 2 === 0 ? "mr-auto" : "ml-auto",
             )}
             initial={{ opacity: 0.15 }}
@@ -153,7 +153,7 @@ const JUDGED = [
 const INTENT_CHIP: Record<string, string> = {
   High: "bg-[#FF6600] text-[#101010]",
   Medium: "bg-[#FFC53D] text-[#101010]",
-  Low: "bg-white/10 text-white/40",
+  Low: "bg-neutral-100 text-neutral-500",
 };
 
 // A, developed: scanning bar over the post, score counting up, the reason
@@ -201,13 +201,13 @@ function SortVisual() {
       ? "#FF6600"
       : post.intent === "Medium"
         ? "#FFC53D"
-        : "rgba(255,255,255,0.25)";
+        : "rgba(0,0,0,0.25)";
 
   const circumference = 2 * Math.PI * 52;
 
   return (
     <div className="flex h-80 flex-col justify-center gap-3">
-      <div className="border border-white/10 bg-white/[0.02]">
+      <div className="border border-neutral-200 bg-neutral-50">
         <div className="flex items-center gap-6 p-6">
           {/* The dial */}
           <div className="relative shrink-0">
@@ -216,7 +216,7 @@ function SortVisual() {
                 cx="60"
                 cy="60"
                 r="52"
-                stroke="rgba(255,255,255,0.08)"
+                stroke="rgba(0,0,0,0.08)"
                 strokeWidth="8"
                 fill="none"
               />
@@ -240,11 +240,11 @@ function SortVisual() {
             <div className="absolute inset-0 flex flex-col items-center justify-center">
               <span
                 className="text-3xl font-semibold tabular-nums"
-                style={{ color: reading ? "rgba(255,255,255,0.25)" : accent }}
+                style={{ color: reading ? "rgba(0,0,0,0.25)" : accent }}
               >
                 {reading ? "--" : score}
               </span>
-              <span className="font-mono text-[9px] tracking-widest text-white/30 uppercase">
+              <span className="font-mono text-[9px] tracking-widest text-neutral-400 uppercase">
                 Intent
               </span>
             </div>
@@ -272,11 +272,11 @@ function SortVisual() {
                     }}
                   />
                 </span>
-                <span className="truncate text-[11px] text-white/40">
+                <span className="truncate text-[11px] text-neutral-500">
                   {post.author} · {post.where} · {post.time}
                 </span>
               </div>
-              <p className="mt-2 line-clamp-2 h-8 text-xs text-white/75">
+              <p className="mt-2 line-clamp-2 h-8 text-xs text-neutral-700">
                 {post.text}
               </p>
               <div className="mt-3 h-8">
@@ -296,7 +296,7 @@ function SortVisual() {
                         />
                       ))}
                     </span>
-                    <span className="font-mono text-[10px] tracking-widest text-white/40 uppercase">
+                    <span className="font-mono text-[10px] tracking-widest text-neutral-500 uppercase">
                       Matching against your product...
                     </span>
                   </span>
@@ -305,7 +305,7 @@ function SortVisual() {
                     initial={{ opacity: 0, y: 6 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="line-clamp-2 text-xs text-white/60"
+                    className="line-clamp-2 text-xs text-neutral-600"
                   >
                     {post.verdict}
                   </motion.p>
@@ -317,16 +317,16 @@ function SortVisual() {
       </div>
 
       {/* Already judged, oldest first */}
-      <div className="flex shrink-0 divide-x divide-white/10 border border-white/10">
+      <div className="flex shrink-0 divide-x divide-neutral-200 border border-neutral-200">
         {JUDGED.map((item, i) => (
           <span
             key={item.author}
             className={cn(
               "flex flex-1 items-center justify-center px-2 py-2",
-              i === index ? "bg-white/[0.04]" : "",
+              i === index ? "bg-neutral-100" : "",
             )}
           >
-            <span className="truncate font-mono text-[9px] tracking-wider text-white/30 uppercase">
+            <span className="truncate font-mono text-[9px] tracking-wider text-neutral-400 uppercase">
               {item.where}
             </span>
           </span>
@@ -341,20 +341,20 @@ function SortVisual() {
 function ReplyVisual() {
   return (
     <div className="flex h-80 flex-col justify-center">
-      <div className="divide-y divide-white/10 border border-white/10">
+      <div className="divide-y divide-neutral-200 border border-neutral-200">
         <article className="p-4">
           <div className="flex items-center gap-2.5">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="https://api.dicebear.com/9.x/notionists/svg?seed=marta&backgroundColor=1f2937"
               alt=""
-              className="h-7 w-7 shrink-0 rounded-full bg-white/5"
+              className="h-7 w-7 shrink-0 rounded-full bg-neutral-50"
             />
             <div className="min-w-0">
-              <p className="text-xs font-medium text-white/80">
+              <p className="text-xs font-medium text-neutral-700">
                 u/marta_builds
               </p>
-              <p className="flex items-center gap-1.5 text-[11px] text-white/35">
+              <p className="flex items-center gap-1.5 text-[11px] text-neutral-400">
                 <FaRedditAlien className="h-3 w-3 text-[#FF4500]" />
                 Reddit · 4m
               </p>
@@ -363,38 +363,38 @@ function ReplyVisual() {
               High
             </span>
           </div>
-          <p className="mt-3 text-xs text-white/75">
+          <p className="mt-3 text-xs text-neutral-700">
             How do you find the threads where people are actually asking for a
             product like yours? Searching manually every day is killing me.
           </p>
-          <div className="mt-3 flex items-center gap-4 text-[11px] text-white/30">
+          <div className="mt-3 flex items-center gap-4 text-[11px] text-neutral-400">
             <span>▲ 47</span>
             <span>12 comments</span>
             <span>share</span>
           </div>
         </article>
 
-        <div className="bg-white/[0.03] p-4 pl-10">
+        <div className="bg-neutral-50 p-4 pl-10">
           <div className="flex items-center gap-2.5">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="https://api.dicebear.com/9.x/notionists/svg?seed=founder&backgroundColor=a3ff12"
               alt=""
-              className="ring-primary/60 h-7 w-7 shrink-0 rounded-full bg-white/5 ring-1"
+              className="ring-primary/60 h-7 w-7 shrink-0 rounded-full bg-neutral-50 ring-1"
             />
             <div className="min-w-0">
-              <p className="text-xs font-medium text-white/80">you</p>
-              <p className="text-[11px] text-white/35">just now</p>
+              <p className="text-xs font-medium text-neutral-700">you</p>
+              <p className="text-[11px] text-neutral-400">just now</p>
             </div>
           </div>
-          <p className="mt-3 text-xs text-white/80">
+          <p className="mt-3 text-xs text-neutral-700">
             Had the same problem, so I built something for it. It reads the
             communities for you and scores what is worth answering —{" "}
             <span className="text-primary underline underline-offset-2">
               commentsaas.com
             </span>
           </p>
-          <div className="mt-3 flex items-center gap-4 text-[11px] text-white/30">
+          <div className="mt-3 flex items-center gap-4 text-[11px] text-neutral-400">
             <span>▲ 8</span>
             <span>reply</span>
             <span>share</span>
@@ -423,11 +423,11 @@ function ResultVisual() {
     <div className="flex h-80 flex-col justify-center gap-5">
       <div className="flex items-end gap-6">
         <div>
-          <p className="font-mono text-[10px] font-bold tracking-widest text-white/40 uppercase">
+          <p className="font-mono text-[10px] font-bold tracking-widest text-neutral-500 uppercase">
             Link clicks
           </p>
           <motion.p
-            className="text-2xl font-semibold text-white"
+            className="text-2xl font-semibold text-neutral-900"
             initial={{ opacity: 0.4 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -436,16 +436,16 @@ function ResultVisual() {
           </motion.p>
         </div>
         <div>
-          <p className="font-mono text-[10px] font-bold tracking-widest text-white/40 uppercase">
+          <p className="font-mono text-[10px] font-bold tracking-widest text-neutral-500 uppercase">
             Replies sent
           </p>
-          <p className="text-2xl font-semibold text-white">2,140</p>
+          <p className="text-2xl font-semibold text-neutral-900">2,140</p>
         </div>
         <div>
-          <p className="font-mono text-[10px] font-bold tracking-widest text-white/40 uppercase">
+          <p className="font-mono text-[10px] font-bold tracking-widest text-neutral-500 uppercase">
             Best channel
           </p>
-          <p className="text-2xl font-semibold text-white">Reddit</p>
+          <p className="text-2xl font-semibold text-neutral-900">Reddit</p>
         </div>
       </div>
 
@@ -463,10 +463,10 @@ function ResultVisual() {
                 }}
               />
             </span>
-            <span className="w-24 shrink-0 text-xs text-white/60">
+            <span className="w-24 shrink-0 text-xs text-neutral-600">
               {source.label}
             </span>
-            <span className="relative h-1.5 flex-1 bg-white/5">
+            <span className="relative h-1.5 flex-1 bg-neutral-50">
               <motion.span
                 className="bg-primary absolute inset-y-0 left-0"
                 initial={{ width: 0 }}
@@ -475,7 +475,7 @@ function ResultVisual() {
                 transition={{ duration: 0.8, delay: i * 0.12, ease: "easeOut" }}
               />
             </span>
-            <span className="w-12 shrink-0 text-right text-xs tabular-nums text-white/60">
+            <span className="w-12 shrink-0 text-right text-xs tabular-nums text-neutral-600">
               {source.clicks.toLocaleString()}
             </span>
           </div>
@@ -556,7 +556,7 @@ export default function Stats() {
 
         {/* Progress rail fills as you scroll through the steps */}
         <div ref={stepsRef} className="relative mx-auto max-w-6xl">
-          <div className="absolute top-0 bottom-0 left-0 hidden w-px bg-white/10 lg:block">
+          <div className="absolute top-0 bottom-0 left-0 hidden w-px bg-neutral-100 lg:block">
             <motion.div
               className="bg-primary absolute top-0 left-0 w-px origin-top"
               style={{ height: "100%", scaleY: progress }}
@@ -570,13 +570,13 @@ export default function Stats() {
                 className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16"
               >
                 <div>
-                  <p className="font-mono text-5xl font-semibold text-white/15">
+                  <p className="font-mono text-5xl font-semibold text-neutral-900/15">
                     {step.number}
                   </p>
-                  <h3 className="mt-4 text-2xl font-semibold text-white">
+                  <h3 className="mt-4 text-2xl font-semibold text-neutral-900">
                     {step.title}
                   </h3>
-                  <p className="mt-3 max-w-md text-sm leading-relaxed text-white/50">
+                  <p className="mt-3 max-w-md text-sm leading-relaxed text-neutral-500">
                     {step.body}
                   </p>
                   {step.marks ? (

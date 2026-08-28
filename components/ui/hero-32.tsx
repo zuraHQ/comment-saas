@@ -9,8 +9,8 @@ export interface Hero32Props {
     title?: React.ReactNode;
     subtitle?: React.ReactNode;
     primaryActionText?: string;
-    backgroundImage?: string;
     loginHref?: string;
+    below?: React.ReactNode;
     navHrefs?: string[];
     action?: React.ReactNode;
 }
@@ -33,9 +33,9 @@ export default function Hero32({
     ),
     primaryActionText = "Book a demo",
     loginHref = "#",
+    below,
     navHrefs,
     action,
-    backgroundImage = "https://assets.watermelon.sh/hero-32-bg.avif",
 }: Hero32Props) {
     // Nav: single element, drops in from top with blur
     const navVariants: Variants = {
@@ -74,22 +74,14 @@ export default function Hero32({
     };
 
     return (
-      <div className="relative min-h-screen w-full overflow-hidden bg-[#5bb2ff] font-sans antialiased selection:bg-white/20">
-        <div className="pointer-events-none absolute inset-0 z-0 select-none">
-          <img
-            className="absolute inset-0 h-full w-full object-cover"
-            src={backgroundImage}
-            alt="Sunflowers background"
-          />
-        </div>
-
+      <div className="relative min-h-screen w-full overflow-hidden bg-white font-sans antialiased">
         <div className="relative z-10 flex min-h-screen flex-col pt-6">
           {/* Nav — single spring drop */}
           <motion.nav
             variants={navVariants}
             initial="hidden"
             animate="visible"
-            className="mx-auto flex w-fit items-center gap-8 rounded-full bg-white px-2 py-2 shadow-sm"
+            className="mx-auto flex w-fit items-center gap-8 rounded-full border border-neutral-200 bg-white px-2 py-2"
           >
             <div className="pl-4 text-base font-bold tracking-tight text-neutral-900 2xl:text-lg">
               {logoText}
@@ -107,21 +99,21 @@ export default function Hero32({
             </div>
             <a
               href={loginHref}
-              className="rounded-full bg-sky-500 px-6 py-2 text-xs font-medium text-white shadow-[inset_0_2px_0_rgba(255,255,255,0.2),inset_0_-2px_0_rgba(0,0,0,0.2)] transition-all hover:bg-sky-600 active:scale-[0.96] 2xl:text-lg"
+              className="rounded-full bg-neutral-900 px-6 py-2 text-xs font-medium text-white transition-colors hover:bg-neutral-700 2xl:text-lg"
             >
               {loginText}
             </a>
           </motion.nav>
 
           {/* Hero Main Content — each element independently animated */}
-          <div className="flex flex-1 items-start justify-center px-6 pt-20">
-            <div className="flex max-w-4xl flex-col items-center text-center 2xl:max-w-6xl">
+          <div className="flex flex-1 items-start justify-center px-6 pt-20 pb-24">
+            <div className="flex w-full max-w-4xl flex-col items-center text-center 2xl:max-w-6xl">
               {/* Title: majestic slow rise */}
               <motion.h1
                 variants={titleVariants}
                 initial="hidden"
                 animate="visible"
-                className="text-5xl font-normal tracking-tight text-white md:text-7xl lg:text-[5.5rem] lg:leading-[1.1] 2xl:text-[7rem]"
+                className="text-5xl font-normal tracking-tight text-neutral-900 md:text-7xl lg:text-[5.5rem] lg:leading-[1.1] 2xl:text-[7rem]"
                 style={{ textWrap: 'balance', fontFamily: 'serif' }}
               >
                 {title}
@@ -132,7 +124,7 @@ export default function Hero32({
                 variants={subtitleVariants}
                 initial="hidden"
                 animate="visible"
-                className="mt-6 max-w-2xl text-base leading-relaxed font-normal text-white md:text-lg"
+                className="mt-6 max-w-2xl text-base leading-relaxed font-normal text-neutral-600 md:text-lg"
                 style={{ textWrap: 'pretty' }}
               >
                 {subtitle}
@@ -156,6 +148,17 @@ export default function Hero32({
                   </>
                 )}
               </motion.div>
+
+              {below ? (
+                <motion.div
+                  variants={ctaVariants}
+                  initial="hidden"
+                  animate="visible"
+                  className="mt-16 w-full"
+                >
+                  {below}
+                </motion.div>
+              ) : null}
             </div>
           </div>
         </div>

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Hero32 from "@/components/ui/hero-32";
+import HeroDemo from "./hero-demo";
 
 export default function Hero() {
   const router = useRouter();
@@ -29,11 +30,11 @@ export default function Hero() {
         inputMode="url"
         autoComplete="url"
         placeholder="yoursaas.com"
-        className="h-12 flex-1 rounded-full border border-white/30 bg-white/20 px-6 text-sm text-white backdrop-blur-sm outline-none transition-colors placeholder:text-white/60 focus:border-white/60"
+        className="h-12 flex-1 rounded-md border border-neutral-300 bg-white px-5 text-sm text-neutral-900 outline-none transition-colors placeholder:text-neutral-400 focus:border-neutral-900"
       />
       <button
         type="submit"
-        className="h-12 shrink-0 rounded-full bg-white px-8 text-sm font-medium text-sky-500 shadow-lg transition-transform hover:scale-[1.02] active:scale-[0.96]"
+        className="bg-primary text-primary-foreground hover:bg-primary/90 h-12 shrink-0 rounded-md px-8 text-sm font-medium transition-colors"
       >
         Find customers
       </button>
@@ -60,6 +61,18 @@ export default function Hero() {
         </>
       }
       action={captureForm}
+      below={
+        <div className="relative mx-auto w-[min(72rem,calc(100vw-2rem))] overflow-hidden border border-neutral-200 bg-[#101010] text-left">
+          <div className="flex items-center gap-2 border-b border-white/10 bg-white/5 px-4 py-2.5">
+            <span className="h-2 w-2 bg-[#FF5F57]" />
+            <span className="h-2 w-2 bg-[#FEBC2E]" />
+            <span className="h-2 w-2 bg-[#28C840]" />
+          </div>
+          <div className="aspect-video w-full">
+            <HeroDemo />
+          </div>
+        </div>
+      }
     />
   );
 }
