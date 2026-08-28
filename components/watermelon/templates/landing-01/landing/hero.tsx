@@ -13,7 +13,10 @@ export default function Hero() {
   // A scribbled pointer at the input, so the one thing to do is obvious.
   const nudge = (
     <span className="pointer-events-none absolute top-1 -left-56 hidden items-end gap-1 lg:flex">
-      <span className="text-brand -rotate-6 text-base italic">
+      <span
+        className="text-brand -rotate-6 text-2xl"
+        style={{ fontFamily: "var(--font-caveat)" }}
+      >
         drop your saas here
       </span>
       <svg
