@@ -2,7 +2,6 @@
 
 import { Check } from "lucide-react";
 import {
-  IntentBadge,
   timeAgo,
   type FeedRow,
 } from "./posts-content";
@@ -57,7 +56,6 @@ export function HistoryPanel({
                     {row.post.title}
                   </a>
                   <p className="mt-1 flex items-center gap-2 text-xs text-muted-foreground">
-                    <IntentBadge match={row.match} />
                     {[row.post.subsource, timeAgo(row.post.postedAt)]
                       .filter(Boolean)
                       .join(" · ")}

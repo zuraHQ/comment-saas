@@ -408,14 +408,11 @@ export function PostsContent() {
                               .join(" · ")}
                           </span>
                         </div>
-                        <div className="flex shrink-0 items-center gap-2">
-                          {row.match.seenAt ? (
-                            <span className="bg-[#7dd3fc] px-2 py-0.5 text-[10px] font-bold tracking-wider text-[#101010] uppercase">
-                              Seen
-                            </span>
-                          ) : null}
-                          <IntentBadge match={row.match} />
-                        </div>
+                        {row.match.seenAt ? (
+                          <span className="shrink-0 bg-[#7dd3fc] px-2 py-0.5 text-[10px] font-bold tracking-wider text-[#101010] uppercase">
+                            Seen
+                          </span>
+                        ) : null}
                       </header>
 
                       <div className="flex-1 p-4">
