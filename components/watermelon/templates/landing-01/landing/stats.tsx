@@ -124,7 +124,7 @@ const JUDGED = [
     time: "38m",
     text: "just launched v2 today, thanks to everyone who tested it",
     Icon: FaXTwitter,
-    color: "#ffffff",
+    color: "#171717",
     intent: "Low",
     verdict: "Launch announcement. Nothing here to answer.",
   },
@@ -136,7 +136,7 @@ const CHATTER = [
     Icon: FaRedditAlien,
     color: "#FF4500",
   },
-  { text: "just launched v2 today", Icon: FaXTwitter, color: "#ffffff" },
+  { text: "just launched v2 today", Icon: FaXTwitter, color: "#171717" },
   {
     text: "what's the best way to track leads?",
     Icon: FaLinkedinIn,
@@ -419,7 +419,7 @@ const CLICK_SOURCES = [
   { label: "Reddit", Icon: FaRedditAlien, color: "#FF4500", clicks: 9840 },
   { label: "Hacker News", Icon: FaHackerNews, color: "#FF6600", clicks: 5310 },
   { label: "LinkedIn", Icon: FaLinkedinIn, color: "#0A66C2", clicks: 3120 },
-  { label: "X/Twitter", Icon: FaXTwitter, color: "#ffffff", clicks: 1465 },
+  { label: "X/Twitter", Icon: FaXTwitter, color: "#171717", clicks: 1465 },
   { label: "Instagram", Icon: FaInstagram, color: "#E4405F", clicks: 780 },
 ];
 
