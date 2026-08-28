@@ -12,7 +12,7 @@ export default function Hero() {
   // does, so the CTA replaces the block's demo buttons.
   // A scribbled pointer at the input, so the one thing to do is obvious.
   const nudge = (
-    <span className="pointer-events-none absolute top-1 -left-56 hidden items-end gap-1 lg:flex">
+    <span className="pointer-events-none absolute -top-28 -left-40 hidden flex-col items-start lg:flex">
       <span
         className="text-brand -rotate-6 text-2xl"
         style={{ fontFamily: "var(--font-handwriting)" }}
@@ -20,18 +20,18 @@ export default function Hero() {
         drop your saas here
       </span>
       <svg
-        viewBox="0 0 64 40"
+        viewBox="0 0 80 72"
         aria-hidden="true"
-        className="text-brand h-10 w-16 shrink-0"
+        className="text-brand ml-10 h-20 w-20"
         fill="none"
         stroke="currentColor"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
       >
-        <path d="M2 6c14-4 30 0 42 12" />
-        <path d="M44 18l-11-1" />
-        <path d="M44 18l-3-11" />
+        <path d="M8 4c-2 26 8 46 40 60" />
+        <path d="M48 64l-13-2" />
+        <path d="M48 64l-2-13" />
       </svg>
     </span>
   );
