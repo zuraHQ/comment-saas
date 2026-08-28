@@ -6,28 +6,41 @@ import { SUBREDDIT_CATALOG } from "../lib/subreddit-catalog";
 
 // How people actually talk in each place. Same post, same product, different
 // reply: what reads as helpful on Reddit reads as fluff on Hacker News.
-const PLATFORM_VOICE: Record<string, string> = {
-  hn: `Hacker News. Readers are engineers and founders who have seen every pitch. Be concrete and a little understated. Lead with a specific technical or practical detail, a number, a tradeoff you hit. No enthusiasm words, no emoji, no "great question". Two short paragraphs at most. Anything that smells like marketing gets flagged and downvoted.`,
-  reddit: `Reddit. Conversational and human. Open with something relatable from your own experience, the actual annoying part of the problem, then get to what helped. Contractions are fine. It should read like a person who has been in this exact spot, not a company account. Three or four sentences up to a short paragraph.`,
-  indiehackers: `Indie Hackers. Founder to founder. Specifics are welcome, including numbers and what did not work. Warm, plain, no posturing. Short.`,
-  bluesky: `Bluesky. Short and casual, one or two sentences. Low key, no hard sell, no hashtags.`,
-  github: `GitHub. Precise and technical. Answer the question directly, mention the tool only if it is genuinely the answer. No fluff, no pleasantries.`,
-  youtube: `YouTube comment. Short, friendly, plain words. One or two sentences.`,
-  x: `X. Very short, one or two lines, punchy. No thread, no hashtags, no hype.`,
-  linkedin: `LinkedIn. Warm and human, but avoid every LinkedIn cliche: no "thrilled", no "game changer", no broetry line breaks. Two or three sentences.`,
+const PLATFORM_VOICE: Record<string, { how: string; words: number }> = {
+  hn: {
+    how: "Hacker News. Say the one thing you actually know from doing it. Understated, specific, no enthusiasm words, no emoji.",
+    words: 45,
+  },
+  reddit: {
+    how: "Reddit. Talk like a person in the thread. Open with the thing that was actually annoying about this for you, then the one thing that helped. Contractions, plain words, a bit blunt is fine.",
+    words: 50,
+  },
+  indiehackers: {
+    how: "Indie Hackers. Founder to founder. One specific thing that worked or did not, numbers if you have them.",
+    words: 40,
+  },
+  bluesky: { how: "Bluesky. Casual, offhand, like a quick reply between other things.", words: 25 },
+  github: { how: "GitHub. Answer the question and nothing else. No pleasantries.", words: 35 },
+  youtube: { how: "YouTube comment. Friendly, simple, the way people actually comment.", words: 20 },
+  x: { how: "X. One thought, said fast. No thread, no hashtags.", words: 20 },
+  linkedin: {
+    how: "LinkedIn. Warm and normal. No LinkedIn voice: nothing is thrilling, nothing is a game changer, no line breaks for drama.",
+    words: 45,
+  },
 };
 
 const RULES = `How to write it:
+- SAY ONE THING. Real people reply with the single thing they know, not a survey of the options. Never list two or three alternatives with tradeoffs. Pick the one you would actually do and say it.
+- Do not try to be complete, balanced or helpful in every direction. Leaving things out is what makes it read like a person.
+- No opening summary of their situation and no general principle. Start on the actual point. Never begin with "the best way", "it depends", "one common approach", "it sounds like", "I can relate".
 - Help first. The reply has to be worth reading even if the product is never mentioned.
-- Mention the product once, by name, dropped naturally into the sentence where it belongs. Never "I built this, check it out". Never ask them to try it.
-- Put the link in exactly once, in that same sentence, written as a bare url in brackets after the name. Use the link given to you verbatim, never the product name as a domain, never a shortened or made up url. If the platform is x, leave the link out entirely, links there kill reach.
-- If the product does not honestly answer what they asked, say something useful and do not mention it at all.
-- Say something relatable or a real opinion. A reply that only restates their problem is worthless.
+- Mention the product once, by name, in the sentence where it belongs, and only if it honestly answers what they asked. If it does not, say your one useful thing and mention nothing. Mentioning nothing is a good outcome.
+- Saying you built it is fine, and usually the most honest way in. What is not fine is asking them to try it, "check it out", "give it a go", or explaining what the product does beyond one short clause.
+- Two or three sentences is the target. Four is already too many.
+- Put the link in exactly once, right after the name, only when you mention it. Use the link given to you verbatim, never the product name as a domain, never a made up url. If the platform is x, leave the link out entirely.
 - No em dashes anywhere. Use commas or full stops.
-- Not corporate. Welcoming, plain spoken, the way a person types.
-- No greeting and no sign off. No "Great question", no "Hope this helps".
-- Never claim a capability that is not in the product description.
-- Do not use headings, bullet points or bold. Plain sentences.
+- No greeting, no sign off, no headings, no bullet points, no bold. Plain sentences.
+- Write the way someone types a reply on their phone between other work. Short sentences are fine. Fragments are fine.
 
 Return only the reply text.`;
 
@@ -120,7 +133,9 @@ export const generate = internalAction({
 
     const system = `You write replies for a founder who answers posts where their product is genuinely relevant. You are writing as the founder, in first person.
 
-${voice}
+${voice.how}
+
+Hard limit: ${voice.words} words. Under is better. A short reply that says one real thing beats a thorough one every time.
 
 ${RULES}`;
 
