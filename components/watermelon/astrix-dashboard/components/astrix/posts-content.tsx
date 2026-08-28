@@ -372,7 +372,7 @@ export function PostsContent() {
                           </span>
                         </div>
                         {row.match.seenAt ? (
-                          <span className="shrink-0 bg-[#7dd3fc] px-2 py-0.5 text-[10px] font-bold tracking-wider text-[#101010] uppercase">
+                          <span className="shrink-0 text-[10px] tracking-wider text-muted-foreground uppercase">
                             Seen
                           </span>
                         ) : null}
