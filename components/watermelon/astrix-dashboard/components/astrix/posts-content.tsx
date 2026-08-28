@@ -5,7 +5,6 @@ import { useAction, useMutation, useQuery } from "convex/react";
 import {
   Check,
   Copy,
-  Sparkles,
   History as HistoryIcon,
   RefreshCw,
   X as XIcon,
@@ -81,21 +80,6 @@ export function IntentBadge({ match }: { match: Doc<"matches"> }) {
 export function PostsContent() {
   const { project } = useProject();
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [draftingId, setDraftingId] = useState<string | null>(null);
-  const [draftError, setDraftError] = useState<string | null>(null);
-  const writeDraft = useAction(api.replyDrafter.draft);
-
-  // Written once and kept on the match, so opening a post again is free.
-  const requestDraft = (matchId: Id<"matches">) => {
-    setDraftingId(matchId);
-    setDraftError(null);
-    writeDraft({ matchId })
-      .then((result) => {
-        if ("error" in result) setDraftError(result.error);
-      })
-      .catch((err) => setDraftError(String(err)))
-      .finally(() => setDraftingId((id) => (id === matchId ? null : id)));
-  };
 
   const copyReply = (id: string, text: string) => {
     navigator.clipboard
@@ -115,6 +99,7 @@ export function PostsContent() {
     api.pipeline.platformStatus,
     project ? { projectId: project._id } : "skip",
   );
+
   // Flip the cached feed instantly; Convex confirms (or rolls back) behind it.
   const setReplied = useMutation(api.pipeline.setReplied).withOptimisticUpdate(
     (localStore, args) => {
@@ -362,7 +347,6 @@ export function PostsContent() {
                 const platform =
                   PLATFORM_BY_ID[row.match.platform ?? row.post.platform];
                 const reply = row.match.draft;
-                const drafting = draftingId === row.match._id;
                 return (
                   <li
                     key={row.match._id}
@@ -432,74 +416,53 @@ export function PostsContent() {
                           </p>
                         ) : null}
                         {reply ? (
-                          <p className="mt-4 border border-border bg-background p-3 text-sm text-foreground/75 rounded-lg">
+                          <p className="mt-4 rounded-lg border border-border bg-background p-3 text-sm text-foreground/75">
                             {reply}
                           </p>
-                        ) : (
-                          <div className="relative z-10 mt-4 border border-dashed border-border p-3 rounded-lg">
-                            <button
-                              type="button"
-                              onClick={() => requestDraft(row.match._id)}
-                              disabled={drafting}
-                              className="flex h-8 cursor-pointer items-center gap-2 border border-border px-3 text-[10px] font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground disabled:cursor-default disabled:opacity-50 rounded-lg"
-                            >
-                              <Sparkles className="size-3.5" />
-                              {drafting ? "Writing..." : "Write the reply"}
-                            </button>
-                            {draftError ? (
-                              <p className="mt-2 text-xs text-red-400">
-                                {draftError}
-                              </p>
-                            ) : null}
-                          </div>
-                        )}
+                        ) : null}
                       </div>
                     </a>
 
-                    <div className="relative z-10 flex items-center justify-end gap-2 border-t border-border px-4 py-3 rounded-lg">
+                    <div className="relative z-10 flex items-center justify-end gap-2 border-t border-border px-4 py-3">
+                      <button
+                        type="button"
+                        onClick={() => toggleReplied(row)}
+                        aria-pressed={row.match.replied}
+                        className={cn(
+                          "flex h-9 shrink-0 cursor-pointer items-center gap-2 rounded-lg px-4 text-xs font-medium shadow-[inset_0_2px_0_rgba(255,255,255,0.25),inset_0_-2px_0_rgba(0,0,0,0.18)] transition-colors",
+                          row.match.replied
+                            ? "bg-brand/15 text-brand"
+                            : "bg-brand text-brand-foreground hover:bg-brand/90",
+                        )}
+                      >
+                        <Check className="size-4" />
+                        {row.match.replied ? "Replied" : "Mark as replied"}
+                      </button>
                       <button
                         type="button"
                         onClick={() => reply && copyReply(row.match._id, reply)}
                         disabled={!reply}
                         aria-label="Copy reply"
                         className={cn(
-                          "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border transition-colors disabled:cursor-default disabled:opacity-40",
+                          "flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-lg border transition-colors disabled:cursor-default disabled:opacity-40",
                           copiedId === row.match._id
-                            ? "border-primary text-primary"
-                            : "border-border text-muted-foreground/40 hover:border-foreground/40 hover:text-foreground rounded-lg",
+                            ? "border-brand text-brand"
+                            : "border-border text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
                         )}
                       >
                         {copiedId === row.match._id ? (
-                          <Check className="h-5 w-5" />
+                          <Check className="size-4" />
                         ) : (
-                          <Copy className="h-5 w-5" />
+                          <Copy className="size-4" />
                         )}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => toggleReplied(row)}
-                        aria-pressed={row.match.replied}
-                        aria-label={
-                          row.match.replied
-                            ? "Replied, click to undo"
-                            : "Mark as replied"
-                        }
-                        className={cn(
-                          "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border transition-colors",
-                          row.match.replied
-                            ? "border-primary bg-primary text-primary-foreground"
-                            : "border-border text-muted-foreground/40 hover:border-foreground/40 hover:text-foreground rounded-lg",
-                        )}
-                      >
-                        <Check className="h-5 w-5" />
                       </button>
                       <button
                         type="button"
                         onClick={() => skip(row)}
                         aria-label="Skip this post"
-                        className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border border-border text-muted-foreground/40 transition-colors hover:border-red-500/40 hover:text-red-400 rounded-lg"
+                        className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:border-red-500/40 hover:text-red-400"
                       >
-                        <XIcon className="h-5 w-5" />
+                        <XIcon className="size-4" />
                       </button>
                     </div>
                   </li>
