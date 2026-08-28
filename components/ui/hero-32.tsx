@@ -133,7 +133,7 @@ export default function Hero32({
         ) : null}
 
         {/* Hero Main Content — each element independently animated */}
-        <div className="flex flex-1 items-start justify-center px-6 pt-20 pb-24">
+        <div className="flex flex-1 items-start justify-center px-6 pt-40 pb-24">
           <div className="flex w-full max-w-4xl flex-col items-center text-center 2xl:max-w-6xl">
             {/* Title: majestic slow rise */}
             <motion.h1
