@@ -229,16 +229,17 @@ export function PostsContent() {
             <RefreshCw className={cn("size-4", refreshing && "animate-spin")} />
           </button>
 
+          {/* Always on, so the one button that costs money is never a mystery */}
+          <span className="relative ml-1 hidden items-center border border-border bg-popover px-2 py-1 text-[10px] font-bold tracking-wider text-muted-foreground uppercase sm:flex">
+            <span className="absolute top-1/2 -left-[5px] size-2 -translate-y-1/2 rotate-45 border-b border-l border-border bg-popover" />
+            {refreshing ? "Fetching..." : "Refresh data"}
+          </span>
+
           <button
             type="button"
             onClick={() => setShowReplies((v) => !v)}
             aria-pressed={showReplies}
-            className={cn(
-              "flex h-9 cursor-pointer items-center gap-2 rounded-md border px-3 text-[10px] font-bold tracking-wider uppercase transition-colors",
-              showReplies
-                ? "border-brand text-brand"
-                : "border-border text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
-            )}
+            className="ml-auto flex h-9 cursor-pointer items-center gap-2 rounded-[7px] border border-border px-3 text-[10px] font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
           >
             {showReplies ? (
               <Eye className="size-3.5" />
@@ -247,12 +248,6 @@ export function PostsContent() {
             )}
             Preview replies
           </button>
-
-          {/* Always on, so the one button that costs money is never a mystery */}
-          <span className="relative ml-1 hidden items-center border border-border bg-popover px-2 py-1 text-[10px] font-bold tracking-wider text-muted-foreground uppercase sm:flex">
-            <span className="absolute top-1/2 -left-[5px] size-2 -translate-y-1/2 rotate-45 border-b border-l border-border bg-popover" />
-            {refreshing ? "Fetching..." : "Refresh data"}
-          </span>
 
           <Sheet>
             <SheetTrigger
@@ -522,7 +517,10 @@ export function PostsContent() {
               })}
               {feed === undefined ? (
                 Array.from({ length: 8 }, (_, i) => (
-                  <li key={i} className="border-b border-border last:border-b-0">
+                  <li
+                    key={i}
+                    className="border-b border-border last:border-b-0"
+                  >
                     <div className="p-4">
                       <div className="h-3 w-1/3 bg-sidebar-accent" />
                       <div className="mt-3" />
