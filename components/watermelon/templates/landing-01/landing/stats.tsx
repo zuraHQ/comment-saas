@@ -27,58 +27,84 @@ import { cn } from "@/lib/utils";
 /* ---------------------------------------------------------------- 01 */
 // Raw chatter arriving from every platform at once.
 
-// A feed running past, so the claim reads as volume rather than a list.
-const INCOMING = [
-  { text: "Looking for a simple invoicing tool", where: "r/freelance", Icon: FaRedditAlien, color: "#FF4500" },
-  { text: "Ask HN: how do you find your first users?", where: "Hacker News", Icon: FaHackerNews, color: "#FF6600" },
-  { text: "Month end took me two days again", where: "r/smallbusiness", Icon: FaRedditAlien, color: "#FF4500" },
-  { text: "What are you all using for outreach?", where: "Indie Hackers", Icon: FaRegLightbulb, color: "#0E2439" },
-  { text: "How do you handle late payers?", where: "LinkedIn", Icon: FaLinkedinIn, color: "#0A66C2" },
+const CHATTER = [
+  {
+    text: "anyone know a good invoicing tool?",
+    Icon: FaRedditAlien,
+    color: "#FF4500",
+    at: "top-10 left-6",
+  },
+  {
+    text: "spreadsheets are killing me",
+    Icon: FaHackerNews,
+    color: "#FF6600",
+    at: "top-24 right-6",
+  },
+  {
+    text: "best way to track leads?",
+    Icon: FaLinkedinIn,
+    color: "#0A66C2",
+    at: "bottom-24 left-6",
+  },
+  {
+    text: "we still do this by hand",
+    Icon: FaBluesky,
+    color: "#0085FF",
+    at: "bottom-10 right-6",
+  },
 ];
 
 
 function ScanVisual() {
   return (
-    <div className="relative h-full w-full overflow-hidden bg-white">
-      <div
-        aria-hidden="true"
-        className="absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(120% 90% at 100% 0%, rgba(14,165,233,0.18) 0%, rgba(14,165,233,0.06) 40%, rgba(255,255,255,0) 75%)",
-        }}
-      />
-      <motion.div
-        className="relative flex flex-col px-6"
-        animate={{ y: ["0%", "-50%"] }}
-        transition={{ duration: 26, repeat: Infinity, ease: "linear" }}
-      >
-        {[...INCOMING, ...INCOMING].map((item, i) => (
-          <div
-            key={i}
-            className="mb-3 flex items-center gap-3 rounded-md border border-neutral-200 bg-white px-4 py-3 shadow-sm"
-          >
-            <span
-              className="flex size-7 shrink-0 items-center justify-center rounded"
-              style={{ backgroundColor: item.color }}
-            >
-              <item.Icon className="size-3.5 text-white" />
-            </span>
-            <span className="min-w-0 flex-1">
-              <span className="block truncate text-sm font-medium text-neutral-900">
-                {item.text}
-              </span>
-              <span className="block truncate text-xs text-neutral-500">
-                {item.where}
-              </span>
-            </span>
+    <div className="relative flex h-80 items-center justify-center overflow-hidden">
+      {/* Radar rings with a rotating sweep */}
+      <div className="absolute flex h-72 w-72 items-center justify-center rounded-full border border-neutral-200">
+        <motion.div
+          className="absolute inset-0 rounded-full"
+          style={{
+            background:
+              "conic-gradient(from 0deg, rgba(14,165,233,0.25), rgba(14,165,233,0) 35%)",
+          }}
+          animate={{ rotate: 360 }}
+          transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+        />
+        <div className="flex h-48 w-48 items-center justify-center rounded-full border border-neutral-200">
+          <div className="flex h-24 w-24 bg-white items-center justify-center rounded-full border border-neutral-200">
+            <Globe className="h-6 w-6 text-neutral-600" strokeWidth={1.25} />
           </div>
-        ))}
-      </motion.div>
+        </div>
+      </div>
 
-      {/* Fade the ends so the feed reads as endless */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-white via-white/80 to-transparent" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-white via-white/80 to-transparent" />
+      {/* Chatter picked up by the sweep, sitting around the dial */}
+      {CHATTER.map((item, i) => (
+        <motion.span
+          key={item.text}
+          className={cn(
+            "absolute z-10 flex max-w-[38%] items-center gap-1.5",
+            item.at,
+          )}
+          initial={{ opacity: 0.35 }}
+          animate={{ opacity: [0.35, 1, 0.35] }}
+          transition={{
+            duration: 4,
+            times: [0, 0.2, 1],
+            repeat: Infinity,
+            delay: i,
+            ease: "easeInOut",
+          }}
+        >
+          <span
+            className="flex size-5 shrink-0 items-center justify-center rounded-full"
+            style={{ backgroundColor: item.color }}
+          >
+            <item.Icon className="size-2.5 text-white" />
+          </span>
+          <span className="text-xs leading-snug font-medium text-neutral-900">
+            {item.text}
+          </span>
+        </motion.span>
+      ))}
     </div>
   );
 }
@@ -487,7 +513,6 @@ const STEPS = [
   {
     number: "01",
     title: "We read eight platforms end to end",
-    bleed: true,
     body: "We read every new post in the communities your customers sit in.",
     marks: true,
     visual: <ScanVisual />,
@@ -568,12 +593,7 @@ export default function Stats() {
                   </div>
                 ) : null}
               </div>
-              <div
-                className={cn(
-                  "flex items-center justify-center",
-                  step.bleed ? "" : "p-8 lg:p-10",
-                )}
-              >
+              <div className="flex items-center justify-center p-8 lg:p-10">
                 {step.visual}
               </div>
             </div>
