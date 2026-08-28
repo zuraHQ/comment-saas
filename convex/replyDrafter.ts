@@ -148,6 +148,26 @@ ${RULES}`;
   },
 });
 
+// CLI helper: pick a scored match to eyeball a draft without the UI.
+//   npx convex run replyDrafter:sample '{"intent":"high"}' --prod
+export const sample = internalQuery({
+  args: { intent: v.string() },
+  handler: async (ctx, args) => {
+    for await (const match of ctx.db.query("matches")) {
+      if (match.intentScore !== args.intent) continue;
+      const post = await ctx.db.get(match.postId);
+      if (!post) continue;
+      return {
+        matchId: match._id,
+        platform: post.platform,
+        title: post.title,
+        reason: match.intentReason,
+      };
+    }
+    return null;
+  },
+});
+
 // What the dashboard calls. Owning the match is the whole permission check.
 export const draft = action({
   args: { matchId: v.id("matches"), force: v.optional(v.boolean()) },

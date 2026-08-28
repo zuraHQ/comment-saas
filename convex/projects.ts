@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import { mutation, query, type MutationCtx } from "./_generated/server";
+import { internalMutation, mutation, query, type MutationCtx } from "./_generated/server";
 import { requireClerkId, requireOwnedProject } from "./auth";
 
 import { COMMUNITY_PLATFORMS, HN_FEEDS, IH_FEEDS, KEYWORD_PLATFORMS } from "./platforms";
@@ -112,6 +112,26 @@ async function ensureJobs(
     }
   }
 }
+
+// CLI helper for filling in fields without going through the UI:
+//   npx convex run projects:patchBySlug '{"slug":"she","description":"..."}' --prod
+export const patchBySlug = internalMutation({
+  args: {
+    slug: v.string(),
+    description: v.optional(v.string()),
+    url: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const { slug, ...patch } = args;
+    const project = await ctx.db
+      .query("projects")
+      .filter((q) => q.eq(q.field("slug"), slug))
+      .first();
+    if (!project) return { error: "no such project" };
+    await ctx.db.patch(project._id, patch);
+    return { patched: project.name };
+  },
+});
 
 export const list = query({
   args: {},
