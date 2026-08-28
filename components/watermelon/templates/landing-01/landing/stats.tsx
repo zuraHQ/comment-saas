@@ -26,80 +26,61 @@ import { cn } from "@/lib/utils";
 
 /* ---------------------------------------------------------------- 01 */
 // Raw chatter arriving from every platform at once.
-const CHATTER = [
-  {
-    text: "anyone know a good invoicing tool?",
-    Icon: FaRedditAlien,
-    color: "#FF4500",
-  },
-  { text: "just launched v2 today", Icon: FaXTwitter, color: "#ffffff" },
-  {
-    text: "what's the best way to track leads?",
-    Icon: FaLinkedinIn,
-    color: "#0A66C2",
-  },
-  {
-    text: "need a better solution for scheduling",
-    Icon: FaInstagram,
-    color: "#E4405F",
-  },
-  {
-    text: "has anyone tried Notion for CRM?",
-    Icon: FaHackerNews,
-    color: "#FF6600",
-  },
-  {
-    text: "spreadsheets are killing me",
-    Icon: FaRedditAlien,
-    color: "#FF4500",
-  },
+
+// Platform marks sitting on the dial, lighting up as the sweep passes them.
+const SCAN_MARKS = [
+  { Icon: FaRedditAlien, bg: "#FF4500", fg: "#ffffff", angle: -80 },
+  { Icon: FaHackerNews, bg: "#FF6600", fg: "#ffffff", angle: -25 },
+  { Icon: FaRegLightbulb, bg: "#0E2439", fg: "#ffffff", angle: 30 },
+  { Icon: FaXTwitter, bg: "#171717", fg: "#ffffff", angle: 85 },
+  { Icon: FaLinkedinIn, bg: "#0A66C2", fg: "#ffffff", angle: 140 },
+  { Icon: FaYoutube, bg: "#FF0000", fg: "#ffffff", angle: 195 },
+  { Icon: FaBluesky, bg: "#0085FF", fg: "#ffffff", angle: 250 },
+  { Icon: FaGithub, bg: "#171717", fg: "#ffffff", angle: 305 },
 ];
+
+const SWEEP_SECONDS = 6;
 
 function ScanVisual() {
   return (
-    <div className="relative flex h-80 items-center justify-center overflow-hidden">
-      {/* Radar rings with a rotating sweep */}
-      <div className="absolute flex h-72 w-72 items-center justify-center rounded-full border border-neutral-200">
+    <div className="relative flex h-80 items-center justify-center">
+      <div className="relative flex size-72 items-center justify-center rounded-full border border-neutral-200">
         <motion.div
           className="absolute inset-0 rounded-full"
           style={{
             background:
-              "conic-gradient(from 0deg, rgba(14,165,233,0.25), rgba(14,165,233,0) 35%)",
+              "conic-gradient(from 0deg, rgba(14,165,233,0.22), rgba(14,165,233,0) 30%)",
           }}
           animate={{ rotate: 360 }}
-          transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: SWEEP_SECONDS, repeat: Infinity, ease: "linear" }}
         />
-        <div className="flex h-48 w-48 items-center justify-center rounded-full border border-neutral-200">
-          <div className="flex h-24 w-24 bg-white items-center justify-center rounded-full border border-neutral-200">
-            <Globe className="h-6 w-6 text-neutral-600" strokeWidth={1.25} />
+
+        <div className="flex size-48 items-center justify-center rounded-full border border-neutral-200">
+          <div className="flex size-24 items-center justify-center rounded-full border border-neutral-200 bg-white">
+            <Globe className="size-6 text-neutral-600" strokeWidth={1.25} />
           </div>
         </div>
-      </div>
 
-      {/* Chatter picked up by the sweep */}
-      <div className="relative z-10 flex w-full flex-col gap-2 px-6">
-        {CHATTER.slice(0, 4).map((item, i) => (
+        {SCAN_MARKS.map((mark, i) => (
           <motion.span
-            key={item.text}
-            className={cn(
-              "bg-white/80 flex items-center gap-2 rounded-full border border-neutral-200 px-3 py-1.5 text-xs text-neutral-600 backdrop-blur-sm",
-              i % 2 === 0 ? "mr-auto" : "ml-auto",
-            )}
-            initial={{ opacity: 0.15 }}
-            animate={{ opacity: [0.15, 1, 0.15] }}
+            key={i}
+            className="absolute flex size-9 items-center justify-center rounded-full shadow-sm"
+            style={{
+              backgroundColor: mark.bg,
+              // sit each mark on the outer ring at its own angle
+              transform: `rotate(${mark.angle}deg) translate(7.5rem) rotate(${-mark.angle}deg)`,
+            }}
+            animate={{ opacity: [0.25, 1, 0.25], scale: [1, 1.12, 1] }}
             transition={{
-              duration: 4,
-              times: [0, 0.25, 1],
+              duration: SWEEP_SECONDS,
+              times: [0, 0.06, 0.4],
               repeat: Infinity,
-              delay: i,
-              ease: "easeInOut",
+              ease: "easeOut",
+              // fire as the sweep reaches each one
+              delay: ((mark.angle + 90 + 360) % 360) / 360 * SWEEP_SECONDS,
             }}
           >
-            <item.Icon
-              className="h-3.5 w-3.5 shrink-0"
-              style={{ color: item.color }}
-            />
-            {item.text}
+            <mark.Icon className="size-4" style={{ color: mark.fg }} />
           </motion.span>
         ))}
       </div>
@@ -517,7 +498,7 @@ const STEPS = [
     number: "02",
     title: "We rank them",
     body: "Every post is scored against what your product actually does. The rest never reaches your feed.",
-    visual: <PreviewRank />,
+    visual: <SortVisual />,
   },
   {
     number: "03",
