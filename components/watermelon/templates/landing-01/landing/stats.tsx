@@ -41,7 +41,7 @@ const PLATFORMS = [
 
 function ScanVisual() {
   return (
-    <div className="grid grid-cols-2 gap-3 rounded-2xl bg-gradient-to-br from-neutral-100 via-white to-neutral-100 p-4">
+    <div className="grid h-full w-full grid-cols-2 content-center gap-3 bg-gradient-to-br from-neutral-100 via-white to-neutral-100 p-8 lg:p-10">
       {PLATFORMS.map((platform) => (
         <div
           key={platform.label}
@@ -469,6 +469,7 @@ const STEPS = [
   {
     number: "01",
     title: "We read eight platforms end to end",
+    bleed: true,
     body: "We read every new post in the communities your customers sit in.",
     marks: true,
     visual: <ScanVisual />,
@@ -517,11 +518,11 @@ export default function Stats() {
             <div
               key={step.number}
               className={cn(
-                "grid items-center gap-8 rounded-2xl bg-neutral-50 p-8 lg:grid-cols-2 lg:gap-12 lg:p-10",
+                "grid items-stretch overflow-hidden rounded-2xl bg-neutral-50 lg:grid-cols-2",
                 i % 2 === 1 && "lg:[&>*:first-child]:order-2",
               )}
             >
-              <div className="px-1">
+              <div className="self-center p-8 lg:p-10">
                 <p className="text-xs font-bold tracking-widest text-neutral-400">
                   {step.number}
                 </p>
@@ -549,7 +550,14 @@ export default function Stats() {
                   </div>
                 ) : null}
               </div>
-              <div>{step.visual}</div>
+              <div
+                className={cn(
+                  "flex items-center justify-center",
+                  step.bleed ? "" : "p-8 lg:p-10",
+                )}
+              >
+                {step.visual}
+              </div>
             </div>
           ))}
         </div>
