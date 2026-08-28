@@ -73,9 +73,11 @@ export function AnalyticsContent() {
         minute: "2-digit",
       })
     : null;
-  const clicksByPlatform = new Map(Object.entries(breakdown?.byPlatform ?? {}));
-  const bestChannel =
-    [...clicksByPlatform.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ?? "—";
+  // Object key order is whichever platform was clicked first, so rank it.
+  const clicksByPlatform = new Map(
+    Object.entries(breakdown?.byPlatform ?? {}).sort((a, b) => b[1] - a[1]),
+  );
+  const bestChannel = [...clicksByPlatform.keys()][0] ?? "—";
   const maxPlatformClicks = Math.max(1, ...clicksByPlatform.values());
 
 
