@@ -15,6 +15,12 @@ import { AnimatePresence, motion } from "motion/react";
 import { Check, Globe, Link2 } from "lucide-react";
 import Container from "./container";
 import SiteCapture from "./site-capture";
+import {
+  PreviewRank,
+  PreviewRead,
+  PreviewReply,
+  PreviewResults,
+} from "./step-versions";
 import Heading from "./heading";
 import { cn } from "@/lib/utils";
 
@@ -505,25 +511,25 @@ const STEPS = [
     title: "We read eight platforms end to end",
     body: "Whole communities and comment sections read end to end, not just keyword hits, so nothing relevant slips past.",
     marks: true,
-    visual: <ScanVisual />,
+    visual: <PreviewRead />,
   },
   {
     number: "02",
     title: "We rank them",
     body: "Every post is scored against what your product actually does. High intent rises to the top, the rest never reaches your feed, and each match tells you why it matched.",
-    visual: <SortVisual />,
+    visual: <PreviewRank />,
   },
   {
     number: "03",
     title: "You join the conversation",
     body: "Open the post and answer like a person, not an ad. Every reply carries a tracked link, so the ones that actually bring people back are the ones you can see.",
-    visual: <ReplyVisual />,
+    visual: <PreviewReply />,
   },
   {
     number: "04",
     title: "You get customers",
     body: "Every reply carries a tracked link, so clicks come back tagged with the platform they came from. You learn which conversations sent people to your site, and which channel is worth your next hour.",
-    visual: <ResultVisual />,
+    visual: <PreviewResults />,
   },
 ];
 

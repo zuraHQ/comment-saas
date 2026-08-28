@@ -64,7 +64,7 @@ const RAIL = [
   { label: "X / Twitter", Icon: FaXTwitter, bg: "#171717", n: "188 posts" },
 ];
 
-function PreviewRead() {
+export function PreviewRead() {
   return (
     <Frame>
       <div className="flex flex-col">
@@ -93,7 +93,7 @@ function PreviewRead() {
   );
 }
 
-function PreviewRank() {
+export function PreviewRank() {
   const rows = [
     { t: "Looking for a simple invoicing tool", s: 94, keep: true },
     { t: "How do you handle late payers", s: 81, keep: true },
@@ -123,7 +123,7 @@ function PreviewRank() {
   );
 }
 
-function PreviewReply() {
+export function PreviewReply() {
   return (
     <Frame>
       <p className="flex items-center gap-2 text-xs text-neutral-500">
@@ -160,7 +160,7 @@ function PreviewReply() {
   );
 }
 
-function PreviewResults() {
+export function PreviewResults() {
   const rows = [
     { label: "Reddit", Icon: FaRedditAlien, bg: "#FF4500", n: 9840 },
     { label: "Hacker News", Icon: FaHackerNews, bg: "#FF6600", n: 5310 },
