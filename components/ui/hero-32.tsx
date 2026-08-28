@@ -136,7 +136,7 @@ export default function Hero32({
               variants={titleVariants}
               initial="hidden"
               animate="visible"
-              className="text-5xl font-semibold tracking-tight text-neutral-900 md:text-7xl lg:text-[5.5rem] lg:leading-[1.1] 2xl:text-[7rem]"
+              className="text-4xl font-semibold tracking-tight text-neutral-900 md:text-5xl lg:text-[64px] lg:leading-[0.95]"
               style={{ textWrap: "balance" }}
             >
               {title}

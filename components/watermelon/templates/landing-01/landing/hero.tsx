@@ -50,8 +50,8 @@ export default function Hero() {
       loginHref="/login"
       title={
         <>
-          Someone is asking for <br />
-          your <span className="italic">product</span> right now
+          We read the internet <br />
+          You get customers
         </>
       }
       subtitle={
