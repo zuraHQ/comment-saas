@@ -235,20 +235,6 @@ export function PostsContent() {
             {refreshing ? "Fetching..." : "Refresh data"}
           </span>
 
-          <button
-            type="button"
-            onClick={() => setShowReplies((v) => !v)}
-            aria-pressed={showReplies}
-            className="ml-auto flex h-9 cursor-pointer items-center gap-2 rounded-[7px] border border-border px-3 text-[10px] font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
-          >
-            {showReplies ? (
-              <Eye className="size-3.5" />
-            ) : (
-              <EyeOff className="size-3.5" />
-            )}
-            Preview replies
-          </button>
-
           <Sheet>
             <SheetTrigger
               type="button"
@@ -282,7 +268,7 @@ export function PostsContent() {
             <SheetTrigger
               type="button"
               aria-label={`History, ${repliedRows.length} replied`}
-              className="relative flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground"
+              className="relative ml-auto flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground"
             >
               <HistoryIcon className="size-4" />
               {repliedRows.length ? (
@@ -301,6 +287,19 @@ export function PostsContent() {
               <HistoryPanel rows={repliedRows} onUnmark={toggleReplied} />
             </SheetContent>
           </Sheet>
+          <button
+            type="button"
+            onClick={() => setShowReplies((v) => !v)}
+            aria-pressed={showReplies}
+            className="flex h-9 cursor-pointer items-center gap-2 rounded-[7px] border border-border px-3 text-[10px] font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
+          >
+            {showReplies ? (
+              <Eye className="size-3.5" />
+            ) : (
+              <EyeOff className="size-3.5" />
+            )}
+            Preview replies
+          </button>
         </div>
 
         <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
