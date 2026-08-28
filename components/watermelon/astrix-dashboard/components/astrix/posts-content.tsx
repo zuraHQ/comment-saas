@@ -5,7 +5,7 @@ import { useAction, useMutation, useQuery } from "convex/react";
 import {
   ArrowUpRight,
   Check,
-  Sparkles,
+  PenLine,
   Eye,
   EyeOff,
   Copy,
@@ -476,7 +476,7 @@ export function PostsContent() {
                           </>
                         ) : (
                           <>
-                            <Sparkles className="size-3.5" />
+                            <PenLine className="size-3.5" />
                             Write reply
                           </>
                         )}
