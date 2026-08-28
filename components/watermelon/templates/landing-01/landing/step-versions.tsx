@@ -288,10 +288,116 @@ function VariantC() {
   );
 }
 
+// D: panelled, but the preview bleeds off the panel edge
+function VariantD() {
+  return (
+    <div className="flex flex-col gap-6">
+      {STEPS.map((step, i) => (
+        <div
+          key={step.n}
+          className={cn(
+            "grid items-center gap-8 overflow-hidden rounded-2xl bg-neutral-50 lg:grid-cols-2",
+            i % 2 === 1 && "lg:[&>*:first-child]:order-2",
+          )}
+        >
+          <div className="p-10">
+            <p className="text-xs font-bold tracking-widest text-neutral-400">
+              STEP {step.n}
+            </p>
+            <h3 className="mt-3 text-2xl font-semibold text-neutral-900">
+              {step.title}
+            </h3>
+            <p className="mt-3 text-base text-neutral-600">{step.body}</p>
+          </div>
+          <div
+            className={cn(
+              "py-10",
+              i % 2 === 1 ? "-ml-10 pl-10" : "-mr-10 pr-10",
+            )}
+          >
+            {PREVIEWS[i]()}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// E: numbered rail down the left, panels to the right of it
+function VariantE() {
+  return (
+    <div className="flex flex-col">
+      {STEPS.map((step, i) => (
+        <div key={step.n} className="flex gap-8">
+          <div className="hidden w-12 shrink-0 flex-col items-center md:flex">
+            <span className="flex size-10 items-center justify-center rounded-full border border-neutral-300 text-xs font-bold text-neutral-500">
+              {step.n}
+            </span>
+            {i < STEPS.length - 1 ? (
+              <span className="w-px flex-1 bg-neutral-200" />
+            ) : null}
+          </div>
+          <div className="flex-1 pb-10">
+            <h3 className="text-2xl font-semibold text-neutral-900">
+              {step.title}
+            </h3>
+            <p className="mt-2 max-w-lg text-base text-neutral-600">
+              {step.body}
+            </p>
+            <div className="mt-5 rounded-2xl bg-neutral-50 p-6">
+              {PREVIEWS[i]()}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// F: the copy sticks while the previews scroll past it
+function VariantF() {
+  return (
+    <div className="grid gap-12 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
+      <div className="lg:sticky lg:top-24 lg:self-start">
+        <h3 className="text-3xl font-semibold text-neutral-900">
+          Four steps, once a day
+        </h3>
+        <ol className="mt-8 flex flex-col gap-6">
+          {STEPS.map((step) => (
+            <li key={step.n} className="flex gap-4">
+              <span className="text-xs font-bold tracking-widest text-neutral-400">
+                {step.n}
+              </span>
+              <span>
+                <span className="block text-base font-medium text-neutral-900">
+                  {step.title}
+                </span>
+                <span className="mt-1 block text-sm text-neutral-600">
+                  {step.body}
+                </span>
+              </span>
+            </li>
+          ))}
+        </ol>
+      </div>
+      <div className="flex flex-col gap-6">
+        {STEPS.map((step, i) => (
+          <div key={step.n} className="rounded-2xl bg-neutral-50 p-6">
+            {PREVIEWS[i]()}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 const VARIANTS = [
   { key: "A", name: "Plain zigzag", note: "Equal halves, generous gap, nothing around the preview but its own frame.", Render: VariantA },
   { key: "B", name: "Zigzag with rules", note: "Rows separated by hairlines and the preview given more width than the text.", Render: VariantB },
-  { key: "C", name: "Panelled", note: "Each step sits in its own tinted block, so the section reads as four objects rather than four rows.", Render: VariantC },
+  { key: "C", name: "Panelled", note: "Each step sits in its own tinted block, so the section reads as four objects rather than four rows. Live on the landing now.", Render: VariantC },
+  { key: "D", name: "Panelled, preview bleeds out", note: "Same panels, but the screenshot runs off the edge so it reads as a window into something bigger.", Render: VariantD },
+  { key: "E", name: "Numbered rail", note: "A connected spine of numbers down the left with the panels beside it. Makes the order explicit.", Render: VariantE },
+  { key: "F", name: "Sticky copy", note: "All four steps stated once on the left while the previews scroll past. Shortest to read, needs the visuals to stand alone.", Render: VariantF },
 ];
 
 export default function StepVersions() {
