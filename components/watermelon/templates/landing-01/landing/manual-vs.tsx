@@ -25,7 +25,7 @@ export default function ManualVs() {
         </div>
 
         <div className="mx-auto grid max-w-5xl gap-6 md:grid-cols-2">
-          <div className="flex flex-col border border-red-500/30 bg-red-500/[0.03] p-8">
+          <div className="flex flex-col rounded-md border border-red-500/30 bg-red-500/[0.03] p-8">
             <p className="font-mono text-xs font-bold tracking-widest text-red-400/80 uppercase">
               By hand
             </p>
@@ -51,7 +51,7 @@ export default function ManualVs() {
             </p>
           </div>
 
-          <div className="border-primary/40 flex flex-col border bg-neutral-50 p-8">
+          <div className="border-primary/40 flex flex-col rounded-md border bg-neutral-50 p-8">
             <p className="text-primary text-xs font-bold tracking-wider uppercase">
               With us
             </p>
