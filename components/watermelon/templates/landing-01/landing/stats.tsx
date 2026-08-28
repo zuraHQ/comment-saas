@@ -43,9 +43,17 @@ const INCOMING = [
 
 function ScanVisual() {
   return (
-    <div className="relative h-full w-full overflow-hidden bg-gradient-to-br from-sky-100 via-sky-50 to-white">
+    <div className="relative h-full w-full overflow-hidden bg-white">
+      <div
+        aria-hidden="true"
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(120% 90% at 100% 0%, rgba(14,165,233,0.18) 0%, rgba(14,165,233,0.06) 40%, rgba(255,255,255,0) 75%)",
+        }}
+      />
       <motion.div
-        className="flex flex-col gap-2 p-6"
+        className="relative flex flex-col gap-2 p-6"
         animate={{ y: ["0%", "-50%"] }}
         transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
       >
@@ -73,8 +81,8 @@ function ScanVisual() {
       </motion.div>
 
       {/* Fade the ends so the feed reads as endless */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-sky-100 to-transparent" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-white via-white/80 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-white via-white/80 to-transparent" />
     </div>
   );
 }
