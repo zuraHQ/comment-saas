@@ -23,7 +23,7 @@ export default function GetStartedDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       {trigger ? <DialogTrigger asChild>{trigger}</DialogTrigger> : null}
-      <DialogContent className="rounded-xl border-border bg-background p-8 sm:max-w-sm">
+      <DialogContent className="light-page border-border bg-background rounded-xl p-8 sm:max-w-sm">
         <DialogHeader className="mb-2">
           <DialogTitle className="text-2xl font-semibold tracking-tight text-foreground">
             Sign in
