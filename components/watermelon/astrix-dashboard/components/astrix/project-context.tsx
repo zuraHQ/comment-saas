@@ -70,7 +70,20 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
   const projects = useQuery(api.projects.list);
   const me = useQuery(api.users.me);
   const create = useMutation(api.projects.create);
-  const update = useMutation(api.projects.update);
+  // Patch the cached project immediately so settings toggles do not wait on
+  // the round trip; Convex reconciles or rolls back after.
+  const update = useMutation(api.projects.update).withOptimisticUpdate(
+    (localStore, args) => {
+      const current = localStore.getQuery(api.projects.list, {});
+      if (!current) return;
+      const { projectId, ...patch } = args;
+      localStore.setQuery(
+        api.projects.list,
+        {},
+        current.map((p) => (p._id === projectId ? { ...p, ...patch } : p)),
+      );
+    },
+  );
   const remove = useMutation(api.projects.remove);
   const setLastProject = useMutation(api.users.setLastProject);
 

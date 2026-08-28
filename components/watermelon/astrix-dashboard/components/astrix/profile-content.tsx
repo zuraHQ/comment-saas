@@ -34,7 +34,20 @@ const INTEGRATIONS = PLATFORM_OPTIONS.map((platform) => ({
 
 export function ProfileContent() {
   const me = useQuery(api.users.me);
-  const setIntegration = useMutation(api.users.setIntegration);
+  // Flip the switch on the spot; Convex confirms or rolls it back behind us.
+  const setIntegration = useMutation(
+    api.users.setIntegration,
+  ).withOptimisticUpdate((localStore, args) => {
+    const current = localStore.getQuery(api.users.me, {});
+    if (!current) return;
+    const integrations = new Set(current.integrations ?? []);
+    if (args.enabled) integrations.add(args.integration);
+    else integrations.delete(args.integration);
+    localStore.setQuery(api.users.me, {}, {
+      ...current,
+      integrations: [...integrations],
+    });
+  });
 
   const enabled = new Set(me?.integrations ?? []);
 
