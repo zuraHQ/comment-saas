@@ -88,14 +88,14 @@
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
+  --background: #1a1b1e;
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: #A3FF12;
-  --primary-foreground: #101010;
+  --primary: #38BDF8;
+  --primary-foreground: #0b1220;
   --brand: #38BDF8;
   --brand-foreground: #0b1220;
   --secondary: oklch(0.269 0 0);
@@ -159,7 +159,7 @@ body:has(.astrix-dashboard) [data-slot="tooltip-content"] {
   --card-foreground: #141414;
   --popover: #ffffff;
   --popover-foreground: #141414;
-  --primary: #4d7c0f;
+  --primary: #0EA5E9;
   --secondary: oklch(0 0 0 / 6%);
   --secondary-foreground: #141414;
   --muted: oklch(0 0 0 / 6%);
@@ -178,7 +178,7 @@ body:has(.astrix-dashboard) [data-slot="tooltip-content"] {
   --chart-5: oklch(0.85 0 0);
   --sidebar: #fafafa;
   --sidebar-foreground: #141414;
-  --sidebar-primary: #4d7c0f;
+  --sidebar-primary: #0EA5E9;
   --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: oklch(0 0 0 / 6%);
   --sidebar-accent-foreground: #141414;
@@ -205,8 +205,8 @@ body:has(.astrix-dashboard) [data-slot="tooltip-content"] {
   --input: oklch(1 0 0 / 10%);
   --input-addon-foreground: oklch(0.777 0 0);
   --sidebar: #17181a;
-  --sidebar-primary: #A3FF12;
-  --sidebar-primary-foreground: #101010;
+  --sidebar-primary: #38BDF8;
+  --sidebar-primary-foreground: #0b1220;
   --sidebar-accent: oklch(1 0 0 / 6%);
   --shadow-sidebar-item: drop-shadow(1px 2px 12px rgb(0 0 0 / 25%));
 }
