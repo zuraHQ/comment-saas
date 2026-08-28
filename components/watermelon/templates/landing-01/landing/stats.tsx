@@ -29,14 +29,14 @@ import { cn } from "@/lib/utils";
 
 // The eight places we read, named, so the claim is checkable at a glance.
 const PLATFORMS = [
-  { label: "Reddit", Icon: FaRedditAlien, bg: "#FF4500", fg: "#ffffff" note: "communities and keywords" },
-  { label: "Hacker News", Icon: FaHackerNews, bg: "#FF6600", fg: "#ffffff" note: "all stories, Ask and Show" },
-  { label: "Indie Hackers", Icon: FaRegLightbulb, bg: "#0E2439", fg: "#ffffff" note: "every new post" },
-  { label: "X / Twitter", Icon: FaXTwitter, bg: "#171717", fg: "#ffffff" note: "keywords and accounts" },
-  { label: "LinkedIn", Icon: FaLinkedinIn, bg: "#0A66C2", fg: "#ffffff" note: "keywords" },
-  { label: "YouTube", Icon: FaYoutube, bg: "#FF0000", fg: "#ffffff" note: "new videos" },
-  { label: "Bluesky", Icon: FaBluesky, bg: "#0085FF", fg: "#ffffff" note: "keywords" },
-  { label: "GitHub", Icon: FaGithub, bg: "#171717", fg: "#ffffff" note: "repo discussions" },
+  { label: "Reddit", Icon: FaRedditAlien, bg: "#FF4500", fg: "#ffffff", note: "communities and keywords" },
+  { label: "Hacker News", Icon: FaHackerNews, bg: "#FF6600", fg: "#ffffff", note: "all stories, Ask and Show" },
+  { label: "Indie Hackers", Icon: FaRegLightbulb, bg: "#0E2439", fg: "#ffffff", note: "every new post" },
+  { label: "X / Twitter", Icon: FaXTwitter, bg: "#171717", fg: "#ffffff", note: "keywords and accounts" },
+  { label: "LinkedIn", Icon: FaLinkedinIn, bg: "#0A66C2", fg: "#ffffff", note: "keywords" },
+  { label: "YouTube", Icon: FaYoutube, bg: "#FF0000", fg: "#ffffff", note: "new videos" },
+  { label: "Bluesky", Icon: FaBluesky, bg: "#0085FF", fg: "#ffffff", note: "keywords" },
+  { label: "GitHub", Icon: FaGithub, bg: "#171717", fg: "#ffffff", note: "repo discussions" },
 ];
 
 function ScanVisual() {
