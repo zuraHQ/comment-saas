@@ -11,10 +11,18 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 
-export default function GetStartedDialog({ trigger }: { trigger: ReactNode }) {
+export default function GetStartedDialog({
+  trigger,
+  open,
+  onOpenChange,
+}: {
+  trigger?: ReactNode;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}) {
   return (
-    <Dialog>
-      <DialogTrigger asChild>{trigger}</DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      {trigger ? <DialogTrigger asChild>{trigger}</DialogTrigger> : null}
       <DialogContent className="rounded-xl border-neutral-200 bg-white p-8 sm:max-w-sm">
         <DialogHeader className="mb-2">
           <DialogTitle className="text-2xl font-semibold tracking-tight text-neutral-900">
