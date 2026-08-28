@@ -311,7 +311,7 @@ export function PostsContent() {
                   onClick={() => setPickedKey(platform.id)}
                   aria-pressed={isActive}
                   className={cn(
-                    "flex shrink-0 cursor-pointer items-center gap-3 px-4 py-3 text-left transition-colors",
+                    "mx-2 flex shrink-0 cursor-pointer items-center gap-3 rounded-md px-3 py-3 text-left transition-colors",
                     isActive
                       ? "bg-sidebar-accent"
                       : "hover:bg-sidebar-accent/60",
