@@ -351,7 +351,7 @@ export function PostsContent() {
                   <li
                     key={row.match._id}
                     className={cn(
-                      "relative flex flex-col border border-border bg-card transition-colors hover:border-foreground/25 rounded-lg",
+                      "relative flex flex-col rounded-lg bg-card transition-colors hover:bg-sidebar-accent/30",
                       row.match.replied && "opacity-50",
                     )}
                   >
@@ -470,7 +470,7 @@ export function PostsContent() {
               })}
               {feed === undefined ? (
                 Array.from({ length: 8 }, (_, i) => (
-                  <li key={i} className="border border-border bg-card rounded-lg">
+                  <li key={i} className="rounded-lg bg-card">
                     <div className="flex items-center justify-between gap-3 bg-sidebar-accent/40 px-4 py-2.5">
                       <div className="h-3 w-1/3 bg-sidebar-accent" />
                       <div className="h-4 w-20 bg-sidebar-accent" />
