@@ -38,7 +38,7 @@ export default function Hero() {
 
   const captureForm = (
     <form
-      className="relative flex w-full max-w-xl flex-col gap-3 sm:flex-row"
+      className="relative mx-auto flex w-full max-w-sm flex-col gap-3"
       onSubmit={(e) => {
         e.preventDefault();
         const value = site.trim();
@@ -55,11 +55,11 @@ export default function Hero() {
         inputMode="url"
         autoComplete="url"
         placeholder="yoursaas.com"
-        className="h-12 flex-1 rounded-md border border-neutral-300 bg-neutral-100 px-5 text-sm text-neutral-900 shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] outline-none transition-colors placeholder:text-neutral-500 focus:border-brand focus:bg-white focus:ring-2 focus:ring-brand/20"
+        className="h-12 w-full rounded-md border border-neutral-300 bg-neutral-100 px-5 text-sm text-neutral-900 shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] outline-none transition-colors placeholder:text-neutral-500 focus:border-brand focus:bg-white focus:ring-2 focus:ring-brand/20"
       />
       <button
         type="submit"
-        className="h-12 shrink-0 rounded-md bg-brand px-8 text-sm font-medium text-white shadow-[inset_0_2px_0_rgba(255,255,255,0.25),inset_0_-2px_0_rgba(0,0,0,0.18)] transition-colors hover:bg-brand/90"
+        className="h-12 w-full rounded-md bg-brand px-8 text-sm font-medium text-white shadow-[inset_0_2px_0_rgba(255,255,255,0.25),inset_0_-2px_0_rgba(0,0,0,0.18)] transition-colors hover:bg-brand/90"
       >
         Find customers
       </button>
