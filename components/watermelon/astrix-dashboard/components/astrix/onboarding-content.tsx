@@ -129,7 +129,7 @@ export function OnboardingContent() {
           <button
             type="button"
             onClick={() => signOut(() => router.push("/login"))}
-            className="flex h-10 cursor-pointer items-center gap-2 rounded-md border border-border px-6 text-xs font-bold tracking-widest uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
+            className="flex h-10 cursor-pointer items-center gap-2 text-xs font-bold tracking-widest text-muted-foreground uppercase transition-colors hover:text-foreground"
           >
             <LogOut className="size-3.5" />
             Log out
