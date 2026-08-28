@@ -344,7 +344,7 @@ export function PostsContent() {
 
           {/* Post feed */}
           <section className="flex min-w-0 flex-1 flex-col">
-            <ul className="no-scrollbar flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto p-3">
+            <ul className="no-scrollbar flex min-h-0 flex-1 flex-col overflow-y-auto">
               {visibleRows.map((row) => {
                 const platform =
                   PLATFORM_BY_ID[row.match.platform ?? row.post.platform];
@@ -353,11 +353,11 @@ export function PostsContent() {
                   <li
                     key={row.match._id}
                     className={cn(
-                      "flex flex-col",
+                      "flex flex-col border-b border-border last:border-b-0 transition-colors hover:bg-sidebar-accent/20",
                       row.match.replied && "opacity-50",
                     )}
                   >
-                    <div className="relative flex flex-1 flex-col border border-border bg-card p-4 transition-colors hover:border-foreground/25">
+                    <div className="relative flex flex-1 flex-col p-4">
                       <a
                         href={row.post.url}
                         target="_blank"
@@ -457,13 +457,13 @@ export function PostsContent() {
                       </div>
                     </div>
 
-                    <div className="flex -mt-px text-[10px] font-bold tracking-wider uppercase">
+                    <div className="flex gap-2 px-4 pb-4 text-[10px] font-bold tracking-wider uppercase">
                       <button
                         type="button"
                         onClick={() => reply && copyReply(row.match._id, reply)}
                         disabled={!reply}
                         className={cn(
-                          "flex h-10 flex-1 cursor-pointer items-center justify-center gap-2 border border-border bg-card transition-colors hover:bg-sidebar-accent disabled:cursor-default disabled:opacity-40 disabled:hover:bg-card",
+                          "flex h-9 cursor-pointer items-center gap-2 rounded-md border border-border px-3 transition-colors hover:bg-sidebar-accent disabled:cursor-default disabled:opacity-40",
                           copiedId === row.match._id
                             ? "text-brand"
                             : "text-muted-foreground",
@@ -484,7 +484,7 @@ export function PostsContent() {
                         onClick={() => toggleReplied(row)}
                         aria-pressed={row.match.replied}
                         className={cn(
-                          "flex h-10 flex-1 cursor-pointer items-center justify-center gap-2 border border-l-0 bg-card transition-colors hover:bg-sidebar-accent",
+                          "flex h-9 cursor-pointer items-center gap-2 rounded-md border px-3 transition-colors hover:bg-sidebar-accent",
                           row.match.replied
                             ? "border-brand/50 text-brand"
                             : "border-border text-muted-foreground",
@@ -496,7 +496,7 @@ export function PostsContent() {
                       <button
                         type="button"
                         onClick={() => skip(row)}
-                        className="flex h-10 flex-1 cursor-pointer items-center justify-center gap-2 border border-l-0 border-border bg-card text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-red-400"
+                        className="ml-auto flex h-9 cursor-pointer items-center gap-2 rounded-md border border-border px-3 text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-red-400"
                       >
                         <XIcon className="size-3.5" /> Skip
                       </button>
@@ -506,12 +506,10 @@ export function PostsContent() {
               })}
               {feed === undefined ? (
                 Array.from({ length: 8 }, (_, i) => (
-                  <li key={i} className="border border-border bg-card">
-                    <div className="flex items-center justify-between gap-3 bg-sidebar-accent/40 px-4 py-2.5">
-                      <div className="h-3 w-1/3 bg-sidebar-accent" />
-                      <div className="h-4 w-20 bg-sidebar-accent" />
-                    </div>
+                  <li key={i} className="border-b border-border last:border-b-0">
                     <div className="p-4">
+                      <div className="h-3 w-1/3 bg-sidebar-accent" />
+                      <div className="mt-3" />
                       <div className="h-4 w-2/3 bg-sidebar-accent" />
                       <div className="mt-3 h-3 w-full bg-sidebar-accent/50" />
                       <div className="mt-1.5 h-3 w-4/5 bg-sidebar-accent/50" />
@@ -520,10 +518,9 @@ export function PostsContent() {
                         <div className="mt-1.5 h-3 w-3/5 bg-sidebar-accent/50" />
                       </div>
                     </div>
-                    <div className="flex justify-end gap-2 border-t border-border px-4 py-3">
-                      <div className="h-10 w-10 border border-border" />
-                      <div className="h-10 w-10 border border-border" />
-                      <div className="h-10 w-10 border border-border" />
+                    <div className="flex gap-2 px-4 pb-4">
+                      <div className="h-9 w-28 border border-border" />
+                      <div className="h-9 w-20 border border-border" />
                     </div>
                   </li>
                 ))
