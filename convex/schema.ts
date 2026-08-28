@@ -78,6 +78,10 @@ export default defineSchema({
     skipped: v.optional(v.boolean()),
     // Set the first time the user opens the post.
     seenAt: v.optional(v.number()),
+    // The written reply, generated on demand and kept so it is written once.
+    draft: v.optional(v.string()),
+    draftedAt: v.optional(v.number()),
+    draftModel: v.optional(v.string()),
     postedAt: v.number(),
   })
     .index("by_project", ["projectId"])

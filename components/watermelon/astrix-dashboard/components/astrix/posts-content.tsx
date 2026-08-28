@@ -5,12 +5,13 @@ import { useAction, useMutation, useQuery } from "convex/react";
 import {
   Check,
   Copy,
+  Sparkles,
   History as HistoryIcon,
   RefreshCw,
   X as XIcon,
 } from "lucide-react";
 import { api } from "@/convex/_generated/api";
-import type { Doc } from "@/convex/_generated/dataModel";
+import type { Doc, Id } from "@/convex/_generated/dataModel";
 import {
   Sheet,
   SheetContent,
@@ -77,28 +78,24 @@ export function IntentBadge({ match }: { match: Doc<"matches"> }) {
   );
 }
 
-// Placeholder drafts so the reply slot can be judged visually. The real ones
-// will come from the model.
-const MOCK_REPLIES = [
-  (product: string) =>
-    `Ran into this exact thing last year. We ended up building ${product} around it — happy to share how we handle the messy part if that helps.`,
-  (product: string) =>
-    `The tedious bit here is doing it by hand every day. That is basically why ${product} exists, though honestly even a rough script gets you most of the way.`,
-  (product: string) =>
-    `Same boat a few months ago. What worked for us was cutting the list down before reading any of it, which is the whole idea behind ${product}.`,
-  (product: string) =>
-    `Worth checking how much of this is repeat work — that was 80% of ours. We wrote ${product} for the repeat part and kept the judgement calls manual.`,
-];
-
-function mockReply(key: string, product: string): string {
-  let hash = 0;
-  for (let i = 0; i < key.length; i++) hash = (hash * 31 + key.charCodeAt(i)) | 0;
-  return MOCK_REPLIES[Math.abs(hash) % MOCK_REPLIES.length](product);
-}
-
 export function PostsContent() {
   const { project } = useProject();
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [draftingId, setDraftingId] = useState<string | null>(null);
+  const [draftError, setDraftError] = useState<string | null>(null);
+  const writeDraft = useAction(api.replyDrafter.draft);
+
+  // Written once and kept on the match, so opening a post again is free.
+  const requestDraft = (matchId: Id<"matches">) => {
+    setDraftingId(matchId);
+    setDraftError(null);
+    writeDraft({ matchId })
+      .then((result) => {
+        if ("error" in result) setDraftError(result.error);
+      })
+      .catch((err) => setDraftError(String(err)))
+      .finally(() => setDraftingId((id) => (id === matchId ? null : id)));
+  };
 
   const copyReply = (id: string, text: string) => {
     navigator.clipboard
@@ -364,10 +361,8 @@ export function PostsContent() {
               {visibleRows.map((row) => {
                 const platform =
                   PLATFORM_BY_ID[row.match.platform ?? row.post.platform];
-                const reply = mockReply(
-                  row.match._id,
-                  project?.name ?? "our tool",
-                );
+                const reply = row.match.draft;
+                const drafting = draftingId === row.match._id;
                 return (
                   <li
                     key={row.match._id}
@@ -436,19 +431,39 @@ export function PostsContent() {
                             Why: {row.match.intentReason}
                           </p>
                         ) : null}
-                        <p className="mt-4 border border-border bg-background p-3 text-sm text-foreground/75">
-                          {reply}
-                        </p>
+                        {reply ? (
+                          <p className="mt-4 border border-border bg-background p-3 text-sm text-foreground/75">
+                            {reply}
+                          </p>
+                        ) : (
+                          <div className="relative z-10 mt-4 border border-dashed border-border p-3">
+                            <button
+                              type="button"
+                              onClick={() => requestDraft(row.match._id)}
+                              disabled={drafting}
+                              className="flex h-8 cursor-pointer items-center gap-2 border border-border px-3 text-[10px] font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground disabled:cursor-default disabled:opacity-50"
+                            >
+                              <Sparkles className="size-3.5" />
+                              {drafting ? "Writing..." : "Write the reply"}
+                            </button>
+                            {draftError ? (
+                              <p className="mt-2 text-xs text-red-400">
+                                {draftError}
+                              </p>
+                            ) : null}
+                          </div>
+                        )}
                       </div>
                     </a>
 
                     <div className="relative z-10 flex items-center justify-end gap-2 border-t border-border px-4 py-3">
                       <button
                         type="button"
-                        onClick={() => copyReply(row.match._id, reply)}
+                        onClick={() => reply && copyReply(row.match._id, reply)}
+                        disabled={!reply}
                         aria-label="Copy reply"
                         className={cn(
-                          "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border transition-colors",
+                          "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border transition-colors disabled:cursor-default disabled:opacity-40",
                           copiedId === row.match._id
                             ? "border-primary text-primary"
                             : "border-border text-muted-foreground/40 hover:border-foreground/40 hover:text-foreground",
