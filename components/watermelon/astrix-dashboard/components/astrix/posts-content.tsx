@@ -291,7 +291,7 @@ export function PostsContent() {
             type="button"
             onClick={() => setShowReplies((v) => !v)}
             aria-pressed={showReplies}
-            className="flex h-9 cursor-pointer items-center gap-2 rounded-[7px] border border-border px-3 text-[10px] font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
+            className="flex h-9 cursor-pointer items-center gap-2 border border-border px-3 text-[10px] font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
           >
             {showReplies ? (
               <Eye className="size-3.5" />
