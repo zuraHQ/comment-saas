@@ -3,7 +3,6 @@
 import { FaHackerNews, FaRedditAlien } from "react-icons/fa6";
 import { ArrowUpRight, Check, Copy, Sparkles, X as XIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import "../../dashboard.css";
 
 type Sample = {
   title: string;

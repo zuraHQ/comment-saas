@@ -141,3 +141,302 @@
   --brand: #0EA5E9;
   --brand-foreground: #ffffff;
 }
+
+/* ----------------------------------------------------------------------
+   Dashboard theme. Scoped to .astrix-dashboard because the app runs two
+   palettes: a light marketing site and a dark product. Only the tokens
+   that differ from the ones above are redeclared here.
+   ---------------------------------------------------------------------- */
+
+.astrix-dashboard,
+body:has(.astrix-dashboard) [data-slot="sidebar"][data-mobile="true"],
+body:has(.astrix-dashboard) [data-slot="dropdown-menu-content"],
+body:has(.astrix-dashboard) [data-slot="sheet-content"],
+body:has(.astrix-dashboard) [data-slot="tooltip-content"] {
+  --background: #fafafa;
+  --foreground: #141414;
+  --card: #ffffff;
+  --card-foreground: #141414;
+  --popover: #ffffff;
+  --popover-foreground: #141414;
+  --primary: #4d7c0f;
+  --secondary: oklch(0 0 0 / 6%);
+  --secondary-foreground: #141414;
+  --muted: oklch(0 0 0 / 6%);
+  --muted-foreground: oklch(0 0 0 / 55%);
+  --accent: oklch(0 0 0 / 6%);
+  --accent-foreground: #141414;
+  --success: oklch(0.627 0.194 149.214);
+  --info: oklch(0.623 0.214 259.815);
+  --border: oklch(0 0 0 / 12%);
+  --input: oklch(0 0 0 / 12%);
+  --input-addon-foreground: oklch(0.55 0 0);
+  --chart-1: oklch(0.35 0 0);
+  --chart-2: oklch(0.5 0 0);
+  --chart-3: oklch(0.62 0 0);
+  --chart-4: oklch(0.74 0 0);
+  --chart-5: oklch(0.85 0 0);
+  --sidebar: #fafafa;
+  --sidebar-foreground: #141414;
+  --sidebar-primary: #4d7c0f;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: oklch(0 0 0 / 6%);
+  --sidebar-accent-foreground: #141414;
+  --sidebar-border: oklch(0 0 0 / 12%);
+  --shadow-sidebar-item: drop-shadow(1px 2px 12px rgb(158 158 158 / 15%));
+}
+
+.astrix-dashboard.dark,
+.dark .astrix-dashboard,
+.dark body:has(.astrix-dashboard) [data-slot="sidebar"][data-mobile="true"],
+.dark body:has(.astrix-dashboard) [data-slot="dropdown-menu-content"],
+.dark body:has(.astrix-dashboard) [data-slot="sheet-content"],
+.dark body:has(.astrix-dashboard) [data-slot="tooltip-content"] {
+  --radius: 0.625rem;
+  --background: #101010;
+  --card: oklch(0.185 0 0);
+  --popover: oklch(0.17 0 0);
+  --secondary: oklch(1 0 0 / 8%);
+  --muted: oklch(1 0 0 / 8%);
+  --muted-foreground: oklch(1 0 0 / 50%);
+  --accent: oklch(1 0 0 / 8%);
+  --success: oklch(0.627 0.194 149.214);
+  --info: oklch(0.707 0.165 254.624);
+  --input: oklch(1 0 0 / 10%);
+  --input-addon-foreground: oklch(0.777 0 0);
+  --sidebar: #101010;
+  --sidebar-primary: #A3FF12;
+  --sidebar-primary-foreground: #101010;
+  --sidebar-accent: oklch(1 0 0 / 6%);
+  --shadow-sidebar-item: drop-shadow(1px 2px 12px rgb(0 0 0 / 25%));
+}
+
+body:has(.astrix-dashboard) [data-slot="tooltip-content"] {
+  background-color: var(--foreground) !important;
+  color: var(--background) !important;
+}
+
+body:has(.astrix-dashboard) [data-slot="tooltip-content"] > svg {
+  background-color: var(--foreground) !important;
+  fill: var(--foreground) !important;
+}
+
+.astrix-dashboard.no-scrollbar,
+.astrix-dashboard .no-scrollbar,
+.astrix-dashboard.no-scrollbar *,
+.astrix-dashboard .no-scrollbar * {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.astrix-dashboard.no-scrollbar::-webkit-scrollbar,
+.astrix-dashboard .no-scrollbar::-webkit-scrollbar,
+.astrix-dashboard.no-scrollbar *::-webkit-scrollbar,
+.astrix-dashboard .no-scrollbar *::-webkit-scrollbar {
+  display: none;
+}
+
+.astrix-dashboard .custom-scrollbar-x,
+.astrix-dashboard [data-slot="table-container"] {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.astrix-dashboard.no-scrollbar .custom-scrollbar-x,
+.astrix-dashboard .no-scrollbar .custom-scrollbar-x,
+.astrix-dashboard.no-scrollbar [data-slot="table-container"],
+.astrix-dashboard .no-scrollbar [data-slot="table-container"] {
+  -ms-overflow-style: auto;
+  scrollbar-width: thin;
+}
+
+.astrix-dashboard .custom-scrollbar-x::-webkit-scrollbar,
+.astrix-dashboard.no-scrollbar .custom-scrollbar-x::-webkit-scrollbar,
+.astrix-dashboard .no-scrollbar .custom-scrollbar-x::-webkit-scrollbar,
+.astrix-dashboard [data-slot="table-container"]::-webkit-scrollbar,
+.astrix-dashboard.no-scrollbar [data-slot="table-container"]::-webkit-scrollbar,
+.astrix-dashboard
+  .no-scrollbar
+  [data-slot="table-container"]::-webkit-scrollbar {
+  display: block;
+  height: 0.375rem;
+}
+
+.astrix-dashboard .custom-scrollbar-x::-webkit-scrollbar-track,
+.astrix-dashboard [data-slot="table-container"]::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.astrix-dashboard .custom-scrollbar-x::-webkit-scrollbar-thumb,
+.astrix-dashboard [data-slot="table-container"]::-webkit-scrollbar-thumb {
+  background-color: var(--border);
+  border-radius: 9999px;
+}
+
+.astrix-dashboard .custom-scrollbar-x::-webkit-scrollbar-thumb:hover,
+.astrix-dashboard [data-slot="table-container"]::-webkit-scrollbar-thumb:hover {
+  background-color: var(--muted-foreground);
+}
+
+.astrix-dashboard [data-slot="table"] {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  text-align: left;
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.astrix-dashboard [data-slot="table-header"] [data-slot="table-row"] {
+  height: 3.125rem;
+  border-bottom-width: 0;
+  background-color: var(--secondary);
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.astrix-dashboard [data-slot="table-header"] [data-slot="table-row"]:hover {
+  background-color: var(--secondary);
+}
+
+.astrix-dashboard [data-slot="table-head"] {
+  height: 3.125rem;
+  padding-inline: 1rem;
+  padding-block: 0;
+  text-align: left;
+  vertical-align: middle;
+  font-weight: 500;
+  color: var(--foreground);
+  white-space: nowrap;
+}
+
+.astrix-dashboard
+  [data-slot="table-header"]
+  [data-slot="table-head"]:first-child {
+  border-top-left-radius: calc(var(--radius) * 1.4);
+  border-bottom-left-radius: calc(var(--radius) * 1.4);
+}
+
+.astrix-dashboard
+  [data-slot="table-header"]
+  [data-slot="table-head"]:last-child {
+  border-top-right-radius: calc(var(--radius) * 1.4);
+  border-bottom-right-radius: calc(var(--radius) * 1.4);
+}
+
+.astrix-dashboard [data-slot="table-body"] [data-slot="table-row"] {
+  height: 4.375rem;
+  border-bottom-width: 0;
+  font-size: 1rem;
+}
+
+.astrix-dashboard [data-slot="table-body"] [data-slot="table-row"]:hover {
+  background-color: transparent;
+}
+
+.astrix-dashboard [data-slot="table-cell"] {
+  padding-inline: 1rem;
+  padding-block: 0;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.astrix-dashboard .text-input-addon-foreground {
+  color: var(--input-addon-foreground);
+}
+
+.astrix-dashboard .text-success {
+  color: var(--success);
+}
+
+.astrix-dashboard .bg-success {
+  background-color: var(--success);
+}
+
+.astrix-dashboard .bg-success\/10 {
+  background-color: color-mix(in oklab, var(--success) 10%, transparent);
+}
+
+.astrix-dashboard .text-info {
+  color: var(--info);
+}
+
+.astrix-dashboard .bg-info\/10 {
+  background-color: color-mix(in oklab, var(--info) 10%, transparent);
+}
+
+.astrix-dashboard .text-xxs {
+  font-size: 0.625rem;
+}
+
+.astrix-dashboard .pipeline-dots {
+  background-image: radial-gradient(
+    circle,
+    color-mix(in oklab, var(--foreground) 3.5%, transparent) 0.15625rem,
+    transparent 0.15625rem
+  );
+  background-size: 0.79375rem 0.79375rem;
+}
+
+.astrix-dashboard[data-slot="dropdown-menu-content"]
+  [data-slot="dropdown-menu-item"],
+.astrix-dashboard[data-slot="dropdown-menu-content"]
+  [data-slot="dropdown-menu-sub-trigger"],
+.astrix-dashboard
+  [data-slot="dropdown-menu-content"]
+  [data-slot="dropdown-menu-item"],
+.astrix-dashboard
+  [data-slot="dropdown-menu-content"]
+  [data-slot="dropdown-menu-sub-trigger"] {
+  padding-inline: 0.625rem;
+  padding-block: 0.625rem;
+}
+
+.astrix-dashboard[data-slot="dropdown-menu-content"]
+  [data-slot="dropdown-menu-checkbox-item"],
+.astrix-dashboard[data-slot="dropdown-menu-content"]
+  [data-slot="dropdown-menu-radio-item"],
+.astrix-dashboard
+  [data-slot="dropdown-menu-content"]
+  [data-slot="dropdown-menu-checkbox-item"],
+.astrix-dashboard
+  [data-slot="dropdown-menu-content"]
+  [data-slot="dropdown-menu-radio-item"] {
+  padding-block: 0.625rem;
+  padding-left: 0.625rem;
+  padding-right: 2rem;
+}
+
+/* Slim vertical scrollbar for in-panel lists (feed, history sheet) */
+.astrix-dashboard .slim-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.astrix-dashboard .slim-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.astrix-dashboard .slim-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.astrix-dashboard .slim-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--border);
+}
+
+.astrix-dashboard .slim-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}
+
+/* Scrolls normally, just no visible scrollbar. */
+.astrix-dashboard .no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.astrix-dashboard .no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
