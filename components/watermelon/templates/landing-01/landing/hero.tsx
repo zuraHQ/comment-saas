@@ -64,11 +64,6 @@ export default function Hero() {
       below={
         <div className="mx-auto w-[min(72rem,calc(100vw-2rem))] rounded-[2rem] border-[10px] border-neutral-900/5">
           <div className="overflow-hidden rounded-3xl border border-neutral-200 bg-white text-left">
-            <div className="flex items-center gap-2 border-b border-neutral-200 bg-neutral-50 px-4 py-3">
-              <span className="h-2.5 w-2.5 rounded-full bg-[#FF5F57]" />
-              <span className="h-2.5 w-2.5 rounded-full bg-[#FEBC2E]" />
-              <span className="h-2.5 w-2.5 rounded-full bg-[#28C840]" />
-            </div>
             <div className="aspect-video w-full bg-neutral-50" />
           </div>
         </div>
