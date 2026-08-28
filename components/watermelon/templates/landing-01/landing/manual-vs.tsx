@@ -52,7 +52,7 @@ export default function ManualVs() {
           </div>
 
           <div className="border-primary/40 flex flex-col border bg-neutral-50 p-8">
-            <p className="text-primary rounded-md text-xs font-bold tracking-wider uppercase">
+            <p className="text-primary text-xs font-bold tracking-wider uppercase">
               With us
             </p>
 
@@ -76,12 +76,12 @@ export default function ManualVs() {
         <div className="mt-12 flex flex-col items-center gap-6 text-center">
           <p className="text-xl font-semibold text-neutral-900">
             That is{' '}
-            <span className="text-primary">60 – 120 hours a month</span> back,
+            <span className="text-brand">60 – 120 hours a month</span> back,
             for every product you run.
           </p>
           <a
             href="/login"
-            className="bg-primary text-primary-foreground hover:bg-primary/90 flex h-12 items-center px-8 rounded-md text-xs font-bold tracking-wider uppercase transition-colors active:scale-[0.97]"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 flex h-12 items-center rounded-sm px-8 text-xs font-bold tracking-wider uppercase transition-colors active:scale-[0.97]"
           >
             Get customers
           </a>

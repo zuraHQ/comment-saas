@@ -52,7 +52,7 @@ export function Faq1({
           <AccordionItem
             key={faq.id}
             value={faq.id}
-            className="bg-muted/50 rounded-none border border-dashed border-none px-6"
+            className="bg-muted/50 mb-2 rounded-sm border-none px-6"
           >
             <AccordionTrigger className="group flex items-center py-6 hover:no-underline [&_[data-slot=accordion-trigger-icon]]:!hidden">
               <span className="text-foreground pr-4 text-left text-base font-medium md:text-lg">
