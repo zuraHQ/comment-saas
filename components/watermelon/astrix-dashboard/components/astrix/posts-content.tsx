@@ -418,7 +418,7 @@ export function PostsContent() {
                       </div>
                     </a>
 
-                    <div className="relative z-10 flex items-center justify-end gap-2 border-t border-border px-4 py-3">
+                    <div className="relative z-10 flex items-center justify-end gap-2 px-4 pb-4">
                       <button
                         type="button"
                         onClick={() => reply && copyReply(row.match._id, reply)}
@@ -483,7 +483,7 @@ export function PostsContent() {
                         <div className="mt-1.5 h-3 w-3/5 bg-sidebar-accent/50" />
                       </div>
                     </div>
-                    <div className="flex justify-end gap-2 border-t border-border px-4 py-3">
+                    <div className="flex justify-end gap-2 px-4 pb-4">
                       <div className="h-10 w-10 border border-border" />
                       <div className="h-10 w-10 border border-border" />
                       <div className="h-10 w-10 border border-border" />
