@@ -236,7 +236,9 @@ function ProjectSettingsForm({ project }: { project: Project }) {
                     on ? "border-primary bg-primary" : "border-border",
                   )}
                 >
-                  {on ? <Check className="size-4 text-[#101010]" /> : null}
+                  {on ? (
+                    <Check className="text-primary-foreground size-4" />
+                  ) : null}
                 </span>
                 <span
                   className="flex h-6 w-6 shrink-0 items-center justify-center"

@@ -133,19 +133,19 @@ export function ProfileContent() {
                 aria-pressed={on}
                 aria-label={`Toggle ${integration.label}`}
                 className={cn(
-                  "flex h-8 w-14 shrink-0 cursor-pointer items-center border px-1 transition-colors",
-                  on
-                    ? "justify-end border-primary bg-primary/20"
-                    : "justify-start border-border",
+                  "relative h-6 w-11 shrink-0 cursor-pointer rounded-full transition-colors",
+                  on ? "bg-primary" : "bg-muted-foreground/30",
                 )}
               >
                 <span
                   className={cn(
-                    "flex h-5 w-5 items-center justify-center",
-                    on ? "bg-primary text-[#101010]" : "bg-muted-foreground/40",
+                    "absolute top-0.5 left-0.5 flex size-5 items-center justify-center rounded-full bg-background shadow-sm transition-transform",
+                    on && "translate-x-5",
                   )}
                 >
-                  {on ? <Check className="size-3.5" /> : null}
+                  {on ? (
+                    <Check className="text-primary size-3" strokeWidth={3} />
+                  ) : null}
                 </span>
               </button>
             </div>
