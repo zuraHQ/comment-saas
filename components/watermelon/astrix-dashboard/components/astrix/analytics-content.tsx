@@ -166,7 +166,7 @@ export function AnalyticsContent() {
                 </span>
                 <span className="relative h-4 flex-1 bg-white/5">
                   <span
-                    className="bg-primary absolute inset-y-0 left-0"
+                    className="bg-brand absolute inset-y-0 left-0"
                     style={{ width: `${(clicks / maxPlatformClicks) * 100}%` }}
                   />
                 </span>
@@ -229,7 +229,7 @@ export function AnalyticsContent() {
               className={cn(
                 "flex h-9 shrink-0 cursor-pointer items-center gap-2 border px-4 text-xs font-bold tracking-wider uppercase transition-colors disabled:cursor-default disabled:opacity-50",
                 copied
-                  ? "border-primary text-primary"
+                  ? "border-brand text-brand"
                   : "border-border text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
               )}
             >
