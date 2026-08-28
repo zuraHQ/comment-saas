@@ -42,6 +42,18 @@ export function ThemeProvider({
       : defaultTheme;
   });
 
+  // Paint the new theme before React re-renders the tree, and hold every
+  // transition for a frame so hundreds of elements do not animate at once.
+  const applyTheme = useCallback((next: Theme) => {
+    const root = document.documentElement;
+    root.classList.add("theme-switching");
+    root.classList.toggle("dark", next === "dark");
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => root.classList.remove("theme-switching"));
+    });
+  }, []);
+
+  // Keep the class in step on mount, when the stored value decided it.
   useEffect(() => {
     document.documentElement.classList.toggle("dark", theme === "dark");
   }, [theme]);
@@ -49,18 +61,20 @@ export function ThemeProvider({
   const setTheme = useCallback(
     (nextTheme: Theme) => {
       localStorage.setItem(storageKey, nextTheme);
+      applyTheme(nextTheme);
       setThemeState(nextTheme);
     },
-    [storageKey],
+    [applyTheme, storageKey],
   );
 
   const toggleTheme = useCallback(() => {
     setThemeState((currentTheme) => {
       const nextTheme = currentTheme === "dark" ? "light" : "dark";
       localStorage.setItem(storageKey, nextTheme);
+      applyTheme(nextTheme);
       return nextTheme;
     });
-  }, [storageKey]);
+  }, [applyTheme, storageKey]);
 
   const value = useMemo(
     () => ({ theme, setTheme, toggleTheme }),

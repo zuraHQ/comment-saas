@@ -141,3 +141,13 @@
   --brand: #0EA5E9;
   --brand-foreground: #ffffff;
 }
+
+/* Held for one frame while the theme flips, so the whole tree repaints at
+   once instead of animating every colour transition. */
+.theme-switching,
+.theme-switching *,
+.theme-switching *::before,
+.theme-switching *::after {
+  transition: none !important;
+  animation: none !important;
+}
