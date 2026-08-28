@@ -63,7 +63,7 @@ export default function Hero() {
       }
       action={captureForm}
       below={
-        <div className="relative mx-auto w-[min(72rem,calc(100vw-2rem))] overflow-hidden border border-neutral-200 bg-[#101010] text-left">
+        <div className="relative mx-auto w-[min(72rem,calc(100vw-2rem))] overflow-hidden rounded-xl border border-neutral-200 bg-[#101010] text-left">
           <div className="flex items-center gap-2 border-b border-white/10 bg-white/5 px-4 py-2.5">
             <span className="h-2 w-2 bg-[#FF5F57]" />
             <span className="h-2 w-2 bg-[#FEBC2E]" />
