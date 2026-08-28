@@ -28,7 +28,7 @@ export default function Hero() {
         onChange={(e) => setSite(e.target.value)}
         inputMode="url"
         autoComplete="url"
-        placeholder="yoursaas.com"
+        placeholder="website.com"
         className="h-12 w-full rounded-md border border-neutral-300 bg-neutral-100 px-5 text-sm text-neutral-900 shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] outline-none transition-colors placeholder:text-neutral-500 focus:border-brand focus:bg-white focus:ring-2 focus:ring-brand/20"
       />
       <button
