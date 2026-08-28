@@ -29,12 +29,13 @@ import { cn } from "@/lib/utils";
 
 // A feed running past, so the claim reads as volume rather than a list.
 const INCOMING = [
-  { text: "Looking for a simple invoicing tool", where: "r/freelance", Icon: FaRedditAlien, color: "#FF4500" },
-  { text: "Ask HN: how do you find your first users?", where: "Hacker News", Icon: FaHackerNews, color: "#FF6600" },
-  { text: "Month end took me two days again", where: "r/smallbusiness", Icon: FaRedditAlien, color: "#FF4500" },
-  { text: "What are you all using for outreach?", where: "Indie Hackers", Icon: FaRegLightbulb, color: "#0E2439" },
-  { text: "How do you handle late payers?", where: "LinkedIn", Icon: FaLinkedinIn, color: "#0A66C2" },
+  { text: "Looking for a simple invoicing tool", where: "r/freelance", Icon: FaRedditAlien, color: "#FF4500", intent: "High" },
+  { text: "Ask HN: how do you find your first users?", where: "Hacker News", Icon: FaHackerNews, color: "#FF6600", intent: "Medium" },
+  { text: "Month end took me two days again", where: "r/smallbusiness", Icon: FaRedditAlien, color: "#FF4500", intent: "High" },
+  { text: "What are you all using for outreach?", where: "Indie Hackers", Icon: FaRegLightbulb, color: "#0E2439", intent: "Medium" },
+  { text: "How do you handle late payers?", where: "LinkedIn", Icon: FaLinkedinIn, color: "#0A66C2", intent: "High" },
 ];
+
 
 
 function ScanVisual() {
@@ -71,6 +72,16 @@ function ScanVisual() {
               <span className="block truncate text-xs text-neutral-500">
                 {item.where}
               </span>
+            </span>
+            <span
+              className={cn(
+                "shrink-0 rounded px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase",
+                item.intent === "High"
+                  ? "bg-[#FF6600] text-white"
+                  : "bg-[#FFC53D] text-[#101010]",
+              )}
+            >
+              {item.intent}
             </span>
           </div>
         ))}
