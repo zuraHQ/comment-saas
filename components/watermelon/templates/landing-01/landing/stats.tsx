@@ -534,8 +534,8 @@ export default function Stats() {
             variant="big"
             className="text-foreground font-sans font-bold text-balance lg:text-[60px] lg:leading-[1.05]"
           >
-            We find the conversations <br />
-            that bring you customers
+            We read the internet <br />
+            so you don&apos;t have to
           </Heading>
         </div>
 
