@@ -442,7 +442,7 @@ export function PostsContent() {
                       ) : null}
                     </div>
 
-                    <div className="relative z-10 flex gap-2 px-4 pb-4 text-[10px] font-bold tracking-wider uppercase">
+                    <div className="pointer-events-none flex gap-2 px-4 pb-4 text-[10px] font-bold tracking-wider uppercase">
                       <button
                         type="button"
                         onClick={() =>
@@ -452,7 +452,7 @@ export function PostsContent() {
                         }
                         disabled={rewritingId === row.match._id}
                         className={cn(
-                          "flex h-9 cursor-pointer items-center gap-2 rounded-md border border-border px-3 transition-colors hover:bg-sidebar-accent disabled:cursor-default disabled:opacity-40",
+                          "pointer-events-auto relative z-10 flex h-9 cursor-pointer items-center gap-2 rounded-md border border-border px-3 transition-colors hover:bg-sidebar-accent disabled:cursor-default disabled:opacity-40",
                           copiedId === row.match._id
                             ? "text-brand"
                             : "text-muted-foreground",
@@ -482,7 +482,7 @@ export function PostsContent() {
                         onClick={() => toggleReplied(row)}
                         aria-pressed={row.match.replied}
                         className={cn(
-                          "flex h-9 cursor-pointer items-center gap-2 rounded-md border px-3 transition-colors hover:bg-sidebar-accent",
+                          "pointer-events-auto relative z-10 flex h-9 cursor-pointer items-center gap-2 rounded-md border px-3 transition-colors hover:bg-sidebar-accent",
                           row.match.replied
                             ? "border-brand/50 text-brand"
                             : "border-border text-muted-foreground",
@@ -494,7 +494,7 @@ export function PostsContent() {
                       <button
                         type="button"
                         onClick={() => skip(row)}
-                        className="ml-auto flex h-9 cursor-pointer items-center gap-2 rounded-md border border-border px-3 text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-red-400"
+                        className="pointer-events-auto relative z-10 ml-auto flex h-9 cursor-pointer items-center gap-2 rounded-md border border-border px-3 text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-red-400"
                       >
                         <XIcon className="size-3.5" /> Skip
                       </button>
