@@ -511,7 +511,7 @@ const STEPS = [
     title: "We read eight platforms end to end",
     body: "Whole communities, not keyword hits, so the post that never says your product name still reaches you.",
     marks: true,
-    visual: <PreviewRead />,
+    visual: <ScanVisual />,
   },
   {
     number: "02",
