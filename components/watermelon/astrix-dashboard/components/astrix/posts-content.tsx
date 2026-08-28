@@ -404,12 +404,6 @@ export function PostsContent() {
                             {row.post.snippet}
                           </p>
                         ) : null}
-                        {row.match.intentReason &&
-                        row.match.intentScore !== "low" ? (
-                          <p className="mt-2 line-clamp-1 text-xs text-muted-foreground">
-                            Why: {row.match.intentReason}
-                          </p>
-                        ) : null}
                         {reply ? (
                           <p className="mt-4 border border-border bg-background p-3 text-sm text-foreground/75">
                             {reply}
