@@ -116,7 +116,7 @@ export default function Footer() {
         <div className="relative flex flex-col items-center justify-between gap-6 overflow-hidden border-b border-neutral-200 py-6 md:flex-row">
           <div className="relative z-10 flex w-full flex-col items-center justify-between gap-6 px-2 md:flex-row">
             <div className="flex items-center gap-3">
-              <div className="bg-cyan-primary h-2 w-2 rounded-full" />
+              <div className="bg-brand h-2 w-2 rounded-full" />
               <span className="text-primary font-mono text-xs tracking-widest uppercase">
                 Built for developers
               </span>

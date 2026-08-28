@@ -8,10 +8,10 @@ import { FcGoogle } from "react-icons/fc";
 const clerkConfigured = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
 
 const INPUT =
-  "h-11 w-full rounded-md border border-neutral-300 bg-neutral-100 px-4 text-sm text-neutral-900 shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] outline-none transition-colors placeholder:text-neutral-500 focus:border-cyan-primary focus:bg-white focus:ring-2 focus:ring-cyan-primary/20";
+  "h-11 w-full rounded-md border border-neutral-300 bg-neutral-100 px-4 text-sm text-neutral-900 shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] outline-none transition-colors placeholder:text-neutral-500 focus:border-brand focus:bg-white focus:ring-2 focus:ring-brand/20";
 
 const PRIMARY =
-  "h-11 w-full cursor-pointer rounded-md bg-cyan-primary px-6 text-sm font-medium text-white shadow-[inset_0_2px_0_rgba(255,255,255,0.25),inset_0_-2px_0_rgba(0,0,0,0.18)] transition-colors hover:bg-cyan-primary/90 disabled:cursor-default disabled:opacity-60";
+  "h-11 w-full cursor-pointer rounded-md bg-brand px-6 text-sm font-medium text-white shadow-[inset_0_2px_0_rgba(255,255,255,0.25),inset_0_-2px_0_rgba(0,0,0,0.18)] transition-colors hover:bg-brand/90 disabled:cursor-default disabled:opacity-60";
 
 const LABEL = "text-xs font-medium text-neutral-600";
 
