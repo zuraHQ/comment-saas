@@ -469,7 +469,7 @@ export function PostsContent() {
                           "flex h-10 flex-1 cursor-pointer items-center justify-center gap-2 border-t transition-colors",
                           row.match.replied
                             ? "border-brand/50 text-brand"
-                            : "border-border text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
+                            : "border-border text-muted-foreground",
                         )}
                       >
                         <Check className="size-3.5" />
@@ -478,7 +478,7 @@ export function PostsContent() {
                       <button
                         type="button"
                         onClick={() => skip(row)}
-                        className="flex h-10 flex-1 cursor-pointer items-center justify-center gap-2 border-t border-l border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-red-400"
+                        className="flex h-10 flex-1 cursor-pointer items-center justify-center gap-2 border-t border-l border-border text-muted-foreground"
                       >
                         <XIcon className="size-3.5" /> Skip
                       </button>
