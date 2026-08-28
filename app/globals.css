@@ -195,7 +195,7 @@ body:has(.astrix-dashboard) [data-slot="tooltip-content"] {
   --radius: 0.625rem;
   --background: #101010;
   --foreground: oklch(0.985 0 0);
-  --card: oklch(0.185 0 0);
+  --card: oklch(0.245 0 0);
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.17 0 0);
   --popover-foreground: oklch(0.985 0 0);
