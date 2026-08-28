@@ -466,9 +466,9 @@ function ResultVisual() {
             <span className="w-24 shrink-0 text-xs text-neutral-600">
               {source.label}
             </span>
-            <span className="relative h-1.5 flex-1 bg-neutral-50">
+            <span className="relative h-1.5 flex-1 rounded-full bg-neutral-200">
               <motion.span
-                className="bg-cyan-primary absolute inset-y-0 left-0"
+                className="bg-primary absolute inset-y-0 left-0 rounded-full"
                 initial={{ width: 0 }}
                 whileInView={{ width: `${(source.clicks / max) * 100}%` }}
                 viewport={{ once: true, margin: "-80px" }}
