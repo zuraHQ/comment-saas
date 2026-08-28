@@ -67,7 +67,7 @@ export default function Navbar({
           {action ?? (
             <GetStartedDialog
               trigger={
-                <button className="flex h-10 cursor-pointer items-center rounded-md bg-neutral-900 px-6 text-xs font-bold tracking-widest text-white uppercase shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] transition-colors hover:bg-neutral-700">
+                <button className="flex h-10 cursor-pointer items-center rounded-md bg-sky-500 px-6 text-xs font-bold tracking-widest text-white uppercase shadow-[inset_0_2px_0_rgba(255,255,255,0.25),inset_0_-2px_0_rgba(0,0,0,0.18)] transition-colors hover:bg-sky-600">
                   Sign in
                 </button>
               }
@@ -106,7 +106,7 @@ export default function Navbar({
 
           <GetStartedDialog
             trigger={
-              <button className="mt-2 w-full cursor-pointer rounded-md bg-neutral-900 px-4 py-4 text-center text-xs font-bold tracking-widest text-white uppercase shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] transition-colors hover:bg-neutral-700">
+              <button className="mt-2 w-full cursor-pointer rounded-md bg-sky-500 px-4 py-4 text-center text-xs font-bold tracking-widest text-white uppercase shadow-[inset_0_2px_0_rgba(255,255,255,0.25),inset_0_-2px_0_rgba(0,0,0,0.18)] transition-colors hover:bg-sky-600">
                 Sign in
               </button>
             }
