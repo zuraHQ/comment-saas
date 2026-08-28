@@ -545,7 +545,7 @@ export default function Stats() {
             <div
               key={step.number}
               className={cn(
-                "grid items-stretch overflow-hidden rounded-md border border-neutral-200/70 bg-neutral-50 shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_-12px_rgba(0,0,0,0.10)] lg:grid-cols-2",
+                "grid items-stretch overflow-hidden rounded-md border border-neutral-200/70 bg-neutral-50 shadow-[0_1px_2px_rgba(0,0,0,0.03)] lg:grid-cols-2",
                 i % 2 === 1 && "lg:[&>*:first-child]:order-2",
               )}
             >
