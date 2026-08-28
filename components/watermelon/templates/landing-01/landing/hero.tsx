@@ -34,7 +34,7 @@ export default function Hero() {
       />
       <button
         type="submit"
-        className="h-12 shrink-0 rounded-md bg-[#FF6600] px-8 text-sm font-medium text-white transition-colors hover:bg-[#e65c00]"
+        className="h-12 shrink-0 rounded-md bg-sky-500 px-8 text-sm font-medium text-white shadow-[inset_0_2px_0_rgba(255,255,255,0.25),inset_0_-2px_0_rgba(0,0,0,0.18)] transition-colors hover:bg-sky-600"
       >
         Find customers
       </button>
@@ -43,6 +43,7 @@ export default function Hero() {
 
   return (
     <Hero32
+      showNav={false}
       logoText="commentsaas"
       navItems={["How it works", "Pricing", "FAQ"]}
       navHrefs={["#how-it-works", "#pricing", "#faq"]}

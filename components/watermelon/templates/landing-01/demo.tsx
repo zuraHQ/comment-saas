@@ -1,5 +1,6 @@
 "use client";
 
+import Navbar from './landing/navbar';
 import Hero from './landing/hero';
 // Real pipeline numbers, parked until they are worth showing off.
 // import LiveData from './landing/live-data';
@@ -18,6 +19,7 @@ export default function Landing01Demo() {
       className="min-h-screen overflow-x-hidden bg-white font-sans"
       style={{ "--font-geist-mono": "var(--font-inter)" } as React.CSSProperties}
     >
+      <Navbar />
       <Hero />
       <Stats />
       <ManualVs />

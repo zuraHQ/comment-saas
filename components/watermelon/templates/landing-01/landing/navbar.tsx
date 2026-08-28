@@ -35,7 +35,7 @@ export default function Navbar({
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b",
         scrolled 
-          ? "bg-background/80 backdrop-blur-md border-border/50 shadow-sm py-3" 
+          ? "bg-white/80 backdrop-blur-md border-neutral-200 py-3" 
           : "bg-transparent border-transparent py-5"
       )}
     >
@@ -54,7 +54,7 @@ export default function Navbar({
             <a
               key={link.href}
               href={link.href}
-              className="text-sm text-white/60 hover:text-white transition-colors"
+              className="text-sm text-neutral-600 hover:text-neutral-900 transition-colors"
             >
               {link.label}
             </a>
@@ -64,7 +64,7 @@ export default function Navbar({
         {/* Right side */}
         <div className="hidden md:flex items-center gap-4">
           {action ?? (
-            <Link href="/login" className="flex items-center h-10 border border-white/20 text-white font-mono font-bold tracking-widest uppercase px-6 text-xs hover:bg-white/10 transition-colors active:scale-[0.96]">
+            <Link href="/login" className="flex items-center h-10 rounded-md border border-neutral-300 text-neutral-900 font-bold tracking-widest uppercase px-6 text-xs hover:bg-neutral-100 transition-colors">
               Get Started
             </Link>
           )}
@@ -85,21 +85,21 @@ export default function Navbar({
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-background border-b border-border/50 shadow-lg p-4 flex flex-col gap-4 animate-fade-in-up">
+        <div className="md:hidden absolute top-full left-0 right-0 bg-white border-b border-neutral-200 shadow-lg p-4 flex flex-col gap-4 animate-fade-in-up">
           <nav className="flex flex-col gap-1">
             {NAV_LINKS.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-2 py-3 text-sm text-white/70 hover:text-white transition-colors"
+                className="px-2 py-3 text-sm text-neutral-600 hover:text-neutral-900 transition-colors"
               >
                 {link.label}
               </a>
             ))}
           </nav>
 
-          <Link href="/login" className="w-full text-center border border-white/20 text-white font-mono font-bold tracking-widest uppercase px-4 py-4 text-xs hover:bg-white/10 transition-colors active:scale-[0.96] mt-2">
+          <Link href="/login" className="w-full text-center rounded-md border border-neutral-300 text-neutral-900 font-bold tracking-widest uppercase px-4 py-4 text-xs hover:bg-neutral-100 transition-colors mt-2">
             Get Started
           </Link>
         </div>

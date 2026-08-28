@@ -11,6 +11,7 @@ export interface Hero32Props {
   primaryActionText?: string;
   loginHref?: string;
   below?: React.ReactNode;
+  showNav?: boolean;
   navHrefs?: string[];
   action?: React.ReactNode;
 }
@@ -35,6 +36,7 @@ export default function Hero32({
   primaryActionText = "Book a demo",
   loginHref = "#",
   below,
+  showNav = true,
   navHrefs,
   action,
 }: Hero32Props) {
@@ -97,36 +99,38 @@ export default function Hero32({
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-white font-sans antialiased">
       <div className="relative z-10 flex min-h-screen flex-col pt-6">
-        <div className="fixed inset-x-0 top-4 z-50 px-4">
-          {/* Nav — single spring drop */}
-          <motion.nav
-            variants={navVariants}
-            initial="hidden"
-            animate="visible"
-            className="mx-auto flex w-fit items-center gap-8 rounded-full border border-neutral-200 bg-white/90 px-2 py-2 backdrop-blur-md"
-          >
-            <div className="pl-4 text-base font-bold tracking-tight text-neutral-900 2xl:text-lg">
-              {logoText}
-            </div>
-            <div className="hidden items-center gap-6 px-4 md:flex">
-              {navItems.map((item, i) => (
-                <a
-                  key={item}
-                  href={navHrefs?.[i] ?? "#"}
-                  className="text-xs font-medium text-neutral-500 transition-colors hover:text-neutral-900 2xl:text-lg"
-                >
-                  {item}
-                </a>
-              ))}
-            </div>
-            <a
-              href={loginHref}
-              className="rounded-full border border-neutral-300 px-6 py-2 text-xs font-medium text-neutral-900 transition-colors hover:bg-neutral-100 2xl:text-lg"
+        {showNav ? (
+          <div className="fixed inset-x-0 top-4 z-50 px-4">
+            {/* Nav — single spring drop */}
+            <motion.nav
+              variants={navVariants}
+              initial="hidden"
+              animate="visible"
+              className="mx-auto flex w-fit items-center gap-8 rounded-full border border-neutral-200 bg-white/90 px-2 py-2 backdrop-blur-md"
             >
-              {loginText}
-            </a>
-          </motion.nav>
-        </div>
+              <div className="pl-4 text-base font-bold tracking-tight text-neutral-900 2xl:text-lg">
+                {logoText}
+              </div>
+              <div className="hidden items-center gap-6 px-4 md:flex">
+                {navItems.map((item, i) => (
+                  <a
+                    key={item}
+                    href={navHrefs?.[i] ?? "#"}
+                    className="text-xs font-medium text-neutral-500 transition-colors hover:text-neutral-900 2xl:text-lg"
+                  >
+                    {item}
+                  </a>
+                ))}
+              </div>
+              <a
+                href={loginHref}
+                className="rounded-full border border-neutral-300 px-6 py-2 text-xs font-medium text-neutral-900 transition-colors hover:bg-neutral-100 2xl:text-lg"
+              >
+                {loginText}
+              </a>
+            </motion.nav>
+          </div>
+        ) : null}
 
         {/* Hero Main Content — each element independently animated */}
         <div className="flex flex-1 items-start justify-center px-6 pt-20 pb-24">
