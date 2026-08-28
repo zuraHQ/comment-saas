@@ -54,11 +54,11 @@ function ScanVisual() {
           <motion.span
             key={item.text}
             className={cn(
-              "bg-white/80 flex items-center gap-2 rounded-full border border-neutral-200 px-3 py-1.5 text-xs text-neutral-600 backdrop-blur-sm",
+              "flex items-center gap-2 border border-neutral-200 bg-white px-3 py-2 text-xs font-medium text-neutral-900 shadow-sm",
               i % 2 === 0 ? "mr-auto" : "ml-auto",
             )}
-            initial={{ opacity: 0.15 }}
-            animate={{ opacity: [0.15, 1, 0.15] }}
+            initial={{ opacity: 0.55 }}
+            animate={{ opacity: [0.55, 1, 0.55] }}
             transition={{
               duration: 4,
               times: [0, 0.25, 1],
