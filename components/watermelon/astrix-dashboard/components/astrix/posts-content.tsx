@@ -453,7 +453,7 @@ export function PostsContent() {
                         onClick={() => reply && copyReply(row.match._id, reply)}
                         disabled={!reply}
                         className={cn(
-                          "flex h-10 flex-1 cursor-pointer items-center justify-center gap-2 border border-border transition-colors disabled:cursor-default disabled:opacity-40",
+                          "flex h-10 flex-1 cursor-pointer items-center justify-center gap-2 border border-border bg-card transition-colors hover:bg-sidebar-accent disabled:cursor-default disabled:opacity-40 disabled:hover:bg-card",
                           copiedId === row.match._id
                             ? "text-brand"
                             : "text-muted-foreground",
@@ -474,7 +474,7 @@ export function PostsContent() {
                         onClick={() => toggleReplied(row)}
                         aria-pressed={row.match.replied}
                         className={cn(
-                          "flex h-10 flex-1 cursor-pointer items-center justify-center gap-2 border border-l-0 transition-colors",
+                          "flex h-10 flex-1 cursor-pointer items-center justify-center gap-2 border border-l-0 bg-card transition-colors hover:bg-sidebar-accent",
                           row.match.replied
                             ? "border-brand/50 text-brand"
                             : "border-border text-muted-foreground",
@@ -486,7 +486,7 @@ export function PostsContent() {
                       <button
                         type="button"
                         onClick={() => skip(row)}
-                        className="flex h-10 flex-1 cursor-pointer items-center justify-center gap-2 border border-l-0 border-border text-muted-foreground"
+                        className="flex h-10 flex-1 cursor-pointer items-center justify-center gap-2 border border-l-0 border-border bg-card text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-red-400"
                       >
                         <XIcon className="size-3.5" /> Skip
                       </button>
