@@ -268,7 +268,7 @@ export function PostsContent() {
             <SheetTrigger
               type="button"
               aria-label={`History, ${repliedRows.length} replied`}
-              className="relative ml-auto flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground"
+              className="relative flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground"
             >
               <HistoryIcon className="size-4" />
               {repliedRows.length ? (
