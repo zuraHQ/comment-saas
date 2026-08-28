@@ -1,12 +1,13 @@
 "use client";
 
-import { useQuery } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 
 import { api } from "@/convex/_generated/api";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export function ProfileContent() {
   const me = useQuery(api.users.me);
+  const restartOnboarding = useMutation(api.users.restartOnboarding);
 
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 p-6">
@@ -56,6 +57,31 @@ export function ProfileContent() {
         </div>
       </section>
 
+      {process.env.NODE_ENV === "development" ? (
+        <section className="flex flex-col gap-4 border border-dashed border-border p-5">
+          <div>
+            <h2 className="text-xs font-bold tracking-wider text-muted-foreground uppercase">
+              Dev only
+            </h2>
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              // The onboarding gate reads a localStorage hint first, so it has
+              // to be cleared too or the dashboard renders anyway.
+              try {
+                localStorage.removeItem("onboarded");
+              } catch {}
+              restartOnboarding({})
+                .then(() => window.location.assign("/dashboard"))
+                .catch(console.error);
+            }}
+            className="h-9 w-fit cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
+          >
+            Reset to onboarding
+          </button>
+        </section>
+      ) : null}
     </div>
   );
 }

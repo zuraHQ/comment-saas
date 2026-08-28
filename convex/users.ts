@@ -67,6 +67,21 @@ export const completeOnboarding = mutation({
   },
 });
 
+// Send yourself back through onboarding. Dev only in the UI, but harmless:
+// it clears the flag, it does not touch projects.
+export const restartOnboarding = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) return;
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_clerk_id", (q) => q.eq("clerkId", identity.subject))
+      .unique();
+    if (user) await ctx.db.patch(user._id, { onboardedAt: undefined });
+  },
+});
+
 // Testing helper, CLI only:
 //   npx convex run users:resetOnboarding '{}' --prod
 //   npx convex run users:resetOnboarding '{"wipeProjects":true}' --prod
