@@ -289,7 +289,7 @@ export function OnboardingContent() {
                       type="button"
                       onClick={() => togglePlatform(platform.id)}
                       className={cn(
-                        "flex cursor-pointer items-center gap-3 border p-3 text-left text-sm transition-colors",
+                        "flex cursor-pointer items-center gap-3 rounded-md border p-3 text-left text-sm transition-colors",
                         on
                           ? "border-primary/40 bg-sidebar-accent/40"
                           : "border-border hover:bg-sidebar-accent/60",
@@ -297,7 +297,7 @@ export function OnboardingContent() {
                     >
                       <span
                         className={cn(
-                          "flex size-6 shrink-0 items-center justify-center border",
+                          "flex size-6 shrink-0 items-center justify-center rounded border",
                           on ? "border-brand bg-brand" : "border-border",
                         )}
                       >
