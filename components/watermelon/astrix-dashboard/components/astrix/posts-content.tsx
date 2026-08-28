@@ -330,7 +330,7 @@ export function PostsContent() {
                   <li
                     key={row.match._id}
                     className={cn(
-                      "relative flex flex-col rounded-[10px] bg-card p-1 transition-colors hover:bg-sidebar-accent/40",
+                      "group relative flex flex-col rounded-[10px] bg-card p-1",
                       row.match.replied && "opacity-50",
                     )}
                   >
@@ -345,7 +345,7 @@ export function PostsContent() {
                           );
                         }
                       }}
-                      className="flex flex-1 cursor-pointer flex-col rounded-[7px] bg-background after:absolute after:inset-0 after:content-['']"
+                      className="flex flex-1 cursor-pointer flex-col rounded-[7px] bg-background transition-colors group-hover:bg-sidebar-accent/25 after:absolute after:inset-0 after:content-['']"
                     >
                       <header className="flex items-center justify-between gap-3 px-3 pt-3">
                         <div className="flex min-w-0 items-center gap-2">
