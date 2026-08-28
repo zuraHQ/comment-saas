@@ -47,7 +47,7 @@ function NavItem({ item }: { item: NavigationItem }) {
             if (isMobile) setOpenMobile(false);
           }}
           className={cn(
-            "group/nav flex h-12 w-full items-center gap-2.5 overflow-hidden rounded-md px-3 py-2.5 text-muted-foreground hover:text-foreground",
+            "group/nav flex h-12 w-full items-center gap-2.5 overflow-hidden rounded-[10px] px-3 py-2.5 text-muted-foreground hover:text-foreground",
             "transition-[width,padding] ease-linear",
             "aria-[current=page]:bg-sidebar-accent aria-[current=page]:text-primary aria-[current=page]:[filter:var(--shadow-sidebar-item)]",
           )}
@@ -123,7 +123,7 @@ export function DashboardSidebar() {
                 target="_blank"
                 rel="noreferrer"
                 className={cn(
-                  "flex h-12 w-full items-center gap-2.5 overflow-hidden rounded-md px-3 py-2.5 text-muted-foreground hover:text-foreground",
+                  "flex h-12 w-full items-center gap-2.5 overflow-hidden rounded-[10px] px-3 py-2.5 text-muted-foreground hover:text-foreground",
                   "transition-[width,padding] ease-linear",
                 )}
               >
