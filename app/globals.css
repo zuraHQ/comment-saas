@@ -194,22 +194,41 @@ body:has(.astrix-dashboard) [data-slot="tooltip-content"] {
 .dark body:has(.astrix-dashboard) [data-slot="tooltip-content"] {
   --radius: 0.625rem;
   --background: #101010;
+  --foreground: oklch(0.985 0 0);
   --card: oklch(0.185 0 0);
+  --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.17 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: #38BDF8;
+  --primary-foreground: #0b1220;
   --secondary: oklch(1 0 0 / 8%);
+  --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(1 0 0 / 8%);
   --muted-foreground: oklch(1 0 0 / 50%);
   --accent: oklch(1 0 0 / 8%);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
   --success: oklch(0.627 0.194 149.214);
   --info: oklch(0.707 0.165 254.624);
+  --border: oklch(1 0 0 / 14%);
   --input: oklch(1 0 0 / 10%);
   --input-addon-foreground: oklch(0.777 0 0);
-  --border: oklch(1 0 0 / 14%);
-  --sidebar-border: oklch(1 0 0 / 14%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
   --sidebar: #101010;
+  --sidebar-foreground: oklch(0.985 0 0);
   --sidebar-primary: #38BDF8;
   --sidebar-primary-foreground: #0b1220;
   --sidebar-accent: oklch(1 0 0 / 6%);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 14%);
+  --sidebar-ring: oklch(0.556 0 0);
+  --brand: #38BDF8;
+  --brand-foreground: #0b1220;
   --shadow-sidebar-item: drop-shadow(1px 2px 12px rgb(0 0 0 / 25%));
 }
 
