@@ -14,7 +14,7 @@ export default function Cta() {
   return (
     <section className="relative w-full pb-24">
       <Container className="relative z-10 mx-auto">
-        <div className="mx-auto flex max-w-5xl flex-col items-start justify-between gap-8 border border-neutral-200 bg-neutral-50 p-10 md:flex-row md:items-center md:p-14">
+        <div className="mx-auto flex max-w-5xl flex-col items-start justify-between gap-8 md:flex-row md:items-center">
           <div className="max-w-xl">
             <Heading
               as="h2"
