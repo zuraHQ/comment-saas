@@ -481,16 +481,6 @@ function ResultVisual() {
   );
 }
 
-const PLATFORM_MARKS = [
-  { label: "Reddit", Icon: FaRedditAlien, bg: "#FF4500", fg: "#ffffff" },
-  { label: "X/Twitter", Icon: FaXTwitter, bg: "#ffffff", fg: "#000000" },
-  { label: "Hacker News", Icon: FaHackerNews, bg: "#FF6600", fg: "#ffffff" },
-  { label: "LinkedIn", Icon: FaLinkedinIn, bg: "#0A66C2", fg: "#ffffff" },
-  { label: "Indie Hackers", Icon: FaRegLightbulb, bg: "#0E2439", fg: "#ffffff" },
-  { label: "YouTube", Icon: FaYoutube, bg: "#FF0000", fg: "#ffffff" },
-  { label: "GitHub", Icon: FaGithub, bg: "#ffffff", fg: "#000000" },
-  { label: "Bluesky", Icon: FaBluesky, bg: "#0085FF", fg: "#ffffff" },
-];
 
 /* ---------------------------------------------------------------- rows */
 const STEPS = [
@@ -498,7 +488,6 @@ const STEPS = [
     number: "01",
     title: "We read eight platforms end to end",
     body: "We read every new post in the communities your customers sit in.",
-    marks: true,
     visual: <ScanVisual />,
   },
   {
@@ -515,7 +504,7 @@ const STEPS = [
   },
   {
     number: "04",
-    title: "You get customers",
+    title: "You see which conversations paid off",
     body: "Every reply carries a tracked link, so clicks come back tagged with the platform they came from.",
     visual: <PreviewResults />,
   },
@@ -556,23 +545,6 @@ export default function Stats() {
                 <p className="mt-4 max-w-md text-lg leading-relaxed text-neutral-600">
                   {step.body}
                 </p>
-                {step.marks ? (
-                  <div className="mt-5 flex flex-wrap gap-2">
-                    {PLATFORM_MARKS.map((mark) => (
-                      <span
-                        key={mark.label}
-                        title={mark.label}
-                        className="flex h-8 w-8 items-center justify-center rounded"
-                        style={{ backgroundColor: mark.bg }}
-                      >
-                        <mark.Icon
-                          className="h-4 w-4"
-                          style={{ color: mark.fg }}
-                        />
-                      </span>
-                    ))}
-                  </div>
-                ) : null}
               </div>
               <div className="flex items-center justify-center p-8 lg:p-10">
                 {step.visual}
