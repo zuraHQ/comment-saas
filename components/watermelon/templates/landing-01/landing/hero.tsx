@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Hero32 from "@/components/ui/hero-32";
-import HeroDemo from "./hero-demo";
 
 export default function Hero() {
   const router = useRouter();
@@ -63,14 +62,14 @@ export default function Hero() {
       }
       action={captureForm}
       below={
-        <div className="relative mx-auto w-[min(72rem,calc(100vw-2rem))] overflow-hidden rounded-xl border border-neutral-200 bg-[#101010] text-left">
-          <div className="flex items-center gap-2 border-b border-white/10 bg-white/5 px-4 py-2.5">
-            <span className="h-2 w-2 bg-[#FF5F57]" />
-            <span className="h-2 w-2 bg-[#FEBC2E]" />
-            <span className="h-2 w-2 bg-[#28C840]" />
-          </div>
-          <div className="aspect-video w-full">
-            <HeroDemo />
+        <div className="mx-auto w-[min(72rem,calc(100vw-2rem))] rounded-[2rem] border-[10px] border-neutral-900/5">
+          <div className="overflow-hidden rounded-3xl border border-neutral-200 bg-white text-left">
+            <div className="flex items-center gap-2 border-b border-neutral-200 bg-neutral-50 px-4 py-3">
+              <span className="h-2.5 w-2.5 rounded-full bg-[#FF5F57]" />
+              <span className="h-2.5 w-2.5 rounded-full bg-[#FEBC2E]" />
+              <span className="h-2.5 w-2.5 rounded-full bg-[#28C840]" />
+            </div>
+            <div className="aspect-video w-full bg-neutral-50" />
           </div>
         </div>
       }

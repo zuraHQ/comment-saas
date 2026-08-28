@@ -1,4 +1,3 @@
-import { motion, type Variants } from "motion/react";
 import { Play } from "lucide-react";
 import React from "react";
 
@@ -40,72 +39,13 @@ export default function Hero32({
   navHrefs,
   action,
 }: Hero32Props) {
-  // Nav: single element, drops in from top with blur
-  const navVariants: Variants = {
-    hidden: { opacity: 0, y: -24, filter: "blur(8px)", scale: 0.97 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      filter: "blur(0px)",
-      scale: 1,
-      transition: {
-        type: "spring",
-        damping: 24,
-        stiffness: 120,
-        duration: 0.6,
-      },
-    },
-  };
-
-  // Title: rises up with a heavier mass — slow, majestic settling
-  const titleVariants: Variants = {
-    hidden: { opacity: 0, y: 36, filter: "blur(10px)" },
-    visible: {
-      opacity: 1,
-      y: 0,
-      filter: "blur(0px)",
-      transition: {
-        type: "spring",
-        damping: 28,
-        stiffness: 80,
-        mass: 1.4,
-        delay: 0.35,
-      },
-    },
-  };
-
-  // Subtitle: lighter, quicker
-  const subtitleVariants: Variants = {
-    hidden: { opacity: 0, y: 18, filter: "blur(4px)" },
-    visible: {
-      opacity: 1,
-      y: 0,
-      filter: "blur(0px)",
-      transition: { type: "spring", damping: 22, stiffness: 110, delay: 0.65 },
-    },
-  };
-
-  // CTA group: scale up from slightly small + fade
-  const ctaVariants: Variants = {
-    hidden: { opacity: 0, scale: 0.92, y: 10 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      y: 0,
-      transition: { type: "spring", damping: 20, stiffness: 140, delay: 0.85 },
-    },
-  };
-
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-white font-sans antialiased">
       <div className="relative z-10 flex min-h-screen flex-col pt-6">
         {showNav ? (
           <div className="fixed inset-x-0 top-4 z-50 px-4">
             {/* Nav — single spring drop */}
-            <motion.nav
-              variants={navVariants}
-              initial="hidden"
-              animate="visible"
+            <nav
               className="mx-auto flex w-fit items-center gap-8 rounded-full border border-neutral-200 bg-white/90 px-2 py-2 backdrop-blur-md"
             >
               <div className="pl-4 text-base font-bold tracking-tight text-neutral-900 2xl:text-lg">
@@ -128,7 +68,7 @@ export default function Hero32({
               >
                 {loginText}
               </a>
-            </motion.nav>
+            </nav>
           </div>
         ) : null}
 
@@ -136,32 +76,23 @@ export default function Hero32({
         <div className="flex flex-1 items-start justify-center px-6 pt-40 pb-24">
           <div className="flex w-full max-w-4xl flex-col items-center text-center 2xl:max-w-6xl">
             {/* Title: majestic slow rise */}
-            <motion.h1
-              variants={titleVariants}
-              initial="hidden"
-              animate="visible"
+            <h1
               className="text-4xl font-semibold tracking-tight text-neutral-900 md:text-5xl lg:text-[64px] lg:leading-[0.95]"
               style={{ textWrap: "balance" }}
             >
               {title}
-            </motion.h1>
+            </h1>
 
             {/* Subtitle: lighter, quicker */}
-            <motion.p
-              variants={subtitleVariants}
-              initial="hidden"
-              animate="visible"
+            <p
               className="mt-6 max-w-2xl text-base leading-relaxed font-normal text-neutral-600 md:text-lg"
               style={{ textWrap: "pretty" }}
             >
               {subtitle}
-            </motion.p>
+            </p>
 
             {/* CTA: scales into place */}
-            <motion.div
-              variants={ctaVariants}
-              initial="hidden"
-              animate="visible"
+            <div
               className="mt-8 flex w-full items-center justify-center gap-4"
             >
               {action ?? (
@@ -174,17 +105,14 @@ export default function Hero32({
                   </button>
                 </>
               )}
-            </motion.div>
+            </div>
 
             {below ? (
-              <motion.div
-                variants={ctaVariants}
-                initial="hidden"
-                animate="visible"
+              <div
                 className="mt-16 w-full"
               >
                 {below}
-              </motion.div>
+              </div>
             ) : null}
           </div>
         </div>
