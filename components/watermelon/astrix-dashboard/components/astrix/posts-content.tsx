@@ -5,6 +5,7 @@ import { useAction, useMutation, useQuery } from "convex/react";
 import {
   ArrowUpRight,
   Check,
+  Sparkles,
   Eye,
   EyeOff,
   Copy,
@@ -431,46 +432,13 @@ export function PostsContent() {
                         ) : null}
                       </a>
 
-                      {/* The reply, written for every scored post */}
-                      {showReplies ? (
+                      {/* The draft, once there is one */}
+                      {reply && showReplies ? (
                         <div className="mt-3 flex flex-1 gap-3">
                           <span className="mt-1 w-px shrink-0 bg-border" />
-                          <div className="flex min-w-0 flex-1 flex-col">
-                            <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
-                              You, replying
-                            </p>
-                            {reply ? (
-                              <p className="mt-1.5 text-sm leading-relaxed text-foreground/85">
-                                {reply}
-                              </p>
-                            ) : (
-                              <p className="mt-1.5 text-sm text-muted-foreground/60">
-                                Not written yet.
-                              </p>
-                            )}
-
-                            <div className="relative z-10 mt-3 flex items-center gap-3 text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
-                              <button
-                                type="button"
-                                onClick={() => rewrite(row.match._id)}
-                                disabled={rewritingId === row.match._id}
-                                className="flex cursor-pointer items-center gap-1.5 transition-colors hover:text-foreground disabled:cursor-default disabled:opacity-50"
-                              >
-                                <RotateCw
-                                  className={cn(
-                                    "size-3",
-                                    rewritingId === row.match._id &&
-                                      "animate-spin",
-                                  )}
-                                />
-                                {rewritingId === row.match._id
-                                  ? "Writing"
-                                  : reply
-                                    ? "Rewrite"
-                                    : "Write reply"}
-                              </button>
-                            </div>
-                          </div>
+                          <p className="min-w-0 flex-1 text-sm leading-relaxed text-foreground/85">
+                            {reply}
+                          </p>
                         </div>
                       ) : null}
                     </div>
@@ -478,8 +446,12 @@ export function PostsContent() {
                     <div className="flex gap-2 px-4 pb-4 text-[10px] font-bold tracking-wider uppercase">
                       <button
                         type="button"
-                        onClick={() => reply && copyReply(row.match._id, reply)}
-                        disabled={!reply}
+                        onClick={() =>
+                          reply
+                            ? copyReply(row.match._id, reply)
+                            : rewrite(row.match._id)
+                        }
+                        disabled={rewritingId === row.match._id}
                         className={cn(
                           "flex h-9 cursor-pointer items-center gap-2 rounded-md border border-border px-3 transition-colors hover:bg-sidebar-accent disabled:cursor-default disabled:opacity-40",
                           copiedId === row.match._id
@@ -487,13 +459,25 @@ export function PostsContent() {
                             : "text-muted-foreground",
                         )}
                       >
-                        {copiedId === row.match._id ? (
+                        {rewritingId === row.match._id ? (
                           <>
-                            <Check className="size-3.5" /> Copied
+                            <RotateCw className="size-3.5 animate-spin" />
+                            Writing
+                          </>
+                        ) : copiedId === row.match._id ? (
+                          <>
+                            <Check className="size-3.5" />
+                            Copied
+                          </>
+                        ) : reply ? (
+                          <>
+                            <Copy className="size-3.5" />
+                            Copy reply
                           </>
                         ) : (
                           <>
-                            <Copy className="size-3.5" /> Copy reply
+                            <Sparkles className="size-3.5" />
+                            Write reply
                           </>
                         )}
                       </button>
