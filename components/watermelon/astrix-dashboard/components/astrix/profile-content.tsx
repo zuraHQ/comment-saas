@@ -133,13 +133,13 @@ export function ProfileContent() {
                 aria-pressed={on}
                 aria-label={`Toggle ${integration.label}`}
                 className={cn(
-                  "relative h-6 w-11 shrink-0 cursor-pointer rounded-full transition-colors",
+                  "relative h-6 w-11 shrink-0 cursor-pointer transition-colors",
                   on ? "bg-primary" : "bg-muted-foreground/30",
                 )}
               >
                 <span
                   className={cn(
-                    "absolute top-0.5 left-0.5 flex size-5 items-center justify-center rounded-full bg-background shadow-sm transition-transform",
+                    "absolute top-0.5 left-0.5 flex size-5 items-center justify-center bg-background transition-transform",
                     on && "translate-x-5",
                   )}
                 >
