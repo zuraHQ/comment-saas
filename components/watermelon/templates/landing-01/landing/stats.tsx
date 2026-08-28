@@ -509,26 +509,26 @@ const STEPS = [
   {
     number: "01",
     title: "We read eight platforms end to end",
-    body: "Whole communities and comment sections read end to end, not just keyword hits, so nothing relevant slips past.",
+    body: "Whole communities, not keyword hits, so the post that never says your product name still reaches you.",
     marks: true,
     visual: <PreviewRead />,
   },
   {
     number: "02",
     title: "We rank them",
-    body: "Every post is scored against what your product actually does. High intent rises to the top, the rest never reaches your feed, and each match tells you why it matched.",
+    body: "Every post is scored against what your product actually does. The rest never reaches your feed.",
     visual: <PreviewRank />,
   },
   {
     number: "03",
-    title: "You join the conversation",
-    body: "Open the post and answer like a person, not an ad. Every reply carries a tracked link, so the ones that actually bring people back are the ones you can see.",
+    title: "The reply is already written",
+    body: "A draft in your voice, mentioning your product once, where it answers the question.",
     visual: <PreviewReply />,
   },
   {
     number: "04",
     title: "You get customers",
-    body: "Every reply carries a tracked link, so clicks come back tagged with the platform they came from. You learn which conversations sent people to your site, and which channel is worth your next hour.",
+    body: "Every reply carries a tracked link, so clicks come back tagged with the platform they came from.",
     visual: <PreviewResults />,
   },
 ];
