@@ -1,4 +1,5 @@
 import { v } from "convex/values";
+import type { Id } from "./_generated/dataModel";
 import { action, internalAction, internalMutation, internalQuery } from "./_generated/server";
 import { internal } from "./_generated/api";
 import { PROJECT_LINK_LABEL } from "./links";
@@ -193,6 +194,55 @@ export const sample = internalQuery({
       };
     }
     return null;
+  },
+});
+
+// ---------- drafting on its own ----------
+
+// Only what is worth answering gets a draft; low intent never does.
+const DRAFT_BATCH = 5;
+
+export const nextUndrafted = internalQuery({
+  args: {},
+  handler: async (ctx) => {
+    const found: Array<{ matchId: Id<"matches"> }> = [];
+    for await (const match of ctx.db.query("matches")) {
+      if (match.draft !== undefined) continue;
+      if (match.intentScore !== "high" && match.intentScore !== "medium") continue;
+      if (match.replied || match.skipped) continue;
+      found.push({ matchId: match._id });
+      if (found.length > DRAFT_BATCH) break;
+    }
+    return {
+      matchIds: found.slice(0, DRAFT_BATCH).map((f) => f.matchId),
+      hasMore: found.length > DRAFT_BATCH,
+    };
+  },
+});
+
+export const draftDue = internalAction({
+  args: {},
+  handler: async (ctx): Promise<{ drafted: number; more: boolean }> => {
+    const batch = await ctx.runQuery(internal.replyDrafter.nextUndrafted, {});
+    if (!batch.matchIds.length) return { drafted: 0, more: false };
+
+    // A few at a time: these are long calls on the writing model.
+    const results = await Promise.all(
+      batch.matchIds.map((matchId) =>
+        ctx
+          .runAction(internal.replyDrafter.generate, { matchId })
+          .catch((err) => {
+            console.error(err);
+            return { error: String(err) };
+          }),
+      ),
+    );
+    const drafted = results.filter((r) => "draft" in r).length;
+
+    if (batch.hasMore) {
+      await ctx.scheduler.runAfter(0, internal.replyDrafter.draftDue, {});
+    }
+    return { drafted, more: batch.hasMore };
   },
 });
 

@@ -415,46 +415,40 @@ export function PostsContent() {
                         ) : null}
                       </a>
 
-                      {/* The reply, nested under the post like a comment thread */}
-                      <div className="mt-3 flex flex-1 gap-3">
-                        <span className="mt-1 w-px shrink-0 bg-border" />
-                        <div className="flex min-w-0 flex-1 flex-col">
-                          <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
-                            You, replying
-                          </p>
-                          {reply ? (
+                      {/* The reply, written for every scored post */}
+                      {reply ? (
+                        <div className="mt-3 flex flex-1 gap-3">
+                          <span className="mt-1 w-px shrink-0 bg-border" />
+                          <div className="flex min-w-0 flex-1 flex-col">
+                            <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
+                              You, replying
+                            </p>
                             <p className="mt-1.5 text-sm leading-relaxed text-foreground/85">
                               {reply}
                             </p>
-                          ) : (
-                            <p className="mt-1.5 text-sm text-muted-foreground/60">
-                              Nothing written yet.
-                            </p>
-                          )}
 
-                          <div className="relative z-10 mt-3 flex items-center gap-3 text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
-                            <button
-                              type="button"
-                              onClick={() => rewrite(row.match._id)}
-                              disabled={rewritingId === row.match._id}
-                              className="flex cursor-pointer items-center gap-1.5 transition-colors hover:text-foreground disabled:cursor-default disabled:opacity-50"
-                            >
-                              <RotateCw
-                                className={cn(
-                                  "size-3",
-                                  rewritingId === row.match._id &&
-                                    "animate-spin",
-                                )}
-                              />
-                              {rewritingId === row.match._id
-                                ? "Writing"
-                                : reply
-                                  ? "Rewrite"
-                                  : "Write reply"}
-                            </button>
+                            <div className="relative z-10 mt-3 flex items-center gap-3 text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
+                              <button
+                                type="button"
+                                onClick={() => rewrite(row.match._id)}
+                                disabled={rewritingId === row.match._id}
+                                className="flex cursor-pointer items-center gap-1.5 transition-colors hover:text-foreground disabled:cursor-default disabled:opacity-50"
+                              >
+                                <RotateCw
+                                  className={cn(
+                                    "size-3",
+                                    rewritingId === row.match._id &&
+                                      "animate-spin",
+                                  )}
+                                />
+                                {rewritingId === row.match._id
+                                  ? "Writing"
+                                  : "Rewrite"}
+                              </button>
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      ) : null}
                     </div>
 
                     <div className="flex gap-2 px-4 pb-4 text-[10px] font-bold tracking-wider uppercase">
