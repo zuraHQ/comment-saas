@@ -60,8 +60,8 @@ export default function ManualVs() {
               Paste your link. That is the setup.
             </h3>
             <p className="mt-4 text-base leading-relaxed text-neutral-600">
-              We read the same eight places and leave a reply waiting on the
-              handful worth answering.
+              We read eight platforms, find the posts where your product is
+              the answer, and write the reply for you.
             </p>
 
             <p className="mt-auto border-t border-neutral-200 pt-6 text-base text-neutral-600">
