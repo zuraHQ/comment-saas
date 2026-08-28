@@ -340,7 +340,7 @@ export function PostsContent() {
 
           {/* Post feed */}
           <section className="flex min-w-0 flex-1 flex-col">
-            <ul className="no-scrollbar grid min-h-0 flex-1 auto-rows-min grid-cols-1 content-start gap-3 overflow-y-auto p-3 xl:grid-cols-2">
+            <ul className="no-scrollbar grid min-h-0 flex-1 auto-rows-min grid-cols-1 content-start gap-3 overflow-y-auto p-3 lg:grid-cols-2 2xl:grid-cols-3">
               {visibleRows.map((row) => {
                 const platform =
                   PLATFORM_BY_ID[row.match.platform ?? row.post.platform];
