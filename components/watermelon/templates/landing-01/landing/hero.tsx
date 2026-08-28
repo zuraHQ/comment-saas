@@ -29,11 +29,11 @@ export default function Hero() {
         inputMode="url"
         autoComplete="url"
         placeholder="yoursaas.com"
-        className="h-12 flex-1 rounded-md border border-neutral-300 bg-neutral-100 px-5 text-sm text-neutral-900 shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] outline-none transition-colors placeholder:text-neutral-500 focus:border-sky-500 focus:bg-white focus:ring-2 focus:ring-sky-500/20"
+        className="h-12 flex-1 rounded-md border border-neutral-300 bg-neutral-100 px-5 text-sm text-neutral-900 shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] outline-none transition-colors placeholder:text-neutral-500 focus:border-cyan-primary focus:bg-white focus:ring-2 focus:ring-cyan-primary/20"
       />
       <button
         type="submit"
-        className="h-12 shrink-0 rounded-md bg-sky-500 px-8 text-sm font-medium text-white shadow-[inset_0_2px_0_rgba(255,255,255,0.25),inset_0_-2px_0_rgba(0,0,0,0.18)] transition-colors hover:bg-sky-600"
+        className="h-12 shrink-0 rounded-md bg-cyan-primary px-8 text-sm font-medium text-white shadow-[inset_0_2px_0_rgba(255,255,255,0.25),inset_0_-2px_0_rgba(0,0,0,0.18)] transition-colors hover:bg-cyan-primary/90"
       >
         Find customers
       </button>

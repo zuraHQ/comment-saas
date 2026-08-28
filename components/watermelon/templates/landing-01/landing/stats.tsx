@@ -380,7 +380,7 @@ function ReplyVisual() {
             <img
               src="https://api.dicebear.com/9.x/notionists/svg?seed=founder&backgroundColor=a3ff12"
               alt=""
-              className="ring-sky-500/60 h-7 w-7 shrink-0 rounded-full bg-neutral-50 ring-1"
+              className="ring-cyan-primary/60 h-7 w-7 shrink-0 rounded-full bg-neutral-50 ring-1"
             />
             <div className="min-w-0">
               <p className="text-xs font-medium text-neutral-700">you</p>
@@ -390,7 +390,7 @@ function ReplyVisual() {
           <p className="mt-3 text-xs text-neutral-700">
             Had the same problem, so I built something for it. It reads the
             communities for you and scores what is worth answering —{" "}
-            <span className="text-sky-600 underline underline-offset-2">
+            <span className="text-cyan-primary underline underline-offset-2">
               commentsaas.com
             </span>
           </p>
@@ -468,7 +468,7 @@ function ResultVisual() {
             </span>
             <span className="relative h-1.5 flex-1 bg-neutral-50">
               <motion.span
-                className="bg-sky-500 absolute inset-y-0 left-0"
+                className="bg-cyan-primary absolute inset-y-0 left-0"
                 initial={{ width: 0 }}
                 whileInView={{ width: `${(source.clicks / max) * 100}%` }}
                 viewport={{ once: true, margin: "-80px" }}
@@ -558,7 +558,7 @@ export default function Stats() {
         <div ref={stepsRef} className="relative mx-auto max-w-6xl">
           <div className="absolute top-0 bottom-0 left-0 hidden w-px bg-neutral-100 lg:block">
             <motion.div
-              className="bg-sky-500 absolute top-0 left-0 w-px origin-top"
+              className="bg-cyan-primary absolute top-0 left-0 w-px origin-top"
               style={{ height: "100%", scaleY: progress }}
             />
           </div>

@@ -21,7 +21,7 @@ export default function Cta() {
           </div>
           <a
             href="/login"
-            className="bg-primary text-background hover:bg-primary/90 flex h-12 shrink-0 items-center px-8 font-mono text-xs font-bold tracking-widest uppercase transition-colors active:scale-[0.97]"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 flex h-12 shrink-0 items-center px-8 rounded-md text-xs font-bold tracking-wider uppercase transition-colors active:scale-[0.97]"
           >
             Get customers
           </a>

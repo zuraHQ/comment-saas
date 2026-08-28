@@ -52,7 +52,7 @@ export default function ManualVs() {
           </div>
 
           <div className="border-primary/40 flex flex-col border bg-neutral-50 p-8">
-            <p className="text-primary font-mono text-xs font-bold tracking-widest uppercase">
+            <p className="text-primary rounded-md text-xs font-bold tracking-wider uppercase">
               With us
             </p>
 
@@ -79,7 +79,7 @@ export default function ManualVs() {
           </p>
           <a
             href="/login"
-            className="bg-primary text-background hover:bg-primary/90 flex h-12 items-center px-8 font-mono text-xs font-bold tracking-widest uppercase transition-colors active:scale-[0.97]"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 flex h-12 items-center px-8 rounded-md text-xs font-bold tracking-wider uppercase transition-colors active:scale-[0.97]"
           >
             Get customers
           </a>
