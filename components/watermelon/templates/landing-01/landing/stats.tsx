@@ -44,14 +44,6 @@ const SCAN_LOG = [
 function ScanVisual() {
   return (
     <div className="relative h-72 w-full overflow-hidden rounded-md border border-neutral-200 bg-white">
-      <div className="flex items-center justify-between border-b border-neutral-200 px-4 py-2.5">
-        <span className="text-xs font-medium text-neutral-900">Reading now</span>
-        <span className="flex items-center gap-1.5 text-[10px] tracking-wider text-neutral-500 uppercase">
-          <span className="size-1.5 rounded-full bg-emerald-500" />
-          live
-        </span>
-      </div>
-
       <motion.div
         className="flex flex-col px-4 pt-3"
         animate={{ y: ["0%", "-50%"] }}
