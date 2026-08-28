@@ -49,14 +49,14 @@ function ScanVisual() {
         }}
       />
       <motion.div
-        className="relative flex flex-col gap-3 p-6"
+        className="relative flex flex-col px-6"
         animate={{ y: ["0%", "-50%"] }}
         transition={{ duration: 26, repeat: Infinity, ease: "linear" }}
       >
         {[...INCOMING, ...INCOMING].map((item, i) => (
           <div
             key={i}
-            className="flex items-center gap-3 rounded-md border border-neutral-200 bg-white px-4 py-3 shadow-sm"
+            className="mb-3 flex items-center gap-3 rounded-md border border-neutral-200 bg-white px-4 py-3 shadow-sm"
           >
             <span
               className="flex size-7 shrink-0 items-center justify-center rounded"
