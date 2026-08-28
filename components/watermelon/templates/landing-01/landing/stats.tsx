@@ -545,9 +545,10 @@ export default function Stats() {
           <Heading
             as="h2"
             variant="big"
-            className="text-foreground font-sans font-semibold text-balance lg:text-[48px]"
+            className="text-foreground font-sans font-bold text-balance lg:text-[60px] lg:leading-[1.05]"
           >
-            We find the conversations that bring you customers
+            We find the conversations <br />
+            that bring you customers
           </Heading>
         </div>
 
@@ -565,7 +566,7 @@ export default function Stats() {
                 <p className="text-xs font-bold tracking-widest text-neutral-400">
                   {step.number}
                 </p>
-                <h3 className="mt-3 text-2xl font-semibold text-neutral-900">
+                <h3 className="mt-3 text-3xl font-semibold text-neutral-900">
                   {step.title}
                 </h3>
                 <p className="mt-3 max-w-md text-sm leading-relaxed text-neutral-500">
