@@ -420,23 +420,6 @@ export function PostsContent() {
                         )}
 
                         <div className="relative z-10 mt-3 flex items-center gap-3 text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
-                          {reply ? (
-                            <button
-                              type="button"
-                              onClick={() => copyReply(row.match._id, reply)}
-                              className="flex cursor-pointer items-center gap-1.5 transition-colors hover:text-foreground"
-                            >
-                              {copiedId === row.match._id ? (
-                                <>
-                                  <Check className="size-3" /> Copied
-                                </>
-                              ) : (
-                                <>
-                                  <Copy className="size-3" /> Copy
-                                </>
-                              )}
-                            </button>
-                          ) : null}
                           <button
                             type="button"
                             onClick={() => rewrite(row.match._id)}
@@ -463,10 +446,31 @@ export function PostsContent() {
                     <div className="relative z-10 -mx-4 mt-4 flex text-[10px] font-bold tracking-wider uppercase">
                       <button
                         type="button"
+                        onClick={() => reply && copyReply(row.match._id, reply)}
+                        disabled={!reply}
+                        className={cn(
+                          "flex h-10 flex-1 cursor-pointer items-center justify-center gap-2 border-t border-border transition-colors disabled:cursor-default disabled:opacity-40",
+                          copiedId === row.match._id
+                            ? "text-brand"
+                            : "text-muted-foreground",
+                        )}
+                      >
+                        {copiedId === row.match._id ? (
+                          <>
+                            <Check className="size-3.5" /> Copied
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="size-3.5" /> Copy reply
+                          </>
+                        )}
+                      </button>
+                      <button
+                        type="button"
                         onClick={() => toggleReplied(row)}
                         aria-pressed={row.match.replied}
                         className={cn(
-                          "flex h-10 flex-1 cursor-pointer items-center justify-center gap-2 border-t transition-colors",
+                          "flex h-10 flex-1 cursor-pointer items-center justify-center gap-2 border-t border-l transition-colors",
                           row.match.replied
                             ? "border-brand/50 text-brand"
                             : "border-border text-muted-foreground",
