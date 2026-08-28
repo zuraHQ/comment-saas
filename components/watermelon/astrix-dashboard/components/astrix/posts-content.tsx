@@ -343,7 +343,7 @@ export function PostsContent() {
                   <li
                     key={row.match._id}
                     className={cn(
-                      "group relative flex flex-col border border-border bg-card p-4 transition-colors hover:border-foreground/25",
+                      "group relative flex flex-col overflow-hidden border border-border bg-card px-4 pt-4 transition-colors hover:border-foreground/25",
                       row.match.replied && "opacity-50",
                     )}
                   >
@@ -456,29 +456,32 @@ export function PostsContent() {
                                 : "Write reply"}
                           </button>
 
-                          <button
-                            type="button"
-                            onClick={() => toggleReplied(row)}
-                            aria-pressed={row.match.replied}
-                            className={cn(
-                              "ml-auto flex h-8 cursor-pointer items-center gap-1.5 border px-3 transition-colors",
-                              row.match.replied
-                                ? "border-brand/50 text-brand"
-                                : "border-border hover:bg-sidebar-accent hover:text-foreground",
-                            )}
-                          >
-                            <Check className="size-3.5" />
-                            {row.match.replied ? "Replied" : "Mark"}
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => skip(row)}
-                            className="flex h-8 cursor-pointer items-center gap-1.5 border border-border px-3 transition-colors hover:border-red-500/40 hover:text-red-400"
-                          >
-                            <XIcon className="size-3.5" /> Skip
-                          </button>
                         </div>
                       </div>
+                    </div>
+
+                    <div className="relative z-10 -mx-4 mt-4 flex text-[10px] font-bold tracking-wider uppercase">
+                      <button
+                        type="button"
+                        onClick={() => toggleReplied(row)}
+                        aria-pressed={row.match.replied}
+                        className={cn(
+                          "flex h-10 flex-1 cursor-pointer items-center justify-center gap-2 border-t transition-colors",
+                          row.match.replied
+                            ? "border-brand/50 text-brand"
+                            : "border-border text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
+                        )}
+                      >
+                        <Check className="size-3.5" />
+                        {row.match.replied ? "Replied" : "Mark"}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => skip(row)}
+                        className="flex h-10 flex-1 cursor-pointer items-center justify-center gap-2 border-t border-l border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-red-400"
+                      >
+                        <XIcon className="size-3.5" /> Skip
+                      </button>
                     </div>
                   </li>
                 );
