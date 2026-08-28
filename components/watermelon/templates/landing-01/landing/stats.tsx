@@ -43,9 +43,9 @@ const SCAN_LOG = [
 
 function ScanVisual() {
   return (
-    <div className="relative h-72 w-full overflow-hidden rounded-md border border-neutral-200 bg-white">
+    <div className="relative h-72 w-full overflow-hidden">
       <motion.div
-        className="flex flex-col px-4 pt-3"
+        className="flex flex-col"
         animate={{ y: ["0%", "-50%"] }}
         transition={{ duration: 16, repeat: Infinity, ease: "linear" }}
       >
@@ -68,7 +68,9 @@ function ScanVisual() {
       </motion.div>
 
       {/* Fade the bottom so the log reads as endless */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white to-transparent" />
+      {/* Fade both ends into the panel so the log has no edges */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-neutral-50 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-neutral-50 to-transparent" />
     </div>
   );
 }
