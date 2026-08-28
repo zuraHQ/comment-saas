@@ -33,13 +33,9 @@ const INCOMING = [
   { text: "Ask HN: how do you find your first users?", where: "Hacker News", Icon: FaHackerNews, color: "#FF6600" },
   { text: "Month end took me two days again", where: "r/smallbusiness", Icon: FaRedditAlien, color: "#FF4500" },
   { text: "What are you all using for outreach?", where: "Indie Hackers", Icon: FaRegLightbulb, color: "#0E2439" },
-  { text: "spreadsheets are killing me honestly", where: "Bluesky", Icon: FaBluesky, color: "#0085FF" },
-  { text: "Any alternative that is not enterprise?", where: "r/SaaS", Icon: FaRedditAlien, color: "#FF4500" },
   { text: "How do you handle late payers?", where: "LinkedIn", Icon: FaLinkedinIn, color: "#0A66C2" },
-  { text: "Show HN: I automated my follow ups", where: "Hacker News", Icon: FaHackerNews, color: "#FF6600" },
-  { text: "Does anyone still do this by hand?", where: "r/Entrepreneur", Icon: FaRedditAlien, color: "#FF4500" },
-  { text: "Best tool for tracking leads in 2026", where: "YouTube", Icon: FaYoutube, color: "#FF0000" },
 ];
+
 
 function ScanVisual() {
   return (
@@ -53,26 +49,26 @@ function ScanVisual() {
         }}
       />
       <motion.div
-        className="relative flex flex-col gap-2 p-6"
+        className="relative flex flex-col gap-3 p-6"
         animate={{ y: ["0%", "-50%"] }}
-        transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
+        transition={{ duration: 26, repeat: Infinity, ease: "linear" }}
       >
         {[...INCOMING, ...INCOMING].map((item, i) => (
           <div
             key={i}
-            className="flex items-center gap-3 rounded-md border border-white bg-white/80 px-3 py-2.5 shadow-sm backdrop-blur-sm"
+            className="flex items-center gap-3 rounded-md border border-neutral-200 bg-white px-4 py-3 shadow-sm"
           >
             <span
-              className="flex size-6 shrink-0 items-center justify-center rounded"
+              className="flex size-7 shrink-0 items-center justify-center rounded"
               style={{ backgroundColor: item.color }}
             >
-              <item.Icon className="size-3 text-white" />
+              <item.Icon className="size-3.5 text-white" />
             </span>
             <span className="min-w-0 flex-1">
-              <span className="block truncate text-xs font-medium text-neutral-900">
+              <span className="block truncate text-sm font-medium text-neutral-900">
                 {item.text}
               </span>
-              <span className="block truncate text-[10px] text-neutral-500">
+              <span className="block truncate text-xs text-neutral-500">
                 {item.where}
               </span>
             </span>
