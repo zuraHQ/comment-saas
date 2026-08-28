@@ -5,6 +5,8 @@ import { useAction, useMutation, useQuery } from "convex/react";
 import {
   ArrowUpRight,
   Check,
+  Eye,
+  EyeOff,
   Copy,
   RotateCw,
   History as HistoryIcon,
@@ -82,6 +84,7 @@ export function PostsContent() {
   const { project } = useProject();
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [rewritingId, setRewritingId] = useState<string | null>(null);
+  const [showReplies, setShowReplies] = useState(true);
   const writeDraft = useAction(api.replyDrafter.draft);
 
   // Ask for a fresh draft of the same post, replacing the stored one.
@@ -224,6 +227,25 @@ export function PostsContent() {
             className="flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground disabled:cursor-default"
           >
             <RefreshCw className={cn("size-4", refreshing && "animate-spin")} />
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setShowReplies((v) => !v)}
+            aria-pressed={showReplies}
+            className={cn(
+              "flex h-9 cursor-pointer items-center gap-2 rounded-md border px-3 text-[10px] font-bold tracking-wider uppercase transition-colors",
+              showReplies
+                ? "border-brand text-brand"
+                : "border-border text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
+            )}
+          >
+            {showReplies ? (
+              <Eye className="size-3.5" />
+            ) : (
+              <EyeOff className="size-3.5" />
+            )}
+            Preview replies
           </button>
 
           {/* Always on, so the one button that costs money is never a mystery */}
@@ -416,7 +438,7 @@ export function PostsContent() {
                       </a>
 
                       {/* The reply, written for every scored post */}
-                      {reply ? (
+                      {reply && showReplies ? (
                         <div className="mt-3 flex flex-1 gap-3">
                           <span className="mt-1 w-px shrink-0 bg-border" />
                           <div className="flex min-w-0 flex-1 flex-col">
