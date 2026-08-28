@@ -56,7 +56,7 @@ body:has(.astrix-dashboard) [data-slot="tooltip-content"] {
 .dark body:has(.astrix-dashboard) [data-slot="sheet-content"],
 .dark body:has(.astrix-dashboard) [data-slot="tooltip-content"] {
   --radius: 0rem;
-  --background: #101010;
+  --background: #161718;
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.185 0 0);
   --card-foreground: oklch(0.985 0 0);
@@ -82,7 +82,7 @@ body:has(.astrix-dashboard) [data-slot="tooltip-content"] {
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
-  --sidebar: #101010;
+  --sidebar: #161718;
   --sidebar-foreground: oklch(0.985 0 0);
   --sidebar-primary: #d4d4d4;
   --sidebar-primary-foreground: #101010;
