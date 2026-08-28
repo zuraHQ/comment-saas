@@ -59,7 +59,7 @@
   --popover-foreground: oklch(0.145 0 0);
   --primary: #171717;
   --primary-foreground: #ffffff;
-  --brand: #365268;
+  --brand: #0EA5E9;
   --brand-foreground: #ffffff;
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
@@ -96,7 +96,7 @@
   --popover-foreground: oklch(0.985 0 0);
   --primary: #38BDF8;
   --primary-foreground: #0b1220;
-  --brand: #365268;
+  --brand: #38BDF8;
   --brand-foreground: #ffffff;
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
@@ -138,7 +138,7 @@
 .light-page * {
   --primary: #171717;
   --primary-foreground: #ffffff;
-  --brand: #365268;
+  --brand: #0EA5E9;
   --brand-foreground: #ffffff;
 }
 
