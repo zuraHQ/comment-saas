@@ -29,23 +29,23 @@ import { cn } from "@/lib/utils";
 
 // The eight places we read, named, so the claim is checkable at a glance.
 const PLATFORMS = [
-  { label: "Reddit", Icon: FaRedditAlien, bg: "#FF4500", fg: "#ffffff" },
-  { label: "Hacker News", Icon: FaHackerNews, bg: "#FF6600", fg: "#ffffff" },
-  { label: "Indie Hackers", Icon: FaRegLightbulb, bg: "#0E2439", fg: "#ffffff" },
-  { label: "X / Twitter", Icon: FaXTwitter, bg: "#171717", fg: "#ffffff" },
-  { label: "LinkedIn", Icon: FaLinkedinIn, bg: "#0A66C2", fg: "#ffffff" },
-  { label: "YouTube", Icon: FaYoutube, bg: "#FF0000", fg: "#ffffff" },
-  { label: "Bluesky", Icon: FaBluesky, bg: "#0085FF", fg: "#ffffff" },
-  { label: "GitHub", Icon: FaGithub, bg: "#171717", fg: "#ffffff" },
+  { label: "Reddit", Icon: FaRedditAlien, bg: "#FF4500", fg: "#ffffff" note: "communities and keywords" },
+  { label: "Hacker News", Icon: FaHackerNews, bg: "#FF6600", fg: "#ffffff" note: "all stories, Ask and Show" },
+  { label: "Indie Hackers", Icon: FaRegLightbulb, bg: "#0E2439", fg: "#ffffff" note: "every new post" },
+  { label: "X / Twitter", Icon: FaXTwitter, bg: "#171717", fg: "#ffffff" note: "keywords and accounts" },
+  { label: "LinkedIn", Icon: FaLinkedinIn, bg: "#0A66C2", fg: "#ffffff" note: "keywords" },
+  { label: "YouTube", Icon: FaYoutube, bg: "#FF0000", fg: "#ffffff" note: "new videos" },
+  { label: "Bluesky", Icon: FaBluesky, bg: "#0085FF", fg: "#ffffff" note: "keywords" },
+  { label: "GitHub", Icon: FaGithub, bg: "#171717", fg: "#ffffff" note: "repo discussions" },
 ];
 
 function ScanVisual() {
   return (
-    <div className="grid h-full w-full grid-cols-2 content-center gap-3 bg-gradient-to-br from-sky-100 via-sky-50 to-white p-8 lg:p-10">
+    <div className="flex h-full w-full flex-col justify-center gap-2 bg-gradient-to-br from-sky-100 via-sky-50 to-white p-8 lg:p-10">
       {PLATFORMS.map((platform) => (
         <div
           key={platform.label}
-          className="flex items-center gap-3 rounded-md border border-neutral-200 bg-white p-3"
+          className="flex items-center gap-3 rounded-md border border-neutral-200 bg-white px-3 py-2.5"
         >
           <span
             className="flex size-9 shrink-0 items-center justify-center rounded"
@@ -58,6 +58,9 @@ function ScanVisual() {
           </span>
           <span className="truncate text-sm font-medium text-neutral-900">
             {platform.label}
+          </span>
+          <span className="ml-auto shrink-0 text-xs text-neutral-500">
+            {platform.note}
           </span>
         </div>
       ))}
@@ -518,7 +521,7 @@ export default function Stats() {
             <div
               key={step.number}
               className={cn(
-                "grid items-stretch overflow-hidden rounded-lg bg-neutral-50 lg:grid-cols-2",
+                "grid items-stretch overflow-hidden rounded-md bg-neutral-50 lg:grid-cols-2",
                 i % 2 === 1 && "lg:[&>*:first-child]:order-2",
               )}
             >
