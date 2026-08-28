@@ -12,7 +12,7 @@ export default function Hero() {
   // does, so the CTA replaces the block's demo buttons.
   const captureForm = (
     <form
-      className="relative mx-auto flex w-full max-w-sm flex-col gap-3"
+      className="relative mx-auto flex w-full max-w-[18rem] flex-col gap-3"
       onSubmit={(e) => {
         e.preventDefault();
         const value = site.trim();
