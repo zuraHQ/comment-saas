@@ -83,7 +83,7 @@ export default function ManualVs() {
             href="/login"
             className="bg-primary text-primary-foreground hover:bg-primary/90 flex h-12 items-center rounded-sm px-8 text-xs font-bold tracking-wider uppercase transition-colors active:scale-[0.97]"
           >
-            Get customers
+            Start free
           </a>
         </div>
       </Container>

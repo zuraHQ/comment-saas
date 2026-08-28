@@ -58,7 +58,7 @@ export default function Cta() {
               type="submit"
               className="bg-brand hover:bg-brand/90 h-12 w-full rounded-md px-8 text-sm font-medium text-white shadow-[inset_0_2px_0_rgba(255,255,255,0.25),inset_0_-2px_0_rgba(0,0,0,0.18)] transition-colors"
             >
-              Get customers
+              Start free
             </button>
           </form>
         </div>

@@ -34,7 +34,7 @@ export default function SiteCapture() {
         type="submit"
         className="bg-brand hover:bg-brand/90 h-12 w-full rounded-md px-8 text-sm font-medium text-white shadow-[inset_0_2px_0_rgba(255,255,255,0.25),inset_0_-2px_0_rgba(0,0,0,0.18)] transition-colors"
       >
-        Find customers
+        Start free
       </button>
       <p className="text-center text-xs text-muted-foreground">
         No credit card. 100 free mentions.
