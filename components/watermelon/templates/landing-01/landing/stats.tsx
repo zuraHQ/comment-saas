@@ -27,84 +27,56 @@ import { cn } from "@/lib/utils";
 /* ---------------------------------------------------------------- 01 */
 // Raw chatter arriving from every platform at once.
 
-const CHATTER = [
-  {
-    text: "anyone know a good invoicing tool?",
-    Icon: FaRedditAlien,
-    color: "#FF4500",
-    at: "top-10 left-6",
-  },
-  {
-    text: "spreadsheets are killing me",
-    Icon: FaHackerNews,
-    color: "#FF6600",
-    at: "top-24 right-6",
-  },
-  {
-    text: "best way to track leads?",
-    Icon: FaLinkedinIn,
-    color: "#0A66C2",
-    at: "bottom-24 left-6",
-  },
-  {
-    text: "we still do this by hand",
-    Icon: FaBluesky,
-    color: "#0085FF",
-    at: "bottom-10 right-6",
-  },
+// A log of what we just finished reading, scrolling without end.
+const SCAN_LOG = [
+  { where: "r/SaaS", n: "42 new posts", Icon: FaRedditAlien, bg: "#FF4500" },
+  { where: "Hacker News", n: "18 new stories", Icon: FaHackerNews, bg: "#FF6600" },
+  { where: "r/freelance", n: "27 new posts", Icon: FaRedditAlien, bg: "#FF4500" },
+  { where: "Indie Hackers", n: "9 new posts", Icon: FaRegLightbulb, bg: "#0E2439" },
+  { where: "Bluesky", n: "61 new posts", Icon: FaBluesky, bg: "#0085FF" },
+  { where: "r/smallbusiness", n: "33 new posts", Icon: FaRedditAlien, bg: "#FF4500" },
+  { where: "GitHub", n: "6 new discussions", Icon: FaGithub, bg: "#171717" },
+  { where: "LinkedIn", n: "14 new posts", Icon: FaLinkedinIn, bg: "#0A66C2" },
+  { where: "X / Twitter", n: "88 new posts", Icon: FaXTwitter, bg: "#171717" },
+  { where: "YouTube", n: "11 new videos", Icon: FaYoutube, bg: "#FF0000" },
 ];
-
 
 function ScanVisual() {
   return (
-    <div className="relative flex h-80 items-center justify-center overflow-hidden">
-      {/* Radar rings with a rotating sweep */}
-      <div className="absolute flex h-72 w-72 items-center justify-center rounded-full border border-neutral-200">
-        <motion.div
-          className="absolute inset-0 rounded-full"
-          style={{
-            background:
-              "conic-gradient(from 0deg, rgba(14,165,233,0.25), rgba(14,165,233,0) 35%)",
-          }}
-          animate={{ rotate: 360 }}
-          transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-        />
-        <div className="flex h-48 w-48 items-center justify-center rounded-full border border-neutral-200">
-          <div className="flex h-24 w-24 bg-white items-center justify-center rounded-full border border-neutral-200">
-            <Globe className="h-6 w-6 text-neutral-600" strokeWidth={1.25} />
-          </div>
-        </div>
+    <div className="relative h-72 w-full overflow-hidden rounded-md border border-neutral-200 bg-white">
+      <div className="flex items-center justify-between border-b border-neutral-200 px-4 py-2.5">
+        <span className="text-xs font-medium text-neutral-900">Reading now</span>
+        <span className="flex items-center gap-1.5 text-[10px] tracking-wider text-neutral-500 uppercase">
+          <span className="size-1.5 rounded-full bg-emerald-500" />
+          live
+        </span>
       </div>
 
-      {/* Chatter picked up by the sweep, sitting around the dial */}
-      {CHATTER.map((item, i) => (
-        <motion.span
-          key={item.text}
-          className={cn(
-            "absolute z-10 flex max-w-[38%] items-center gap-1.5",
-            item.at,
-          )}
-          initial={{ opacity: 0.35 }}
-          animate={{ opacity: [0.35, 1, 0.35] }}
-          transition={{
-            duration: 4,
-            times: [0, 0.2, 1],
-            repeat: Infinity,
-            delay: i,
-            ease: "easeInOut",
-          }}
-        >
-          <span
-            className="flex size-5 shrink-0 items-center justify-center rounded-full"
-            style={{ backgroundColor: item.color }}
-          >
-            <item.Icon className="size-2.5 text-white" />
+      <motion.div
+        className="flex flex-col px-4 pt-3"
+        animate={{ y: ["0%", "-50%"] }}
+        transition={{ duration: 16, repeat: Infinity, ease: "linear" }}
+      >
+        {[...SCAN_LOG, ...SCAN_LOG].map((line, i) => (
+          <span key={i} className="mb-3 flex items-center gap-2.5">
+            <span
+              className="flex size-5 shrink-0 items-center justify-center rounded"
+              style={{ backgroundColor: line.bg }}
+            >
+              <line.Icon className="size-2.5 text-white" />
+            </span>
+            <span className="truncate text-xs font-medium text-neutral-900">
+              {line.where}
+            </span>
+            <span className="ml-auto shrink-0 text-xs text-neutral-500">
+              {line.n}
+            </span>
           </span>
-          <span className="text-xs leading-snug font-medium text-neutral-900">
-            {item.text}
-          </span>
-        </motion.span>
-      ))}
+        ))}
+      </motion.div>
+
+      {/* Fade the bottom so the log reads as endless */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white to-transparent" />
     </div>
   );
 }
