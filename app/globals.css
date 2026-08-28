@@ -193,9 +193,9 @@ body:has(.astrix-dashboard) [data-slot="tooltip-content"] {
 .dark body:has(.astrix-dashboard) [data-slot="sheet-content"],
 .dark body:has(.astrix-dashboard) [data-slot="tooltip-content"] {
   --radius: 0.625rem;
-  --background: #101010;
-  --card: oklch(0.185 0 0);
-  --popover: oklch(0.17 0 0);
+  --background: #1a1b1e;
+  --card: oklch(0.235 0 0);
+  --popover: oklch(0.245 0 0);
   --secondary: oklch(1 0 0 / 8%);
   --muted: oklch(1 0 0 / 8%);
   --muted-foreground: oklch(1 0 0 / 50%);
@@ -204,7 +204,7 @@ body:has(.astrix-dashboard) [data-slot="tooltip-content"] {
   --info: oklch(0.707 0.165 254.624);
   --input: oklch(1 0 0 / 10%);
   --input-addon-foreground: oklch(0.777 0 0);
-  --sidebar: #101010;
+  --sidebar: #17181a;
   --sidebar-primary: #A3FF12;
   --sidebar-primary-foreground: #101010;
   --sidebar-accent: oklch(1 0 0 / 6%);
