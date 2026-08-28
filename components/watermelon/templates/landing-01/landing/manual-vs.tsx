@@ -3,10 +3,10 @@ import Container from './container';
 import Heading from './heading';
 
 const MANUAL = [
-  { text: 'Search eight platforms, every few hours', time: '30 – 60 min' },
-  { text: 'Read every mention, judge which ones fit', time: '45 – 90 min' },
-  { text: 'Write each reply from scratch', time: '60 – 90 min' },
-  { text: 'Track what you answered, and what it did', time: '15 – 30 min' },
+  { text: 'Open eight tabs, scroll, come back in two hours', time: '30 – 60 min' },
+  { text: 'Read all of it and decide what deserves a reply', time: '45 – 90 min' },
+  { text: 'Write every reply from an empty box', time: '60 – 90 min' },
+  { text: 'Remember who you answered, and whether it did anything', time: '15 – 30 min' },
 ];
 
 
@@ -43,11 +43,11 @@ export default function ManualVs() {
               ))}
             </ul>
             <p className="mt-8 border-t border-neutral-200 pt-6 text-base text-neutral-500">
-              Roughly{' '}
+              That is{' '}
               <span className="font-semibold text-red-400">
-                2 – 4 hours a day
-              </span>{' '}
-              for one product.
+                most of a morning
+              </span>
+              , every day, for one product.
             </p>
           </div>
 
@@ -57,16 +57,19 @@ export default function ManualVs() {
             </p>
 
             <h3 className="mt-8 text-lg font-semibold text-neutral-900">
-              All you do is paste your link
+              Paste your link. That is the setup.
             </h3>
             <p className="mt-4 text-base leading-relaxed text-neutral-600">
-              We watch eight platforms and rank what is worth answering.
+              We read the same eight places you would have, keep the handful
+              worth answering, and leave a reply waiting on each one. You read
+              them over coffee and hit send on the ones you like.
             </p>
 
             <p className="mt-auto border-t border-neutral-200 pt-6 text-base text-neutral-600">
-              Total:{' '}
-              <span className="font-semibold text-neutral-900">2 minutes once</span>,
-              then ten minutes a day.
+              <span className="font-semibold text-neutral-900">
+                Two minutes once.
+              </span>{' '}
+              Ten minutes a day after that.
             </p>
           </div>
         </div>
