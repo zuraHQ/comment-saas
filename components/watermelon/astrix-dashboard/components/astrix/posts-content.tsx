@@ -21,7 +21,6 @@ import {
 import { cn } from "@/lib/utils";
 import { ProjectIcon } from "./project-icon";
 import { PLATFORM_OPTIONS, useProject } from "./project-context";
-import { INTENT_FILTERS, useFeedFilter } from "./feed-filter";
 import { HistoryPanel } from "./history-content";
 
 export type FeedRow = { match: Doc<"matches">; post: Doc<"posts"> };
@@ -117,7 +116,6 @@ export function PostsContent() {
       }
     },
   );
-  const { intentFilter, setIntentFilter } = useFeedFilter();
   const refreshProject = useAction(api.fetchers.refreshProject);
   const markSeen = useMutation(api.pipeline.markSeen);
   const [refreshing, setRefreshing] = useState(false);
@@ -194,11 +192,7 @@ export function PostsContent() {
   // Replied and skipped posts leave the feed automatically; the History and
   // Skipped panels hold them.
   const visibleRows = platformRows.filter(
-    (row) =>
-      !row.match.replied &&
-      !row.match.skipped &&
-      (intentFilter === "All" ||
-        row.match.intentScore === intentFilter.toLowerCase()),
+    (row) => !row.match.replied && !row.match.skipped,
   );
   const repliedRows = rows.filter((row) => row.match.replied);
   const skippedRows = rows.filter(
@@ -209,25 +203,6 @@ export function PostsContent() {
     <div className="flex h-full flex-col">
       <div className="flex min-h-0 flex-1 flex-col">
         <div className="flex flex-wrap items-center gap-3 border-b border-border px-4 py-3">
-          <div className="flex items-center">
-            {INTENT_FILTERS.map((option) => (
-              <button
-                key={option}
-                type="button"
-                onClick={() => setIntentFilter(option)}
-                aria-pressed={intentFilter === option}
-                className={cn(
-                  "h-9 cursor-pointer border border-l-0 px-3 text-[10px] font-bold tracking-wider uppercase transition-colors first:border-l",
-                  intentFilter === option
-                    ? "border-border bg-sidebar-accent text-foreground"
-                    : "border-border text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
-                )}
-              >
-                {option}
-              </button>
-            ))}
-          </div>
-
           <button
             type="button"
             onClick={refresh}
