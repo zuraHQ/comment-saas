@@ -185,7 +185,7 @@ function ProjectSettingsForm({ project }: { project: Project }) {
         <Field label="Icon" hint="Square image, shown in the project switcher.">
           <div className="flex items-center gap-3">
             <ProjectIcon project={project} className="h-10 w-10 text-sm" />
-            <label className="h-9 cursor-pointer border border-border px-4 text-xs font-bold leading-9 tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground">
+            <label className="h-9 cursor-pointer border border-border px-4 text-xs font-bold leading-9 tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground rounded-lg">
               {uploading ? "Uploading..." : project.iconUrl ? "Replace" : "Upload"}
               <input
                 type="file"
@@ -202,7 +202,7 @@ function ProjectSettingsForm({ project }: { project: Project }) {
               <button
                 type="button"
                 onClick={() => void clearIcon({ projectId: project._id })}
-                className="h-9 cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:border-red-500/40 hover:text-red-400"
+                className="h-9 cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:border-red-500/40 hover:text-red-400 rounded-lg"
               >
                 Remove
               </button>
@@ -227,13 +227,13 @@ function ProjectSettingsForm({ project }: { project: Project }) {
                   "flex cursor-pointer items-center gap-3 border p-3 text-left text-sm transition-colors",
                   on
                     ? "border-primary/40 bg-sidebar-accent/40"
-                    : "border-border hover:bg-sidebar-accent/60",
+                    : "border-border hover:bg-sidebar-accent/60 rounded-lg",
                 )}
               >
                 <span
                   className={cn(
                     "flex size-6 shrink-0 items-center justify-center border transition-colors",
-                    on ? "border-primary bg-primary" : "border-border",
+                    on ? "border-primary bg-primary" : "border-border rounded-lg",
                   )}
                 >
                   {on ? <Check className="size-4 text-[#101010]" /> : null}
@@ -269,7 +269,7 @@ function ProjectSettingsForm({ project }: { project: Project }) {
           />
           <button
             type="submit"
-            className="h-9 shrink-0 cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
+            className="h-9 shrink-0 cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground rounded-lg"
           >
             Add
           </button>
@@ -280,7 +280,7 @@ function ProjectSettingsForm({ project }: { project: Project }) {
             {project.communities.map((c) => (
               <span
                 key={c}
-                className="flex items-center gap-2 border border-border px-3 py-1.5 text-sm"
+                className="flex items-center gap-2 border border-border px-3 py-1.5 text-sm rounded-lg"
               >
                 r/{c}
                 <button
@@ -323,7 +323,7 @@ function ProjectSettingsForm({ project }: { project: Project }) {
           </div>
           <button
             type="submit"
-            className="h-9 shrink-0 cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
+            className="h-9 shrink-0 cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground rounded-lg"
           >
             Add
           </button>
@@ -332,7 +332,7 @@ function ProjectSettingsForm({ project }: { project: Project }) {
           {(project.instagramAccounts ?? []).map((account) => (
             <span
               key={account}
-              className="flex items-center gap-2 border border-border px-3 py-1.5 text-sm"
+              className="flex items-center gap-2 border border-border px-3 py-1.5 text-sm rounded-lg"
             >
               @{account}
               <button
@@ -370,7 +370,7 @@ function ProjectSettingsForm({ project }: { project: Project }) {
           </div>
           <button
             type="submit"
-            className="h-9 shrink-0 cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
+            className="h-9 shrink-0 cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground rounded-lg"
           >
             Add
           </button>
@@ -379,7 +379,7 @@ function ProjectSettingsForm({ project }: { project: Project }) {
           {(project.tiktokAccounts ?? []).map((account) => (
             <span
               key={account}
-              className="flex items-center gap-2 border border-border px-3 py-1.5 text-sm"
+              className="flex items-center gap-2 border border-border px-3 py-1.5 text-sm rounded-lg"
             >
               @{account}
               <button
@@ -418,7 +418,7 @@ function ProjectSettingsForm({ project }: { project: Project }) {
           </div>
           <button
             type="submit"
-            className="h-9 shrink-0 cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
+            className="h-9 shrink-0 cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground rounded-lg"
           >
             Add
           </button>
@@ -427,7 +427,7 @@ function ProjectSettingsForm({ project }: { project: Project }) {
           {(project.xAccounts ?? []).map((account) => (
             <span
               key={account}
-              className="flex items-center gap-2 border border-border px-3 py-1.5 text-sm"
+              className="flex items-center gap-2 border border-border px-3 py-1.5 text-sm rounded-lg"
             >
               @{account}
               <button
@@ -457,7 +457,7 @@ function ProjectSettingsForm({ project }: { project: Project }) {
           />
           <button
             type="submit"
-            className="h-9 shrink-0 cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
+            className="h-9 shrink-0 cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground rounded-lg"
           >
             Add
           </button>
@@ -470,7 +470,7 @@ function ProjectSettingsForm({ project }: { project: Project }) {
                 <span
                   key={k}
                   title="Picked from your site"
-                  className="flex items-center gap-2 border border-border px-3 py-1.5 text-sm text-muted-foreground"
+                  className="flex items-center gap-2 border border-border px-3 py-1.5 text-sm text-muted-foreground rounded-lg"
                 >
                   <Lock className="size-3" />
                   {k}
@@ -478,7 +478,7 @@ function ProjectSettingsForm({ project }: { project: Project }) {
               ) : (
                 <span
                   key={k}
-                  className="flex items-center gap-2 border border-border px-3 py-1.5 text-sm"
+                  className="flex items-center gap-2 border border-border px-3 py-1.5 text-sm rounded-lg"
                 >
                   {k}
                   <button
@@ -521,7 +521,7 @@ function ProjectSettingsForm({ project }: { project: Project }) {
               <button
                 type="button"
                 onClick={() => setConfirmDelete(false)}
-                className="h-9 cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
+                className="h-9 cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground rounded-lg"
               >
                 Cancel
               </button>
@@ -530,7 +530,7 @@ function ProjectSettingsForm({ project }: { project: Project }) {
             <button
               type="button"
               onClick={() => setConfirmDelete(true)}
-              className="flex h-9 w-fit cursor-pointer items-center gap-2 border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:border-red-500/40 hover:text-red-400"
+              className="flex h-9 w-fit cursor-pointer items-center gap-2 border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:border-red-500/40 hover:text-red-400 rounded-lg"
             >
               <Trash2 className="size-3.5" />
               Delete project
@@ -562,7 +562,7 @@ function Section({
     : undefined;
   const GlobeIcon = platform === "all" ? Globe : undefined;
   return (
-    <section className="flex flex-col gap-4 border border-border bg-sidebar-accent/20 p-5">
+    <section className="flex flex-col gap-4 border border-border bg-sidebar-accent/20 p-5 rounded-lg">
       <div>
         <h2 className="flex items-center gap-2 text-xs font-bold tracking-wider text-muted-foreground uppercase">
           {meta ? (

@@ -34,7 +34,7 @@ export function ProjectSwitcher({
       <DropdownMenuTrigger
         type="button"
         className={cn(
-          "flex h-10 cursor-pointer items-center gap-2.5 border border-border px-3 text-sm font-medium text-foreground transition-colors hover:bg-sidebar-accent",
+          "flex h-10 cursor-pointer items-center gap-2.5 border border-border px-3 text-sm font-medium text-foreground transition-colors hover:bg-sidebar-accent rounded-lg",
           className,
         )}
         aria-label="Switch project"
@@ -83,7 +83,7 @@ export function ProjectSwitcher({
                 }
               }}
               placeholder="Project name"
-              className="h-8 w-full border border-border bg-transparent px-2 text-sm outline-none placeholder:text-muted-foreground focus-visible:border-ring"
+              className="h-8 w-full border border-border bg-transparent px-2 text-sm outline-none placeholder:text-muted-foreground focus-visible:border-ring rounded-lg"
             />
           </form>
         ) : (

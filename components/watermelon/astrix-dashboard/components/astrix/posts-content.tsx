@@ -61,7 +61,7 @@ function platformLabel(
 export function IntentBadge({ match }: { match: Doc<"matches"> }) {
   if (!match.intentScore) {
     return (
-      <span className="shrink-0 border border-border px-2 py-0.5 text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
+      <span className="shrink-0 border border-border px-2 py-0.5 text-[10px] font-bold tracking-wider text-muted-foreground uppercase rounded-lg">
         Scoring...
       </span>
     );
@@ -234,7 +234,7 @@ export function PostsContent() {
                 onClick={() => setIntentFilter(option)}
                 aria-pressed={intentFilter === option}
                 className={cn(
-                  "h-9 cursor-pointer border border-l-0 px-3 text-[10px] font-bold tracking-wider uppercase transition-colors first:border-l",
+                  "h-9 cursor-pointer border border-l-0 px-3 text-[10px] font-bold tracking-wider uppercase transition-colors first:rounded-l-lg first:border-l last:rounded-r-lg",
                   intentFilter === option
                     ? "border-border bg-sidebar-accent text-foreground"
                     : "border-border text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
@@ -250,7 +250,7 @@ export function PostsContent() {
             onClick={refresh}
             aria-label="Refresh posts"
             disabled={refreshing}
-            className="flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground disabled:cursor-default"
+            className="flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground disabled:cursor-default rounded-lg"
           >
             <RefreshCw className={cn("size-4", refreshing && "animate-spin")} />
           </button>
@@ -259,7 +259,7 @@ export function PostsContent() {
             <SheetTrigger
               type="button"
               aria-label="Skipped"
-              className="ml-auto flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground"
+              className="ml-auto flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground rounded-lg"
             >
               <XIcon className="size-4" />
             </SheetTrigger>
@@ -283,7 +283,7 @@ export function PostsContent() {
             <SheetTrigger
               type="button"
               aria-label="History"
-              className="flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground"
+              className="flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground rounded-lg"
             >
               <HistoryIcon className="size-4" />
             </SheetTrigger>
@@ -367,7 +367,7 @@ export function PostsContent() {
                   <li
                     key={row.match._id}
                     className={cn(
-                      "relative flex flex-col border border-border bg-card transition-colors hover:border-foreground/25",
+                      "relative flex flex-col border border-border bg-card transition-colors hover:border-foreground/25 rounded-lg",
                       row.match.replied && "opacity-50",
                     )}
                   >
@@ -432,16 +432,16 @@ export function PostsContent() {
                           </p>
                         ) : null}
                         {reply ? (
-                          <p className="mt-4 border border-border bg-background p-3 text-sm text-foreground/75">
+                          <p className="mt-4 border border-border bg-background p-3 text-sm text-foreground/75 rounded-lg">
                             {reply}
                           </p>
                         ) : (
-                          <div className="relative z-10 mt-4 border border-dashed border-border p-3">
+                          <div className="relative z-10 mt-4 border border-dashed border-border p-3 rounded-lg">
                             <button
                               type="button"
                               onClick={() => requestDraft(row.match._id)}
                               disabled={drafting}
-                              className="flex h-8 cursor-pointer items-center gap-2 border border-border px-3 text-[10px] font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground disabled:cursor-default disabled:opacity-50"
+                              className="flex h-8 cursor-pointer items-center gap-2 border border-border px-3 text-[10px] font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground disabled:cursor-default disabled:opacity-50 rounded-lg"
                             >
                               <Sparkles className="size-3.5" />
                               {drafting ? "Writing..." : "Write the reply"}
@@ -456,7 +456,7 @@ export function PostsContent() {
                       </div>
                     </a>
 
-                    <div className="relative z-10 flex items-center justify-end gap-2 border-t border-border px-4 py-3">
+                    <div className="relative z-10 flex items-center justify-end gap-2 border-t border-border px-4 py-3 rounded-lg">
                       <button
                         type="button"
                         onClick={() => reply && copyReply(row.match._id, reply)}
@@ -466,7 +466,7 @@ export function PostsContent() {
                           "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border transition-colors disabled:cursor-default disabled:opacity-40",
                           copiedId === row.match._id
                             ? "border-primary text-primary"
-                            : "border-border text-muted-foreground/40 hover:border-foreground/40 hover:text-foreground",
+                            : "border-border text-muted-foreground/40 hover:border-foreground/40 hover:text-foreground rounded-lg",
                         )}
                       >
                         {copiedId === row.match._id ? (
@@ -488,7 +488,7 @@ export function PostsContent() {
                           "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border transition-colors",
                           row.match.replied
                             ? "border-primary bg-primary text-primary-foreground"
-                            : "border-border text-muted-foreground/40 hover:border-foreground/40 hover:text-foreground",
+                            : "border-border text-muted-foreground/40 hover:border-foreground/40 hover:text-foreground rounded-lg",
                         )}
                       >
                         <Check className="h-5 w-5" />
@@ -497,7 +497,7 @@ export function PostsContent() {
                         type="button"
                         onClick={() => skip(row)}
                         aria-label="Skip this post"
-                        className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border border-border text-muted-foreground/40 transition-colors hover:border-red-500/40 hover:text-red-400"
+                        className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border border-border text-muted-foreground/40 transition-colors hover:border-red-500/40 hover:text-red-400 rounded-lg"
                       >
                         <XIcon className="h-5 w-5" />
                       </button>
@@ -507,7 +507,7 @@ export function PostsContent() {
               })}
               {feed === undefined ? (
                 Array.from({ length: 8 }, (_, i) => (
-                  <li key={i} className="border border-border bg-card">
+                  <li key={i} className="border border-border bg-card rounded-lg">
                     <div className="flex items-center justify-between gap-3 bg-sidebar-accent/40 px-4 py-2.5">
                       <div className="h-3 w-1/3 bg-sidebar-accent" />
                       <div className="h-4 w-20 bg-sidebar-accent" />
@@ -516,15 +516,15 @@ export function PostsContent() {
                       <div className="h-4 w-2/3 bg-sidebar-accent" />
                       <div className="mt-3 h-3 w-full bg-sidebar-accent/50" />
                       <div className="mt-1.5 h-3 w-4/5 bg-sidebar-accent/50" />
-                      <div className="mt-4 border border-border p-3">
+                      <div className="mt-4 border border-border p-3 rounded-lg">
                         <div className="h-3 w-11/12 bg-sidebar-accent/50" />
                         <div className="mt-1.5 h-3 w-3/5 bg-sidebar-accent/50" />
                       </div>
                     </div>
-                    <div className="flex justify-end gap-2 border-t border-border px-4 py-3">
-                      <div className="h-10 w-10 border border-border" />
-                      <div className="h-10 w-10 border border-border" />
-                      <div className="h-10 w-10 border border-border" />
+                    <div className="flex justify-end gap-2 border-t border-border px-4 py-3 rounded-lg">
+                      <div className="h-10 w-10 border border-border rounded-lg" />
+                      <div className="h-10 w-10 border border-border rounded-lg" />
+                      <div className="h-10 w-10 border border-border rounded-lg" />
                     </div>
                   </li>
                 ))

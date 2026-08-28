@@ -42,7 +42,7 @@ export function ProfileContent() {
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 p-6">
       <h1 className="text-xl font-semibold">Profile</h1>
 
-      <section className="flex items-center gap-4 border border-border bg-sidebar-accent/20 p-5">
+      <section className="flex items-center gap-4 border border-border bg-sidebar-accent/20 p-5 rounded-lg">
         <Avatar className="size-14">
           <AvatarImage src={me?.imageUrl} alt={me?.name ?? ""} />
           <AvatarFallback>
@@ -57,13 +57,13 @@ export function ProfileContent() {
         </div>
       </section>
 
-      <section className="flex flex-col gap-4 border border-border bg-sidebar-accent/20 p-5">
+      <section className="flex flex-col gap-4 border border-border bg-sidebar-accent/20 p-5 rounded-lg">
         <div>
           <h2 className="text-xs font-bold tracking-wider text-muted-foreground uppercase">
             Billing
           </h2>
         </div>
-        <div className="flex flex-wrap items-center gap-4 border border-border p-4">
+        <div className="flex flex-wrap items-center gap-4 border border-border p-4 rounded-lg">
           <div className="min-w-0 flex-1">
             <p className="flex items-center gap-2 text-sm font-medium">
               Free plan
@@ -79,14 +79,14 @@ export function ProfileContent() {
           <button
             type="button"
             disabled
-            className="h-9 shrink-0 border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase opacity-50"
+            className="h-9 shrink-0 border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase opacity-50 rounded-lg"
           >
             Manage billing
           </button>
         </div>
       </section>
 
-      <section className="flex flex-col gap-4 border border-border bg-sidebar-accent/20 p-5">
+      <section className="flex flex-col gap-4 border border-border bg-sidebar-accent/20 p-5 rounded-lg">
         <div>
           <h2 className="text-xs font-bold tracking-wider text-muted-foreground uppercase">
             Integrations
@@ -98,7 +98,7 @@ export function ProfileContent() {
           return (
             <div
               key={integration.id}
-              className="flex items-center gap-4 border border-border p-4"
+              className="flex items-center gap-4 border border-border p-4 rounded-lg"
             >
               <span
                 className="flex h-9 w-9 shrink-0 items-center justify-center"
@@ -136,7 +136,7 @@ export function ProfileContent() {
                   "flex h-8 w-14 shrink-0 cursor-pointer items-center border px-1 transition-colors",
                   on
                     ? "justify-end border-primary bg-primary/20"
-                    : "justify-start border-border",
+                    : "justify-start border-border rounded-lg",
                 )}
               >
                 <span

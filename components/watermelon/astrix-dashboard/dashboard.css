@@ -3,7 +3,7 @@ body:has(.astrix-dashboard) [data-slot="sidebar"][data-mobile="true"],
 body:has(.astrix-dashboard) [data-slot="dropdown-menu-content"],
 body:has(.astrix-dashboard) [data-slot="sheet-content"],
 body:has(.astrix-dashboard) [data-slot="tooltip-content"] {
-  --radius: 0rem;
+  --radius: 0.625rem;
   --background: #fafafa;
   --foreground: #141414;
   --card: #ffffff;
@@ -38,6 +38,8 @@ body:has(.astrix-dashboard) [data-slot="tooltip-content"] {
   --sidebar-accent-foreground: #141414;
   --sidebar-border: oklch(0 0 0 / 12%);
   --sidebar-ring: oklch(0.708 0 0);
+  --brand: #0EA5E9;
+  --brand-foreground: #ffffff;
   --shadow-sidebar-item: drop-shadow(1px 2px 12px rgb(158 158 158 / 15%));
 }
 
@@ -53,7 +55,7 @@ body:has(.astrix-dashboard) [data-slot="tooltip-content"] {
 .dark body:has(.astrix-dashboard) [data-slot="dropdown-menu-content"],
 .dark body:has(.astrix-dashboard) [data-slot="sheet-content"],
 .dark body:has(.astrix-dashboard) [data-slot="tooltip-content"] {
-  --radius: 0rem;
+  --radius: 0.625rem;
   --background: #101010;
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.185 0 0);
@@ -88,6 +90,8 @@ body:has(.astrix-dashboard) [data-slot="tooltip-content"] {
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  --brand: #38BDF8;
+  --brand-foreground: #0b1220;
   --shadow-sidebar-item: drop-shadow(1px 2px 12px rgb(0 0 0 / 25%));
 }
 

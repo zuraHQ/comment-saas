@@ -98,8 +98,8 @@ export function AnalyticsContent() {
               className={cn(
                 "h-9 cursor-pointer border border-l-0 px-3 text-[10px] font-bold tracking-wider uppercase transition-colors first:border-l",
                 range === option.days
-                  ? "border-border bg-sidebar-accent text-foreground"
-                  : "border-border text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
+                  ? "border-border bg-sidebar-accent text-foreground rounded-lg"
+                  : "border-border text-muted-foreground hover:bg-sidebar-accent hover:text-foreground rounded-lg",
               )}
             >
               {option.label}
@@ -127,7 +127,7 @@ export function AnalyticsContent() {
             value: (counts?.replied ?? 0).toLocaleString(),
           },
         ].map((tile) => (
-          <div key={tile.label} className="border border-border bg-sidebar-accent/20 p-4">
+          <div key={tile.label} className="border border-border bg-sidebar-accent/20 p-4 rounded-lg">
             <p className="text-xs font-bold tracking-wider text-muted-foreground uppercase">
               {tile.label}
             </p>
@@ -136,7 +136,7 @@ export function AnalyticsContent() {
         ))}
       </div>
 
-      <section className="border border-border bg-sidebar-accent/20">
+      <section className="border border-border bg-sidebar-accent/20 rounded-lg">
         <header className="border-b border-border px-4 py-3 text-sm font-medium">
           Where your clicks came from
         </header>
@@ -204,7 +204,7 @@ export function AnalyticsContent() {
       </div>
 
       {/* Your tracked link */}
-      <section className="flex flex-col gap-3 border border-border bg-sidebar-accent/20 p-5">
+      <section className="flex flex-col gap-3 border border-border bg-sidebar-accent/20 p-5 rounded-lg">
         <div>
           <h2 className="flex items-center gap-2 text-sm font-semibold">
             <Link2 className="size-4" />
@@ -219,7 +219,7 @@ export function AnalyticsContent() {
 
         {hasUrl ? (
           <div className="flex flex-wrap items-center gap-3">
-            <code className="min-w-0 flex-1 truncate border border-border bg-sidebar-accent/40 px-3 py-2 text-sm">
+            <code className="min-w-0 flex-1 truncate border border-border bg-sidebar-accent/40 px-3 py-2 text-sm rounded-lg">
               {link ?? "..."}
             </code>
             <button
@@ -230,7 +230,7 @@ export function AnalyticsContent() {
                 "flex h-9 shrink-0 cursor-pointer items-center gap-2 border px-4 text-xs font-bold tracking-wider uppercase transition-colors disabled:cursor-default disabled:opacity-50",
                 copied
                   ? "border-primary text-primary"
-                  : "border-border text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
+                  : "border-border text-muted-foreground hover:bg-sidebar-accent hover:text-foreground rounded-lg",
               )}
             >
               {copied ? <Check className="size-3.5" /> : <Link2 className="size-3.5" />}
@@ -251,7 +251,7 @@ export function AnalyticsContent() {
             />
             <button
               type="submit"
-              className="h-9 shrink-0 cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
+              className="h-9 shrink-0 cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground rounded-lg"
             >
               Save
             </button>
@@ -285,7 +285,7 @@ function SourceCard({
   label: (row: SourceRow) => string;
 }) {
   return (
-    <section className="border border-border bg-sidebar-accent/20">
+    <section className="border border-border bg-sidebar-accent/20 rounded-lg">
       <div className="border-b border-border px-4 py-3">
         <h2 className="text-sm font-semibold">{title}</h2>
       </div>
