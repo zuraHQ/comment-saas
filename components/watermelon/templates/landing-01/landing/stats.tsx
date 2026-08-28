@@ -511,7 +511,7 @@ const STEPS = [
   {
     number: "01",
     title: "We read eight platforms end to end",
-    body: "Not keyword alerts. We read every new post in the communities your customers sit in.",
+    body: "We read every new post in the communities your customers sit in.",
     marks: true,
     visual: <ScanVisual />,
   },
