@@ -59,6 +59,15 @@ export function OnboardingContent() {
     suggestCommunities([]),
   );
 
+  const [keywordDraft, setKeywordDraft] = useState("");
+
+  const addKeyword = () => {
+    const value = keywordDraft.trim().toLowerCase();
+    if (!value || keywords.includes(value)) return;
+    setKeywords([...keywords, value]);
+    setKeywordDraft("");
+  };
+
   const toggleCategory = (id: string) => {
     const next = categories.includes(id)
       ? categories.filter((c) => c !== id)
@@ -251,7 +260,7 @@ export function OnboardingContent() {
                         onClick={() => toggleCategory(category.id)}
                         aria-pressed={on}
                         className={cn(
-                          "cursor-pointer border px-3 py-1.5 text-sm transition-colors",
+                          "cursor-pointer rounded-md border px-3 py-1.5 text-sm transition-colors",
                           on
                             ? "border-primary/40 bg-sidebar-accent/40 text-foreground"
                             : "border-border text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
@@ -268,9 +277,47 @@ export function OnboardingContent() {
                 <label className="text-sm font-medium">
                   Phrases we will watch for
                 </label>
-                <p className="text-sm text-muted-foreground">
-                  {keywords.join(", ")}
-                </p>
+                <div className="flex flex-wrap gap-2">
+                  {keywords.map((keyword) => (
+                    <span
+                      key={keyword}
+                      className="flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1 text-sm text-foreground"
+                    >
+                      {keyword}
+                      <button
+                        type="button"
+                        aria-label={`Remove ${keyword}`}
+                        onClick={() =>
+                          setKeywords(keywords.filter((k) => k !== keyword))
+                        }
+                        className="cursor-pointer text-muted-foreground transition-colors hover:text-foreground"
+                      >
+                        <X className="size-3" />
+                      </button>
+                    </span>
+                  ))}
+                </div>
+                <div className="flex gap-2">
+                  <Input
+                    value={keywordDraft}
+                    onChange={(e) => setKeywordDraft(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key !== "Enter") return;
+                      e.preventDefault();
+                      addKeyword();
+                    }}
+                    placeholder="add a phrase"
+                    className="h-9 rounded-md"
+                  />
+                  <button
+                    type="button"
+                    onClick={addKeyword}
+                    disabled={!keywordDraft.trim()}
+                    className="h-9 shrink-0 cursor-pointer rounded-md border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground disabled:cursor-default disabled:opacity-40"
+                  >
+                    Add
+                  </button>
+                </div>
               </div>
             </Step>
           ) : null}
