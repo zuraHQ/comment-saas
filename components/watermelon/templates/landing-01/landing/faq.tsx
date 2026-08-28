@@ -48,7 +48,7 @@ const FAQS: FaqItem[] = [
 
 export default function Faq() {
   return (
-    <section id="faq" className="relative w-full py-12">
+    <section className="relative w-full py-12">
       <Container className="relative z-10 mx-auto">
         <Faq1 title="FAQ" faqs={FAQS} />
       </Container>
