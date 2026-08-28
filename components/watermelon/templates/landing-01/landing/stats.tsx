@@ -13,6 +13,7 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useScroll, useSpring } from "motion/react";
 import { Check, Globe, Link2 } from "lucide-react";
 import Container from "./container";
+import SiteCapture from "./site-capture";
 import Heading from "./heading";
 import { cn } from "@/lib/utils";
 
@@ -601,6 +602,10 @@ export default function Stats() {
               </div>
             ))}
           </div>
+        </div>
+
+        <div className="mt-20">
+          <SiteCapture />
         </div>
       </Container>
     </section>

@@ -1,48 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Hero32 from "@/components/ui/hero-32";
+import SiteCapture from "./site-capture";
 
 export default function Hero() {
-  const router = useRouter();
-  const [site, setSite] = useState("");
-
-  // The link is the whole signup: we read the site to learn what the product
-  // does, so the CTA replaces the block's demo buttons.
-  const captureForm = (
-    <form
-      className="relative mx-auto flex w-full max-w-[18rem] flex-col gap-3"
-      onSubmit={(e) => {
-        e.preventDefault();
-        const value = site.trim();
-        if (!value) return;
-        const url = /^https?:\/\//i.test(value) ? value : `https://${value}`;
-        router.push(`/login?site=${encodeURIComponent(url)}`);
-      }}
-    >
-      <input
-        type="text"
-        required
-        value={site}
-        onChange={(e) => setSite(e.target.value)}
-        inputMode="url"
-        autoComplete="url"
-        placeholder="website.com"
-        className="h-12 w-full rounded-md border border-neutral-300 bg-neutral-100 px-5 text-sm text-neutral-900 shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] outline-none transition-colors placeholder:text-neutral-500 focus:border-brand focus:bg-white focus:ring-2 focus:ring-brand/20"
-      />
-      <button
-        type="submit"
-        className="h-12 w-full rounded-md bg-brand px-8 text-sm font-medium text-white shadow-[inset_0_2px_0_rgba(255,255,255,0.25),inset_0_-2px_0_rgba(0,0,0,0.18)] transition-colors hover:bg-brand/90"
-      >
-        Find customers
-      </button>
-      <p className="text-center text-xs text-neutral-500">
-        No credit card. 100 free mentions.
-      </p>
-    </form>
-  );
-
   return (
     <Hero32
       showNav={false}
@@ -63,7 +24,7 @@ export default function Hero() {
           <br className="hidden md:block" /> and draft suggested replies.
         </>
       }
-      action={captureForm}
+      action={<SiteCapture />}
       below={
         <div className="mx-auto w-[min(72rem,calc(100vw-2rem))] rounded-[2rem] border-[10px] border-neutral-900/5">
           <div className="overflow-hidden rounded-3xl border border-neutral-200 bg-white text-left">
