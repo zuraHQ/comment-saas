@@ -14,8 +14,8 @@ export default function Hero() {
       loginHref="/login"
       title={
         <>
-          We read the internet <br />
-          You get customers
+          People are asking for your <br />
+          product right now
         </>
       }
       subtitle={
