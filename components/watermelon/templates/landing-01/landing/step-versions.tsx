@@ -9,6 +9,8 @@ import {
   FaXTwitter,
 } from "react-icons/fa6";
 import { Check, Copy, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 
 export const STEPS = [
@@ -123,7 +125,24 @@ export function PreviewRank() {
   );
 }
 
+const DRAFT =
+  "Been exactly here. The chasing was the part that ate my Fridays, so I ended up building Acme around it. No seat minimum.";
+
 export function PreviewReply() {
+  // Type the draft out, hold it, then start over.
+  const [typed, setTyped] = useState(0);
+
+  useEffect(() => {
+    if (typed >= DRAFT.length) {
+      const restart = setTimeout(() => setTyped(0), 2600);
+      return () => clearTimeout(restart);
+    }
+    const tick = setTimeout(() => setTyped((n) => n + 1), 22);
+    return () => clearTimeout(tick);
+  }, [typed]);
+
+  const writing = typed < DRAFT.length;
+
   return (
     <Frame>
       <p className="flex items-center gap-2 text-xs text-neutral-500">
@@ -136,12 +155,34 @@ export function PreviewReply() {
       <div className="mt-3 flex gap-3">
         <span className="mt-1 w-px shrink-0 bg-neutral-200" />
         <div className="min-w-0">
-          <p className="text-[10px] font-bold tracking-wider text-neutral-500 uppercase">
-            You, replying
+          <p className="flex items-center gap-1.5 text-[10px] font-bold tracking-wider text-neutral-500 uppercase">
+            {writing ? (
+              <>
+                AI drafting
+                <span className="flex gap-0.5">
+                  {[0, 1, 2].map((dot) => (
+                    <motion.span
+                      key={dot}
+                      className="size-1 rounded-full bg-neutral-400"
+                      animate={{ opacity: [0.2, 1, 0.2] }}
+                      transition={{
+                        duration: 0.9,
+                        repeat: Infinity,
+                        delay: dot * 0.15,
+                      }}
+                    />
+                  ))}
+                </span>
+              </>
+            ) : (
+              "Your reply"
+            )}
           </p>
-          <p className="mt-1.5 text-sm leading-relaxed text-neutral-700">
-            Been exactly here. The chasing was the part that ate my Fridays, so
-            I ended up building Acme around it. No seat minimum.
+          <p className="mt-1.5 min-h-[4.5rem] text-sm leading-relaxed text-neutral-700">
+            {DRAFT.slice(0, typed)}
+            {writing ? (
+              <span className="ml-0.5 inline-block h-4 w-px translate-y-0.5 bg-neutral-400" />
+            ) : null}
           </p>
         </div>
       </div>
