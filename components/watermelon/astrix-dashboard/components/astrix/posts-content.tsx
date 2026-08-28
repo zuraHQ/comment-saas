@@ -429,10 +429,10 @@ export function PostsContent() {
                         onClick={() => toggleReplied(row)}
                         aria-pressed={row.match.replied}
                         className={cn(
-                          "flex h-9 shrink-0 cursor-pointer items-center gap-2 rounded-lg px-4 text-xs font-medium shadow-[inset_0_2px_0_rgba(255,255,255,0.25),inset_0_-2px_0_rgba(0,0,0,0.18)] transition-colors",
+                          "flex h-9 shrink-0 cursor-pointer items-center gap-2 rounded-lg border px-3 text-xs font-medium transition-colors",
                           row.match.replied
-                            ? "bg-brand/15 text-brand"
-                            : "bg-brand text-brand-foreground hover:bg-brand/90",
+                            ? "border-brand/40 text-brand"
+                            : "border-border text-muted-foreground hover:border-brand/40 hover:text-brand",
                         )}
                       >
                         <Check className="size-4" />
