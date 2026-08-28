@@ -235,10 +235,15 @@ export function PostsContent() {
           <Sheet>
             <SheetTrigger
               type="button"
-              aria-label="Skipped"
-              className="ml-auto flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground"
+              aria-label={`Skipped, ${skippedRows.length} posts`}
+              className="relative ml-auto flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground"
             >
               <XIcon className="size-4" />
+              {skippedRows.length ? (
+                <span className="absolute -top-2 -right-2 flex h-5 min-w-5 items-center justify-center rounded-full bg-sidebar-accent px-1.5 text-[10px] font-bold text-foreground">
+                  {skippedRows.length > 99 ? "99+" : skippedRows.length}
+                </span>
+              ) : null}
             </SheetTrigger>
             <SheetContent
               side="right"
@@ -259,10 +264,15 @@ export function PostsContent() {
           <Sheet>
             <SheetTrigger
               type="button"
-              aria-label="History"
-              className="flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground"
+              aria-label={`History, ${repliedRows.length} replied`}
+              className="relative flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground"
             >
               <HistoryIcon className="size-4" />
+              {repliedRows.length ? (
+                <span className="bg-brand text-brand-foreground absolute -top-2 -right-2 flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[10px] font-bold">
+                  {repliedRows.length > 99 ? "99+" : repliedRows.length}
+                </span>
+              ) : null}
             </SheetTrigger>
             <SheetContent
               side="right"
