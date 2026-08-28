@@ -262,7 +262,7 @@ export function OnboardingContent() {
                         className={cn(
                           "cursor-pointer rounded-md border px-3 py-1.5 text-sm transition-colors",
                           on
-                            ? "border-primary/40 bg-sidebar-accent/40 text-foreground"
+                            ? "border-brand bg-brand/10 text-brand"
                             : "border-border text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
                         )}
                       >
