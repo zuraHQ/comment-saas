@@ -27,43 +27,54 @@ import { cn } from "@/lib/utils";
 /* ---------------------------------------------------------------- 01 */
 // Raw chatter arriving from every platform at once.
 
-// The eight places we read, named, so the claim is checkable at a glance.
-const PLATFORMS = [
-  { label: "Reddit", Icon: FaRedditAlien, bg: "#FF4500", fg: "#ffffff", note: "communities and keywords" },
-  { label: "Hacker News", Icon: FaHackerNews, bg: "#FF6600", fg: "#ffffff", note: "all stories, Ask and Show" },
-  { label: "Indie Hackers", Icon: FaRegLightbulb, bg: "#0E2439", fg: "#ffffff", note: "every new post" },
-  { label: "X / Twitter", Icon: FaXTwitter, bg: "#171717", fg: "#ffffff", note: "keywords and accounts" },
-  { label: "LinkedIn", Icon: FaLinkedinIn, bg: "#0A66C2", fg: "#ffffff", note: "keywords" },
-  { label: "YouTube", Icon: FaYoutube, bg: "#FF0000", fg: "#ffffff", note: "new videos" },
-  { label: "Bluesky", Icon: FaBluesky, bg: "#0085FF", fg: "#ffffff", note: "keywords" },
-  { label: "GitHub", Icon: FaGithub, bg: "#171717", fg: "#ffffff", note: "repo discussions" },
+// A feed running past, so the claim reads as volume rather than a list.
+const INCOMING = [
+  { text: "Looking for a simple invoicing tool", where: "r/freelance", Icon: FaRedditAlien, color: "#FF4500" },
+  { text: "Ask HN: how do you find your first users?", where: "Hacker News", Icon: FaHackerNews, color: "#FF6600" },
+  { text: "Month end took me two days again", where: "r/smallbusiness", Icon: FaRedditAlien, color: "#FF4500" },
+  { text: "What are you all using for outreach?", where: "Indie Hackers", Icon: FaRegLightbulb, color: "#0E2439" },
+  { text: "spreadsheets are killing me honestly", where: "Bluesky", Icon: FaBluesky, color: "#0085FF" },
+  { text: "Any alternative that is not enterprise?", where: "r/SaaS", Icon: FaRedditAlien, color: "#FF4500" },
+  { text: "How do you handle late payers?", where: "LinkedIn", Icon: FaLinkedinIn, color: "#0A66C2" },
+  { text: "Show HN: I automated my follow ups", where: "Hacker News", Icon: FaHackerNews, color: "#FF6600" },
+  { text: "Does anyone still do this by hand?", where: "r/Entrepreneur", Icon: FaRedditAlien, color: "#FF4500" },
+  { text: "Best tool for tracking leads in 2026", where: "YouTube", Icon: FaYoutube, color: "#FF0000" },
 ];
 
 function ScanVisual() {
   return (
-    <div className="flex h-full w-full flex-col justify-center gap-2 bg-gradient-to-br from-sky-100 via-sky-50 to-white p-8 lg:p-10">
-      {PLATFORMS.map((platform) => (
-        <div
-          key={platform.label}
-          className="flex items-center gap-3 rounded-md border border-neutral-200 bg-white px-3 py-2.5"
-        >
-          <span
-            className="flex size-9 shrink-0 items-center justify-center rounded"
-            style={{ backgroundColor: platform.bg }}
+    <div className="relative h-full w-full overflow-hidden bg-gradient-to-br from-sky-100 via-sky-50 to-white">
+      <motion.div
+        className="flex flex-col gap-2 p-6"
+        animate={{ y: ["0%", "-50%"] }}
+        transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
+      >
+        {[...INCOMING, ...INCOMING].map((item, i) => (
+          <div
+            key={i}
+            className="flex items-center gap-3 rounded-md border border-white bg-white/80 px-3 py-2.5 shadow-sm backdrop-blur-sm"
           >
-            <platform.Icon
-              className="size-4"
-              style={{ color: platform.fg }}
-            />
-          </span>
-          <span className="truncate text-sm font-medium text-neutral-900">
-            {platform.label}
-          </span>
-          <span className="ml-auto shrink-0 text-xs text-neutral-500">
-            {platform.note}
-          </span>
-        </div>
-      ))}
+            <span
+              className="flex size-6 shrink-0 items-center justify-center rounded"
+              style={{ backgroundColor: item.color }}
+            >
+              <item.Icon className="size-3 text-white" />
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="block truncate text-xs font-medium text-neutral-900">
+                {item.text}
+              </span>
+              <span className="block truncate text-[10px] text-neutral-500">
+                {item.where}
+              </span>
+            </span>
+          </div>
+        ))}
+      </motion.div>
+
+      {/* Fade the ends so the feed reads as endless */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-sky-100 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white to-transparent" />
     </div>
   );
 }
