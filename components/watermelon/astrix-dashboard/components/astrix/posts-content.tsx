@@ -3,14 +3,16 @@
 import { useState } from "react";
 import { useAction, useMutation, useQuery } from "convex/react";
 import {
+  ArrowUpRight,
   Check,
   Copy,
+  RotateCw,
   History as HistoryIcon,
   RefreshCw,
   X as XIcon,
 } from "lucide-react";
 import { api } from "@/convex/_generated/api";
-import type { Doc } from "@/convex/_generated/dataModel";
+import type { Doc, Id } from "@/convex/_generated/dataModel";
 import {
   Sheet,
   SheetContent,
@@ -79,6 +81,17 @@ export function IntentBadge({ match }: { match: Doc<"matches"> }) {
 export function PostsContent() {
   const { project } = useProject();
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [rewritingId, setRewritingId] = useState<string | null>(null);
+  const writeDraft = useAction(api.replyDrafter.draft);
+
+  // Ask for a fresh draft of the same post, replacing the stored one.
+  const rewrite = (matchId: Id<"matches">) => {
+    setRewritingId(matchId);
+    writeDraft({ matchId, force: true })
+      .catch(console.error)
+      .finally(() => setRewritingId((id) => (id === matchId ? null : id)));
+  };
+
   const copyReply = (id: string, text: string) => {
     navigator.clipboard
       .writeText(text)
@@ -321,7 +334,7 @@ export function PostsContent() {
 
           {/* Post feed */}
           <section className="flex min-w-0 flex-1 flex-col">
-            <ul className="no-scrollbar grid min-h-0 flex-1 auto-rows-min grid-cols-1 content-start gap-3 overflow-y-auto p-3 lg:grid-cols-2 2xl:grid-cols-3">
+            <ul className="no-scrollbar grid min-h-0 flex-1 auto-rows-min grid-cols-1 content-start gap-3 overflow-y-auto p-3 lg:grid-cols-2">
               {visibleRows.map((row) => {
                 const platform =
                   PLATFORM_BY_ID[row.match.platform ?? row.post.platform];
@@ -391,32 +404,57 @@ export function PostsContent() {
                     </a>
 
                     {reply ? (
-                      <div className="relative z-10 mx-4 mb-4 border-l-2 border-brand bg-sidebar-accent/30 py-2.5 pr-2.5 pl-3">
-                        <div className="flex items-center justify-between gap-2">
-                          <span className="text-[10px] font-bold tracking-wider text-brand uppercase">
-                            Your reply
-                          </span>
-                          <button
-                            type="button"
-                            onClick={() => copyReply(row.match._id, reply)}
-                            className="flex h-6 shrink-0 cursor-pointer items-center gap-1.5 px-1.5 text-[10px] font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:text-foreground"
-                          >
-                            {copiedId === row.match._id ? (
-                              <>
-                                <Check className="size-3" />
-                                Copied
-                              </>
-                            ) : (
-                              <>
-                                <Copy className="size-3" />
-                                Copy
-                              </>
-                            )}
-                          </button>
+                      <div className="relative z-10 mx-4 mb-4 flex gap-3">
+                        <span className="mt-1 w-px shrink-0 bg-border" />
+                        <div className="min-w-0 flex-1">
+                          <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
+                            You, replying
+                          </p>
+                          <p className="mt-1.5 text-sm leading-relaxed text-foreground/85">
+                            {reply}
+                          </p>
+                          <div className="mt-3 flex items-center gap-3 text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
+                            <button
+                              type="button"
+                              onClick={() => copyReply(row.match._id, reply)}
+                              className="flex cursor-pointer items-center gap-1.5 transition-colors hover:text-foreground"
+                            >
+                              {copiedId === row.match._id ? (
+                                <>
+                                  <Check className="size-3" /> Copied
+                                </>
+                              ) : (
+                                <>
+                                  <Copy className="size-3" /> Copy
+                                </>
+                              )}
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => rewrite(row.match._id)}
+                              disabled={rewritingId === row.match._id}
+                              className="flex cursor-pointer items-center gap-1.5 transition-colors hover:text-foreground disabled:cursor-default disabled:opacity-50"
+                            >
+                              <RotateCw
+                                className={cn(
+                                  "size-3",
+                                  rewritingId === row.match._id && "animate-spin",
+                                )}
+                              />
+                              {rewritingId === row.match._id
+                                ? "Writing"
+                                : "Rewrite"}
+                            </button>
+                            <a
+                              href={row.post.url}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="ml-auto flex cursor-pointer items-center gap-1.5 transition-colors hover:text-foreground"
+                            >
+                              Open <ArrowUpRight className="size-3" />
+                            </a>
+                          </div>
                         </div>
-                        <p className="mt-1.5 text-sm leading-relaxed text-foreground/85">
-                          {reply}
-                        </p>
                       </div>
                     ) : null}
 
