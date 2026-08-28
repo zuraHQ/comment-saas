@@ -38,7 +38,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <script
           dangerouslySetInnerHTML={{
             __html:
-              "(function(){try{if(localStorage.getItem('astrix-theme')!=='light'){document.documentElement.classList.add('dark')}}catch(e){}})()",
+              "(function(){try{var t=localStorage.getItem('astrix-theme');var d=t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.classList.toggle('dark',d)}catch(e){}})()",
           }}
         />
       </head>

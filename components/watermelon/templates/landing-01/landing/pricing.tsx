@@ -50,7 +50,7 @@ export default function Pricing() {
           >
             One reply can pay for a year.
           </Heading>
-          <p className="mt-4 max-w-xl text-sm text-neutral-500">
+          <p className="mt-4 max-w-xl text-sm text-muted-foreground">
             Free while in beta. Cancel any time.
           </p>
         </div>
@@ -62,8 +62,8 @@ export default function Pricing() {
               className={cn(
                 'relative flex flex-col border p-8',
                 plan.featured
-                  ? 'border-primary/50 bg-neutral-50'
-                  : 'border-neutral-200 bg-white',
+                  ? 'border-primary/50 bg-muted/40'
+                  : 'border-border bg-background',
               )}
             >
               {plan.featured ? (
@@ -72,22 +72,22 @@ export default function Pricing() {
                 </span>
               ) : null}
 
-              <p className="font-mono text-xs font-bold tracking-widest text-neutral-600 uppercase">
+              <p className="font-mono text-xs font-bold tracking-widest text-muted-foreground uppercase">
                 {plan.name}
               </p>
               <p className="mt-4 flex items-baseline gap-1">
-                <span className="text-5xl font-semibold text-neutral-900">
+                <span className="text-5xl font-semibold text-foreground">
                   ${plan.price}
                 </span>
-                <span className="text-sm text-neutral-500">/month</span>
+                <span className="text-sm text-muted-foreground">/month</span>
               </p>
-              <p className="mt-3 text-sm text-neutral-500">{plan.blurb}</p>
+              <p className="mt-3 text-sm text-muted-foreground">{plan.blurb}</p>
 
               <ul className="mt-8 flex flex-1 flex-col gap-3">
                 {plan.features.map((feature) => (
                   <li key={feature} className="flex items-start gap-3 text-sm">
                     <Check className="text-primary mt-0.5 h-4 w-4 shrink-0" />
-                    <span className="text-neutral-600">{feature}</span>
+                    <span className="text-muted-foreground">{feature}</span>
                   </li>
                 ))}
               </ul>
@@ -98,7 +98,7 @@ export default function Pricing() {
                   'mt-8 flex h-12 items-center justify-center font-mono text-xs font-bold tracking-widest uppercase transition-colors',
                   plan.featured
                     ? 'bg-primary text-background hover:bg-primary/90'
-                    : 'border border-neutral-300 text-neutral-900 hover:bg-neutral-100',
+                    : 'border border-border text-foreground hover:bg-muted',
                 )}
               >
                 {plan.cta}

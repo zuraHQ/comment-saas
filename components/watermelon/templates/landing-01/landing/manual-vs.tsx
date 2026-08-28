@@ -34,7 +34,7 @@ export default function ManualVs() {
                 <li key={item.text} className="flex gap-3">
                   <X className="mt-0.5 h-4 w-4 shrink-0 text-red-400/70" />
                   <div>
-                    <p className="text-base text-neutral-600">{item.text}</p>
+                    <p className="text-base text-muted-foreground">{item.text}</p>
                     <p className="mt-1.5 font-mono text-xs tracking-widest text-red-400/50 uppercase">
                       {item.time}
                     </p>
@@ -42,7 +42,7 @@ export default function ManualVs() {
                 </li>
               ))}
             </ul>
-            <p className="mt-8 border-t border-neutral-200 pt-6 text-base text-neutral-500">
+            <p className="mt-8 border-t border-border pt-6 text-base text-muted-foreground">
               That is{' '}
               <span className="font-semibold text-red-400">
                 most of a morning
@@ -51,21 +51,21 @@ export default function ManualVs() {
             </p>
           </div>
 
-          <div className="border-primary/40 flex flex-col rounded-md border bg-neutral-50 p-8">
+          <div className="border-primary/40 flex flex-col rounded-md border bg-muted/40 p-8">
             <p className="text-primary text-xs font-bold tracking-wider uppercase">
               With us
             </p>
 
-            <h3 className="mt-8 text-lg font-semibold text-neutral-900">
+            <h3 className="mt-8 text-lg font-semibold text-foreground">
               Paste your link. That is the setup.
             </h3>
-            <p className="mt-4 text-base leading-relaxed text-neutral-600">
+            <p className="mt-4 text-base leading-relaxed text-muted-foreground">
               We read eight platforms, find the posts where your product is
               the answer, and write the reply for you.
             </p>
 
-            <p className="mt-auto border-t border-neutral-200 pt-6 text-base text-neutral-600">
-              <span className="font-semibold text-neutral-900">
+            <p className="mt-auto border-t border-border pt-6 text-base text-muted-foreground">
+              <span className="font-semibold text-foreground">
                 Two minutes once.
               </span>{' '}
               Ten minutes a day after that.
@@ -74,7 +74,7 @@ export default function ManualVs() {
         </div>
 
         <div className="mt-12 flex flex-col items-center gap-6 text-center">
-          <p className="text-xl font-semibold text-neutral-900">
+          <p className="text-xl font-semibold text-foreground">
             That is{' '}
             <span className="text-brand">60 – 120 hours a month</span> back,
             for every product you run.

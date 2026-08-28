@@ -57,10 +57,10 @@ function ScanVisual() {
             >
               <line.Icon className="size-2.5 text-white" />
             </span>
-            <span className="truncate text-xs font-medium text-neutral-900">
+            <span className="truncate text-xs font-medium text-foreground">
               {line.where}
             </span>
-            <span className="ml-auto shrink-0 text-xs text-neutral-500">
+            <span className="ml-auto shrink-0 text-xs text-muted-foreground">
               {line.n}
             </span>
           </span>
@@ -69,8 +69,8 @@ function ScanVisual() {
 
       {/* Fade the bottom so the log reads as endless */}
       {/* Fade both ends into the panel so the log has no edges */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-neutral-50 to-transparent" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-neutral-50 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-muted/40 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-muted/40 to-transparent" />
     </div>
   );
 }
@@ -131,7 +131,7 @@ const JUDGED = [
 const INTENT_CHIP: Record<string, string> = {
   High: "bg-[#FF6600] text-[#101010]",
   Medium: "bg-[#FFC53D] text-[#101010]",
-  Low: "bg-neutral-100 text-neutral-500",
+  Low: "bg-muted text-muted-foreground",
 };
 
 // A, developed: scanning bar over the post, score counting up, the reason
@@ -222,7 +222,7 @@ function SortVisual() {
               >
                 {reading ? "--" : score}
               </span>
-              <span className="text-[9px] tracking-wider text-neutral-400 uppercase">
+              <span className="text-[9px] tracking-wider text-muted-foreground/70 uppercase">
                 Intent
               </span>
             </div>
@@ -250,11 +250,11 @@ function SortVisual() {
                     }}
                   />
                 </span>
-                <span className="truncate text-[11px] text-neutral-500">
+                <span className="truncate text-[11px] text-muted-foreground">
                   {post.author} · {post.where} · {post.time}
                 </span>
               </div>
-              <p className="mt-2 line-clamp-2 h-8 text-xs text-neutral-700">
+              <p className="mt-2 line-clamp-2 h-8 text-xs text-foreground/80">
                 {post.text}
               </p>
               <div className="mt-3 h-8">
@@ -274,7 +274,7 @@ function SortVisual() {
                         />
                       ))}
                     </span>
-                    <span className="text-[10px] tracking-wider text-neutral-500 uppercase">
+                    <span className="text-[10px] tracking-wider text-muted-foreground uppercase">
                       Matching against your product...
                     </span>
                   </span>
@@ -283,7 +283,7 @@ function SortVisual() {
                     initial={{ opacity: 0, y: 6 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="line-clamp-2 text-xs text-neutral-600"
+                    className="line-clamp-2 text-xs text-muted-foreground"
                   >
                     {post.verdict}
                   </motion.p>
@@ -303,20 +303,20 @@ function SortVisual() {
 function ReplyVisual() {
   return (
     <div className="flex h-80 flex-col justify-center">
-      <div className="divide-y divide-neutral-200 overflow-hidden rounded-xl border border-neutral-200">
+      <div className="divide-y divide-border overflow-hidden rounded-xl border border-border">
         <article className="p-4">
           <div className="flex items-center gap-2.5">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="https://api.dicebear.com/9.x/notionists/svg?seed=marta&backgroundColor=1f2937"
               alt=""
-              className="h-7 w-7 shrink-0 rounded-full bg-neutral-50"
+              className="h-7 w-7 shrink-0 rounded-full bg-muted/40"
             />
             <div className="min-w-0">
-              <p className="text-xs font-medium text-neutral-700">
+              <p className="text-xs font-medium text-foreground/80">
                 u/marta_builds
               </p>
-              <p className="flex items-center gap-1.5 text-[11px] text-neutral-400">
+              <p className="flex items-center gap-1.5 text-[11px] text-muted-foreground/70">
                 <FaRedditAlien className="h-3 w-3 text-[#FF4500]" />
                 Reddit · 4m
               </p>
@@ -325,38 +325,38 @@ function ReplyVisual() {
               High
             </span>
           </div>
-          <p className="mt-3 text-xs text-neutral-700">
+          <p className="mt-3 text-xs text-foreground/80">
             How do you find the threads where people are actually asking for a
             product like yours? Searching manually every day is killing me.
           </p>
-          <div className="mt-3 flex items-center gap-4 text-[11px] text-neutral-400">
+          <div className="mt-3 flex items-center gap-4 text-[11px] text-muted-foreground/70">
             <span>▲ 47</span>
             <span>12 comments</span>
             <span>share</span>
           </div>
         </article>
 
-        <div className="bg-neutral-50 p-4 pl-10">
+        <div className="bg-muted/40 p-4 pl-10">
           <div className="flex items-center gap-2.5">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="https://api.dicebear.com/9.x/notionists/svg?seed=founder&backgroundColor=a3ff12"
               alt=""
-              className="ring-brand/60 h-7 w-7 shrink-0 rounded-full bg-neutral-50 ring-1"
+              className="ring-brand/60 h-7 w-7 shrink-0 rounded-full bg-muted/40 ring-1"
             />
             <div className="min-w-0">
-              <p className="text-xs font-medium text-neutral-700">you</p>
-              <p className="text-[11px] text-neutral-400">just now</p>
+              <p className="text-xs font-medium text-foreground/80">you</p>
+              <p className="text-[11px] text-muted-foreground/70">just now</p>
             </div>
           </div>
-          <p className="mt-3 text-xs text-neutral-700">
+          <p className="mt-3 text-xs text-foreground/80">
             Had the same problem, so I built something for it. It reads the
             communities for you and scores what is worth answering —{" "}
             <span className="text-brand underline underline-offset-2">
               commentsaas.com
             </span>
           </p>
-          <div className="mt-3 flex items-center gap-4 text-[11px] text-neutral-400">
+          <div className="mt-3 flex items-center gap-4 text-[11px] text-muted-foreground/70">
             <span>▲ 8</span>
             <span>reply</span>
             <span>share</span>
@@ -385,11 +385,11 @@ function ResultVisual() {
     <div className="flex h-80 flex-col justify-center gap-5">
       <div className="flex items-end gap-6">
         <div>
-          <p className="text-[10px] font-bold tracking-wider text-neutral-500 uppercase">
+          <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
             Link clicks
           </p>
           <motion.p
-            className="text-2xl font-semibold text-neutral-900"
+            className="text-2xl font-semibold text-foreground"
             initial={{ opacity: 0.4 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -398,16 +398,16 @@ function ResultVisual() {
           </motion.p>
         </div>
         <div>
-          <p className="text-[10px] font-bold tracking-wider text-neutral-500 uppercase">
+          <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
             Replies sent
           </p>
-          <p className="text-2xl font-semibold text-neutral-900">2,140</p>
+          <p className="text-2xl font-semibold text-foreground">2,140</p>
         </div>
         <div>
-          <p className="text-[10px] font-bold tracking-wider text-neutral-500 uppercase">
+          <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
             Best channel
           </p>
-          <p className="text-2xl font-semibold text-neutral-900">Reddit</p>
+          <p className="text-2xl font-semibold text-foreground">Reddit</p>
         </div>
       </div>
 
@@ -425,10 +425,10 @@ function ResultVisual() {
                 }}
               />
             </span>
-            <span className="w-24 shrink-0 text-xs text-neutral-600">
+            <span className="w-24 shrink-0 text-xs text-muted-foreground">
               {source.label}
             </span>
-            <span className="relative h-1.5 flex-1 rounded-full bg-neutral-200">
+            <span className="relative h-1.5 flex-1 rounded-full bg-muted">
               <motion.span
                 className="bg-primary absolute inset-y-0 left-0 rounded-full"
                 initial={{ width: 0 }}
@@ -437,7 +437,7 @@ function ResultVisual() {
                 transition={{ duration: 0.8, delay: i * 0.12, ease: "easeOut" }}
               />
             </span>
-            <span className="w-12 shrink-0 text-right text-xs tabular-nums text-neutral-600">
+            <span className="w-12 shrink-0 text-right text-xs tabular-nums text-muted-foreground">
               {source.clicks.toLocaleString()}
             </span>
           </div>
@@ -500,15 +500,15 @@ export default function Stats() {
             <div
               key={step.number}
               className={cn(
-                "grid items-stretch overflow-hidden rounded-md border border-neutral-200/70 bg-neutral-50 shadow-[0_1px_2px_rgba(0,0,0,0.03)] lg:grid-cols-2",
+                "grid items-stretch overflow-hidden rounded-md border border-border/70 bg-muted/40 shadow-[0_1px_2px_rgba(0,0,0,0.03)] lg:grid-cols-2",
                 i % 2 === 1 && "lg:[&>*:first-child]:order-2",
               )}
             >
               <div className="self-center p-8 lg:p-10">
-                <h3 className="text-4xl leading-[1.1] font-semibold text-neutral-900">
+                <h3 className="text-4xl leading-[1.1] font-semibold text-foreground">
                   {step.title}
                 </h3>
-                <p className="mt-4 max-w-md text-lg leading-relaxed text-neutral-600">
+                <p className="mt-4 max-w-md text-lg leading-relaxed text-muted-foreground">
                   {step.body}
                 </p>
               </div>

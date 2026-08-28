@@ -40,15 +40,15 @@ export default function Hero32({
   action,
 }: Hero32Props) {
   return (
-    <div className="relative min-h-screen w-full overflow-hidden bg-white font-sans antialiased">
+    <div className="relative min-h-screen w-full overflow-hidden bg-background font-sans antialiased">
       <div className="relative z-10 flex min-h-screen flex-col pt-6">
         {showNav ? (
           <div className="fixed inset-x-0 top-4 z-50 px-4">
             {/* Nav — single spring drop */}
             <nav
-              className="mx-auto flex w-fit items-center gap-8 rounded-full border border-neutral-200 bg-white/90 px-2 py-2 backdrop-blur-md"
+              className="mx-auto flex w-fit items-center gap-8 rounded-full border border-border bg-background/90 px-2 py-2 backdrop-blur-md"
             >
-              <div className="pl-4 text-base font-bold tracking-tight text-neutral-900 2xl:text-lg">
+              <div className="pl-4 text-base font-bold tracking-tight text-foreground 2xl:text-lg">
                 {logoText}
               </div>
               <div className="hidden items-center gap-6 px-4 md:flex">
@@ -56,7 +56,7 @@ export default function Hero32({
                   <a
                     key={item}
                     href={navHrefs?.[i] ?? "#"}
-                    className="text-xs font-medium text-neutral-500 transition-colors hover:text-neutral-900 2xl:text-lg"
+                    className="text-xs font-medium text-muted-foreground transition-colors hover:text-foreground 2xl:text-lg"
                   >
                     {item}
                   </a>
@@ -64,7 +64,7 @@ export default function Hero32({
               </div>
               <a
                 href={loginHref}
-                className="rounded-full border border-neutral-300 px-6 py-2 text-xs font-medium text-neutral-900 transition-colors hover:bg-neutral-100 2xl:text-lg"
+                className="rounded-full border border-border px-6 py-2 text-xs font-medium text-foreground transition-colors hover:bg-muted 2xl:text-lg"
               >
                 {loginText}
               </a>
@@ -77,7 +77,7 @@ export default function Hero32({
           <div className="flex w-full max-w-4xl flex-col items-center text-center 2xl:max-w-6xl">
             {/* Title: majestic slow rise */}
             <h1
-              className="text-4xl font-semibold tracking-tight text-neutral-900 md:text-5xl lg:text-[64px] lg:leading-[0.95]"
+              className="text-4xl font-semibold tracking-tight text-foreground md:text-5xl lg:text-[64px] lg:leading-[0.95]"
               style={{ textWrap: "balance" }}
             >
               {title}
@@ -85,7 +85,7 @@ export default function Hero32({
 
             {/* Subtitle: lighter, quicker */}
             <p
-              className="mt-6 max-w-2xl text-base leading-relaxed font-normal text-neutral-600 md:text-lg"
+              className="mt-6 max-w-2xl text-base leading-relaxed font-normal text-muted-foreground md:text-lg"
               style={{ textWrap: "pretty" }}
             >
               {subtitle}
@@ -97,10 +97,10 @@ export default function Hero32({
             >
               {action ?? (
                 <>
-                  <button className="flex min-h-12 items-center rounded-full bg-white/20 px-8 text-sm font-medium text-white shadow-[inset_2px_2px_0_-0.5px_rgba(255,255,255,0.1),inset_-2px_-2px_0_-0.5px_rgba(255,255,255,0.1)] backdrop-blur-sm transition-transform hover:bg-white/30 active:scale-[0.96] 2xl:text-lg">
+                  <button className="flex min-h-12 items-center rounded-full bg-background/20 px-8 text-sm font-medium text-white shadow-[inset_2px_2px_0_-0.5px_rgba(255,255,255,0.1),inset_-2px_-2px_0_-0.5px_rgba(255,255,255,0.1)] backdrop-blur-sm transition-transform hover:bg-background/30 active:scale-[0.96] 2xl:text-lg">
                     {primaryActionText}
                   </button>
-                  <button className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-sky-400 shadow-lg transition-transform hover:scale-105 active:scale-[0.96]">
+                  <button className="flex h-12 w-12 items-center justify-center rounded-full bg-background text-sky-400 shadow-lg transition-transform hover:scale-105 active:scale-[0.96]">
                     <Play className="h-5 w-5 fill-current" />
                   </button>
                 </>

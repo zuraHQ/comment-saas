@@ -27,8 +27,8 @@ export default function Hero() {
       action={<SiteCapture />}
       below={
         <div className="mx-auto w-[min(72rem,calc(100vw-2rem))] rounded-[2rem] border-[10px] border-neutral-900/5">
-          <div className="overflow-hidden rounded-3xl border border-neutral-200 bg-white text-left">
-            <div className="aspect-video w-full bg-neutral-50" />
+          <div className="overflow-hidden rounded-3xl border border-border bg-background text-left">
+            <div className="aspect-video w-full bg-muted/40" />
           </div>
         </div>
       }

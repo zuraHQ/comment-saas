@@ -28,7 +28,7 @@ export default function SiteCapture() {
         inputMode="url"
         autoComplete="url"
         placeholder="website.com"
-        className="focus:border-brand focus:ring-brand/20 h-12 w-full rounded-md border border-neutral-300 bg-neutral-100 px-5 text-sm text-neutral-900 shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] outline-none transition-colors placeholder:text-neutral-500 focus:bg-white focus:ring-2"
+        className="focus:border-brand focus:ring-brand/20 h-12 w-full rounded-md border border-border bg-muted px-5 text-sm text-foreground shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] outline-none transition-colors placeholder:text-muted-foreground focus:bg-background focus:ring-2"
       />
       <button
         type="submit"
@@ -36,7 +36,7 @@ export default function SiteCapture() {
       >
         Find customers
       </button>
-      <p className="text-center text-xs text-neutral-500">
+      <p className="text-center text-xs text-muted-foreground">
         No credit card. 100 free mentions.
       </p>
     </form>

@@ -17,8 +17,8 @@ function Crosshair({ position }: { position: 'top-left' | 'top-right' | 'bottom-
       isTop ? "top-0" : "bottom-0",
       isLeft ? "left-0" : "right-0"
     )}>
-      <div className={cn("absolute h-full w-px bg-neutral-100", isTop ? "top-0" : "bottom-0", isLeft ? "left-4" : "right-4")} />
-      <div className={cn("absolute h-px w-full bg-neutral-100", isTop ? "top-4" : "bottom-4", isLeft ? "left-0" : "right-0")} />
+      <div className={cn("absolute h-full w-px bg-muted", isTop ? "top-0" : "bottom-0", isLeft ? "left-4" : "right-4")} />
+      <div className={cn("absolute h-px w-full bg-muted", isTop ? "top-4" : "bottom-4", isLeft ? "left-0" : "right-0")} />
     </div>
   );
 }
@@ -36,7 +36,7 @@ function FooterLinkColumn({ title, children }: { title: string; children: React.
 
 function FooterLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
-    <a href={href} className="text-sm text-neutral-500 transition-colors hover:text-neutral-900">
+    <a href={href} className="text-sm text-muted-foreground transition-colors hover:text-foreground">
       {children}
     </a>
   );
@@ -46,7 +46,7 @@ function SocialLink({ href, icon: Icon }: { href: string; icon: React.ElementTyp
   return (
     <a
       href={href}
-      className="flex h-8 w-8 items-center justify-center border border-neutral-200 bg-neutral-50 text-neutral-500 transition-all hover:border-neutral-300 hover:text-neutral-900"
+      className="flex h-8 w-8 items-center justify-center border border-border bg-muted/40 text-muted-foreground transition-all hover:border-border hover:text-foreground"
     >
       <Icon className="h-4 w-4" />
     </a>
@@ -55,14 +55,14 @@ function SocialLink({ href, icon: Icon }: { href: string; icon: React.ElementTyp
 
 export default function Footer() {
   return (
-    <footer className="bg-white text-neutral-900 relative mt-24 overflow-hidden border-t border-neutral-200 font-mono">
+    <footer className="bg-background text-foreground relative mt-24 overflow-hidden border-t border-border font-mono">
       {/* Decorative Technical Crosshairs at the very edges */}
       <Crosshair position="top-left" />
       <Crosshair position="top-right" />
 
       <div className="relative z-10 container mx-auto px-4 pt-20 pb-12 md:px-8 lg:px-12 xl:px-16">
         {/* Top Grid */}
-        <div className="relative grid grid-cols-1 gap-12 border-b border-neutral-200 pb-16 lg:grid-cols-12 lg:gap-8">
+        <div className="relative grid grid-cols-1 gap-12 border-b border-border pb-16 lg:grid-cols-12 lg:gap-8">
           {/* Left Side: Brand & Newsletter (span 5) */}
           <div className="flex flex-col items-start pr-0 lg:col-span-5 lg:pr-8">
             <div className="text-primary mb-6 flex items-center gap-2 font-mono text-xs tracking-widest">
@@ -72,7 +72,7 @@ export default function Footer() {
               Building the future <br className="hidden lg:block" /> of
               interfaces
             </h3>
-            <p className="mb-8 max-w-md text-sm leading-relaxed text-pretty text-neutral-500">
+            <p className="mb-8 max-w-md text-sm leading-relaxed text-pretty text-muted-foreground">
               Watermelon UI is the foundational layer for modern web
               applications—beautifully designed, perfectly animated, and deeply
               technical
@@ -109,11 +109,11 @@ export default function Footer() {
           </div>
 
           {/* Vertical divider line for desktop */}
-          <div className="absolute top-0 bottom-0 left-[41.666%] hidden w-px bg-neutral-50 lg:block" />
+          <div className="absolute top-0 bottom-0 left-[41.666%] hidden w-px bg-muted/40 lg:block" />
         </div>
 
         {/* Middle Section (Strip) */}
-        <div className="relative flex flex-col items-center justify-between gap-6 overflow-hidden border-b border-neutral-200 py-6 md:flex-row">
+        <div className="relative flex flex-col items-center justify-between gap-6 overflow-hidden border-b border-border py-6 md:flex-row">
           <div className="relative z-10 flex w-full flex-col items-center justify-between gap-6 px-2 md:flex-row">
             <div className="flex items-center gap-3">
               <div className="bg-brand h-2 w-2 rounded-full" />
@@ -129,7 +129,7 @@ export default function Footer() {
                   key={i}
                   className={cn(
                     'h-4 w-1.5 transition-colors',
-                    i < 12 ? 'bg-primary' : 'bg-neutral-100',
+                    i < 12 ? 'bg-primary' : 'bg-muted',
                   )}
                 />
               ))}
@@ -149,31 +149,31 @@ export default function Footer() {
               <div className="group relative flex h-8 w-8 items-center justify-center">
                 <LogoIcon className="text-primary h-full w-full" />
               </div>
-              <span className="font-sans text-lg font-bold tracking-tight text-neutral-900/90">
+              <span className="font-sans text-lg font-bold tracking-tight text-foreground/90">
                 Watermelon UI
               </span>
             </div>
 
-            <div className="hidden flex-col border-l border-neutral-200 pl-8 md:flex">
-              <span className="text-xs tracking-widest text-neutral-500">
+            <div className="hidden flex-col border-l border-border pl-8 md:flex">
+              <span className="text-xs tracking-widest text-muted-foreground">
                 The foundational layer for apps.
               </span>
-              <span className="text-xs tracking-widest text-neutral-500">
+              <span className="text-xs tracking-widest text-muted-foreground">
                 Fast. Animated. Technical.
               </span>
             </div>
           </div>
 
-          <div className="flex w-full flex-col items-start justify-between gap-4 text-xs tracking-widest text-neutral-500 uppercase md:flex-row md:items-center md:gap-16 xl:w-auto xl:justify-end">
+          <div className="flex w-full flex-col items-start justify-between gap-4 text-xs tracking-widest text-muted-foreground uppercase md:flex-row md:items-center md:gap-16 xl:w-auto xl:justify-end">
             <div className="flex flex-col gap-1">
               <span>&copy; 2026 Watermelon UI.</span>
               <span>All rights reserved.</span>
             </div>
             <div className="flex gap-4 md:gap-6">
-              <a href="#" className="transition-colors hover:text-neutral-900">
+              <a href="#" className="transition-colors hover:text-foreground">
                 Privacy Policy
               </a>
-              <a href="#" className="transition-colors hover:text-neutral-900">
+              <a href="#" className="transition-colors hover:text-foreground">
                 Terms of Service
               </a>
             </div>

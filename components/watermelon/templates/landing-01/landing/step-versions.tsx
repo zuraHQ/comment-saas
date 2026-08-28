@@ -48,7 +48,7 @@ function Frame({
   return (
     <div
       className={cn(
-        "w-full overflow-hidden rounded-xl border border-neutral-200 bg-white p-4",
+        "w-full overflow-hidden rounded-xl border border-border bg-background p-4",
         className,
       )}
     >
@@ -75,7 +75,7 @@ export function PreviewRead() {
             key={r.label}
             className={cn(
               "flex items-center gap-3 rounded-md px-2 py-2.5",
-              i === 0 && "bg-neutral-100",
+              i === 0 && "bg-muted",
             )}
           >
             <span
@@ -84,10 +84,10 @@ export function PreviewRead() {
             >
               <r.Icon className="size-3.5 text-white" />
             </span>
-            <span className="text-sm font-medium text-neutral-900">
+            <span className="text-sm font-medium text-foreground">
               {r.label}
             </span>
-            <span className="ml-auto text-xs text-neutral-500">{r.n}</span>
+            <span className="ml-auto text-xs text-muted-foreground">{r.n}</span>
           </div>
         ))}
       </div>
@@ -108,14 +108,14 @@ export function PreviewRank() {
       <div className="flex flex-col gap-3">
         {rows.map((r) => (
           <div key={r.t} className={cn("flex items-center gap-3", !r.keep && "opacity-35")}>
-            <span className="w-52 truncate text-sm text-neutral-700">{r.t}</span>
-            <span className="h-1.5 flex-1 rounded-full bg-neutral-200">
+            <span className="w-52 truncate text-sm text-foreground/80">{r.t}</span>
+            <span className="h-1.5 flex-1 rounded-full bg-muted">
               <span
                 className="block h-full rounded-full bg-neutral-900"
                 style={{ width: `${r.s}%` }}
               />
             </span>
-            <span className="w-7 text-right text-xs tabular-nums text-neutral-500">
+            <span className="w-7 text-right text-xs tabular-nums text-muted-foreground">
               {r.s}
             </span>
           </div>
@@ -145,17 +145,17 @@ export function PreviewReply() {
 
   return (
     <Frame>
-      <p className="flex items-center gap-2 text-xs text-neutral-500">
+      <p className="flex items-center gap-2 text-xs text-muted-foreground">
         <FaRedditAlien className="size-3.5 text-[#FF4500]" />
         r/freelance · u/marta_builds · 4m ago
       </p>
-      <p className="mt-2 text-sm font-medium text-neutral-900">
+      <p className="mt-2 text-sm font-medium text-foreground">
         Looking for a simple invoicing tool that is not enterprise priced
       </p>
       <div className="mt-3 flex gap-3">
-        <span className="mt-1 w-px shrink-0 bg-neutral-200" />
+        <span className="mt-1 w-px shrink-0 bg-muted" />
         <div className="min-w-0">
-          <p className="flex items-center gap-1.5 text-[10px] font-bold tracking-wider text-neutral-500 uppercase">
+          <p className="flex items-center gap-1.5 text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
             {writing ? (
               <>
                 AI drafting
@@ -178,7 +178,7 @@ export function PreviewReply() {
               "Your reply"
             )}
           </p>
-          <p className="mt-1.5 min-h-[4.5rem] text-sm leading-relaxed text-neutral-700">
+          <p className="mt-1.5 min-h-[4.5rem] text-sm leading-relaxed text-foreground/80">
             {DRAFT.slice(0, typed)}
             {writing ? (
               <span className="ml-0.5 inline-block h-4 w-px translate-y-0.5 bg-neutral-400" />
@@ -186,14 +186,14 @@ export function PreviewReply() {
           </p>
         </div>
       </div>
-      <div className="-mx-4 -mb-4 mt-4 flex border-t border-neutral-200 text-[10px] font-bold tracking-wider text-neutral-500 uppercase">
+      <div className="-mx-4 -mb-4 mt-4 flex border-t border-border text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
         <span className="flex flex-1 items-center justify-center gap-2 py-2.5">
           <Copy className="size-3.5" /> Copy reply
         </span>
-        <span className="flex flex-1 items-center justify-center gap-2 border-l border-neutral-200 py-2.5">
+        <span className="flex flex-1 items-center justify-center gap-2 border-l border-border py-2.5">
           <Check className="size-3.5" /> Mark
         </span>
-        <span className="flex flex-1 items-center justify-center gap-2 border-l border-neutral-200 py-2.5">
+        <span className="flex flex-1 items-center justify-center gap-2 border-l border-border py-2.5">
           <X className="size-3.5" /> Skip
         </span>
       </div>
@@ -212,8 +212,8 @@ export function PreviewResults() {
   return (
     <Frame>
       <div className="flex items-baseline justify-between">
-        <p className="text-2xl font-semibold text-neutral-900">20,515</p>
-        <p className="text-xs text-neutral-500">clicks this month</p>
+        <p className="text-2xl font-semibold text-foreground">20,515</p>
+        <p className="text-xs text-muted-foreground">clicks this month</p>
       </div>
       <div className="mt-4 flex flex-col gap-3">
         {rows.map((r) => (
@@ -224,16 +224,16 @@ export function PreviewResults() {
             >
               <r.Icon className="size-3 text-white" />
             </span>
-            <span className="w-24 shrink-0 text-xs text-neutral-600">
+            <span className="w-24 shrink-0 text-xs text-muted-foreground">
               {r.label}
             </span>
-            <span className="h-2 flex-1 rounded-full bg-neutral-200">
+            <span className="h-2 flex-1 rounded-full bg-muted">
               <span
                 className="block h-full rounded-full bg-neutral-900"
                 style={{ width: `${(r.n / max) * 100}%` }}
               />
             </span>
-            <span className="w-12 text-right text-xs tabular-nums text-neutral-600">
+            <span className="w-12 text-right text-xs tabular-nums text-muted-foreground">
               {r.n.toLocaleString()}
             </span>
           </div>
@@ -260,13 +260,13 @@ function VariantA() {
           )}
         >
           <div>
-            <p className="text-xs font-bold tracking-widest text-neutral-400">
+            <p className="text-xs font-bold tracking-widest text-muted-foreground/70">
               {step.n}
             </p>
-            <h3 className="mt-3 text-2xl font-semibold text-neutral-900">
+            <h3 className="mt-3 text-2xl font-semibold text-foreground">
               {step.title}
             </h3>
-            <p className="mt-3 text-base text-neutral-600">{step.body}</p>
+            <p className="mt-3 text-base text-muted-foreground">{step.body}</p>
           </div>
           {PREVIEWS[i]()}
         </div>
@@ -278,7 +278,7 @@ function VariantA() {
 // B: zigzag with a rule and a wider preview
 function VariantB() {
   return (
-    <div className="flex flex-col divide-y divide-neutral-200">
+    <div className="flex flex-col divide-y divide-border">
       {STEPS.map((step, i) => (
         <div
           key={step.n}
@@ -288,11 +288,11 @@ function VariantB() {
           )}
         >
           <div>
-            <h3 className="text-2xl font-semibold text-neutral-900">
-              <span className="mr-3 text-neutral-300">{step.n}</span>
+            <h3 className="text-2xl font-semibold text-foreground">
+              <span className="mr-3 text-muted-foreground/50">{step.n}</span>
               {step.title}
             </h3>
-            <p className="mt-3 text-base text-neutral-600">{step.body}</p>
+            <p className="mt-3 text-base text-muted-foreground">{step.body}</p>
           </div>
           {PREVIEWS[i]()}
         </div>
@@ -309,18 +309,18 @@ function VariantC() {
         <div
           key={step.n}
           className={cn(
-            "grid items-center gap-8 rounded-2xl bg-neutral-50 p-8 md:grid-cols-2",
+            "grid items-center gap-8 rounded-2xl bg-muted/40 p-8 md:grid-cols-2",
             i % 2 === 1 && "md:[&>*:first-child]:order-2",
           )}
         >
           <div className="px-2">
-            <p className="text-xs font-bold tracking-widest text-neutral-400">
+            <p className="text-xs font-bold tracking-widest text-muted-foreground/70">
               STEP {step.n}
             </p>
-            <h3 className="mt-3 text-2xl font-semibold text-neutral-900">
+            <h3 className="mt-3 text-2xl font-semibold text-foreground">
               {step.title}
             </h3>
-            <p className="mt-3 text-base text-neutral-600">{step.body}</p>
+            <p className="mt-3 text-base text-muted-foreground">{step.body}</p>
           </div>
           {PREVIEWS[i]()}
         </div>
@@ -337,18 +337,18 @@ function VariantD() {
         <div
           key={step.n}
           className={cn(
-            "grid items-center gap-8 overflow-hidden rounded-2xl bg-neutral-50 lg:grid-cols-2",
+            "grid items-center gap-8 overflow-hidden rounded-2xl bg-muted/40 lg:grid-cols-2",
             i % 2 === 1 && "lg:[&>*:first-child]:order-2",
           )}
         >
           <div className="p-10">
-            <p className="text-xs font-bold tracking-widest text-neutral-400">
+            <p className="text-xs font-bold tracking-widest text-muted-foreground/70">
               STEP {step.n}
             </p>
-            <h3 className="mt-3 text-2xl font-semibold text-neutral-900">
+            <h3 className="mt-3 text-2xl font-semibold text-foreground">
               {step.title}
             </h3>
-            <p className="mt-3 text-base text-neutral-600">{step.body}</p>
+            <p className="mt-3 text-base text-muted-foreground">{step.body}</p>
           </div>
           <div
             className={cn(
@@ -371,21 +371,21 @@ function VariantE() {
       {STEPS.map((step, i) => (
         <div key={step.n} className="flex gap-8">
           <div className="hidden w-12 shrink-0 flex-col items-center md:flex">
-            <span className="flex size-10 items-center justify-center rounded-full border border-neutral-300 text-xs font-bold text-neutral-500">
+            <span className="flex size-10 items-center justify-center rounded-full border border-border text-xs font-bold text-muted-foreground">
               {step.n}
             </span>
             {i < STEPS.length - 1 ? (
-              <span className="w-px flex-1 bg-neutral-200" />
+              <span className="w-px flex-1 bg-muted" />
             ) : null}
           </div>
           <div className="flex-1 pb-10">
-            <h3 className="text-2xl font-semibold text-neutral-900">
+            <h3 className="text-2xl font-semibold text-foreground">
               {step.title}
             </h3>
-            <p className="mt-2 max-w-lg text-base text-neutral-600">
+            <p className="mt-2 max-w-lg text-base text-muted-foreground">
               {step.body}
             </p>
-            <div className="mt-5 rounded-2xl bg-neutral-50 p-6">
+            <div className="mt-5 rounded-2xl bg-muted/40 p-6">
               {PREVIEWS[i]()}
             </div>
           </div>
@@ -400,20 +400,20 @@ function VariantF() {
   return (
     <div className="grid gap-12 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
       <div className="lg:sticky lg:top-24 lg:self-start">
-        <h3 className="text-3xl font-semibold text-neutral-900">
+        <h3 className="text-3xl font-semibold text-foreground">
           Four steps, once a day
         </h3>
         <ol className="mt-8 flex flex-col gap-6">
           {STEPS.map((step) => (
             <li key={step.n} className="flex gap-4">
-              <span className="text-xs font-bold tracking-widest text-neutral-400">
+              <span className="text-xs font-bold tracking-widest text-muted-foreground/70">
                 {step.n}
               </span>
               <span>
-                <span className="block text-base font-medium text-neutral-900">
+                <span className="block text-base font-medium text-foreground">
                   {step.title}
                 </span>
-                <span className="mt-1 block text-sm text-neutral-600">
+                <span className="mt-1 block text-sm text-muted-foreground">
                   {step.body}
                 </span>
               </span>
@@ -423,7 +423,7 @@ function VariantF() {
       </div>
       <div className="flex flex-col gap-6">
         {STEPS.map((step, i) => (
-          <div key={step.n} className="rounded-2xl bg-neutral-50 p-6">
+          <div key={step.n} className="rounded-2xl bg-muted/40 p-6">
             {PREVIEWS[i]()}
           </div>
         ))}
@@ -443,12 +443,12 @@ const VARIANTS = [
 
 export default function StepVersions() {
   return (
-    <main className="light-page min-h-screen bg-white px-6 py-16 font-sans">
+    <main className="light-page min-h-screen bg-background px-6 py-16 font-sans">
       <header className="mx-auto max-w-5xl">
-        <h1 className="text-2xl font-semibold text-neutral-900">
+        <h1 className="text-2xl font-semibold text-foreground">
           How it works, alternating layouts
         </h1>
-        <p className="mt-2 text-sm text-neutral-600">
+        <p className="mt-2 text-sm text-muted-foreground">
           Text one side, a preview of the real screen on the other, flipping
           each row.
         </p>
@@ -460,9 +460,9 @@ export default function StepVersions() {
             <span className="bg-neutral-900 px-2 py-0.5 text-xs font-bold text-white">
               {key}
             </span>
-            <h2 className="text-lg font-medium text-neutral-900">{name}</h2>
+            <h2 className="text-lg font-medium text-foreground">{name}</h2>
           </div>
-          <p className="mt-2 mb-10 text-sm text-neutral-600">{note}</p>
+          <p className="mt-2 mb-10 text-sm text-muted-foreground">{note}</p>
           <Render />
         </section>
       ))}

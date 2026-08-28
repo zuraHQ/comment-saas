@@ -4,6 +4,7 @@ import { Menu01Icon, Cancel01Icon } from "hugeicons-react";
 import { cn } from "@/lib/utils";
 import LogoIcon from "@/assets/logo-icon";
 import GetStartedDialog from "./get-started-dialog";
+import ThemeToggle from "./theme-toggle";
 
 // Only link to sections that exist; add back as the sections land.
 const NAV_LINKS = [
@@ -36,7 +37,7 @@ export default function Navbar({
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b",
         scrolled 
-          ? "bg-white/80 backdrop-blur-md border-neutral-200 py-3" 
+          ? "bg-background/80 backdrop-blur-md border-border py-3" 
           : "bg-transparent border-transparent py-5"
       )}
     >
@@ -55,7 +56,7 @@ export default function Navbar({
             <a
               key={link.href}
               href={link.href}
-              className="text-sm text-neutral-600 hover:text-neutral-900 transition-colors"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               {link.label}
             </a>
@@ -64,6 +65,7 @@ export default function Navbar({
 
         {/* Right side */}
         <div className="hidden md:flex items-center gap-4">
+          <ThemeToggle />
           {action ?? (
             <GetStartedDialog
               trigger={
@@ -90,14 +92,14 @@ export default function Navbar({
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-white border-b border-neutral-200 shadow-lg p-4 flex flex-col gap-4 animate-fade-in-up">
+        <div className="md:hidden absolute top-full left-0 right-0 bg-background border-b border-border shadow-lg p-4 flex flex-col gap-4 animate-fade-in-up">
           <nav className="flex flex-col gap-1">
             {NAV_LINKS.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-2 py-3 text-sm text-neutral-600 hover:text-neutral-900 transition-colors"
+                className="px-2 py-3 text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
                 {link.label}
               </a>

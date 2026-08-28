@@ -23,7 +23,7 @@ export default function Cta() {
             >
               Someone is asking for your product right now
             </Heading>
-            <p className="mt-4 text-base text-neutral-600">
+            <p className="mt-4 text-base text-muted-foreground">
               Paste your link. The first ranked posts land in a couple of
               minutes.
             </p>
@@ -52,7 +52,7 @@ export default function Cta() {
               inputMode="url"
               autoComplete="url"
               placeholder="website.com"
-              className="focus:border-brand focus:ring-brand/20 h-12 w-full rounded-md border border-neutral-300 bg-neutral-100 px-5 text-sm text-neutral-900 shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] outline-none transition-colors placeholder:text-neutral-500 focus:bg-white focus:ring-2"
+              className="focus:border-brand focus:ring-brand/20 h-12 w-full rounded-md border border-border bg-muted px-5 text-sm text-foreground shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] outline-none transition-colors placeholder:text-muted-foreground focus:bg-background focus:ring-2"
             />
             <button
               type="submit"
