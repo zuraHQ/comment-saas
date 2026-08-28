@@ -26,8 +26,8 @@ export type Project = Doc<"projects"> & { iconUrl: string | null };
 // Where we look for posts. Only reddit + hn have live fetchers today; the
 // rest are wired as the pipeline grows.
 export const PLATFORM_OPTIONS = [
-  { id: "reddit", label: "Reddit", Icon: FaRedditAlien, bg: "#FF4500", fg: "#ffffff", live: true },
   { id: "hn", label: "Hacker News", Icon: FaHackerNews, bg: "#FF6600", fg: "#ffffff", live: true },
+  { id: "reddit", label: "Reddit", Icon: FaRedditAlien, bg: "#FF4500", fg: "#ffffff", live: true },
   { id: "indiehackers", label: "Indie Hackers", Icon: FaRegLightbulb, bg: "#0E2439", fg: "#ffffff", live: true },
   { id: "x", label: "X / Twitter", Icon: FaXTwitter, bg: "#ffffff", fg: "#000000", live: true },
   { id: "linkedin", label: "LinkedIn", Icon: FaLinkedinIn, bg: "#0A66C2", fg: "#ffffff", live: true },
