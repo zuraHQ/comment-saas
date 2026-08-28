@@ -11,7 +11,7 @@ import {
   FaYoutube,
 } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion, useScroll, useSpring } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { Check, Globe, Link2 } from "lucide-react";
 import Container from "./container";
 import SiteCapture from "./site-capture";
@@ -528,17 +528,6 @@ const STEPS = [
 ];
 
 export default function Stats() {
-  const stepsRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: stepsRef,
-    offset: ["start 65%", "end 60%"],
-  });
-  const progress = useSpring(scrollYProgress, {
-    stiffness: 120,
-    damping: 24,
-    restDelta: 0.001,
-  });
-
   return (
     <section className="relative w-full pt-8 pb-24">
       <Container className="relative z-10 mx-auto">
@@ -555,53 +544,47 @@ export default function Stats() {
           </Heading>
         </div>
 
-        {/* Progress rail fills as you scroll through the steps */}
-        <div ref={stepsRef} className="relative mx-auto max-w-6xl">
-          <div className="absolute top-0 bottom-0 left-0 hidden w-px bg-neutral-100 lg:block">
-            <motion.div
-              className="bg-brand absolute top-0 left-0 w-px origin-top"
-              style={{ height: "100%", scaleY: progress }}
-            />
-          </div>
-
-          <div className="flex flex-col gap-32 lg:pl-16">
-            {STEPS.map((step) => (
-              <div
-                key={step.number}
-                className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16"
-              >
-                <div>
-                  <p className="text-5xl font-semibold text-neutral-900/15">
-                    {step.number}
-                  </p>
-                  <h3 className="mt-4 text-2xl font-semibold text-neutral-900">
-                    {step.title}
-                  </h3>
-                  <p className="mt-3 max-w-md text-sm leading-relaxed text-neutral-500">
-                    {step.body}
-                  </p>
-                  {step.marks ? (
-                    <div className="mt-5 flex flex-wrap gap-2">
-                      {PLATFORM_MARKS.map((mark) => (
-                        <span
-                          key={mark.label}
-                          title={mark.label}
-                          className="flex h-8 w-8 items-center justify-center"
-                          style={{ backgroundColor: mark.bg }}
-                        >
-                          <mark.Icon
-                            className="h-4 w-4"
-                            style={{ color: mark.fg }}
-                          />
-                        </span>
-                      ))}
-                    </div>
-                  ) : null}
-                </div>
-                <div>{step.visual}</div>
+        {/* Each step is its own panel, alternating side to side */}
+        <div className="mx-auto flex max-w-6xl flex-col gap-6">
+          {STEPS.map((step, i) => (
+            <div
+              key={step.number}
+              className={cn(
+                "grid items-center gap-8 rounded-2xl bg-neutral-50 p-8 lg:grid-cols-2 lg:gap-12 lg:p-10",
+                i % 2 === 1 && "lg:[&>*:first-child]:order-2",
+              )}
+            >
+              <div className="px-1">
+                <p className="text-xs font-bold tracking-widest text-neutral-400">
+                  STEP {step.number}
+                </p>
+                <h3 className="mt-3 text-2xl font-semibold text-neutral-900">
+                  {step.title}
+                </h3>
+                <p className="mt-3 max-w-md text-sm leading-relaxed text-neutral-500">
+                  {step.body}
+                </p>
+                {step.marks ? (
+                  <div className="mt-5 flex flex-wrap gap-2">
+                    {PLATFORM_MARKS.map((mark) => (
+                      <span
+                        key={mark.label}
+                        title={mark.label}
+                        className="flex h-8 w-8 items-center justify-center rounded"
+                        style={{ backgroundColor: mark.bg }}
+                      >
+                        <mark.Icon
+                          className="h-4 w-4"
+                          style={{ color: mark.fg }}
+                        />
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
               </div>
-            ))}
-          </div>
+              <div>{step.visual}</div>
+            </div>
+          ))}
         </div>
 
         <div className="mt-20">
