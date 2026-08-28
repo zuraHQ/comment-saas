@@ -164,9 +164,9 @@ export function AnalyticsContent() {
                 <span className="w-24 shrink-0 truncate text-sm capitalize">
                   {meta?.label ?? platformId}
                 </span>
-                <span className="relative h-4 flex-1 rounded-full bg-white/5">
+                <span className="relative h-4 flex-1 bg-white/5">
                   <span
-                    className="bg-primary absolute inset-y-0 left-0 rounded-full"
+                    className="bg-primary absolute inset-y-0 left-0"
                     style={{ width: `${(clicks / maxPlatformClicks) * 100}%` }}
                   />
                 </span>

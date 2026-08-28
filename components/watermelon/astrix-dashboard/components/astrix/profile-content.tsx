@@ -1,55 +1,12 @@
 "use client";
 
-import { useMutation, useQuery } from "convex/react";
-import { Check } from "lucide-react";
+import { useQuery } from "convex/react";
+
 import { api } from "@/convex/_generated/api";
-import { PLATFORM_OPTIONS } from "./project-context";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { cn } from "@/lib/utils";
-
-// One toggle per platform: the platform list IS the integration list.
-const DESCRIPTIONS: Record<string, string> = {
-  reddit: "Subreddits you watch plus keyword sweeps across Reddit.",
-  hn: "Every Hacker News story, Ask HN and Show HN.",
-  indiehackers: "Every new Indie Hackers post.",
-  bluesky: "Keyword search across Bluesky.",
-  github: "Watch repo discussions like communities. Best for dev tools.",
-  youtube: "New videos matching your keywords.",
-  instagram: "Comments under the accounts you watch.",
-  tiktok: "Comments under the TikTok accounts you watch.",
-  x: "Keyword search on X.",
-  linkedin: "Keyword search across LinkedIn posts.",
-  threads: "Coming later.",
-};
-
-const INTEGRATIONS = PLATFORM_OPTIONS.map((platform) => ({
-  id: platform.id,
-  label: platform.label,
-  Icon: platform.Icon,
-  iconBg: platform.bg,
-  iconFg: platform.fg,
-  description: DESCRIPTIONS[platform.id] ?? "",
-  ready: platform.live,
-}));
 
 export function ProfileContent() {
   const me = useQuery(api.users.me);
-  // Flip the switch on the spot; Convex confirms or rolls it back behind us.
-  const setIntegration = useMutation(
-    api.users.setIntegration,
-  ).withOptimisticUpdate((localStore, args) => {
-    const current = localStore.getQuery(api.users.me, {});
-    if (!current) return;
-    const integrations = new Set(current.integrations ?? []);
-    if (args.enabled) integrations.add(args.integration);
-    else integrations.delete(args.integration);
-    localStore.setQuery(api.users.me, {}, {
-      ...current,
-      integrations: [...integrations],
-    });
-  });
-
-  const enabled = new Set(me?.integrations ?? []);
 
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 p-6">
@@ -99,72 +56,6 @@ export function ProfileContent() {
         </div>
       </section>
 
-      <section className="flex flex-col gap-4 border border-border bg-sidebar-accent/20 p-5">
-        <div>
-          <h2 className="text-xs font-bold tracking-wider text-muted-foreground uppercase">
-            Integrations
-          </h2>
-        </div>
-
-        {INTEGRATIONS.map((integration) => {
-          const on = enabled.has(integration.id);
-          return (
-            <div
-              key={integration.id}
-              className="flex items-center gap-4 border border-border p-4"
-            >
-              <span
-                className="flex h-9 w-9 shrink-0 items-center justify-center"
-                style={{ backgroundColor: integration.iconBg }}
-              >
-                <integration.Icon
-                  className="h-5 w-5"
-                  style={{ color: integration.iconFg }}
-                />
-              </span>
-              <div className="min-w-0 flex-1">
-                <p className="flex items-center gap-2 text-sm font-medium">
-                  {integration.label}
-                  {!integration.ready ? (
-                    <span className="text-[10px] tracking-wider text-muted-foreground uppercase">
-                      soon
-                    </span>
-                  ) : null}
-                </p>
-                <p className="mt-0.5 text-xs text-muted-foreground">
-                  {integration.description}
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() =>
-                  setIntegration({
-                    integration: integration.id,
-                    enabled: !on,
-                  }).catch(console.error)
-                }
-                aria-pressed={on}
-                aria-label={`Toggle ${integration.label}`}
-                className={cn(
-                  "relative h-6 w-11 shrink-0 cursor-pointer transition-colors",
-                  on ? "bg-primary" : "bg-muted-foreground/30",
-                )}
-              >
-                <span
-                  className={cn(
-                    "absolute top-0.5 left-0.5 flex size-5 items-center justify-center bg-background transition-transform",
-                    on && "translate-x-5",
-                  )}
-                >
-                  {on ? (
-                    <Check className="text-primary size-3" strokeWidth={3} />
-                  ) : null}
-                </span>
-              </button>
-            </div>
-          );
-        })}
-      </section>
     </div>
   );
 }

@@ -10,8 +10,6 @@ export default defineSchema({
     lastProjectId: v.optional(v.id("projects")),
     // Set when onboarding finishes; absent means the user has never been through it.
     onboardedAt: v.optional(v.number()),
-    // Optional platform hookups the user has switched on ("github", ...).
-    integrations: v.optional(v.array(v.string())),
   }).index("by_clerk_id", ["clerkId"]),
 
   // A user's product. Everything user-specific hangs off a project, and every

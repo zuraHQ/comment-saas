@@ -104,55 +104,6 @@ export const resetOnboarding = internalMutation({
   },
 });
 
-// Flip a user-level integration on or off.
-export const setIntegration = mutation({
-  args: { integration: v.string(), enabled: v.boolean() },
-  handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) return;
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_clerk_id", (q) => q.eq("clerkId", identity.subject))
-      .unique();
-    if (!user) return;
-    const current = new Set(user.integrations ?? []);
-    if (args.enabled) current.add(args.integration);
-    else current.delete(args.integration);
-    await ctx.db.patch(user._id, { integrations: [...current] });
-
-    // The toggle means "fetch this platform": keep every project in sync so
-    // flipping it here is enough to start (or stop) the jobs.
-    const projects = await ctx.db
-      .query("projects")
-      .withIndex("by_owner", (q) => q.eq("ownerClerkId", identity.subject))
-      .collect();
-    for (const project of projects) {
-      const platforms = new Set(project.platforms);
-      if (args.enabled) platforms.add(args.integration);
-      else platforms.delete(args.integration);
-      if (platforms.size !== project.platforms.length) {
-        await ctx.db.patch(project._id, { platforms: [...platforms] });
-      }
-    }
-  },
-});
-
-// One-shot CLI helper: take platforms off every project that has them.
-export const disablePlatformsForAll = internalMutation({
-  args: { platforms: v.array(v.string()) },
-  handler: async (ctx, args) => {
-    let updated = 0;
-    for (const project of await ctx.db.query("projects").collect()) {
-      const kept = project.platforms.filter((p) => !args.platforms.includes(p));
-      if (kept.length !== project.platforms.length) {
-        await ctx.db.patch(project._id, { platforms: kept });
-        updated++;
-      }
-    }
-    return updated;
-  },
-});
-
 // One-shot CLI helper: add platforms to every project that lacks them.
 export const enablePlatformsForAll = internalMutation({
   args: { platforms: v.array(v.string()) },
