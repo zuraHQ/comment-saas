@@ -35,8 +35,6 @@ function ProjectSettingsForm({ project }: { project: Project }) {
   const [description, setDescription] = useState(project.description ?? "");
   const [keyword, setKeyword] = useState("");
   const [community, setCommunity] = useState("");
-  const [igAccount, setIgAccount] = useState("");
-  const [ttAccount, setTtAccount] = useState("");
   const [xAccount, setXAccount] = useState("");
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -301,100 +299,6 @@ function ProjectSettingsForm({ project }: { project: Project }) {
             No communities yet. Add the subreddits your customers hang out in.
           </p>
         )}
-      </Section>
-
-      <Section title="Instagram accounts" platform="instagram">
-        <p className="text-sm text-muted-foreground">
-          Same idea: we read the comments under these accounts&apos; posts.
-        </p>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            addToList("instagramAccounts", igAccount, () => setIgAccount(""));
-          }}
-          className="flex gap-2"
-        >
-          <div className="flex h-9 flex-1 items-center border border-input transition-colors focus-within:border-ring dark:bg-input/30">
-            <span className="pl-3 text-sm text-muted-foreground">@</span>
-            <input
-              value={igAccount}
-              onChange={(e) => setIgAccount(e.target.value)}
-              placeholder="shopify"
-              className="h-full w-full min-w-0 bg-transparent px-1.5 text-sm outline-none placeholder:text-muted-foreground"
-            />
-          </div>
-          <button
-            type="submit"
-            className="h-9 shrink-0 cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
-          >
-            Add
-          </button>
-        </form>
-        <div className="flex flex-wrap gap-2">
-          {(project.instagramAccounts ?? []).map((account) => (
-            <span
-              key={account}
-              className="flex items-center gap-2 border border-border px-3 py-1.5 text-sm"
-            >
-              @{account}
-              <button
-                type="button"
-                onClick={() => removeFromList("instagramAccounts", account)}
-                aria-label={`Remove ${account}`}
-                className="cursor-pointer text-muted-foreground transition-colors hover:text-foreground"
-              >
-                <X className="size-3.5" />
-              </button>
-            </span>
-          ))}
-        </div>
-      </Section>
-
-      <Section title="TikTok accounts" platform="tiktok">
-        <p className="text-sm text-muted-foreground">
-          We read the comments under these accounts&apos; latest videos.
-        </p>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            addToList("tiktokAccounts", ttAccount, () => setTtAccount(""));
-          }}
-          className="flex gap-2"
-        >
-          <div className="flex h-9 flex-1 items-center border border-input transition-colors focus-within:border-ring dark:bg-input/30">
-            <span className="pl-3 text-sm text-muted-foreground">@</span>
-            <input
-              value={ttAccount}
-              onChange={(e) => setTtAccount(e.target.value)}
-              placeholder="shopify"
-              className="h-full w-full min-w-0 bg-transparent px-1.5 text-sm outline-none placeholder:text-muted-foreground"
-            />
-          </div>
-          <button
-            type="submit"
-            className="h-9 shrink-0 cursor-pointer border border-border px-4 text-xs font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
-          >
-            Add
-          </button>
-        </form>
-        <div className="flex flex-wrap gap-2">
-          {(project.tiktokAccounts ?? []).map((account) => (
-            <span
-              key={account}
-              className="flex items-center gap-2 border border-border px-3 py-1.5 text-sm"
-            >
-              @{account}
-              <button
-                type="button"
-                onClick={() => removeFromList("tiktokAccounts", account)}
-                aria-label={`Remove ${account}`}
-                className="cursor-pointer text-muted-foreground transition-colors hover:text-foreground"
-              >
-                <X className="size-3.5" />
-              </button>
-            </span>
-          ))}
-        </div>
       </Section>
 
       <Section title="X accounts" platform="x">
