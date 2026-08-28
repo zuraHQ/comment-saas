@@ -432,16 +432,22 @@ export function PostsContent() {
                       </a>
 
                       {/* The reply, written for every scored post */}
-                      {reply && showReplies ? (
+                      {showReplies ? (
                         <div className="mt-3 flex flex-1 gap-3">
                           <span className="mt-1 w-px shrink-0 bg-border" />
                           <div className="flex min-w-0 flex-1 flex-col">
                             <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
                               You, replying
                             </p>
-                            <p className="mt-1.5 text-sm leading-relaxed text-foreground/85">
-                              {reply}
-                            </p>
+                            {reply ? (
+                              <p className="mt-1.5 text-sm leading-relaxed text-foreground/85">
+                                {reply}
+                              </p>
+                            ) : (
+                              <p className="mt-1.5 text-sm text-muted-foreground/60">
+                                Not written yet.
+                              </p>
+                            )}
 
                             <div className="relative z-10 mt-3 flex items-center gap-3 text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
                               <button
@@ -459,7 +465,9 @@ export function PostsContent() {
                                 />
                                 {rewritingId === row.match._id
                                   ? "Writing"
-                                  : "Rewrite"}
+                                  : reply
+                                    ? "Rewrite"
+                                    : "Write reply"}
                               </button>
                             </div>
                           </div>

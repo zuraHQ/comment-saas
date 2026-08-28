@@ -11,8 +11,4 @@ crons.interval("fetch posts for due search jobs", { minutes: 15 }, internal.fetc
 // omissions). No-op when everything is scored.
 crons.interval("score unscored matches", { minutes: 5 }, internal.intentMarker.scoreDue, {});
 
-// Write a reply for anything scored worth answering. Skips low intent, and
-// no-ops once every match has one.
-crons.interval("draft replies for scored matches", { minutes: 5 }, internal.replyDrafter.draftDue, {});
-
 export default crons;
