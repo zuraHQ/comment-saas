@@ -345,7 +345,7 @@ export function PostsContent() {
                           );
                         }
                       }}
-                      className="flex flex-1 cursor-pointer flex-col rounded-[7px] bg-[var(--panel)] transition-colors group-hover:bg-sidebar-accent/25 after:absolute after:inset-0 after:content-['']"
+                      className="flex flex-1 cursor-pointer flex-col rounded-[7px] bg-[var(--panel)] after:absolute after:inset-0 after:content-['']"
                     >
                       <header className="flex items-center justify-between gap-3 px-3 pt-3">
                         <div className="flex min-w-0 items-center gap-2">
@@ -379,7 +379,9 @@ export function PostsContent() {
                       </header>
 
                       <div className="flex-1 px-3 pt-2 pb-3">
-                        <p className="text-sm font-medium">{row.post.title}</p>
+                        <p className="text-sm font-medium underline-offset-4 group-hover:underline">
+                          {row.post.title}
+                        </p>
                         {row.post.snippet ? (
                           <p className="mt-2 line-clamp-2 text-sm text-foreground/70">
                             {row.post.snippet}
