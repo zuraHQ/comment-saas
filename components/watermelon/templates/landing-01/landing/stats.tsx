@@ -328,22 +328,6 @@ function SortVisual() {
         </div>
       </div>
 
-      {/* Already judged, oldest first */}
-      <div className="flex shrink-0 divide-x divide-neutral-200 overflow-hidden rounded-xl border border-neutral-200">
-        {JUDGED.map((item, i) => (
-          <span
-            key={item.author}
-            className={cn(
-              "flex flex-1 items-center justify-center px-2 py-2",
-              i === index ? "bg-neutral-100" : "",
-            )}
-          >
-            <span className="truncate text-[9px] tracking-wider text-neutral-400 uppercase">
-              {item.where}
-            </span>
-          </span>
-        ))}
-      </div>
     </div>
   );
 }
@@ -566,10 +550,7 @@ export default function Stats() {
               )}
             >
               <div className="self-center p-8 lg:p-10">
-                <p className="text-xs font-bold tracking-widest text-neutral-400">
-                  {step.number}
-                </p>
-                <h3 className="mt-3 text-4xl leading-[1.1] font-semibold text-neutral-900">
+                <h3 className="text-4xl leading-[1.1] font-semibold text-neutral-900">
                   {step.title}
                 </h3>
                 <p className="mt-4 max-w-md text-lg leading-relaxed text-neutral-600">

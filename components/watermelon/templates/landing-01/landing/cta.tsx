@@ -14,8 +14,8 @@ export default function Cta() {
   return (
     <section className="relative w-full pb-24">
       <Container className="relative z-10 mx-auto">
-        <div className="mx-auto flex max-w-5xl flex-col items-start justify-between gap-8 md:flex-row md:items-center">
-          <div className="max-w-xl">
+        <div className="mx-auto flex max-w-2xl flex-col items-center gap-8 text-center">
+          <div>
             <Heading
               as="h2"
               variant="big"
@@ -30,7 +30,7 @@ export default function Cta() {
           </div>
 
           <form
-            className="flex w-full shrink-0 flex-col gap-3 md:w-72"
+            className="flex w-full max-w-[18rem] flex-col gap-3"
             onSubmit={(e) => {
               e.preventDefault();
               const value = site.trim();
