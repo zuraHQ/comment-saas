@@ -185,7 +185,7 @@ function SortVisual() {
 
   return (
     <div className="flex h-80 flex-col justify-center gap-3">
-      <div className="rounded-xl border border-neutral-200 bg-neutral-50">
+      <div>
         <div className="flex items-center gap-6 p-6">
           {/* The dial */}
           <div className="relative shrink-0">
