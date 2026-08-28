@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Menu01Icon, Cancel01Icon } from "hugeicons-react";
 import { cn } from "@/lib/utils";
 import LogoIcon from "@/assets/logo-icon";
+import GetStartedDialog from "./get-started-dialog";
 
 // Only link to sections that exist; add back as the sections land.
 const NAV_LINKS = [
@@ -64,9 +65,13 @@ export default function Navbar({
         {/* Right side */}
         <div className="hidden md:flex items-center gap-4">
           {action ?? (
-            <Link href="/login" className="flex items-center h-10 rounded-md border border-neutral-300 text-neutral-900 font-bold tracking-widest uppercase px-6 text-xs hover:bg-neutral-100 transition-colors">
-              Get Started
-            </Link>
+            <GetStartedDialog
+              trigger={
+                <button className="flex h-10 cursor-pointer items-center rounded-md border border-neutral-300 px-6 text-xs font-bold tracking-widest text-neutral-900 uppercase transition-colors hover:bg-neutral-100">
+                  Get Started
+                </button>
+              }
+            />
           )}
         </div>
 
@@ -99,9 +104,13 @@ export default function Navbar({
             ))}
           </nav>
 
-          <Link href="/login" className="w-full text-center rounded-md border border-neutral-300 text-neutral-900 font-bold tracking-widest uppercase px-4 py-4 text-xs hover:bg-neutral-100 transition-colors mt-2">
-            Get Started
-          </Link>
+          <GetStartedDialog
+            trigger={
+              <button className="mt-2 w-full cursor-pointer rounded-md border border-neutral-300 px-4 py-4 text-center text-xs font-bold tracking-widest text-neutral-900 uppercase transition-colors hover:bg-neutral-100">
+                Get Started
+              </button>
+            }
+          />
         </div>
       )}
     </header>
