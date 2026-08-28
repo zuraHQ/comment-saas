@@ -345,9 +345,9 @@ export function PostsContent() {
                           );
                         }
                       }}
-                      className="flex flex-1 cursor-pointer flex-col after:absolute after:inset-0 after:content-['']"
+                      className="flex flex-1 cursor-pointer flex-col rounded-sm bg-background after:absolute after:inset-0 after:content-['']"
                     >
-                      <header className="flex items-center justify-between gap-3 px-4 pt-4">
+                      <header className="flex items-center justify-between gap-3 px-3 pt-3">
                         <div className="flex min-w-0 items-center gap-2">
                           {platform ? (
                             <span className="relative flex size-4 shrink-0 items-center justify-center">
@@ -378,7 +378,7 @@ export function PostsContent() {
                         ) : null}
                       </header>
 
-                      <div className="flex-1 px-4 pt-2 pb-4">
+                      <div className="flex-1 px-3 pt-2 pb-3">
                         <p className="text-sm font-medium">{row.post.title}</p>
                         {row.post.snippet ? (
                           <p className="mt-2 line-clamp-2 text-sm text-foreground/70">
@@ -389,7 +389,7 @@ export function PostsContent() {
                     </a>
 
                     {reply ? (
-                      <div className="relative z-10 mx-4 mb-4 border-l-2 border-brand bg-sidebar-accent/30 py-2.5 pr-2.5 pl-3">
+                      <div className="relative z-10 mx-1 mt-1 border-l-2 border-brand bg-sidebar-accent/30 py-2.5 pr-2.5 pl-3">
                         <div className="flex items-center justify-between gap-2">
                           <span className="text-[10px] font-bold tracking-wider text-brand uppercase">
                             Your reply
@@ -418,7 +418,7 @@ export function PostsContent() {
                       </div>
                     ) : null}
 
-                    <div className="relative z-10 flex items-center justify-end gap-2 px-4 pb-4">
+                    <div className="relative z-10 flex items-center justify-end gap-2 px-2 pt-2 pb-1">
                       <button
                         type="button"
                         onClick={() => toggleReplied(row)}
@@ -452,23 +452,15 @@ export function PostsContent() {
               {feed === undefined ? (
                 Array.from({ length: 8 }, (_, i) => (
                   <li key={i} className="rounded-md bg-card p-1">
-                    <div className="flex items-center justify-between gap-3 bg-sidebar-accent/40 px-4 py-2.5">
+                    <div className="rounded-sm bg-background p-3">
                       <div className="h-3 w-1/3 bg-sidebar-accent" />
-                      <div className="h-4 w-20 bg-sidebar-accent" />
-                    </div>
-                    <div className="p-4">
-                      <div className="h-4 w-2/3 bg-sidebar-accent" />
+                      <div className="mt-3 h-4 w-2/3 bg-sidebar-accent" />
                       <div className="mt-3 h-3 w-full bg-sidebar-accent/50" />
                       <div className="mt-1.5 h-3 w-4/5 bg-sidebar-accent/50" />
-                      <div className="mt-4 border border-border p-3">
-                        <div className="h-3 w-11/12 bg-sidebar-accent/50" />
-                        <div className="mt-1.5 h-3 w-3/5 bg-sidebar-accent/50" />
-                      </div>
                     </div>
-                    <div className="flex justify-end gap-2 px-4 pb-4">
-                      <div className="h-10 w-10 border border-border" />
-                      <div className="h-10 w-10 border border-border" />
-                      <div className="h-10 w-10 border border-border" />
+                    <div className="flex justify-end gap-2 px-2 pt-2 pb-1">
+                      <div className="h-9 w-24 bg-sidebar-accent/60" />
+                      <div className="h-9 w-9 bg-sidebar-accent/60" />
                     </div>
                   </li>
                 ))
