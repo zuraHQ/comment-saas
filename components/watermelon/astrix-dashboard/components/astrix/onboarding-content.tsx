@@ -120,7 +120,7 @@ export function OnboardingContent() {
           <button
             type="button"
             onClick={() => signOut(() => router.push("/login"))}
-            className="flex h-10 cursor-pointer items-center gap-2 border border-border px-6 font-mono text-xs font-bold tracking-widest uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground rounded-lg"
+            className="flex h-10 cursor-pointer items-center gap-2 border border-border px-6 font-mono text-xs font-bold tracking-widest uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
           >
             <LogOut className="size-3.5" />
             Log out
@@ -149,7 +149,7 @@ export function OnboardingContent() {
                       ? "border-foreground"
                       : i < step
                         ? "border-primary bg-primary text-[#101010]"
-                        : "border-border rounded-lg",
+                        : "border-border",
                   )}
                 >
                   {i < step ? <Check className="size-3.5" /> : i + 1}
@@ -163,7 +163,7 @@ export function OnboardingContent() {
           ))}
         </ol>
 
-        <div className="border border-border p-6 rounded-lg">
+        <div className="border border-border p-6">
           {step === 0 ? (
             <Step
               title="Reading your site"
@@ -179,7 +179,7 @@ export function OnboardingContent() {
                 />
               </div>
 
-              <ul className="flex flex-col gap-2 border border-border p-4 text-sm rounded-lg">
+              <ul className="flex flex-col gap-2 border border-border p-4 text-sm">
                 {[
                   "Fetching the page",
                   "Reading your copy",
@@ -213,7 +213,7 @@ export function OnboardingContent() {
               subtitle="Fix anything that is off. This is what we match posts against."
             >
               {scanning ? (
-                <div className="flex items-center gap-3 border border-border p-4 text-sm text-muted-foreground rounded-lg">
+                <div className="flex items-center gap-3 border border-border p-4 text-sm text-muted-foreground">
                   <Loader2 className="size-4 shrink-0 animate-spin" />
                   Reading {url || "your site"}...
                 </div>
@@ -254,7 +254,7 @@ export function OnboardingContent() {
                           "cursor-pointer border px-3 py-1.5 text-sm transition-colors",
                           on
                             ? "border-primary/40 bg-sidebar-accent/40 text-foreground"
-                            : "border-border text-muted-foreground hover:bg-sidebar-accent hover:text-foreground rounded-lg",
+                            : "border-border text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
                         )}
                       >
                         {category.label}
@@ -292,13 +292,13 @@ export function OnboardingContent() {
                         "flex cursor-pointer items-center gap-3 border p-3 text-left text-sm transition-colors",
                         on
                           ? "border-primary/40 bg-sidebar-accent/40"
-                          : "border-border hover:bg-sidebar-accent/60 rounded-lg",
+                          : "border-border hover:bg-sidebar-accent/60",
                       )}
                     >
                       <span
                         className={cn(
                           "flex size-6 shrink-0 items-center justify-center border",
-                          on ? "border-primary bg-primary" : "border-border rounded-lg",
+                          on ? "border-primary bg-primary" : "border-border",
                         )}
                       >
                         {on ? <Check className="size-4 text-[#101010]" /> : null}
@@ -326,7 +326,7 @@ export function OnboardingContent() {
             </Step>
           ) : null}
 
-          <div className="mt-6 flex items-center justify-between gap-3 border-t border-border pt-6 rounded-lg">
+          <div className="mt-6 flex items-center justify-between gap-3 border-t border-border pt-6">
             <button
               type="button"
               onClick={() => setStep((s) => Math.max(0, s - 1))}

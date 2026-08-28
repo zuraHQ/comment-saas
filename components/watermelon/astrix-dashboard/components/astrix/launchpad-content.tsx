@@ -84,7 +84,7 @@ export function LaunchpadContent() {
               key={`${site.domain}-${site.name}`}
               className={cn(
                 "flex items-center border bg-sidebar-accent/20 pr-3 transition-colors",
-                isLaunched ? "border-primary/40" : "border-border rounded-lg",
+                isLaunched ? "border-primary/40" : "border-border",
               )}
             >
               <a
@@ -126,7 +126,7 @@ export function LaunchpadContent() {
                   "flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center border transition-colors",
                   isLaunched
                     ? "border-primary bg-primary text-primary-foreground"
-                    : "border-border text-muted-foreground/40 hover:border-foreground/40 hover:text-foreground rounded-lg",
+                    : "border-border text-muted-foreground/40 hover:border-foreground/40 hover:text-foreground",
                 )}
               >
                 <Check className="h-3.5 w-3.5" />

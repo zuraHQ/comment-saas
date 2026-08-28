@@ -5,6 +5,7 @@ import { useAction, useMutation, useQuery } from "convex/react";
 import {
   Check,
   Copy,
+  Sparkles,
   History as HistoryIcon,
   RefreshCw,
   X as XIcon,
@@ -60,7 +61,7 @@ function platformLabel(
 export function IntentBadge({ match }: { match: Doc<"matches"> }) {
   if (!match.intentScore) {
     return (
-      <span className="shrink-0 border border-border px-2 py-0.5 text-[10px] font-bold tracking-wider text-muted-foreground uppercase rounded-lg">
+      <span className="shrink-0 border border-border px-2 py-0.5 text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
         Scoring...
       </span>
     );
@@ -80,6 +81,21 @@ export function IntentBadge({ match }: { match: Doc<"matches"> }) {
 export function PostsContent() {
   const { project } = useProject();
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [draftingId, setDraftingId] = useState<string | null>(null);
+  const [draftError, setDraftError] = useState<string | null>(null);
+  const writeDraft = useAction(api.replyDrafter.draft);
+
+  // Written once and kept on the match, so opening a post again is free.
+  const requestDraft = (matchId: Id<"matches">) => {
+    setDraftingId(matchId);
+    setDraftError(null);
+    writeDraft({ matchId })
+      .then((result) => {
+        if ("error" in result) setDraftError(result.error);
+      })
+      .catch((err) => setDraftError(String(err)))
+      .finally(() => setDraftingId((id) => (id === matchId ? null : id)));
+  };
 
   const copyReply = (id: string, text: string) => {
     navigator.clipboard
@@ -99,7 +115,6 @@ export function PostsContent() {
     api.pipeline.platformStatus,
     project ? { projectId: project._id } : "skip",
   );
-
   // Flip the cached feed instantly; Convex confirms (or rolls back) behind it.
   const setReplied = useMutation(api.pipeline.setReplied).withOptimisticUpdate(
     (localStore, args) => {
@@ -219,7 +234,7 @@ export function PostsContent() {
                 onClick={() => setIntentFilter(option)}
                 aria-pressed={intentFilter === option}
                 className={cn(
-                  "h-9 cursor-pointer border border-l-0 px-3 text-[10px] font-bold tracking-wider uppercase transition-colors first:rounded-l-lg first:border-l last:rounded-r-lg",
+                  "h-9 cursor-pointer border border-l-0 px-3 text-[10px] font-bold tracking-wider uppercase transition-colors first:border-l",
                   intentFilter === option
                     ? "border-border bg-sidebar-accent text-foreground"
                     : "border-border text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
@@ -235,7 +250,7 @@ export function PostsContent() {
             onClick={refresh}
             aria-label="Refresh posts"
             disabled={refreshing}
-            className="flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground disabled:cursor-default rounded-lg"
+            className="flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground disabled:cursor-default"
           >
             <RefreshCw className={cn("size-4", refreshing && "animate-spin")} />
           </button>
@@ -244,7 +259,7 @@ export function PostsContent() {
             <SheetTrigger
               type="button"
               aria-label="Skipped"
-              className="ml-auto flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground rounded-lg"
+              className="ml-auto flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground"
             >
               <XIcon className="size-4" />
             </SheetTrigger>
@@ -268,7 +283,7 @@ export function PostsContent() {
             <SheetTrigger
               type="button"
               aria-label="History"
-              className="flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground rounded-lg"
+              className="flex h-9 w-9 cursor-pointer items-center justify-center border border-border text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground"
             >
               <HistoryIcon className="size-4" />
             </SheetTrigger>
@@ -347,11 +362,12 @@ export function PostsContent() {
                 const platform =
                   PLATFORM_BY_ID[row.match.platform ?? row.post.platform];
                 const reply = row.match.draft;
+                const drafting = draftingId === row.match._id;
                 return (
                   <li
                     key={row.match._id}
                     className={cn(
-                      "relative flex flex-col rounded-lg bg-card transition-colors hover:bg-sidebar-accent/30",
+                      "relative flex flex-col border border-border bg-card transition-colors hover:border-foreground/25",
                       row.match.replied && "opacity-50",
                     )}
                   >
@@ -416,53 +432,74 @@ export function PostsContent() {
                           </p>
                         ) : null}
                         {reply ? (
-                          <p className="mt-4 rounded-lg border border-border bg-background p-3 text-sm text-foreground/75">
+                          <p className="mt-4 border border-border bg-background p-3 text-sm text-foreground/75">
                             {reply}
                           </p>
-                        ) : null}
+                        ) : (
+                          <div className="relative z-10 mt-4 border border-dashed border-border p-3">
+                            <button
+                              type="button"
+                              onClick={() => requestDraft(row.match._id)}
+                              disabled={drafting}
+                              className="flex h-8 cursor-pointer items-center gap-2 border border-border px-3 text-[10px] font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground disabled:cursor-default disabled:opacity-50"
+                            >
+                              <Sparkles className="size-3.5" />
+                              {drafting ? "Writing..." : "Write the reply"}
+                            </button>
+                            {draftError ? (
+                              <p className="mt-2 text-xs text-red-400">
+                                {draftError}
+                              </p>
+                            ) : null}
+                          </div>
+                        )}
                       </div>
                     </a>
 
                     <div className="relative z-10 flex items-center justify-end gap-2 border-t border-border px-4 py-3">
                       <button
                         type="button"
-                        onClick={() => toggleReplied(row)}
-                        aria-pressed={row.match.replied}
-                        className={cn(
-                          "flex h-9 shrink-0 cursor-pointer items-center gap-2 rounded-lg border px-3 text-xs font-medium transition-colors",
-                          row.match.replied
-                            ? "border-brand/40 text-brand"
-                            : "border-border text-muted-foreground hover:border-brand/40 hover:text-brand",
-                        )}
-                      >
-                        <Check className="size-4" />
-                        {row.match.replied ? "Replied" : "Mark as replied"}
-                      </button>
-                      <button
-                        type="button"
                         onClick={() => reply && copyReply(row.match._id, reply)}
                         disabled={!reply}
                         aria-label="Copy reply"
                         className={cn(
-                          "flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-lg border transition-colors disabled:cursor-default disabled:opacity-40",
+                          "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border transition-colors disabled:cursor-default disabled:opacity-40",
                           copiedId === row.match._id
-                            ? "border-brand text-brand"
-                            : "border-border text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
+                            ? "border-primary text-primary"
+                            : "border-border text-muted-foreground/40 hover:border-foreground/40 hover:text-foreground",
                         )}
                       >
                         {copiedId === row.match._id ? (
-                          <Check className="size-4" />
+                          <Check className="h-5 w-5" />
                         ) : (
-                          <Copy className="size-4" />
+                          <Copy className="h-5 w-5" />
                         )}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => toggleReplied(row)}
+                        aria-pressed={row.match.replied}
+                        aria-label={
+                          row.match.replied
+                            ? "Replied, click to undo"
+                            : "Mark as replied"
+                        }
+                        className={cn(
+                          "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border transition-colors",
+                          row.match.replied
+                            ? "border-primary bg-primary text-primary-foreground"
+                            : "border-border text-muted-foreground/40 hover:border-foreground/40 hover:text-foreground",
+                        )}
+                      >
+                        <Check className="h-5 w-5" />
                       </button>
                       <button
                         type="button"
                         onClick={() => skip(row)}
                         aria-label="Skip this post"
-                        className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:border-red-500/40 hover:text-red-400"
+                        className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border border-border text-muted-foreground/40 transition-colors hover:border-red-500/40 hover:text-red-400"
                       >
-                        <XIcon className="size-4" />
+                        <XIcon className="h-5 w-5" />
                       </button>
                     </div>
                   </li>
@@ -470,7 +507,7 @@ export function PostsContent() {
               })}
               {feed === undefined ? (
                 Array.from({ length: 8 }, (_, i) => (
-                  <li key={i} className="rounded-lg bg-card">
+                  <li key={i} className="border border-border bg-card">
                     <div className="flex items-center justify-between gap-3 bg-sidebar-accent/40 px-4 py-2.5">
                       <div className="h-3 w-1/3 bg-sidebar-accent" />
                       <div className="h-4 w-20 bg-sidebar-accent" />
@@ -479,15 +516,15 @@ export function PostsContent() {
                       <div className="h-4 w-2/3 bg-sidebar-accent" />
                       <div className="mt-3 h-3 w-full bg-sidebar-accent/50" />
                       <div className="mt-1.5 h-3 w-4/5 bg-sidebar-accent/50" />
-                      <div className="mt-4 border border-border p-3 rounded-lg">
+                      <div className="mt-4 border border-border p-3">
                         <div className="h-3 w-11/12 bg-sidebar-accent/50" />
                         <div className="mt-1.5 h-3 w-3/5 bg-sidebar-accent/50" />
                       </div>
                     </div>
-                    <div className="flex justify-end gap-2 border-t border-border px-4 py-3 rounded-lg">
-                      <div className="h-10 w-10 border border-border rounded-lg" />
-                      <div className="h-10 w-10 border border-border rounded-lg" />
-                      <div className="h-10 w-10 border border-border rounded-lg" />
+                    <div className="flex justify-end gap-2 border-t border-border px-4 py-3">
+                      <div className="h-10 w-10 border border-border" />
+                      <div className="h-10 w-10 border border-border" />
+                      <div className="h-10 w-10 border border-border" />
                     </div>
                   </li>
                 ))
