@@ -4,7 +4,7 @@ body:has(.astrix-dashboard) [data-slot="dropdown-menu-content"],
 body:has(.astrix-dashboard) [data-slot="sheet-content"],
 body:has(.astrix-dashboard) [data-slot="tooltip-content"] {
   --radius: 0rem;
-  --background: #fafafa;
+  --background: #ffffff;
   --foreground: #141414;
   --card: #F4F4F5;
   --card-foreground: #141414;
@@ -30,7 +30,7 @@ body:has(.astrix-dashboard) [data-slot="tooltip-content"] {
   --chart-3: oklch(0.62 0 0);
   --chart-4: oklch(0.74 0 0);
   --chart-5: oklch(0.85 0 0);
-  --sidebar: #fafafa;
+  --sidebar: #ffffff;
   --sidebar-foreground: #141414;
   --sidebar-primary: #2a2a2a;
   --sidebar-primary-foreground: #ffffff;
