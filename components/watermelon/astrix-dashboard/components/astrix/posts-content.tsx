@@ -380,8 +380,8 @@ export function PostsContent() {
                             </span>
                           ) : null}
                           <span className="truncate text-xs text-muted-foreground">
-                            {row.post.type === "comment" ? "comment · " : ""}
                             {[
+                              row.post.type === "comment" ? "comment" : "post",
                               row.post.subsource,
                               row.post.author,
                               timeAgo(row.post.postedAt),
