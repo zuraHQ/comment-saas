@@ -41,7 +41,7 @@ const PLATFORMS = [
 
 function ScanVisual() {
   return (
-    <div className="grid grid-cols-2 gap-3">
+    <div className="grid grid-cols-2 gap-3 rounded-2xl bg-gradient-to-br from-neutral-100 via-white to-neutral-100 p-4">
       {PLATFORMS.map((platform) => (
         <div
           key={platform.label}
