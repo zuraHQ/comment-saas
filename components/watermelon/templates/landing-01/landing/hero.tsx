@@ -38,7 +38,7 @@ export default function Hero() {
         Find customers
       </button>
       <p className="text-center text-xs text-neutral-500">
-        14-day free trial. No card required
+        No credit card. 100 free mentions.
       </p>
     </form>
   );
