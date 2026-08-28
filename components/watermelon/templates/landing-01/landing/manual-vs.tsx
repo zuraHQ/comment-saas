@@ -3,7 +3,7 @@ import Container from './container';
 import Heading from './heading';
 
 const MANUAL = [
-  { text: 'Search ten platforms, every few hours', time: '30 – 60 min' },
+  { text: 'Search eight platforms, every few hours', time: '30 – 60 min' },
   { text: 'Read every mention, judge which ones fit', time: '45 – 90 min' },
   { text: 'Write each reply from scratch', time: '60 – 90 min' },
   { text: 'Track what you answered, and what it did', time: '15 – 30 min' },
@@ -60,7 +60,7 @@ export default function ManualVs() {
               All you do is paste your link
             </h3>
             <p className="mt-4 text-base leading-relaxed text-neutral-600">
-              We watch ten platforms and rank what is worth answering.
+              We watch eight platforms and rank what is worth answering.
             </p>
 
             <p className="mt-auto border-t border-neutral-200 pt-6 text-base text-neutral-600">

@@ -18,7 +18,7 @@ const FAQS: FaqItem[] = [
     id: 'vs-search',
     question: 'How is this different from just searching Reddit myself?',
     answer:
-      'Search shows you everything that matches a word. We read ten platforms end to end, rank every post by whether the person is actually looking for something like yours, and tell you why. You read ten posts a day instead of four hundred.',
+      'Search shows you everything that matches a word. We read eight platforms end to end, rank every post by whether the person is actually looking for something like yours, and tell you why. You read ten posts a day instead of four hundred.',
   },
   {
     id: 'niche',
