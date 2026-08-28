@@ -330,7 +330,7 @@ export function PostsContent() {
                   <li
                     key={row.match._id}
                     className={cn(
-                      "relative flex flex-col rounded-md bg-card p-1 transition-colors hover:bg-sidebar-accent/40",
+                      "relative flex flex-col rounded-[10px] bg-card p-1 transition-colors hover:bg-sidebar-accent/40",
                       row.match.replied && "opacity-50",
                     )}
                   >
@@ -345,7 +345,7 @@ export function PostsContent() {
                           );
                         }
                       }}
-                      className="flex flex-1 cursor-pointer flex-col rounded-sm bg-background after:absolute after:inset-0 after:content-['']"
+                      className="flex flex-1 cursor-pointer flex-col rounded-[7px] bg-background after:absolute after:inset-0 after:content-['']"
                     >
                       <header className="flex items-center justify-between gap-3 px-3 pt-3">
                         <div className="flex min-w-0 items-center gap-2">
@@ -451,8 +451,8 @@ export function PostsContent() {
               })}
               {feed === undefined ? (
                 Array.from({ length: 8 }, (_, i) => (
-                  <li key={i} className="rounded-md bg-card p-1">
-                    <div className="rounded-sm bg-background p-3">
+                  <li key={i} className="rounded-[10px] bg-card p-1">
+                    <div className="rounded-[7px] bg-background p-3">
                       <div className="h-3 w-1/3 bg-sidebar-accent" />
                       <div className="mt-3 h-4 w-2/3 bg-sidebar-accent" />
                       <div className="mt-3 h-3 w-full bg-sidebar-accent/50" />
