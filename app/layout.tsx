@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Caveat, Inter, Geist_Mono } from "next/font/google";
+import { Shadows_Into_Light, Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ConvexClientProvider } from "@/components/ConvexClientProvider";
 
@@ -13,9 +13,11 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// Handwriting, for the scribbled note next to the hero input.
-const caveat = Caveat({
-  variable: "--font-caveat",
+// Handwriting, for the scribbled note next to the hero input. A pen face
+// rather than a marker one, so it reads as a margin note.
+const handwriting = Shadows_Into_Light({
+  variable: "--font-handwriting",
+  weight: "400",
   subsets: ["latin"],
 });
 
@@ -28,7 +30,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${geistMono.variable} ${caveat.variable} h-full antialiased`}
+      className={`${inter.variable} ${geistMono.variable} ${handwriting.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <head>

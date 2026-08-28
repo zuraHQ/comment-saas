@@ -15,7 +15,7 @@ export default function Hero() {
     <span className="pointer-events-none absolute top-1 -left-56 hidden items-end gap-1 lg:flex">
       <span
         className="text-brand -rotate-6 text-2xl"
-        style={{ fontFamily: "var(--font-caveat)" }}
+        style={{ fontFamily: "var(--font-handwriting)" }}
       >
         drop your saas here
       </span>
