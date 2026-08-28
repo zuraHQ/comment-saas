@@ -404,33 +404,40 @@ export function PostsContent() {
                             {row.post.snippet}
                           </p>
                         ) : null}
-                        {reply ? (
-                          <p className="mt-4 border border-border bg-background p-3 text-sm text-foreground/75">
-                            {reply}
-                          </p>
-                        ) : null}
                       </div>
                     </a>
 
+                    {reply ? (
+                      <div className="relative z-10 mx-4 mb-4 border-l-2 border-brand bg-sidebar-accent/30 py-2.5 pr-2.5 pl-3">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-[10px] font-bold tracking-wider text-brand uppercase">
+                            Your reply
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => copyReply(row.match._id, reply)}
+                            className="flex h-6 shrink-0 cursor-pointer items-center gap-1.5 px-1.5 text-[10px] font-bold tracking-wider text-muted-foreground uppercase transition-colors hover:text-foreground"
+                          >
+                            {copiedId === row.match._id ? (
+                              <>
+                                <Check className="size-3" />
+                                Copied
+                              </>
+                            ) : (
+                              <>
+                                <Copy className="size-3" />
+                                Copy
+                              </>
+                            )}
+                          </button>
+                        </div>
+                        <p className="mt-1.5 text-sm leading-relaxed text-foreground/85">
+                          {reply}
+                        </p>
+                      </div>
+                    ) : null}
+
                     <div className="relative z-10 flex items-center justify-end gap-2 px-4 pb-4">
-                      <button
-                        type="button"
-                        onClick={() => reply && copyReply(row.match._id, reply)}
-                        disabled={!reply}
-                        aria-label="Copy reply"
-                        className={cn(
-                          "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border transition-colors disabled:cursor-default disabled:opacity-40",
-                          copiedId === row.match._id
-                            ? "border-primary text-primary"
-                            : "border-border text-muted-foreground/40 hover:border-foreground/40 hover:text-foreground",
-                        )}
-                      >
-                        {copiedId === row.match._id ? (
-                          <Check className="h-5 w-5" />
-                        ) : (
-                          <Copy className="h-5 w-5" />
-                        )}
-                      </button>
                       <button
                         type="button"
                         onClick={() => toggleReplied(row)}
