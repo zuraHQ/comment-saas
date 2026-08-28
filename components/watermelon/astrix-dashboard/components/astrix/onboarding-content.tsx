@@ -338,7 +338,7 @@ export function OnboardingContent() {
                       className={cn(
                         "flex cursor-pointer items-center gap-3 rounded-md border p-3 text-left text-sm transition-colors",
                         on
-                          ? "border-primary/40 bg-sidebar-accent/40"
+                          ? "border-brand bg-brand/10"
                           : "border-border hover:bg-sidebar-accent/60",
                       )}
                     >
@@ -348,7 +348,7 @@ export function OnboardingContent() {
                           on ? "border-brand bg-brand" : "border-border",
                         )}
                       >
-                        {on ? <Check className="size-4 text-[#101010]" /> : null}
+                        {on ? <Check className="text-brand-foreground size-4" /> : null}
                       </span>
                       <span
                         className="flex h-6 w-6 shrink-0 items-center justify-center"
