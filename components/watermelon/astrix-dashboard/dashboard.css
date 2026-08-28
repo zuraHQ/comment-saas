@@ -38,8 +38,9 @@ body:has(.astrix-dashboard) [data-slot="tooltip-content"] {
   --sidebar-accent-foreground: #141414;
   --sidebar-border: oklch(0 0 0 / 12%);
   --sidebar-ring: oklch(0.708 0 0);
-  --brand: #0EA5E9;
+  --brand: #1c1d1f;
   --brand-foreground: #ffffff;
+  --panel: #f4f5f7;
   --shadow-sidebar-item: drop-shadow(1px 2px 12px rgb(158 158 158 / 15%));
 }
 
@@ -90,8 +91,9 @@ body:has(.astrix-dashboard) [data-slot="tooltip-content"] {
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
-  --brand: #38BDF8;
-  --brand-foreground: #ffffff;
+  --brand: #ededee;
+  --brand-foreground: #161718;
+  --panel: #161718;
   --shadow-sidebar-item: drop-shadow(1px 2px 12px rgb(0 0 0 / 25%));
 }
 

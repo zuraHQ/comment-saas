@@ -345,7 +345,7 @@ export function PostsContent() {
                           );
                         }
                       }}
-                      className="flex flex-1 cursor-pointer flex-col rounded-[7px] bg-background transition-colors group-hover:bg-sidebar-accent/25 after:absolute after:inset-0 after:content-['']"
+                      className="flex flex-1 cursor-pointer flex-col rounded-[7px] bg-[var(--panel)] transition-colors group-hover:bg-sidebar-accent/25 after:absolute after:inset-0 after:content-['']"
                     >
                       <header className="flex items-center justify-between gap-3 px-3 pt-3">
                         <div className="flex min-w-0 items-center gap-2">
@@ -431,7 +431,7 @@ export function PostsContent() {
                         className={cn(
                           "flex h-10 shrink-0 cursor-pointer items-center gap-2 rounded-[7px] px-3 text-xs font-medium transition-colors",
                           row.match.replied
-                            ? "bg-brand/15 text-brand"
+                            ? "bg-brand/15 text-foreground"
                             : "bg-brand text-brand-foreground shadow-[inset_0_2px_0_rgba(255,255,255,0.25),inset_0_-2px_0_rgba(0,0,0,0.18)] hover:bg-brand/90",
                         )}
                       >
@@ -453,7 +453,7 @@ export function PostsContent() {
               {feed === undefined ? (
                 Array.from({ length: 8 }, (_, i) => (
                   <li key={i} className="rounded-[10px] bg-card p-1">
-                    <div className="rounded-[7px] bg-background p-3">
+                    <div className="rounded-[7px] bg-[var(--panel)] p-3">
                       <div className="h-3 w-1/3 bg-sidebar-accent" />
                       <div className="mt-3 h-4 w-2/3 bg-sidebar-accent" />
                       <div className="mt-3 h-3 w-full bg-sidebar-accent/50" />
