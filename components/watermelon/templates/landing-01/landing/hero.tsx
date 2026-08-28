@@ -34,7 +34,7 @@ export default function Hero() {
       />
       <button
         type="submit"
-        className="h-12 shrink-0 rounded-md bg-neutral-900 px-8 text-sm font-medium text-white transition-colors hover:bg-neutral-700"
+        className="h-12 shrink-0 rounded-md bg-[#FF6600] px-8 text-sm font-medium text-white transition-colors hover:bg-[#e65c00]"
       >
         Find customers
       </button>
