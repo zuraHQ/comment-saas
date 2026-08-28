@@ -56,13 +56,13 @@ function ScanVisual() {
           className="absolute inset-0 rounded-full"
           style={{
             background:
-              "conic-gradient(from 0deg, rgba(163,255,18,0.25), rgba(163,255,18,0) 35%)",
+              "conic-gradient(from 0deg, rgba(14,165,233,0.25), rgba(14,165,233,0) 35%)",
           }}
           animate={{ rotate: 360 }}
           transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
         />
         <div className="flex h-48 w-48 items-center justify-center rounded-full border border-neutral-200">
-          <div className="bg-background flex h-24 w-24 items-center justify-center rounded-full border border-neutral-200">
+          <div className="flex h-24 w-24 bg-white items-center justify-center rounded-full border border-neutral-200">
             <Globe className="h-6 w-6 text-neutral-600" strokeWidth={1.25} />
           </div>
         </div>
@@ -74,7 +74,7 @@ function ScanVisual() {
           <motion.span
             key={item.text}
             className={cn(
-              "bg-white/80 flex items-center gap-2 border border-neutral-200 px-3 py-1.5 text-xs text-neutral-600 backdrop-blur-sm",
+              "bg-white/80 flex items-center gap-2 rounded-full border border-neutral-200 px-3 py-1.5 text-xs text-neutral-600 backdrop-blur-sm",
               i % 2 === 0 ? "mr-auto" : "ml-auto",
             )}
             initial={{ opacity: 0.15 }}
@@ -207,7 +207,7 @@ function SortVisual() {
 
   return (
     <div className="flex h-80 flex-col justify-center gap-3">
-      <div className="border border-neutral-200 bg-neutral-50">
+      <div className="rounded-xl border border-neutral-200 bg-neutral-50">
         <div className="flex items-center gap-6 p-6">
           {/* The dial */}
           <div className="relative shrink-0">
@@ -244,7 +244,7 @@ function SortVisual() {
               >
                 {reading ? "--" : score}
               </span>
-              <span className="font-mono text-[9px] tracking-widest text-neutral-400 uppercase">
+              <span className="text-[9px] tracking-wider text-neutral-400 uppercase">
                 Intent
               </span>
             </div>
@@ -286,7 +286,7 @@ function SortVisual() {
                       {[0, 1, 2].map((dot) => (
                         <motion.span
                           key={dot}
-                          className="h-1.5 w-1.5 rounded-full bg-white/30"
+                          className="h-1.5 w-1.5 rounded-full bg-neutral-300"
                           animate={{ opacity: [0.2, 1, 0.2] }}
                           transition={{
                             duration: 0.9,
@@ -296,7 +296,7 @@ function SortVisual() {
                         />
                       ))}
                     </span>
-                    <span className="font-mono text-[10px] tracking-widest text-neutral-500 uppercase">
+                    <span className="text-[10px] tracking-wider text-neutral-500 uppercase">
                       Matching against your product...
                     </span>
                   </span>
@@ -317,7 +317,7 @@ function SortVisual() {
       </div>
 
       {/* Already judged, oldest first */}
-      <div className="flex shrink-0 divide-x divide-neutral-200 border border-neutral-200">
+      <div className="flex shrink-0 divide-x divide-neutral-200 overflow-hidden rounded-xl border border-neutral-200">
         {JUDGED.map((item, i) => (
           <span
             key={item.author}
@@ -326,7 +326,7 @@ function SortVisual() {
               i === index ? "bg-neutral-100" : "",
             )}
           >
-            <span className="truncate font-mono text-[9px] tracking-wider text-neutral-400 uppercase">
+            <span className="truncate text-[9px] tracking-wider text-neutral-400 uppercase">
               {item.where}
             </span>
           </span>
@@ -341,7 +341,7 @@ function SortVisual() {
 function ReplyVisual() {
   return (
     <div className="flex h-80 flex-col justify-center">
-      <div className="divide-y divide-neutral-200 border border-neutral-200">
+      <div className="divide-y divide-neutral-200 overflow-hidden rounded-xl border border-neutral-200">
         <article className="p-4">
           <div className="flex items-center gap-2.5">
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -359,7 +359,7 @@ function ReplyVisual() {
                 Reddit · 4m
               </p>
             </div>
-            <span className="ml-auto bg-[#FF6600] px-2 py-0.5 font-mono text-[10px] font-bold tracking-widest text-[#101010] uppercase">
+            <span className="ml-auto bg-[#FF6600] px-2 py-0.5 text-[10px] font-bold tracking-wider text-[#101010] uppercase">
               High
             </span>
           </div>
@@ -380,7 +380,7 @@ function ReplyVisual() {
             <img
               src="https://api.dicebear.com/9.x/notionists/svg?seed=founder&backgroundColor=a3ff12"
               alt=""
-              className="ring-primary/60 h-7 w-7 shrink-0 rounded-full bg-neutral-50 ring-1"
+              className="ring-sky-500/60 h-7 w-7 shrink-0 rounded-full bg-neutral-50 ring-1"
             />
             <div className="min-w-0">
               <p className="text-xs font-medium text-neutral-700">you</p>
@@ -390,7 +390,7 @@ function ReplyVisual() {
           <p className="mt-3 text-xs text-neutral-700">
             Had the same problem, so I built something for it. It reads the
             communities for you and scores what is worth answering —{" "}
-            <span className="text-primary underline underline-offset-2">
+            <span className="text-sky-600 underline underline-offset-2">
               commentsaas.com
             </span>
           </p>
@@ -423,7 +423,7 @@ function ResultVisual() {
     <div className="flex h-80 flex-col justify-center gap-5">
       <div className="flex items-end gap-6">
         <div>
-          <p className="font-mono text-[10px] font-bold tracking-widest text-neutral-500 uppercase">
+          <p className="text-[10px] font-bold tracking-wider text-neutral-500 uppercase">
             Link clicks
           </p>
           <motion.p
@@ -436,13 +436,13 @@ function ResultVisual() {
           </motion.p>
         </div>
         <div>
-          <p className="font-mono text-[10px] font-bold tracking-widest text-neutral-500 uppercase">
+          <p className="text-[10px] font-bold tracking-wider text-neutral-500 uppercase">
             Replies sent
           </p>
           <p className="text-2xl font-semibold text-neutral-900">2,140</p>
         </div>
         <div>
-          <p className="font-mono text-[10px] font-bold tracking-widest text-neutral-500 uppercase">
+          <p className="text-[10px] font-bold tracking-wider text-neutral-500 uppercase">
             Best channel
           </p>
           <p className="text-2xl font-semibold text-neutral-900">Reddit</p>
@@ -468,7 +468,7 @@ function ResultVisual() {
             </span>
             <span className="relative h-1.5 flex-1 bg-neutral-50">
               <motion.span
-                className="bg-primary absolute inset-y-0 left-0"
+                className="bg-sky-500 absolute inset-y-0 left-0"
                 initial={{ width: 0 }}
                 whileInView={{ width: `${(source.clicks / max) * 100}%` }}
                 viewport={{ once: true, margin: "-80px" }}
@@ -558,7 +558,7 @@ export default function Stats() {
         <div ref={stepsRef} className="relative mx-auto max-w-6xl">
           <div className="absolute top-0 bottom-0 left-0 hidden w-px bg-neutral-100 lg:block">
             <motion.div
-              className="bg-primary absolute top-0 left-0 w-px origin-top"
+              className="bg-sky-500 absolute top-0 left-0 w-px origin-top"
               style={{ height: "100%", scaleY: progress }}
             />
           </div>
@@ -570,7 +570,7 @@ export default function Stats() {
                 className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16"
               >
                 <div>
-                  <p className="font-mono text-5xl font-semibold text-neutral-900/15">
+                  <p className="text-5xl font-semibold text-neutral-900/15">
                     {step.number}
                   </p>
                   <h3 className="mt-4 text-2xl font-semibold text-neutral-900">
