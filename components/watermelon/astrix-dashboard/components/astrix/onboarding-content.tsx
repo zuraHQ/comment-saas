@@ -120,7 +120,7 @@ export function OnboardingContent() {
           <button
             type="button"
             onClick={() => signOut(() => router.push("/login"))}
-            className="flex h-10 cursor-pointer items-center gap-2 border border-border px-6 font-mono text-xs font-bold tracking-widest uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
+            className="flex h-10 cursor-pointer items-center gap-2 rounded-md border border-border px-6 text-xs font-bold tracking-widest uppercase transition-colors hover:bg-sidebar-accent hover:text-foreground"
           >
             <LogOut className="size-3.5" />
             Log out
@@ -148,7 +148,7 @@ export function OnboardingContent() {
                     i === step
                       ? "border-foreground"
                       : i < step
-                        ? "border-primary bg-primary text-[#101010]"
+                        ? "border-brand bg-brand text-brand-foreground"
                         : "border-border",
                   )}
                 >
@@ -163,7 +163,7 @@ export function OnboardingContent() {
           ))}
         </ol>
 
-        <div className="border border-border p-6">
+        <div className="rounded-lg border border-border p-6">
           {step === 0 ? (
             <Step
               title="Reading your site"
@@ -175,11 +175,11 @@ export function OnboardingContent() {
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
                   placeholder="yoursaas.com"
-                  className="h-9 rounded-none"
+                  className="h-9 rounded-md"
                 />
               </div>
 
-              <ul className="flex flex-col gap-2 border border-border p-4 text-sm">
+              <ul className="flex flex-col gap-2 rounded-lg border border-border p-4 text-sm">
                 {[
                   "Fetching the page",
                   "Reading your copy",
@@ -213,7 +213,7 @@ export function OnboardingContent() {
               subtitle="Fix anything that is off. This is what we match posts against."
             >
               {scanning ? (
-                <div className="flex items-center gap-3 border border-border p-4 text-sm text-muted-foreground">
+                <div className="flex items-center gap-3 rounded-lg border border-border p-4 text-sm text-muted-foreground">
                   <Loader2 className="size-4 shrink-0 animate-spin" />
                   Reading {url || "your site"}...
                 </div>
@@ -224,7 +224,7 @@ export function OnboardingContent() {
                 <Input
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="h-9 rounded-none"
+                  className="h-9 rounded-md"
                 />
               </div>
 
@@ -298,7 +298,7 @@ export function OnboardingContent() {
                       <span
                         className={cn(
                           "flex size-6 shrink-0 items-center justify-center border",
-                          on ? "border-primary bg-primary" : "border-border",
+                          on ? "border-brand bg-brand" : "border-border",
                         )}
                       >
                         {on ? <Check className="size-4 text-[#101010]" /> : null}
@@ -341,7 +341,7 @@ export function OnboardingContent() {
                 type="button"
                 onClick={() => setStep((s) => s + 1)}
                 disabled={scanning && step <= 1}
-                className="h-10 cursor-pointer bg-primary px-6 text-xs font-bold tracking-wider text-primary-foreground uppercase hover:bg-primary/90 disabled:cursor-default disabled:opacity-50"
+                className="bg-brand text-brand-foreground hover:bg-brand/90 h-10 cursor-pointer rounded-md px-6 text-xs font-bold tracking-wider uppercase shadow-[inset_0_2px_0_rgba(255,255,255,0.25),inset_0_-2px_0_rgba(0,0,0,0.18)] disabled:cursor-default disabled:opacity-50"
               >
                 {scanning && step <= 1 ? "Reading..." : "Next"}
               </button>
@@ -350,7 +350,7 @@ export function OnboardingContent() {
                 type="button"
                 onClick={finish}
                 disabled={saving}
-                className="h-10 cursor-pointer bg-primary px-6 text-xs font-bold tracking-wider text-primary-foreground uppercase hover:bg-primary/90 disabled:cursor-default disabled:opacity-50"
+                className="bg-brand text-brand-foreground hover:bg-brand/90 h-10 cursor-pointer rounded-md px-6 text-xs font-bold tracking-wider uppercase shadow-[inset_0_2px_0_rgba(255,255,255,0.25),inset_0_-2px_0_rgba(0,0,0,0.18)] disabled:cursor-default disabled:opacity-50"
               >
                 {saving ? "Setting up..." : "Done"}
               </button>
