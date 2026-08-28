@@ -213,12 +213,6 @@ export function PostsContent() {
             <RefreshCw className={cn("size-4", refreshing && "animate-spin")} />
           </button>
 
-          {/* Always on, so the one button that costs money is never a mystery */}
-          <span className="relative ml-1 hidden items-center border border-border bg-popover px-2 py-1 text-[10px] font-bold tracking-wider text-muted-foreground uppercase sm:flex">
-            <span className="absolute top-1/2 -left-[5px] size-2 -translate-y-1/2 rotate-45 border-b border-l border-border bg-popover" />
-            {refreshing ? "Fetching..." : "Refresh data"}
-          </span>
-
           <Sheet>
             <SheetTrigger
               type="button"
