@@ -343,113 +343,117 @@ export function PostsContent() {
                   <li
                     key={row.match._id}
                     className={cn(
-                      "group relative flex flex-col overflow-hidden border border-border bg-card px-4 pt-4 transition-colors hover:border-foreground/25",
+                      "flex flex-col",
                       row.match.replied && "opacity-50",
                     )}
                   >
-                    <a
-                      href={row.post.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      onClick={() => {
-                        if (!row.match.seenAt) {
-                          markSeen({ matchId: row.match._id }).catch(
-                            console.error,
-                          );
-                        }
-                      }}
-                      className="cursor-pointer after:absolute after:inset-0 after:content-['']"
-                    >
-                      <span className="flex items-center justify-between gap-3">
-                        <span className="flex min-w-0 items-center gap-2">
-                          {platform ? (
-                            <span className="relative flex size-4 shrink-0 items-center justify-center">
-                              {platform.id === "hn" ? (
-                                <span className="absolute inset-px bg-white" />
-                              ) : null}
-                              <platform.Icon
-                                className="relative size-4"
-                                style={{ color: platform.bg }}
-                              />
+                    <div className="relative flex flex-1 flex-col border border-border bg-card p-4 transition-colors hover:border-foreground/25">
+                      <a
+                        href={row.post.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        onClick={() => {
+                          if (!row.match.seenAt) {
+                            markSeen({ matchId: row.match._id }).catch(
+                              console.error,
+                            );
+                          }
+                        }}
+                        className="cursor-pointer after:absolute after:inset-0 after:content-['']"
+                      >
+                        <span className="flex items-center justify-between gap-3">
+                          <span className="flex min-w-0 items-center gap-2">
+                            {platform ? (
+                              <span className="relative flex size-4 shrink-0 items-center justify-center">
+                                {platform.id === "hn" ? (
+                                  <span className="absolute inset-px bg-white" />
+                                ) : null}
+                                <platform.Icon
+                                  className="relative size-4"
+                                  style={{ color: platform.bg }}
+                                />
+                              </span>
+                            ) : null}
+                            <span className="truncate text-xs text-muted-foreground">
+                              {[
+                                row.post.type === "comment"
+                                  ? "comment"
+                                  : "post",
+                                row.post.subsource,
+                                row.post.author,
+                                timeAgo(row.post.postedAt),
+                              ]
+                                .filter(Boolean)
+                                .join(" · ")}
+                            </span>
+                          </span>
+                          {row.match.seenAt ? (
+                            <span className="shrink-0 text-[10px] tracking-wider text-muted-foreground uppercase">
+                              Seen
                             </span>
                           ) : null}
-                          <span className="truncate text-xs text-muted-foreground">
-                            {[
-                              row.post.type === "comment" ? "comment" : "post",
-                              row.post.subsource,
-                              row.post.author,
-                              timeAgo(row.post.postedAt),
-                            ]
-                              .filter(Boolean)
-                              .join(" · ")}
-                          </span>
                         </span>
-                        {row.match.seenAt ? (
-                          <span className="shrink-0 text-[10px] tracking-wider text-muted-foreground uppercase">
-                            Seen
+                        <span className="mt-2 block text-sm font-medium">
+                          {row.post.title}
+                        </span>
+                        {row.post.snippet &&
+                        row.post.platform !== "reddit" &&
+                        row.post.platform !== "hn" ? (
+                          <span className="mt-2 line-clamp-2 block text-sm text-foreground/70">
+                            {row.post.snippet}
                           </span>
                         ) : null}
-                      </span>
-                      <span className="mt-2 block text-sm font-medium">
-                        {row.post.title}
-                      </span>
-                      {row.post.snippet &&
-                      row.post.platform !== "reddit" &&
-                      row.post.platform !== "hn" ? (
-                        <span className="mt-2 line-clamp-2 block text-sm text-foreground/70">
-                          {row.post.snippet}
-                        </span>
-                      ) : null}
-                    </a>
+                      </a>
 
-                    {/* The reply, nested under the post like a comment thread */}
-                    <div className="mt-3 flex flex-1 gap-3">
-                      <span className="mt-1 w-px shrink-0 bg-border" />
-                      <div className="flex min-w-0 flex-1 flex-col">
-                        <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
-                          You, replying
-                        </p>
-                        {reply ? (
-                          <p className="mt-1.5 text-sm leading-relaxed text-foreground/85">
-                            {reply}
+                      {/* The reply, nested under the post like a comment thread */}
+                      <div className="mt-3 flex flex-1 gap-3">
+                        <span className="mt-1 w-px shrink-0 bg-border" />
+                        <div className="flex min-w-0 flex-1 flex-col">
+                          <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
+                            You, replying
                           </p>
-                        ) : (
-                          <p className="mt-1.5 text-sm text-muted-foreground/60">
-                            Nothing written yet.
-                          </p>
-                        )}
+                          {reply ? (
+                            <p className="mt-1.5 text-sm leading-relaxed text-foreground/85">
+                              {reply}
+                            </p>
+                          ) : (
+                            <p className="mt-1.5 text-sm text-muted-foreground/60">
+                              Nothing written yet.
+                            </p>
+                          )}
 
-                        <div className="relative z-10 mt-3 flex items-center gap-3 text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
-                          <button
-                            type="button"
-                            onClick={() => rewrite(row.match._id)}
-                            disabled={rewritingId === row.match._id}
-                            className="flex cursor-pointer items-center gap-1.5 transition-colors hover:text-foreground disabled:cursor-default disabled:opacity-50"
-                          >
-                            <RotateCw
-                              className={cn(
-                                "size-3",
-                                rewritingId === row.match._id && "animate-spin",
-                              )}
-                            />
-                            {rewritingId === row.match._id
-                              ? "Writing"
-                              : reply
-                                ? "Rewrite"
-                                : "Write reply"}
-                          </button>
-
+                          <div className="relative z-10 mt-3 flex items-center gap-3 text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
+                            <button
+                              type="button"
+                              onClick={() => rewrite(row.match._id)}
+                              disabled={rewritingId === row.match._id}
+                              className="flex cursor-pointer items-center gap-1.5 transition-colors hover:text-foreground disabled:cursor-default disabled:opacity-50"
+                            >
+                              <RotateCw
+                                className={cn(
+                                  "size-3",
+                                  rewritingId === row.match._id &&
+                                    "animate-spin",
+                                )}
+                              />
+                              {rewritingId === row.match._id
+                                ? "Writing"
+                                : reply
+                                  ? "Rewrite"
+                                  : "Write reply"}
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
 
-                    <div className="relative z-10 -mx-4 mt-4 flex text-[10px] font-bold tracking-wider uppercase">
+                    <div className="flex -mt-px text-[10px] font-bold tracking-wider uppercase">
                       <button
                         type="button"
                         onClick={() => reply && copyReply(row.match._id, reply)}
                         disabled={!reply}
                         className={cn(
-                          "flex h-10 flex-1 cursor-pointer items-center justify-center gap-2 border-t border-border transition-colors disabled:cursor-default disabled:opacity-40",
+                          "flex h-10 flex-1 cursor-pointer items-center justify-center gap-2 border border-border transition-colors disabled:cursor-default disabled:opacity-40",
                           copiedId === row.match._id
                             ? "text-brand"
                             : "text-muted-foreground",
@@ -470,7 +474,7 @@ export function PostsContent() {
                         onClick={() => toggleReplied(row)}
                         aria-pressed={row.match.replied}
                         className={cn(
-                          "flex h-10 flex-1 cursor-pointer items-center justify-center gap-2 border-t border-l transition-colors",
+                          "flex h-10 flex-1 cursor-pointer items-center justify-center gap-2 border border-l-0 transition-colors",
                           row.match.replied
                             ? "border-brand/50 text-brand"
                             : "border-border text-muted-foreground",
@@ -482,7 +486,7 @@ export function PostsContent() {
                       <button
                         type="button"
                         onClick={() => skip(row)}
-                        className="flex h-10 flex-1 cursor-pointer items-center justify-center gap-2 border-t border-l border-border text-muted-foreground"
+                        className="flex h-10 flex-1 cursor-pointer items-center justify-center gap-2 border border-l-0 border-border text-muted-foreground"
                       >
                         <XIcon className="size-3.5" /> Skip
                       </button>
