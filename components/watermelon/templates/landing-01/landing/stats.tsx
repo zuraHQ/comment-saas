@@ -4,6 +4,7 @@ import {
   FaLinkedinIn,
   FaHackerNews,
   FaInstagram,
+  FaRegLightbulb,
   FaRedditAlien,
   FaTiktok,
   FaXTwitter,
@@ -491,8 +492,7 @@ const PLATFORM_MARKS = [
   { label: "X/Twitter", Icon: FaXTwitter, bg: "#ffffff", fg: "#000000" },
   { label: "Hacker News", Icon: FaHackerNews, bg: "#FF6600", fg: "#ffffff" },
   { label: "LinkedIn", Icon: FaLinkedinIn, bg: "#0A66C2", fg: "#ffffff" },
-  { label: "Instagram", Icon: FaInstagram, bg: "#E4405F", fg: "#ffffff" },
-  { label: "TikTok", Icon: FaTiktok, bg: "#ffffff", fg: "#000000" },
+  { label: "Indie Hackers", Icon: FaRegLightbulb, bg: "#0E2439", fg: "#ffffff" },
   { label: "YouTube", Icon: FaYoutube, bg: "#FF0000", fg: "#ffffff" },
   { label: "GitHub", Icon: FaGithub, bg: "#ffffff", fg: "#000000" },
   { label: "Bluesky", Icon: FaBluesky, bg: "#0085FF", fg: "#ffffff" },
@@ -502,7 +502,7 @@ const PLATFORM_MARKS = [
 const STEPS = [
   {
     number: "01",
-    title: "We pull posts and comments from 9 platforms",
+    title: "We read eight platforms end to end",
     body: "Whole communities and comment sections read end to end, not just keyword hits, so nothing relevant slips past.",
     marks: true,
     visual: <ScanVisual />,
