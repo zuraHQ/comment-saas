@@ -53,7 +53,7 @@ function ScanVisual() {
         <motion.span
           key={item.text}
           className={cn(
-            "absolute z-10 flex max-w-[45%] items-center gap-2",
+            "absolute z-10 flex max-w-[38%] items-center gap-1.5",
             item.at,
           )}
           initial={{ opacity: 0.35 }}
@@ -67,12 +67,12 @@ function ScanVisual() {
           }}
         >
           <span
-            className="flex size-6 shrink-0 items-center justify-center rounded-full"
+            className="flex size-5 shrink-0 items-center justify-center rounded-full"
             style={{ backgroundColor: item.color }}
           >
-            <item.Icon className="size-3 text-white" />
+            <item.Icon className="size-2.5 text-white" />
           </span>
-          <span className="text-sm leading-snug font-medium text-neutral-900">
+          <span className="text-xs leading-snug font-medium text-neutral-900">
             {item.text}
           </span>
         </motion.span>
@@ -137,25 +137,25 @@ const CHATTER = [
     text: "anyone know a good invoicing tool?",
     Icon: FaRedditAlien,
     color: "#FF4500",
-    at: "top-6 left-0",
+    at: "top-10 left-6",
   },
   {
     text: "spreadsheets are killing me",
     Icon: FaHackerNews,
     color: "#FF6600",
-    at: "top-1/3 right-0",
+    at: "top-24 right-6",
   },
   {
     text: "best way to track leads?",
     Icon: FaLinkedinIn,
     color: "#0A66C2",
-    at: "bottom-1/3 left-0",
+    at: "bottom-24 left-6",
   },
   {
     text: "we still do this by hand",
     Icon: FaBluesky,
     color: "#0085FF",
-    at: "bottom-6 right-0",
+    at: "bottom-10 right-6",
   },
 ];
 
