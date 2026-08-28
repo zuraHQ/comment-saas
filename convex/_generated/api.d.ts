@@ -17,7 +17,9 @@ import type * as links from "../links.js";
 import type * as pipeline from "../pipeline.js";
 import type * as platforms from "../platforms.js";
 import type * as projects from "../projects.js";
+import type * as publicStats from "../publicStats.js";
 import type * as replies from "../replies.js";
+import type * as replyDrafter from "../replyDrafter.js";
 import type * as users from "../users.js";
 
 import type {
@@ -36,7 +38,9 @@ declare const fullApi: ApiFromModules<{
   pipeline: typeof pipeline;
   platforms: typeof platforms;
   projects: typeof projects;
+  publicStats: typeof publicStats;
   replies: typeof replies;
+  replyDrafter: typeof replyDrafter;
   users: typeof users;
 }>;
 
