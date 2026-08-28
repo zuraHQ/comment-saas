@@ -140,160 +140,76 @@ const READ_MS = 2200;
 const HOLD_MS = 6000;
 
 function SortVisual() {
-  const [index, setIndex] = useState(0);
-  const [reading, setReading] = useState(true);
-  const [score, setScore] = useState(0);
+  // Walk the list, scoring one post at a time, then start over.
+  const [judged, setJudged] = useState(0);
 
   useEffect(() => {
-    setScore(0);
-    const done = setTimeout(() => setReading(false), READ_MS);
-    const next = setTimeout(() => {
-      setIndex((i) => (i + 1) % JUDGED.length);
-      setReading(true);
-    }, HOLD_MS);
-    return () => {
-      clearTimeout(done);
-      clearTimeout(next);
-    };
-  }, [index]);
-
-  const post = JUDGED[index];
-
-  // Count the score up once the read finishes.
-  useEffect(() => {
-    if (reading) return;
-    let current = 0;
-    const step = setInterval(() => {
-      current += Math.max(1, Math.round(post.score / 18));
-      if (current >= post.score) {
-        current = post.score;
-        clearInterval(step);
-      }
-      setScore(current);
-    }, 26);
-    return () => clearInterval(step);
-  }, [reading, post.score]);
-
-  const accent =
-    post.intent === "High"
-      ? "#FF6600"
-      : post.intent === "Medium"
-        ? "#FFC53D"
-        : "rgba(0,0,0,0.25)";
-
-  const circumference = 2 * Math.PI * 52;
+    const timer = setInterval(() => {
+      setJudged((n) => (n > JUDGED.length ? 0 : n + 1));
+    }, 1100);
+    return () => clearInterval(timer);
+  }, []);
 
   return (
-    <div className="flex h-80 flex-col justify-center gap-3">
-      <div className="rounded-xl border border-neutral-200 bg-neutral-50">
-        <div className="flex items-center gap-6 p-6">
-          {/* The dial */}
-          <div className="relative shrink-0">
-            <svg viewBox="0 0 120 120" className="h-28 w-28 -rotate-90">
-              <circle
-                cx="60"
-                cy="60"
-                r="52"
-                stroke="rgba(0,0,0,0.08)"
-                strokeWidth="8"
-                fill="none"
-              />
-              <motion.circle
-                cx="60"
-                cy="60"
-                r="52"
-                stroke={accent}
-                strokeWidth="8"
-                fill="none"
-                strokeDasharray={circumference}
-                initial={false}
-                animate={{
-                  strokeDashoffset:
-                    circumference -
-                    (reading ? 0 : (post.score / 100) * circumference),
-                }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
-              />
-            </svg>
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
+    <div className="flex w-full flex-col gap-3">
+      {JUDGED.map((post, i) => {
+        const done = i < judged;
+        const accent =
+          post.intent === "High"
+            ? "#FF6600"
+            : post.intent === "Medium"
+              ? "#FFC53D"
+              : "#d4d4d4";
+        return (
+          <div
+            key={post.author}
+            className={cn(
+              "rounded-md border border-neutral-200 bg-white p-3 transition-opacity duration-500",
+              done && post.intent === "Low" && "opacity-40",
+            )}
+          >
+            <div className="flex items-center gap-2">
               <span
-                className="text-3xl font-semibold tabular-nums"
-                style={{ color: reading ? "rgba(0,0,0,0.25)" : accent }}
+                className="flex size-5 shrink-0 items-center justify-center rounded"
+                style={{ backgroundColor: post.color }}
               >
-                {reading ? "--" : score}
+                <post.Icon
+                  className="size-2.5"
+                  style={{
+                    color: post.color === "#171717" ? "#ffffff" : "#ffffff",
+                  }}
+                />
               </span>
-              <span className="text-[9px] tracking-wider text-neutral-400 uppercase">
-                Intent
+              <span className="truncate text-xs text-neutral-500">
+                {post.author} · {post.where}
               </span>
-            </div>
-          </div>
-
-          {/* The post it is judging */}
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={post.author}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.25 }}
-              className="min-w-0 flex-1"
-            >
-              <div className="flex items-center gap-2">
-                <span
-                  className="flex h-5 w-5 shrink-0 items-center justify-center"
-                  style={{ backgroundColor: post.color }}
-                >
-                  <post.Icon
-                    className="h-3 w-3"
-                    style={{
-                      color: post.color === "#ffffff" ? "#000000" : "#ffffff",
-                    }}
-                  />
-                </span>
-                <span className="truncate text-[11px] text-neutral-500">
-                  {post.author} · {post.where} · {post.time}
-                </span>
-              </div>
-              <p className="mt-2 line-clamp-2 h-8 text-xs text-neutral-700">
-                {post.text}
-              </p>
-              <div className="mt-3 h-8">
-                {reading ? (
-                  <span className="flex items-center gap-3">
-                    <span className="flex gap-1">
-                      {[0, 1, 2].map((dot) => (
-                        <motion.span
-                          key={dot}
-                          className="h-1.5 w-1.5 rounded-full bg-neutral-300"
-                          animate={{ opacity: [0.2, 1, 0.2] }}
-                          transition={{
-                            duration: 0.9,
-                            repeat: Infinity,
-                            delay: dot * 0.15,
-                          }}
-                        />
-                      ))}
-                    </span>
-                    <span className="text-[10px] tracking-wider text-neutral-500 uppercase">
-                      Matching against your product...
-                    </span>
+              <span className="ml-auto shrink-0 text-xs tabular-nums">
+                {done ? (
+                  <span style={{ color: accent }} className="font-semibold">
+                    {post.score}
                   </span>
                 ) : (
-                  <motion.p
-                    initial={{ opacity: 0, y: 6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="line-clamp-2 text-xs text-neutral-600"
-                  >
-                    {post.verdict}
-                  </motion.p>
+                  <span className="text-neutral-300">--</span>
                 )}
-              </div>
-            </motion.div>
-          </AnimatePresence>
-        </div>
-      </div>
+              </span>
+            </div>
 
+            <p className="mt-1.5 line-clamp-1 text-sm font-medium text-neutral-900">
+              {post.text}
+            </p>
+
+            <div className="mt-2 h-1 w-full rounded-full bg-neutral-100">
+              <motion.div
+                className="h-full rounded-full"
+                style={{ backgroundColor: accent }}
+                initial={{ width: 0 }}
+                animate={{ width: done ? `${post.score}%` : 0 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+              />
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }
