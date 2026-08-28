@@ -346,9 +346,9 @@ export function PostsContent() {
                 <p className="text-xs text-muted-foreground">
                   Scoring {counts.total - counts.scored} posts...
                 </p>
-                <div className="mt-2 h-1.5 w-full bg-sidebar-accent">
+                <div className="mt-2 h-1.5 w-full rounded-full bg-sidebar-accent">
                   <div
-                    className="h-full bg-primary transition-[width] duration-500"
+                    className="bg-brand h-full rounded-full transition-[width] duration-500"
                     style={{
                       width: `${Math.round((counts.scored / counts.total) * 100)}%`,
                     }}
