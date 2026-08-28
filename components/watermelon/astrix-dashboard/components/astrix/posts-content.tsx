@@ -5,7 +5,6 @@ import { useAction, useMutation, useQuery } from "convex/react";
 import {
   ArrowUpRight,
   Check,
-  PenLine,
   Eye,
   EyeOff,
   Copy,
@@ -475,10 +474,7 @@ export function PostsContent() {
                             Copy reply
                           </>
                         ) : (
-                          <>
-                            <PenLine className="size-3.5" />
-                            Write reply
-                          </>
+                          "Write reply"
                         )}
                       </button>
                       <button
