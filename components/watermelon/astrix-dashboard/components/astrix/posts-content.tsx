@@ -369,11 +369,11 @@ export function PostsContent() {
                   <li
                     key={row.match._id}
                     className={cn(
-                      "flex flex-col border-b border-border last:border-b-0 transition-colors hover:bg-sidebar-accent/20",
+                      "relative flex flex-col border-b border-border last:border-b-0 transition-colors hover:bg-sidebar-accent/20",
                       row.match.replied && "opacity-50",
                     )}
                   >
-                    <div className="relative flex flex-1 flex-col p-4">
+                    <div className="flex flex-1 flex-col p-4">
                       <a
                         href={row.post.url}
                         target="_blank"
@@ -442,7 +442,7 @@ export function PostsContent() {
                       ) : null}
                     </div>
 
-                    <div className="flex gap-2 px-4 pb-4 text-[10px] font-bold tracking-wider uppercase">
+                    <div className="relative z-10 flex gap-2 px-4 pb-4 text-[10px] font-bold tracking-wider uppercase">
                       <button
                         type="button"
                         onClick={() =>
