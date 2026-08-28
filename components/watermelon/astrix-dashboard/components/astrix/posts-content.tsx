@@ -429,19 +429,20 @@ export function PostsContent() {
                             : "Mark as replied"
                         }
                         className={cn(
-                          "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border transition-colors",
+                          "flex h-10 shrink-0 cursor-pointer items-center gap-2 rounded-[7px] px-3 text-xs font-medium transition-colors",
                           row.match.replied
-                            ? "border-primary bg-primary text-primary-foreground"
-                            : "border-border text-muted-foreground/40 hover:border-foreground/40 hover:text-foreground",
+                            ? "bg-brand/15 text-brand"
+                            : "bg-brand text-brand-foreground shadow-[inset_0_2px_0_rgba(255,255,255,0.25),inset_0_-2px_0_rgba(0,0,0,0.18)] hover:bg-brand/90",
                         )}
                       >
-                        <Check className="h-5 w-5" />
+                        <Check className="size-4" />
+                        {row.match.replied ? "Replied" : "Mark as replied"}
                       </button>
                       <button
                         type="button"
                         onClick={() => skip(row)}
                         aria-label="Skip this post"
-                        className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center border border-border text-muted-foreground/40 transition-colors hover:border-red-500/40 hover:text-red-400"
+                        className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-[7px] border border-border text-muted-foreground/40 transition-colors hover:border-red-500/40 hover:text-red-400"
                       >
                         <XIcon className="h-5 w-5" />
                       </button>
