@@ -269,7 +269,7 @@ export function PostsContent() {
             >
               <HistoryIcon className="size-4" />
               {repliedRows.length ? (
-                <span className="bg-brand text-brand-foreground absolute -top-2 -right-2 flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[10px] font-bold">
+                <span className="absolute -top-2 -right-2 flex h-5 min-w-5 items-center justify-center rounded-full bg-sidebar-accent px-1.5 text-[10px] font-bold text-foreground">
                   {repliedRows.length > 99 ? "99+" : repliedRows.length}
                 </span>
               ) : null}
