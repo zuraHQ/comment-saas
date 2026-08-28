@@ -460,17 +460,22 @@ export function PostsContent() {
                             type="button"
                             onClick={() => toggleReplied(row)}
                             aria-pressed={row.match.replied}
-                            className="ml-auto flex cursor-pointer items-center gap-1.5 transition-colors hover:text-foreground"
+                            className={cn(
+                              "ml-auto flex h-8 cursor-pointer items-center gap-1.5 border px-3 transition-colors",
+                              row.match.replied
+                                ? "border-brand/50 text-brand"
+                                : "border-border hover:bg-sidebar-accent hover:text-foreground",
+                            )}
                           >
-                            <Check className="size-3" />
+                            <Check className="size-3.5" />
                             {row.match.replied ? "Replied" : "Mark"}
                           </button>
                           <button
                             type="button"
                             onClick={() => skip(row)}
-                            className="flex cursor-pointer items-center gap-1.5 transition-colors hover:text-red-400"
+                            className="flex h-8 cursor-pointer items-center gap-1.5 border border-border px-3 transition-colors hover:border-red-500/40 hover:text-red-400"
                           >
-                            <XIcon className="size-3" /> Skip
+                            <XIcon className="size-3.5" /> Skip
                           </button>
                         </div>
                       </div>
