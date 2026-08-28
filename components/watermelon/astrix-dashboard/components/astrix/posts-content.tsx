@@ -431,8 +431,8 @@ export function PostsContent() {
                         className={cn(
                           "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-[7px] transition-colors",
                           row.match.replied
-                            ? "bg-brand/15 text-foreground"
-                            : "bg-brand text-brand-foreground shadow-[inset_0_2px_0_rgba(255,255,255,0.25),inset_0_-2px_0_rgba(0,0,0,0.18)] hover:bg-brand/90",
+                            ? "border border-border text-foreground"
+                            : "border border-border text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
                         )}
                       >
                         <Check className="size-4" />
