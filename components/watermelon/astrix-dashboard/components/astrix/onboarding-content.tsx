@@ -163,7 +163,7 @@ export function OnboardingContent() {
           ))}
         </ol>
 
-        <div className="rounded-lg border border-border p-6">
+        <div className="rounded-md border border-border p-6">
           {step === 0 ? (
             <Step
               title="Reading your site"
@@ -179,7 +179,7 @@ export function OnboardingContent() {
                 />
               </div>
 
-              <ul className="flex flex-col gap-2 rounded-lg border border-border p-4 text-sm">
+              <ul className="flex flex-col gap-2 rounded-md border border-border p-4 text-sm">
                 {[
                   "Fetching the page",
                   "Reading your copy",
@@ -213,7 +213,7 @@ export function OnboardingContent() {
               subtitle="Fix anything that is off. This is what we match posts against."
             >
               {scanning ? (
-                <div className="flex items-center gap-3 rounded-lg border border-border p-4 text-sm text-muted-foreground">
+                <div className="flex items-center gap-3 rounded-md border border-border p-4 text-sm text-muted-foreground">
                   <Loader2 className="size-4 shrink-0 animate-spin" />
                   Reading {url || "your site"}...
                 </div>
