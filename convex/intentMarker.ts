@@ -3,6 +3,10 @@ import { internalAction, internalMutation, internalQuery } from "./_generated/se
 import { internal } from "./_generated/api";
 
 const BATCH_SIZE = 40;
+// Batches go out together rather than one after another. 40 is the size the
+// model stays reliable at, so scale comes from running more of them at once.
+const CONCURRENCY = 10;
+const POOL = BATCH_SIZE * CONCURRENCY;
 
 // ---------- queue: unscored matches, one project per batch ----------
 
@@ -19,13 +23,13 @@ export const nextBatch = internalQuery({
         .order("desc")) {
         if (match.intentScore === undefined) {
           unscored.push(match);
-          if (unscored.length > BATCH_SIZE) break; // one extra = "has more"
+          if (unscored.length > POOL) break; // one extra = "has more"
         }
       }
       if (!unscored.length) continue;
 
       const items = [];
-      for (const match of unscored.slice(0, BATCH_SIZE)) {
+      for (const match of unscored.slice(0, POOL)) {
         const post = await ctx.db.get(match.postId);
         if (!post) continue;
         items.push({
@@ -43,7 +47,7 @@ export const nextBatch = internalQuery({
         projectId: project._id,
         product: `${project.name}: ${project.description || "no description yet"}`,
         items,
-        hasMore: unscored.length > BATCH_SIZE,
+        hasMore: unscored.length > POOL,
       };
     }
     return null;
@@ -76,6 +80,26 @@ export const applyScores = internalMutation({
       applied++;
     }
     return applied;
+  },
+});
+
+// Clear scores so they get judged again, after a prompt or model change:
+//   npx convex run intentMarker:unscore '{"limit":200}' --prod
+export const unscore = internalMutation({
+  args: { limit: v.optional(v.number()) },
+  handler: async (ctx, args) => {
+    const limit = args.limit ?? 100;
+    let cleared = 0;
+    for await (const match of ctx.db.query("matches")) {
+      if (cleared >= limit) break;
+      if (match.intentScore === undefined) continue;
+      await ctx.db.patch(match._id, {
+        intentScore: undefined,
+        intentReason: undefined,
+      });
+      cleared++;
+    }
+    return cleared;
   },
 });
 
@@ -124,6 +148,105 @@ reason: one short sentence, for the founder, on why this post is or is not worth
 
 Return one entry per post, echoing the exact id you were given for it.`;
 
+type BatchItem = {
+  matchId: string;
+  title: string;
+  snippet: string;
+  platform: string;
+  community: string;
+};
+
+type Scored = { matchId: any; intent: string; reason: string };
+
+// Rate limits bite on tokens per minute, not requests, so ten batches landing
+// at once can get a 429 even though nothing is wrong. Back off and retry
+// rather than dropping the batch on the sweeper.
+const RETRY_DELAYS_MS = [1000, 4000, 10000];
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function scoreChunk(
+  apiKey: string,
+  model: string,
+  product: string,
+  items: BatchItem[],
+): Promise<Scored[]> {
+  // The model echoes short indexes, not raw ids: nothing for it to mangle.
+  const user = JSON.stringify({
+    product,
+    posts: items.map((item, index) => ({
+      id: String(index),
+      platform: item.platform,
+      community: item.community,
+      title: item.title,
+      text: item.snippet,
+    })),
+  });
+
+  let body: string | null = null;
+  for (let attempt = 0; attempt <= RETRY_DELAYS_MS.length; attempt++) {
+    const last = attempt === RETRY_DELAYS_MS.length;
+    try {
+      const res = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model,
+          messages: [
+            { role: "system", content: SYSTEM_PROMPT },
+            { role: "user", content: user },
+          ],
+          response_format: RESPONSE_SCHEMA,
+        }),
+      });
+
+      if (res.ok) {
+        body = await res.text();
+        break;
+      }
+
+      const retryable = res.status === 429 || res.status >= 500;
+      const detail = (await res.text()).slice(0, 200);
+      if (!retryable || last) {
+        // Leave this chunk unscored; the sweeper picks it up again.
+        console.error(`OpenAI ${res.status}: ${detail}`);
+        return [];
+      }
+    } catch (err) {
+      // Network-level failure, which is exactly what the retries are for.
+      if (last) {
+        console.error(`OpenAI request failed: ${String(err).slice(0, 200)}`);
+        return [];
+      }
+    }
+    await sleep(RETRY_DELAYS_MS[attempt]);
+  }
+  if (!body) return [];
+
+  const data = JSON.parse(body);
+  const parsed = JSON.parse(data.choices[0].message.content) as {
+    scores: Array<{ id: string; intent: string; reason: string }>;
+  };
+
+  const scores: Scored[] = [];
+  for (const score of parsed.scores) {
+    const index = Number(score.id);
+    const item = Number.isInteger(index) ? items[index] : undefined;
+    if (!item) continue; // index the model invented
+    scores.push({
+      matchId: item.matchId,
+      intent: score.intent,
+      reason: score.reason,
+    });
+  }
+  return scores;
+}
+
 export const scoreDue = internalAction({
   args: {},
   handler: async (ctx): Promise<{ scored: number; more: boolean } | { skipped: string }> => {
@@ -134,55 +257,24 @@ export const scoreDue = internalAction({
     if (!batch || !batch.items.length) return { scored: 0, more: false };
 
     const model = process.env.OPENAI_MODEL ?? "gpt-5-mini";
-    // The model echoes short indexes, not raw ids: nothing for it to mangle.
-    const user = JSON.stringify({
-      product: batch.product,
-      posts: batch.items.map((item, index) => ({
-        id: String(index),
-        platform: item.platform,
-        community: item.community,
-        title: item.title,
-        text: item.snippet,
-      })),
-    });
 
-    const res = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model,
-        messages: [
-          { role: "system", content: SYSTEM_PROMPT },
-          { role: "user", content: user },
-        ],
-        response_format: RESPONSE_SCHEMA,
-      }),
-    });
-    if (!res.ok) {
-      // Leave the batch unscored; the sweeper retries it.
-      throw new Error(`OpenAI ${res.status}: ${(await res.text()).slice(0, 200)}`);
+    const chunks: BatchItem[][] = [];
+    for (let i = 0; i < batch.items.length; i += BATCH_SIZE) {
+      chunks.push(batch.items.slice(i, i + BATCH_SIZE) as BatchItem[]);
     }
-    const data = await res.json();
-    const parsed = JSON.parse(data.choices[0].message.content) as {
-      scores: Array<{ id: string; intent: string; reason: string }>;
-    };
 
-    const scores = [];
-    for (const score of parsed.scores) {
-      const index = Number(score.id);
-      const item = Number.isInteger(index) ? batch.items[index] : undefined;
-      if (!item) continue; // index the model invented
-      scores.push({
-        matchId: item.matchId,
-        intent: score.intent,
-        reason: score.reason,
-      });
-    }
+    // All chunks go out together; one failing does not take the others down.
+    const results = await Promise.all(
+      chunks.map((chunk) =>
+        scoreChunk(apiKey, model, batch.product, chunk).catch((err) => {
+          console.error(err);
+          return [] as Scored[];
+        }),
+      ),
+    );
+
     const applied: number = await ctx.runMutation(internal.intentMarker.applyScores, {
-      scores,
+      scores: results.flat(),
       allowedIds: batch.items.map((item) => item.matchId),
     });
 
