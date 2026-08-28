@@ -48,33 +48,35 @@ function ScanVisual() {
         </div>
       </div>
 
-      {/* Chatter picked up by the sweep */}
-      <div className="relative z-10 flex w-full flex-col gap-2 px-6">
-        {CHATTER.slice(0, 4).map((item, i) => (
-          <motion.span
-            key={item.text}
-            className={cn(
-              "flex w-fit items-center gap-2 text-sm font-medium text-neutral-900",
-              i % 2 === 0 ? "mr-auto" : "ml-auto",
-            )}
-            initial={{ opacity: 0.55 }}
-            animate={{ opacity: [0.55, 1, 0.55] }}
-            transition={{
-              duration: 4,
-              times: [0, 0.25, 1],
-              repeat: Infinity,
-              delay: i,
-              ease: "easeInOut",
-            }}
+      {/* Chatter picked up by the sweep, sitting around the dial */}
+      {CHATTER.map((item, i) => (
+        <motion.span
+          key={item.text}
+          className={cn(
+            "absolute z-10 flex max-w-[45%] items-center gap-2",
+            item.at,
+          )}
+          initial={{ opacity: 0.35 }}
+          animate={{ opacity: [0.35, 1, 0.35] }}
+          transition={{
+            duration: 4,
+            times: [0, 0.2, 1],
+            repeat: Infinity,
+            delay: i,
+            ease: "easeInOut",
+          }}
+        >
+          <span
+            className="flex size-6 shrink-0 items-center justify-center rounded-full"
+            style={{ backgroundColor: item.color }}
           >
-            <item.Icon
-              className="h-3.5 w-3.5 shrink-0"
-              style={{ color: item.color }}
-            />
+            <item.Icon className="size-3 text-white" />
+          </span>
+          <span className="text-sm leading-snug font-medium text-neutral-900">
             {item.text}
-          </motion.span>
-        ))}
-      </div>
+          </span>
+        </motion.span>
+      ))}
     </div>
   );
 }
@@ -135,29 +137,28 @@ const CHATTER = [
     text: "anyone know a good invoicing tool?",
     Icon: FaRedditAlien,
     color: "#FF4500",
-  },
-  { text: "just launched v2 today", Icon: FaXTwitter, color: "#171717" },
-  {
-    text: "what's the best way to track leads?",
-    Icon: FaLinkedinIn,
-    color: "#0A66C2",
-  },
-  {
-    text: "need a better solution for scheduling",
-    Icon: FaInstagram,
-    color: "#E4405F",
-  },
-  {
-    text: "has anyone tried Notion for CRM?",
-    Icon: FaHackerNews,
-    color: "#FF6600",
+    at: "top-6 left-0",
   },
   {
     text: "spreadsheets are killing me",
-    Icon: FaRedditAlien,
-    color: "#FF4500",
+    Icon: FaHackerNews,
+    color: "#FF6600",
+    at: "top-1/3 right-0",
+  },
+  {
+    text: "best way to track leads?",
+    Icon: FaLinkedinIn,
+    color: "#0A66C2",
+    at: "bottom-1/3 left-0",
+  },
+  {
+    text: "we still do this by hand",
+    Icon: FaBluesky,
+    color: "#0085FF",
+    at: "bottom-6 right-0",
   },
 ];
+
 
 const INTENT_CHIP: Record<string, string> = {
   High: "bg-[#FF6600] text-[#101010]",
