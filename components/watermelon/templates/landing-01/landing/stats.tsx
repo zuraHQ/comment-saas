@@ -452,8 +452,8 @@ function ResultVisual() {
 const STEPS = [
   {
     number: "01",
-    title: "We read eight platforms end to end",
-    body: "We read every new post in the communities your customers sit in.",
+    title: "Eight platforms, end to end",
+    body: "Every new post in the communities your customers already sit in.",
     visual: <ScanVisual />,
   },
   {
