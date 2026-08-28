@@ -27,55 +27,39 @@ import { cn } from "@/lib/utils";
 /* ---------------------------------------------------------------- 01 */
 // Raw chatter arriving from every platform at once.
 
+// The eight places we read, named, so the claim is checkable at a glance.
+const PLATFORMS = [
+  { label: "Reddit", Icon: FaRedditAlien, bg: "#FF4500", fg: "#ffffff" },
+  { label: "Hacker News", Icon: FaHackerNews, bg: "#FF6600", fg: "#ffffff" },
+  { label: "Indie Hackers", Icon: FaRegLightbulb, bg: "#0E2439", fg: "#ffffff" },
+  { label: "X / Twitter", Icon: FaXTwitter, bg: "#171717", fg: "#ffffff" },
+  { label: "LinkedIn", Icon: FaLinkedinIn, bg: "#0A66C2", fg: "#ffffff" },
+  { label: "YouTube", Icon: FaYoutube, bg: "#FF0000", fg: "#ffffff" },
+  { label: "Bluesky", Icon: FaBluesky, bg: "#0085FF", fg: "#ffffff" },
+  { label: "GitHub", Icon: FaGithub, bg: "#171717", fg: "#ffffff" },
+];
+
 function ScanVisual() {
   return (
-    <div className="relative flex h-80 items-center justify-center overflow-hidden">
-      {/* Radar rings with a rotating sweep */}
-      <div className="absolute flex h-72 w-72 items-center justify-center rounded-full border border-neutral-200">
-        <motion.div
-          className="absolute inset-0 rounded-full"
-          style={{
-            background:
-              "conic-gradient(from 0deg, rgba(14,165,233,0.25), rgba(14,165,233,0) 35%)",
-          }}
-          animate={{ rotate: 360 }}
-          transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-        />
-        <div className="flex h-48 w-48 items-center justify-center rounded-full border border-neutral-200">
-          <div className="flex h-24 w-24 bg-white items-center justify-center rounded-full border border-neutral-200">
-            <Globe className="h-6 w-6 text-neutral-600" strokeWidth={1.25} />
-          </div>
-        </div>
-      </div>
-
-      {/* Chatter picked up by the sweep, sitting around the dial */}
-      {CHATTER.map((item, i) => (
-        <motion.span
-          key={item.text}
-          className={cn(
-            "absolute z-10 flex max-w-[38%] items-center gap-1.5",
-            item.at,
-          )}
-          initial={{ opacity: 0.35 }}
-          animate={{ opacity: [0.35, 1, 0.35] }}
-          transition={{
-            duration: 4,
-            times: [0, 0.2, 1],
-            repeat: Infinity,
-            delay: i,
-            ease: "easeInOut",
-          }}
+    <div className="grid grid-cols-2 gap-3">
+      {PLATFORMS.map((platform) => (
+        <div
+          key={platform.label}
+          className="flex items-center gap-3 rounded-xl border border-neutral-200 bg-white p-3"
         >
           <span
-            className="flex size-5 shrink-0 items-center justify-center rounded-full"
-            style={{ backgroundColor: item.color }}
+            className="flex size-9 shrink-0 items-center justify-center rounded-lg"
+            style={{ backgroundColor: platform.bg }}
           >
-            <item.Icon className="size-2.5 text-white" />
+            <platform.Icon
+              className="size-4"
+              style={{ color: platform.fg }}
+            />
           </span>
-          <span className="text-xs leading-snug font-medium text-neutral-900">
-            {item.text}
+          <span className="truncate text-sm font-medium text-neutral-900">
+            {platform.label}
           </span>
-        </motion.span>
+        </div>
       ))}
     </div>
   );
@@ -132,32 +116,6 @@ const JUDGED = [
   },
 ];
 
-const CHATTER = [
-  {
-    text: "anyone know a good invoicing tool?",
-    Icon: FaRedditAlien,
-    color: "#FF4500",
-    at: "top-10 left-6",
-  },
-  {
-    text: "spreadsheets are killing me",
-    Icon: FaHackerNews,
-    color: "#FF6600",
-    at: "top-24 right-6",
-  },
-  {
-    text: "best way to track leads?",
-    Icon: FaLinkedinIn,
-    color: "#0A66C2",
-    at: "bottom-24 left-6",
-  },
-  {
-    text: "we still do this by hand",
-    Icon: FaBluesky,
-    color: "#0085FF",
-    at: "bottom-10 right-6",
-  },
-];
 
 
 const INTENT_CHIP: Record<string, string> = {
