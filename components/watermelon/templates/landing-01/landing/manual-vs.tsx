@@ -60,9 +60,8 @@ export default function ManualVs() {
               Paste your link. That is the setup.
             </h3>
             <p className="mt-4 text-base leading-relaxed text-neutral-600">
-              We read the same eight places you would have, keep the handful
-              worth answering, and leave a reply waiting on each one. You read
-              them over coffee and hit send on the ones you like.
+              We read the same eight places and leave a reply waiting on the
+              handful worth answering.
             </p>
 
             <p className="mt-auto border-t border-neutral-200 pt-6 text-base text-neutral-600">
