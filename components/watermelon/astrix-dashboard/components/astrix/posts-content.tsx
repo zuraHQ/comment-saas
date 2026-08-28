@@ -380,7 +380,9 @@ export function PostsContent() {
 
                       <div className="flex-1 px-4 pt-2 pb-4">
                         <p className="text-sm font-medium">{row.post.title}</p>
-                        {row.post.snippet && row.post.platform !== "reddit" ? (
+                        {row.post.snippet &&
+                        row.post.platform !== "reddit" &&
+                        row.post.platform !== "hn" ? (
                           <p className="mt-2 line-clamp-2 text-sm text-foreground/70">
                             {row.post.snippet}
                           </p>
