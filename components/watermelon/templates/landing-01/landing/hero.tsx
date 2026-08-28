@@ -10,9 +10,32 @@ export default function Hero() {
 
   // The link is the whole signup: we read the site to learn what the product
   // does, so the CTA replaces the block's demo buttons.
+  // A scribbled pointer at the input, so the one thing to do is obvious.
+  const nudge = (
+    <span className="pointer-events-none absolute top-1 -left-56 hidden items-end gap-1 lg:flex">
+      <span className="text-brand -rotate-6 text-base italic">
+        drop your saas here
+      </span>
+      <svg
+        viewBox="0 0 64 40"
+        aria-hidden="true"
+        className="text-brand h-10 w-16 shrink-0"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M2 6c14-4 30 0 42 12" />
+        <path d="M44 18l-11-1" />
+        <path d="M44 18l-3-11" />
+      </svg>
+    </span>
+  );
+
   const captureForm = (
     <form
-      className="flex w-full max-w-xl flex-col gap-3 sm:flex-row"
+      className="relative flex w-full max-w-xl flex-col gap-3 sm:flex-row"
       onSubmit={(e) => {
         e.preventDefault();
         const value = site.trim();
@@ -37,6 +60,7 @@ export default function Hero() {
       >
         Find customers
       </button>
+      {nudge}
     </form>
   );
 
