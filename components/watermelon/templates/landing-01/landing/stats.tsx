@@ -458,7 +458,7 @@ const STEPS = [
   },
   {
     number: "02",
-    title: "We rank them",
+    title: "Ten worth answering, not four hundred",
     body: "Every post is scored against what your product actually does. The rest never reaches your feed.",
     visual: <SortVisual />,
   },
