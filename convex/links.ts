@@ -88,7 +88,7 @@ export const statsForProject = query({
   },
 });
 
-const PROJECT_LINK_LABEL = "__project__";
+export const PROJECT_LINK_LABEL = "__project__";
 
 // One permanent tracked link per project. Attribution comes from the click's
 // referrer, so a single link still tells us which platform sent the visitor.

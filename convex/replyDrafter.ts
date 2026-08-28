@@ -1,6 +1,7 @@
 import { v } from "convex/values";
 import { action, internalAction, internalMutation, internalQuery } from "./_generated/server";
 import { internal } from "./_generated/api";
+import { PROJECT_LINK_LABEL } from "./links";
 import { SUBREDDIT_CATALOG } from "../lib/subreddit-catalog";
 
 // How people actually talk in each place. Same post, same product, different
@@ -19,6 +20,7 @@ const PLATFORM_VOICE: Record<string, string> = {
 const RULES = `How to write it:
 - Help first. The reply has to be worth reading even if the product is never mentioned.
 - Mention the product once, by name, dropped naturally into the sentence where it belongs. Never "I built this, check it out". Never ask them to try it.
+- Put the link in exactly once, in that same sentence, written as a bare url in brackets after the name. Use the link given to you verbatim, never the product name as a domain, never a shortened or made up url. If the platform is x, leave the link out entirely, links there kill reach.
 - If the product does not honestly answer what they asked, say something useful and do not mention it at all.
 - Say something relatable or a real opinion. A reply that only restates their problem is worthless.
 - No em dashes anywhere. Use commas or full stops.
@@ -47,6 +49,17 @@ export const context = internalQuery({
     const project = await ctx.db.get(match.projectId);
     if (!post || !project) return null;
 
+    // Hand the writer the tracked link rather than the bare URL, so a click
+    // from the reply shows up in analytics with the platform it came from.
+    const site = process.env.SITE_URL?.replace(/\/$/, "");
+    const links = await ctx.db
+      .query("trackedLinks")
+      .withIndex("by_project", (q) => q.eq("projectId", match.projectId))
+      .collect();
+    const tracked = links.find((l) => l.label === PROJECT_LINK_LABEL);
+    const link =
+      site && tracked ? `${site}/r/${tracked.code}` : (project.url ?? "");
+
     // Community rules matter: the same sentence is fine in one subreddit and
     // a ban in another.
     const community = post.subsource?.replace(/^r\//, "").toLowerCase();
@@ -67,7 +80,7 @@ export const context = internalQuery({
       selfPromo: entry?.selfPromo ?? "",
       product: {
         name: project.name,
-        url: project.url ?? "",
+        link,
         description: project.description ?? "",
       },
     };
