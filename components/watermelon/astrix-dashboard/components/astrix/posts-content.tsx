@@ -403,7 +403,7 @@ export function PostsContent() {
                     </a>
 
                     {/* The reply, nested under the post like a comment thread */}
-                    <div className="relative z-10 mt-3 flex flex-1 gap-3">
+                    <div className="mt-3 flex flex-1 gap-3">
                       <span className="mt-1 w-px shrink-0 bg-border" />
                       <div className="flex min-w-0 flex-1 flex-col">
                         <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
@@ -419,7 +419,7 @@ export function PostsContent() {
                           </p>
                         )}
 
-                        <div className="mt-3 flex items-center gap-3 text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
+                        <div className="relative z-10 mt-3 flex items-center gap-3 text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
                           {reply ? (
                             <button
                               type="button"
