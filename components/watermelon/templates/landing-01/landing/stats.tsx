@@ -566,7 +566,7 @@ export default function Stats() {
                 <p className="text-xs font-bold tracking-widest text-neutral-400">
                   {step.number}
                 </p>
-                <h3 className="mt-3 text-3xl font-semibold text-neutral-900">
+                <h3 className="mt-3 text-4xl leading-[1.1] font-semibold text-neutral-900">
                   {step.title}
                 </h3>
                 <p className="mt-4 max-w-md text-lg leading-relaxed text-neutral-600">
