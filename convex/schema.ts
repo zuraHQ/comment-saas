@@ -86,6 +86,7 @@ export default defineSchema({
     .index("by_project_post", ["projectId", "postId"])
     .index("by_project_posted", ["projectId", "postedAt"])
     .index("by_project_platform", ["projectId", "platform", "postedAt"])
+    .index("by_intent", ["intentScore"])
     .index("by_owner", ["ownerClerkId"]),
 
   // Globally deduped fetch jobs, shared across projects: one job per

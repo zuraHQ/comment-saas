@@ -13,44 +13,42 @@ const POOL = BATCH_SIZE * CONCURRENCY;
 export const nextBatch = internalQuery({
   args: {},
   handler: async (ctx) => {
-    // Small scale: walk projects and take the first with unscored matches.
-    // Revisit with an index once matches stop fitting in a scan.
-    for (const project of await ctx.db.query("projects").collect()) {
-      const unscored = [];
-      for await (const match of ctx.db
-        .query("matches")
-        .withIndex("by_project_posted", (q) => q.eq("projectId", project._id))
-        .order("desc")) {
-        if (match.intentScore === undefined) {
-          unscored.push(match);
-          if (unscored.length > POOL) break; // one extra = "has more"
-        }
-      }
-      if (!unscored.length) continue;
+    // Unscored rows only. Walking every match to find them read the whole
+    // table on every cron tick, which is what ate the database quota.
+    const unscored = await ctx.db
+      .query("matches")
+      .withIndex("by_intent", (q) => q.eq("intentScore", undefined))
+      .take(POOL + 1);
+    if (!unscored.length) return null;
 
-      const items = [];
-      for (const match of unscored.slice(0, POOL)) {
-        const post = await ctx.db.get(match.postId);
-        if (!post) continue;
-        items.push({
-          matchId: match._id,
-          title: post.title,
-          snippet:
-            post.type === "comment" && post.parentTitle
-              ? `[comment on: ${post.parentTitle}] ${post.snippet ?? ""}`
-              : (post.snippet ?? ""),
-          platform: post.platform,
-          community: post.subsource ?? "",
-        });
-      }
-      return {
-        projectId: project._id,
-        product: `${project.name}: ${project.description || "no description yet"}`,
-        items,
-        hasMore: unscored.length > POOL,
-      };
+    // One project per batch: the prompt carries that product's description.
+    const projectId = unscored[0].projectId;
+    const project = await ctx.db.get(projectId);
+    if (!project) return null;
+
+    const items = [];
+    for (const match of unscored.slice(0, POOL)) {
+      if (match.projectId !== projectId) continue;
+      const post = await ctx.db.get(match.postId);
+      if (!post) continue;
+      items.push({
+        matchId: match._id,
+        title: post.title,
+        snippet:
+          post.type === "comment" && post.parentTitle
+            ? `[comment on: ${post.parentTitle}] ${post.snippet ?? ""}`
+            : (post.snippet ?? ""),
+        platform: post.platform,
+        community: post.subsource ?? "",
+      });
     }
-    return null;
+
+    return {
+      projectId,
+      product: `${project.name}: ${project.description || "no description yet"}`,
+      items,
+      hasMore: unscored.length > POOL,
+    };
   },
 });
 
